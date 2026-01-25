@@ -6,6 +6,8 @@ Je vous écris d'une page web que j'ai créée à l'abri des robots du web.
 Vous pouvez découvrir une autre version en suivant ce lien:
 [https://yannkeep.github.io/test/1160/ccplc/office/bureau/portail.html](https://yannkeep.github.io/test/1160/ccplc/office/bureau/portail.html)
 
+Je vous propose de découvrir ce qui suit et vous invite à rebondir vers moi à propos de n'importe quel sujet que vous trouveriez pertinent pour vous et moi.
+
 Pour intro, j'en suis arrivé là parce que:
 
 1. je suis sur la touche au niveau boulot
