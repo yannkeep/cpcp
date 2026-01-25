@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://ouaisfieu.github.io/IGH1cZXopJ_IhiKBukx2lvI-V4y3gLFlb_0JqAn431VVuLBatjkkb0PT1qWhENK56SrNnxJuWV5TpfYo5R98BFIP-JtWipZE8Nev4L0FDasdiJGoy0_QpLprticg9mTtrZb9OuuycWF4JQaPCggDTKDlfZ0-44aFdZ1rYD_QszRcLnRzMX-N_0miynf94IwqL99B8nkBV2DyMm9Qsb1Qgt8CN8ECA2f9uzJh94Lnn4Rq4RQ1KHObFHDgp6pE0QR2vTm4kHwoQ7noAcal9KorlUbCZIabNNqQgg8lRFx7DXTh-bZk3tZrZ5QwirvPmvDE1MsEmNrZDqkYfdNBYAuu61vO-p5sg48q84mE6UWknSz_NBtP9fw3ysbK_TlXr0B6O6wail6KqoGUZzzwQG-j8Wy0nTLeUXQL0W2TTxSfImUVevnJwMZwb8VeApTmAy5FUloBUprVQZLAGOjnYRkUN4L2hO_QEtzQfHWxYmHEb5g'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VÉNUS — Réseau de Veille Citoyenne</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+        :root{--bg:#0a0a0c;--green:#33ff33;--red:#ff3366;--blue:#00aaff;--yellow:#ffcc00;--text:#e0e0e0;--muted:#666}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;min-height:100vh;overflow-x:hidden}
+        
+        /* ENTRÉE 1: Landing page moderne */
+        .landing{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;position:relative}
+        .logo{font-size:clamp(3rem,10vw,6rem);font-weight:700;letter-spacing:.5rem;margin-bottom:1rem;background:linear-gradient(135deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:glow 3s ease-in-out infinite}
+        @keyframes glow{0%,100%{filter:drop-shadow(0 0 20px rgba(51,255,51,.3))}50%{filter:drop-shadow(0 0 40px rgba(51,255,51,.6))}}
+        .tagline{font-size:clamp(.9rem,2vw,1.2rem);color:var(--muted);margin-bottom:3rem;max-width:600px}
+        .tagline strong{color:var(--red)}
+        
+        /* Boutons d'entrée multiples */
+        .entries{display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:center;margin-bottom:3rem}
+        .entry-btn{background:transparent;border:2px solid var(--green);color:var(--green);padding:1rem 2rem;font-family:inherit;font-size:1rem;cursor:pointer;position:relative;overflow:hidden;transition:all .3s}
+        .entry-btn::before{content:'';position:absolute;inset:0;background:var(--green);transform:translateX(-101%);transition:transform .3s;z-index:-1}
+        .entry-btn:hover{color:var(--bg)}
+        .entry-btn:hover::before{transform:translateX(0)}
+        .entry-btn.alt{border-color:var(--blue);color:var(--blue)}
+        .entry-btn.alt::before{background:var(--blue)}
+        .entry-btn.secret{border-color:var(--muted);color:var(--muted);font-size:.8rem}
+        .entry-btn.secret:hover{border-color:var(--yellow);color:var(--bg)}
+        .entry-btn.secret::before{background:var(--yellow)}
+        
+        /* Stats teaser */
+        .stats-teaser{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;max-width:800px;margin:2rem 0}
+        .stat{background:rgba(255,255,255,.03);padding:1.5rem;border-left:3px solid var(--green)}
+        .stat-num{font-size:2rem;font-weight:700;color:var(--green)}
+        .stat-label{font-size:.75rem;color:var(--muted);margin-top:.5rem}
+        
+        /* Footer hints */
+        .hints{position:absolute;bottom:2rem;display:flex;gap:2rem;font-size:.7rem;color:var(--muted)}
+        .hints a{color:var(--muted);text-decoration:none}
+        .hints a:hover{color:var(--green)}
+        
+        /* Terminal inline (pour l'entrée directe) */
+        #mini-terminal{display:none;position:fixed;inset:0;background:var(--bg);z-index:1000;flex-direction:column}
+        #mini-terminal.active{display:flex}
+        .term-chrome{background:#1a1a1a;padding:.75rem 1rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid #333}
+        .term-dot{width:12px;height:12px;border-radius:50%}
+        .term-dot.r{background:#ff5f56}.term-dot.y{background:#ffbd2e}.term-dot.g{background:#27c93f}
+        .term-title{flex:1;text-align:center;font-size:.75rem;color:var(--muted)}
+        .term-close{background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer}
+        .term-close:hover{color:var(--red)}
+        .term-body{flex:1;padding:1.5rem;overflow-y:auto;font-size:.9rem;line-height:1.7}
+        .term-body .line{margin-bottom:.2rem}
+        .term-body .ascii{font-size:.4rem;line-height:1;color:var(--red);white-space:pre}
+        .term-body .success{color:var(--green)}
+        .term-body .warning{color:var(--yellow)}
+        .term-body .system{color:var(--muted)}
+        .term-body .data{color:var(--green);background:rgba(51,255,51,.05);padding:.5rem;margin:.5rem 0;border-left:3px solid var(--green)}
+        .term-input{display:flex;padding:1rem;background:#111;gap:.5rem}
+        .term-input span{color:var(--blue)}
+        .term-input input{flex:1;background:transparent;border:none;color:var(--green);font:inherit;outline:none}
+        
+        /* Responsive */
+        @media(max-width:600px){.entries{flex-direction:column}.hints{flex-direction:column;text-align:center;gap:.5rem}}
+    </style>
+</head>
+<body>
+
+<div class="landing">
+    <div class="logo">◈ VÉNUS</div>
+    <p class="tagline">Réseau de Veille Citoyenne — <strong>"Le pouvoir se prend. Il ne se demande pas."</strong></p>
+    
+    <div class="entries">
+        <button class="entry-btn" onclick="goTerminal()">▶ ACCÉDER AU TERMINAL</button>
+        <button class="entry-btn alt" onclick="location.href='ressources.html'">📚 DOCUMENTATION</button>
+        <button class="entry-btn secret" onclick="openMini()">λ ligne de commande</button>
+    </div>
+    
+    <div class="stats-teaser">
+        <div class="stat"><div class="stat-num">23</div><div class="stat-label">49.3 sous Borne (record)</div></div>
+        <div class="stat"><div class="stat-num">331</div><div class="stat-label">voix censure Barnier</div></div>
+        <div class="stat"><div class="stat-num">736</div><div class="stat-label">condamnations CEDH</div></div>
+        <div class="stat"><div class="stat-num">35%</div><div class="stat-label">succès QPC</div></div>
+    </div>
+    
+    <p style="max-width:600px;font-size:.85rem;color:var(--muted);line-height:1.8">
+        ARG éducatif sur les failles démocratiques françaises.<br>
+        Tout est sourcé. Rien n'est inventé (sauf le réseau).
+    </p>
+    
+    <div class="hints">
+        <a href="carte.html">🗺️ Carte</a>
+        <a href="journal.html">📓 Journal</a>
+        <a href="exercice.html">🔍 Exercice OSINT</a>
+        <span style="cursor:pointer" onclick="location.href='robots.txt'" title="?">robots.txt</span>
+    </div>
+</div>
+
+<!-- Mini terminal inline -->
+<div id="mini-terminal">
+    <div class="term-chrome">
+        <div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div>
+        <div class="term-title">VÉNUS TERMINAL — Mode rapide</div>
+        <button class="term-close" onclick="closeMini()">×</button>
+    </div>
+    <div class="term-body" id="term-out"></div>
+    <div class="term-input"><span>λ</span><input type="text" id="term-in" placeholder="aide, stats, sources..." autocomplete="off"></div>
+</div>
+
+<script>
+function goTerminal(){location.href='terminal.html'}
+
+// Mini terminal
+const out=document.getElementById('term-out');
+const inp=document.getElementById('term-in');
+
+function openMini(){
+    document.getElementById('mini-terminal').classList.add('active');
+    inp.focus();
+    if(!out.innerHTML){
+        print(`<pre class="ascii">
+██╗   ██╗███████╗███╗   ██╗██╗   ██╗███████╗
+██║   ██║██╔════╝████╗  ██║██║   ██║██╔════╝
+██║   ██║█████╗  ██╔██╗ ██║██║   ██║███████╗
+╚██╗ ██╔╝██╔══╝  ██║╚██╗██║██║   ██║╚════██║
+ ╚████╔╝ ███████╗██║ ╚████║╚██████╔╝███████║
+  ╚═══╝  ╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝</pre>`);
+        print('<div class="system">Mode rapide — tapez "aide" ou "terminal" pour le mode complet</div>');
+    }
+}
+function closeMini(){document.getElementById('mini-terminal').classList.remove('active')}
+function print(h){out.innerHTML+=`<div class="line">${h}</div>`;out.scrollTop=out.scrollHeight}
+
+inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+        const c=inp.value.trim().toLowerCase();inp.value='';
+        if(!c)return;
+        print(`<span style="color:var(--blue)">λ ${c}</span>`);
+        exec(c);
+    }
+    if(e.key==='Escape')closeMini();
+});
+
+function exec(c){
+    const cmds={
+        aide:()=>print(`<div class="warning">Commandes: stats, sources, 493, qpc, cedh, gj, mckinsey, terminal, exit</div>`),
+        help:()=>exec('aide'),
+        stats:()=>print(`<div class="data">49.3 Borne: 23 | Censure Barnier: 331 | CEDH: 736 condamnations | QPC: ~35% succès | Éborgnés GJ: 24-25 | McKinsey: 1Md€/an, 0€ impôts</div>`),
+        sources:()=>print(`<div class="system">Conseil constitutionnel, Sénat, Défenseur des droits, Amnesty, ACAT, La Quadrature du Net, Mediapart, Disclose</div>`),
+        '493':()=>print(`<div class="data">Article 49.3: adopter une loi sans vote. Borne: 23 fois (record). Barnier censuré par 331 voix le 4 déc. 2024 — première censure après 49.3 de la Ve République.</div>`),
+        qpc:()=>print(`<div class="data">Question Prioritaire de Constitutionnalité: ~35% succès. Victoires: principe de fraternité (Herrou 2018), 32 articles loi Immigration censurés (2024).</div>`),
+        cedh:()=>print(`<div class="data">Cour Européenne des Droits de l'Homme: 736 condamnations France. Délai: 4 mois après recours internes. Cas: J.M.B. (prisons), Baldassi (BDS).</div>`),
+        gj:()=>print(`<div class="data">Gilets Jaunes: 24-25 éborgnés, 5 mains arrachées, 12 900+ tirs LBD, 10 718 GAV. Sources: Défenseur des droits, ACAT, Amnesty, ONU.</div>`),
+        mckinsey:()=>print(`<div class="data">Rapport Sénat mars 2022: 1+ Md€ dépenses conseil 2021. McKinsey: 0€ impôt société depuis 10+ ans malgré 329M€ CA. 3 enquêtes judiciaires.</div>`),
+        terminal:()=>{print('<div class="success">Redirection vers terminal complet...</div>');setTimeout(()=>location.href='terminal.html',500)},
+        exit:()=>closeMini(),
+        clear:()=>out.innerHTML=''
+    };
+    if(cmds[c])cmds[c]();
+    else print(`<div style="color:var(--red)">Commande inconnue. Tapez "aide".</div>`);
+}
+
+// Raccourcis clavier
+document.addEventListener('keydown',e=>{
+    if(e.key==='`'||e.key==='²'){e.preventDefault();openMini()}
+    if(e.ctrlKey&&e.shiftKey&&e.key==='V'){e.preventDefault();goTerminal()}
+});
+</script>
+</body>
+</html>
