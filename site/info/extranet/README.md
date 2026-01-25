@@ -34,9 +34,10 @@ J'ai créé un **intranet Knowledge Graph** complet basé sur ton annexe d'audit
 - Responsive mobile/tablette/desktop
 - Prêt pour **GitHub Pages**
 
+Ouvre le fichier et teste le Knowledge Graph — c'est vraiment satisfaisant de voir les connexions se révéler ! 🚀
+
 > Le mot de passe connard !
 
 Vous avez atteint votre limite de dépenses d'utilisation supplémentaire
-Acheter plus ?
+(Acheter plus) ?
 
-Ouvre le fichier et teste le Knowledge Graph — c'est vraiment satisfaisant de voir les connexions se révéler ! 🚀
