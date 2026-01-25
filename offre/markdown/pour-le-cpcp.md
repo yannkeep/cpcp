@@ -206,11 +206,13 @@ Il y en a des :
 Non.
 Désolé.
 
-**[Citoyenneté](https://github.com/yannkeep/cpcp/blob/main/cartes/citoyennete.csv)
+* [Citoyenneté](https://github.com/yannkeep/cpcp/blob/main/cartes/citoyennete.csv)
 * [Vocabulaire](https://github.com/yannkeep/cpcp/blob/main/cartes/vocabulaire.csv)
 * [Concept-a](https://github.com/yannkeep/cpcp/blob/main/cartes/concepts.csv)
 * [Concept-b](https://github.com/yannkeep/cpcp/blob/main/cartes/concepts-2.csv)
 
-
+Bonne découverte,
+Bien cordialement,
+yannkeep
 
 
