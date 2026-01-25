@@ -194,7 +194,7 @@ Voici [une autre page web](https://ouaisfieu.github.io/112/14-flashcards.html) q
 
 Et des jeux de cartes (flashcards) pour parcourir le tout.
 
-Il y en a un :
+Il y en a des :
 * facile
 * moyen
 * difficile
@@ -204,9 +204,10 @@ Il y en a un :
 Non.
 Désolé.
 
-* [Surprise-a](https://github.com/yannkeep/test/blob/main/cpcp/cartes/cpcp%20-%20a.csv)
-* [Surprise-b](https://github.com/yannkeep/test/blob/main/cpcp/cartes/cpcp%20-%20b.csv)
-* [Surprise-c](https://github.com/yannkeep/test/blob/main/cpcp/cartes/cpcp%20-%20c.csv)
+**[Citoyenneté](https://github.com/yannkeep/cpcp/blob/main/cartes/citoyennete.csv)
+* [Vocabulaire](https://github.com/yannkeep/cpcp/blob/main/cartes/vocabulaire.csv)
+* [Concept-a](https://github.com/yannkeep/cpcp/blob/main/cartes/concepts.csv)
+* [Concept-b](https://github.com/yannkeep/cpcp/blob/main/cartes/concepts-2.csv)
 
 
 
