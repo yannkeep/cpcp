@@ -1,0 +1,575 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://ouaisfieu.github.io/0i0eZ2imsUmOrmly5maQRrXekcocuSLu4SkzSZKORc85w2KS914A_3JlRDj3J7k1q6AHz0rRR80mpaMXTKTmiaq_DSWtlokoe7s5G5ilB8GDoZlMT9MUAzNjPYcwrXrcfzfaMYwsPLxNyoU9HYw1WeikuWI-p2WWsQOBHZiSNGrGOwnAfA0so_ewPCMUXLZVFn4H1ZU4XD2D80TO9hxhf7YL2HL9lWvpUiqP4eNB8sNpMu0l-8EPRs4crLMXTQ-M-vjfNSaL9fCOuZjt-fcusF_OVgAEm0UkJRqCW1P7IPCFb3q7i8IWNHHVkXoWA-7-FY3JalOUBnd0IwLPJ75av7QRrdk6nZaBiCBC_axYsxluSt7hRR4g7zsD0-YiBMkCxTWSuFWz87nEMGe6OE8scCBukB0q_9eOoigXm0J2ZnJdJuCGxGLjQUvyy8D1bXXUgg7K_DWW4ce16QYBQ7KzVv8u5g46XptYq68VHg6H44VqgPGXxgm39dwi6vXWbIqHvJUinu3tqeQED8TbyKhUTHJV35ADPEyhpPtg85z45k1glBtyOXGA4w'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit & Analyse : Économie Contributive Provisionnée</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Chart Container Styling per Requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px; /* Max width to prevent excessive stretching */
+            height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Custom Scrollbar for internal overflow elements */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <!-- Chosen Palette: Professional Audit Blue & Slate. 
+         Primary: Slate-900 (Text), Blue-600 (Action/Highlight).
+         Background: Slate-50 (App), White (Cards).
+         Accents: Red-500 (Risk), Emerald-500 (Feasibility/Gain).
+         Reasoning: Evokes trust, clarity, and the seriousness of a fiscal/legal audit. -->
+
+    <!-- Application Structure Plan:
+         1. Header & Context: Sets the stage (Arizona Govt, Budget Cuts) to explain WHY ECP is proposed.
+         2. Simulation Module (The "Trap"): Interactive chart comparing "Status Quo" vs "ECP". Allows user to slide income and see the "net" loss currently vs the "provisioned" gain in ECP.
+         3. Mechanism Breakdown: A step-by-step interactive flow of how the money moves (Client -> ASBL -> Provision), demystifying the "black box".
+         4. Legal & Fiscal Stress Test: The core "Debunking" section. Cards detailing the specific legal hurdles (ONSS, Ruling, VAT).
+         5. Feasibility Radar: A holistic view of the project's viability across 5 axes.
+         
+         Structure Rationale: Allows the user to first understand the problem, then the proposed solution, and finally critically evaluate the risks/feasibility. -->
+
+    <!-- Visualization & Content Choices:
+         - Context Stats -> Goal: Inform -> Simple Stat Cards -> Quick context absorption.
+         - The Trap -> Goal: Compare/Change -> Bar Chart + Slider -> Demonstrates the "marginal tax rate" of >100% in the current system.
+         - The Mechanism -> Goal: Organize -> CSS Grid Flow -> Visualizes the path of funds and the "Provision" concept (No SVG).
+         - Feasibility -> Goal: Analyze -> Radar Chart -> Shows balance between Social Utility (High) and Legal Certainty (Low/Requires Ruling).
+         - Risks -> Goal: Inform/Warn -> Color-coded Cards -> Highlights the "Ruling Fiscal" absolute necessity.
+         
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-slate-900 tracking-tight">Audit ECP <span class="text-blue-600">Belgium</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <button onclick="scrollToSection('context')" class="text-slate-500 hover:text-blue-600 font-medium transition">Contexte Arizona</button>
+                    <button onclick="scrollToSection('simulation')" class="text-slate-500 hover:text-blue-600 font-medium transition">Le Piège vs ECP</button>
+                    <button onclick="scrollToSection('mechanism')" class="text-slate-500 hover:text-blue-600 font-medium transition">Mécanisme</button>
+                    <button onclick="scrollToSection('legal')" class="text-red-600 hover:text-red-700 font-bold transition border border-red-100 bg-red-50 px-3 py-1 rounded-full">Audit Juridique</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero / Introduction -->
+    <header class="bg-white border-b border-slate-200 pt-12 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6">
+                L'Économie Contributive Provisionnée
+            </h1>
+            <p class="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
+                Analyse factuelle, juridique et fiscale du modèle proposé comme réponse aux réformes du gouvernement Arizona (2025-2029).
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="bg-blue-50 px-6 py-3 rounded-lg border border-blue-100">
+                    <span class="block text-sm text-blue-600 font-bold uppercase">Objectif Emploi</span>
+                    <span class="block text-2xl font-bold text-slate-900">80%</span>
+                </div>
+                <div class="bg-red-50 px-6 py-3 rounded-lg border border-red-100">
+                    <span class="block text-sm text-red-600 font-bold uppercase">Économies Visées</span>
+                    <span class="block text-2xl font-bold text-slate-900">18 Mrds €</span>
+                </div>
+                <div class="bg-emerald-50 px-6 py-3 rounded-lg border border-emerald-100">
+                    <span class="block text-sm text-emerald-600 font-bold uppercase">Concept Clé</span>
+                    <span class="block text-2xl font-bold text-slate-900">Portage Solidaire</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+
+        <!-- SECTION 1: CONTEXTE & PROBLEMATIQUE -->
+        <section id="context" class="scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6 border-l-4 border-blue-600 pl-4">Le Contexte "Arizona"</h2>
+                    <p class="text-lg text-slate-700 mb-4 leading-relaxed">
+                        Ce tableau de bord examine la proposition de l'ECP dans le cadre des négociations gouvernementales de 2025. Avec un besoin d'assainissement budgétaire massif, la pression sur les chômeurs et les bénéficiaires du CPAS s'intensifie.
+                    </p>
+                    <p class="text-slate-600 mb-6">
+                        Le document source identifie un <strong>"Piège Institutionnel"</strong> : les mécanismes actuels de la sécurité sociale belge pénalisent l'activité partielle. Un euro gagné est souvent un euro (ou plus) déduit des allocations, ou entraîne la perte de statuts dérivés (BIM).
+                    </p>
+                    <div class="bg-slate-100 p-4 rounded-lg border-l-4 border-slate-400">
+                        <h4 class="font-bold text-slate-900 mb-2">Définition: Piège Institutionnel</h4>
+                        <p class="text-sm text-slate-600">Situation où la reprise d'un travail (même partiel) entraîne une perte financière nette ou une insécurité administrative disproportionnée par rapport au gain généré.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 text-center">Répartition de la Problématique</h3>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="contextChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-slate-500 mt-4">Estimation des freins à l'emploi (Source: Analyse Doc ECP)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: SIMULATION (DEBUNKING THE TRAP) -->
+        <section id="simulation" class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden scroll-mt-24">
+            <div class="p-8 border-b border-slate-100 bg-slate-50">
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Simulateur : Le Choc Financier</h2>
+                <p class="text-slate-600">Comparez la situation actuelle (Risque) vs le modèle ECP (Sécurisation). Ajustez le revenu généré pour voir l'impact.</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8 p-8">
+                <!-- Controls -->
+                <div class="space-y-8 lg:col-span-1">
+                    <div>
+                        <label for="incomeSlider" class="block text-sm font-medium text-slate-700 mb-2">Revenu d'activité généré (mensuel)</label>
+                        <input type="range" min="0" max="1500" step="50" value="400" id="incomeSlider" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                        <div class="flex justify-between mt-2 text-sm text-slate-600">
+                            <span>0€</span>
+                            <span id="incomeValue" class="font-bold text-blue-600 text-lg">400€</span>
+                            <span>1500€</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-red-50 p-4 rounded-lg border border-red-100">
+                        <h4 class="font-bold text-red-800 mb-2">Système Actuel (Risques)</h4>
+                        <ul class="text-sm text-red-700 space-y-2 list-disc pl-4">
+                            <li>Déduction des allocations (chômage/RIS).</li>
+                            <li>Risque de contrôle et radiation.</li>
+                            <li>Perte potentielle statut BIM.</li>
+                            <li>Coûts de transport/garderie non déductibles.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
+                        <h4 class="font-bold text-emerald-800 mb-2">Modèle ECP (Proposition)</h4>
+                        <ul class="text-sm text-emerald-700 space-y-2 list-disc pl-4">
+                            <li>Transformation en "Frais Propres" (non taxé).</li>
+                            <li>Reste en "Provision" (épargne différée).</li>
+                            <li>Maintien du statut social principal.</li>
+                            <li>Nécessite Ruling Fiscal strict.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="lg:col-span-2 flex flex-col justify-center">
+                    <div class="chart-container">
+                        <canvas id="trapChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <p class="text-sm text-slate-500 italic">
+                            Note : Cette simulation est illustrative. Le modèle ECP repose sur l'hypothèse que les montants ne sont pas qualifiés de "revenus professionnels" immédiats par le fisc.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: MECANISME & FLUX -->
+        <section id="mechanism" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8 text-center">Analyse du Flux Financier ECP</h2>
+            <p class="text-center text-slate-600 max-w-2xl mx-auto mb-12">
+                Le modèle ECP ne verse pas de salaire direct. Il utilise une structure d'intermédiation (Portage) pour transformer la valeur économique. Voici comment cela fonctionne théoriquement.
+            </p>
+
+            <div class="grid md:grid-cols-4 gap-4 text-center relative">
+                <!-- Step 1 -->
+                <div class="interactive-card bg-white p-6 rounded-xl shadow border border-slate-200 z-10">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+                    <h3 class="font-bold text-slate-900">Client / Marché</h3>
+                    <p class="text-sm text-slate-500 mt-2">Commande une prestation (Jardinage, Code, Aide...).</p>
+                    <div class="mt-4 p-2 bg-slate-50 text-xs font-mono text-slate-600 border border-slate-200 rounded">Paiement Facture TTC</div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="hidden md:flex items-center justify-center text-slate-300">
+                    <span class="text-4xl">➔</span>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="interactive-card bg-white p-6 rounded-xl shadow border border-slate-200 z-10 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-yellow-400 text-white text-xs font-bold px-2 py-1">Clé</div>
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+                    <h3 class="font-bold text-slate-900">Structure ECP</h3>
+                    <p class="text-sm text-slate-500 mt-2">ASBL ou Coopérative de portage.</p>
+                    <ul class="text-left text-xs text-slate-600 mt-3 space-y-1">
+                        <li class="flex justify-between"><span>Gestion:</span> <span class="font-mono text-red-500">-10%</span></li>
+                        <li class="flex justify-between"><span>Assurances:</span> <span class="font-mono text-red-500">-5%</span></li>
+                        <li class="flex justify-between font-bold text-indigo-700"><span>Reste:</span> <span>Provision</span></li>
+                    </ul>
+                </div>
+
+                <!-- Arrow -->
+                <div class="hidden md:flex items-center justify-center text-slate-300">
+                    <span class="text-4xl">➔</span>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="interactive-card bg-white p-6 rounded-xl shadow border border-slate-200 z-10">
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+                    <h3 class="font-bold text-slate-900">Le Contribuant</h3>
+                    <p class="text-sm text-slate-500 mt-2">Réalise la tâche, mais ne touche pas de salaire.</p>
+                    <div class="mt-4 space-y-2">
+                        <div class="p-2 bg-emerald-50 text-xs font-bold text-emerald-700 border border-emerald-200 rounded">
+                            A. Frais Propres
+                            <span class="block font-normal text-emerald-600 mt-1">Remboursement de frais réels ou forfaitaires (Non taxé)</span>
+                        </div>
+                        <div class="p-2 bg-blue-50 text-xs font-bold text-blue-700 border border-blue-200 rounded">
+                            B. Provision
+                            <span class="block font-normal text-blue-600 mt-1">Capital stocké pour projets futurs ou complément pension.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: AUDIT JURIDIQUE & FISCAL (DEBUNKING) -->
+        <section id="legal" class="scroll-mt-24">
+            <div class="bg-slate-900 text-white rounded-t-2xl p-8">
+                <h2 class="text-3xl font-bold mb-2">Audit de Faisabilité & Risques</h2>
+                <p class="text-slate-400">Analyse critique des points de friction juridique. Le système ne peut fonctionner sans sécurisation préalable.</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-0 border-x border-b border-slate-200 bg-white">
+                
+                <!-- Risk: Requalification -->
+                <div class="p-8 border-b lg:border-b-0 lg:border-r border-slate-200 hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold uppercase tracking-wide">Risque Critique</span>
+                        <h3 class="text-xl font-bold text-slate-900">Lien de Subordination (ONSS)</h3>
+                    </div>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">
+                        <strong>Le Problème :</strong> Si la structure ECP donne des instructions, contrôle les horaires ou le travail, l'ONSS peut requalifier la relation en "salariat déguisé".
+                    </p>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">
+                        <strong>Conséquence :</strong> Rappel de cotisations sociales patronales et personnelles + amendes. Le modèle économique s'effondre.
+                    </p>
+                    <div class="bg-white border border-slate-300 p-4 rounded text-sm">
+                        <strong class="text-slate-800">Solution ECP :</strong> Autonomie totale du contribuant. Utilisation de plateformes décentralisées (Solid) pour prouver l'absence de subordination hiérarchique classique.
+                    </div>
+                </div>
+
+                <!-- Risk: Ruling Fiscal -->
+                <div class="p-8 border-b border-slate-200 hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold uppercase tracking-wide">Pré-requis Absolu</span>
+                        <h3 class="text-xl font-bold text-slate-900">Le Ruling Fiscal (SDA)</h3>
+                    </div>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">
+                        <strong>Le Problème :</strong> Le remboursement de frais (Défraiement) est souvent limité et scruté. L'accumulation de "Provisions" pourrait être taxée comme un revenu professionnel différé.
+                    </p>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">
+                        <strong>Nécessité :</strong> Le document insiste sur l'obtention d'une <em>Décision Anticipée</em> (Ruling) valable 5 ans pour garantir que les provisions ne soient pas taxables l'année de leur constitution.
+                    </p>
+                    <div class="bg-white border border-slate-300 p-4 rounded text-sm">
+                        <strong class="text-slate-800">État :</strong> Sans ce ruling, chaque contribuant s'expose à un redressement fiscal individuel.
+                    </div>
+                </div>
+
+                <!-- Feasibility Radar -->
+                <div class="p-8 border-r border-slate-200 lg:col-span-1 flex flex-col justify-center items-center">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4">Radar de Viabilité</h3>
+                    <div class="chart-container" style="height: 350px; width: 100%;">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Risk: VAT -->
+                <div class="p-8 hover:bg-slate-50 transition flex flex-col justify-center">
+                     <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold uppercase tracking-wide">Complexité</span>
+                        <h3 class="text-xl font-bold text-slate-900">Régime TVA (Art. 44)</h3>
+                    </div>
+                    <p class="text-slate-600 mb-4 text-sm leading-relaxed">
+                        L'exemption de TVA (Art. 44) s'applique à certaines prestations sociales ou éducatives. Cependant, si l'ECP vend des services commerciaux (jardinage, web...), la TVA doit être facturée.
+                    </p>
+                    <div class="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 text-sm">
+                        <strong>Attention :</strong> La concurrence déloyale avec le secteur privé est un risque juridique majeur si l'ECP casse les prix grâce à l'absence de charges sociales complètes.
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        
+        <!-- SECTION 5: CONCLUSION & TECH -->
+        <section class="bg-slate-100 rounded-2xl p-8 border border-slate-200 text-center">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">Infrastructure Technologique</h2>
+            <p class="text-slate-600 max-w-2xl mx-auto mb-6">
+                Le modèle ECP mentionne l'utilisation de <strong>Solid</strong> (Social Linked Data) et <strong>NYXO</strong> pour gérer les données. Cela permet de prouver la traçabilité des activités sans créer de base de données centralisée intrusive (RGPD).
+            </p>
+            <div class="inline-flex gap-4">
+                <span class="px-4 py-2 bg-white rounded border border-slate-300 text-sm font-semibold text-slate-700">Web Décentralisé</span>
+                <span class="px-4 py-2 bg-white rounded border border-slate-300 text-sm font-semibold text-slate-700">Portabilité des données</span>
+                <span class="px-4 py-2 bg-white rounded border border-slate-300 text-sm font-semibold text-slate-700">Smart Contracts (Optionnel)</span>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left grid md:grid-cols-2 gap-8">
+            <div>
+                <h4 class="text-white font-bold mb-2">Audit ECP 2026</h4>
+                <p class="text-sm">Basé sur le document "Économie contributive provisionnée — Wikipédia.pdf".</p>
+                <p class="text-sm mt-2">Ce tableau de bord est une analyse indépendante et ne constitue pas un conseil juridique officiel.</p>
+            </div>
+            <div class="md:text-right">
+                <p class="text-xs uppercase tracking-widest mb-2">Sources Mentionnées</p>
+                <ul class="text-sm space-y-1">
+                    <li>Gouvernement Arizona (Note de formateur)</li>
+                    <li>SPF Finances (SDA - Ruling)</li>
+                    <li>ONSS (Réglementation salariale)</li>
+                    <li>Projet Solid (Inrupt)</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- CHART DATA & CONFIGURATION ---
+
+        // 1. Context Chart (Doughnut)
+        const ctxContext = document.getElementById('contextChart').getContext('2d');
+        const contextChart = new Chart(ctxContext, {
+            type: 'doughnut',
+            data: {
+                labels: ['Piège à l\'emploi (Perte Droits)', 'Inactivité forcée', 'Travail au noir (Estimation)', 'Activité partielle sécurisée'],
+                datasets: [{
+                    data: [45, 30, 15, 10],
+                    backgroundColor: ['#ef4444', '#cbd5e1', '#f59e0b', '#10b981'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right' }
+                }
+            }
+        });
+
+        // 2. The Trap Simulation (Bar Chart)
+        const ctxTrap = document.getElementById('trapChart').getContext('2d');
+        let trapChart = new Chart(ctxTrap, {
+            type: 'bar',
+            data: {
+                labels: ['Revenu Net Disponible'],
+                datasets: [
+                    {
+                        label: 'Sans Activité (Allocations)',
+                        data: [1200], // Base amount
+                        backgroundColor: '#cbd5e1',
+                        stack: 'StatusQuo'
+                    },
+                    {
+                        label: 'Perte sur Allocations',
+                        data: [0], 
+                        backgroundColor: '#ef4444',
+                        stack: 'StatusQuo'
+                    },
+                    {
+                        label: 'Gain Activité (Net)',
+                        data: [0],
+                        backgroundColor: '#3b82f6',
+                        stack: 'StatusQuo'
+                    },
+                    // ECP Stack
+                    {
+                        label: 'Base Allocations (ECP)',
+                        data: [1200],
+                        backgroundColor: '#cbd5e1',
+                        stack: 'ECP'
+                    },
+                    {
+                        label: 'Frais Propres (ECP)',
+                        data: [0],
+                        backgroundColor: '#10b981',
+                        stack: 'ECP'
+                    },
+                    {
+                        label: 'Provision Différée (ECP)',
+                        data: [0],
+                        backgroundColor: '#6366f1',
+                        stack: 'ECP'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Montant en €' }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            footer: (tooltipItems) => {
+                                let total = 0;
+                                tooltipItems.forEach((item) => {
+                                    if(item.dataset.label !== 'Perte sur Allocations') {
+                                        total += item.raw;
+                                    } else {
+                                        total -= item.raw; // Visual approximation
+                                    }
+                                });
+                                // Simple logic for demo purpose tooltip sum
+                                return ''; 
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 3. Radar Chart (Feasibility)
+        const ctxRadar = document.getElementById('radarChart').getContext('2d');
+        const radarChart = new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: [
+                    'Sécurité Juridique (ONSS)', 
+                    'Viabilité Fiscale (SDA)', 
+                    'Acceptation Politique', 
+                    'Impact Social', 
+                    'Maturité Techno'
+                ],
+                datasets: [{
+                    label: 'Score ECP Actuel',
+                    data: [2, 3, 4, 9, 7], // Low legal/fiscal score without ruling, high social impact
+                    fill: true,
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    borderColor: 'rgb(59, 130, 246)',
+                    pointBackgroundColor: 'rgb(59, 130, 246)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(59, 130, 246)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: {
+                    line: { borderWidth: 3 }
+                },
+                scales: {
+                    r: {
+                        angleLines: { display: true },
+                        suggestedMin: 0,
+                        suggestedMax: 10,
+                        ticks: { stepSize: 2 }
+                    }
+                }
+            }
+        });
+
+        // --- INTERACTION LOGIC ---
+
+        const slider = document.getElementById('incomeSlider');
+        const incomeDisplay = document.getElementById('incomeValue');
+
+        // Logic to simulate the "Trap" vs ECP
+        // Assumptions for demo:
+        // Status Quo: After a small disregard (e.g., 200€), allocations drop 1:1 or similarly harsh.
+        // ECP: Allocations stay 100%. Generated money splits into Frais (approx 20%) and Provision (80% minus mgmt fees).
+        
+        function updateSimulation() {
+            const income = parseInt(slider.value);
+            incomeDisplay.textContent = income + '€';
+
+            // 1. Status Quo Logic (Simplified Trap)
+            // Base allocation: 1200
+            // If income > 200, loose allocation equivalent to income (simplified worst case for BIM/Chomage complet)
+            const baseAlloc = 1200;
+            let loss = 0;
+            let netActivity = income;
+
+            // Scenario: Traditional "Activité autorisée" often has ceilings or progressive loss.
+            // Let's model a harsh trap: above 150€, you lose euro for euro on allocations (simplified).
+            if (income > 150) {
+                loss = (income - 150); 
+            }
+            // Cap loss at allocation amount
+            if (loss > baseAlloc) loss = baseAlloc;
+
+            // Update Chart Data for Status Quo
+            // Stack 0: Base Alloc (visual trick: we show full alloc then a red bar for loss? No, let's show Remaining Alloc)
+            // Actually, stacked bar works best if we show components.
+            // Component 1: Remaining Allocation
+            trapChart.data.datasets[0].data = [baseAlloc - loss];
+            // Component 2: The "Loss" (Red visualization of what disappeared)
+            trapChart.data.datasets[1].data = [loss]; 
+            // Component 3: The Activity Income
+            trapChart.data.datasets[2].data = [income];
+
+            // 2. ECP Logic
+            // Base Allocation: Remains 1200 (Theory: it's not professional income yet)
+            // Activity Income splits: 
+            // Fee: 15% (Management + Insurance)
+            // Frais Propres: 20% of remainder (illustrative)
+            // Provision: Rest
+            
+            const fee = income * 0.15;
+            const distributable = income - fee;
+            const frais = distributable * 0.25; // Approx reimbursement
+            const provision = distributable * 0.75;
+
+            trapChart.data.datasets[3].data = [baseAlloc]; // Alloc maintained
+            trapChart.data.datasets[4].data = [frais]; // Cash now (untaxed)
+            trapChart.data.datasets[5].data = [provision]; // Future money
+
+            trapChart.update();
+        }
+
+        slider.addEventListener('input', updateSimulation);
+        
+        // Navigation Smooth Scroll
+        window.scrollToSection = function(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        // Initialize
+        updateSimulation();
+
+    </script>
+</body>
+</html>
