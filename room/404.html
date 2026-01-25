@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)file:///C:/Users/yanni/Downloads/it-crowd-404.html -->
+<html lang="fr"><head><script type='text/javascript' src='https://dl.ouaisfi.eu/fq78wRl0viFM2wQPKhkQvJ37E6_XM92upm6YQeUu1nca_6MkBXfbpO-iU0kvwKsDn_aKz2nx3NGkCrwP0X49ecqOL3VlrREieDr6EMlHCV6USBVFz-mjCEkGDSKb88VPhvpe4aDfEP-DkTEzVbgl-bYg_ap42WXqoiuknKnlOUnbaiWj1eSATxUdHTj-_GIsdNCwlQZQFti5As0nCr3_Tq-xAg9pP3R8T4o5PLJEIvqSSYI4ocbT7pjhjON1rVQU7-64ZtEXrYz-r3xb42ALHD7BvdlBrqE8Gp1a_mXhHgY2zOui8lJ2twW-u8SH9K4VwTqXswRis-bKJEd8WTPNnqfwLebWixNspdCOPmCjYu01-ABYxVSyt_nWyuE1_kLPXj-FB9pzaMkH6fwWmBSr5SQPYPlOc5ByiLja_xZsxhXbsDMV-rBc0UrA-62-4O48Rrsi7HF1f6i_6oCkD8DLUg'></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Avez-vous essayé de l'éteindre et de le rallumer ?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #000;
+            border: 3px solid #00ff00;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #1a1a1a;
+            padding: 15px 20px;
+            border-bottom: 2px solid #00ff00;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff5f56;
+        }
+
+        .header-dot:nth-child(2) {
+            background: #ffbd2e;
+        }
+
+        .header-dot:nth-child(3) {
+            background: #27c93f;
+        }
+
+        .header-title {
+            margin-left: 15px;
+            font-size: 14px;
+        }
+
+        .error-display {
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px solid #00ff00;
+            background: #0a0a0a;
+        }
+
+        .error-code {
+            font-size: 80px;
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 0 0 20px #ff0000;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            60% { transform: translateX(-2px); }
+            80% { transform: translateX(2px); }
+        }
+
+        .error-message {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #00ff00;
+        }
+
+        .chat-container {
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 10px;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message.bot {
+            align-self: flex-start;
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #00ff00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000;
+            flex-shrink: 0;
+        }
+
+        .user .avatar {
+            background: #0080ff;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+        }
+
+        .user .message-content {
+            background: #0a2540;
+            border-color: #0080ff;
+            color: #0080ff;
+        }
+
+        .input-area {
+            padding: 20px;
+            border-top: 2px solid #00ff00;
+            background: #0a0a0a;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        button {
+            padding: 12px 24px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #00cc00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 12px 16px;
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            width: fit-content;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-dot"></div>
+            <div class="header-dot"></div>
+            <div class="header-dot"></div>
+            <div class="header-title">Support Technique Reynholm Industries</div>
+        </div>
+        
+        <div class="error-display">
+            <div class="error-code">404</div>
+            <div class="error-message">Page non trouvée</div>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="chat-message bot">
+                <div class="avatar">IT</div>
+                <div class="message-content">
+                    Bonjour ! Service informatique, avez-vous essayé de l'éteindre et de le rallumer ?
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-container">
+                <input type="text" id="userInput" placeholder="Tapez votre message...">
+                <button onclick="sendMessage()" id="sendBtn">Envoyer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const responses = {
+            'bonjour': 'Bonjour ! Avez-vous vérifié que votre ordinateur est bien branché ?',
+            'aide': 'Bien sûr ! Première question : est-ce que c\'est allumé ?',
+            'bug': 'Ah, un bug ! Avez-vous essayé de fermer toutes les fenêtres et de redémarrer ?',
+            'erreur': 'Une erreur 404 signifie que la page n\'existe pas. Un peu comme mon salaire décent.',
+            'internet': 'L\'internet ? Vous voulez dire la boîte noire avec le bouton clignotant ?',
+            'ordinateur': 'Est-ce que vous êtes sûr qu\'il est branché ? Non, je veux dire VRAIMENT sûr ?',
+            'mot de passe': 'Essayez "mot de passe". Ou "123456". Ou appelez Roy, il adore ça.',
+            'lent': 'C\'est lent ? Avez-vous essayé de souffler dans les ventilateurs ?',
+            'default': [
+                'Intéressant... Avez-vous essayé de redémarrer ?',
+                'Hmm, je vois. Est-ce que le bouton est en position ON ?',
+                'D\'accord. Pouvez-vous vérifier tous les câbles ?',
+                'Je comprends. Avez-vous lu le manuel ?',
+                'Fascinant. L\'avez-vous débranché et rebranché ?',
+                'Je note. Est-ce que vous êtes sûr que c\'est branché ?',
+                'Très bien. Avez-vous essayé de cliquer dessus ?'
+            ]
+        };
+
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            userInput.value = '';
+            sendBtn.disabled = true;
+
+            showTyping();
+            
+            setTimeout(() => {
+                hideTyping();
+                const response = getResponse(message);
+                addMessage(response, 'bot');
+                sendBtn.disabled = false;
+            }, 1500 + Math.random() * 1000);
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            avatar.textContent = sender === 'bot' ? 'IT' : 'U';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.textContent = text;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            chatContainer.appendChild(messageDiv);
+            
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function getResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            for (let keyword in responses) {
+                if (lowerMessage.includes(keyword)) {
+                    return responses[keyword];
+                }
+            }
+            
+            const defaultResponses = responses.default;
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        function showTyping() {
+            const typing = document.createElement('div');
+            typing.className = 'chat-message bot';
+            typing.id = 'typingIndicator';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            avatar.textContent = 'IT';
+            
+            const indicator = document.createElement('div');
+            indicator.className = 'typing-indicator active';
+            indicator.innerHTML = '<span></span><span></span><span></span>';
+            
+            typing.appendChild(avatar);
+            typing.appendChild(indicator);
+            chatContainer.appendChild(typing);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+    </script>
+
+</body></html>
