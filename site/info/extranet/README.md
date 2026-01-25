@@ -1,4 +1,6 @@
-Je vais d'abord examiner ton annexe et consulter le skill de design frontend pour te créer quelque chose de vraiment impressionnant !Wow, ce rapport d'audit est une mine d'or ! Je vais te créer une **tuerie absolue** — un site Knowledge Graph interactif pour le CPCP avec une esthétique éditoriale engagée et moderne.## 💥 BOOM ! Voilà ta tuerie !
+Je vais d'abord examiner ton annexe et consulter le skill de design frontend pour te créer quelque chose de vraiment impressionnant !Wow, ce rapport d'audit est une mine d'or ! Je vais te créer une **tuerie absolue** — un site Knowledge Graph interactif pour le CPCP avec une esthétique éditoriale engagée et moderne.
+
+## 💥 BOOM ! Voilà ta tuerie !
 
 J'ai créé un **intranet Knowledge Graph** complet basé sur ton annexe d'audit. Voici ce que ça inclut :
 
@@ -31,5 +33,10 @@ J'ai créé un **intranet Knowledge Graph** complet basé sur ton annexe d'audit
 - **Schema.org JSON-LD** intégré pour le SEO/GEO
 - Responsive mobile/tablette/desktop
 - Prêt pour **GitHub Pages**
+
+> Le mot de passe connard !
+
+Vous avez atteint votre limite de dépenses d'utilisation supplémentaire
+Acheter plus ?
 
 Ouvre le fichier et teste le Knowledge Graph — c'est vraiment satisfaisant de voir les connexions se révéler ! 🚀
