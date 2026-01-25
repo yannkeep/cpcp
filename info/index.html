@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratégie d'Inclusion : CPCP & Profil Civic-Low-Tech</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <!-- CSS Styling -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #F0F4F8; /* Light neutral background */
+            color: #102A43; /* Dark Slate */
+        }
+
+        /* CHART CONTAINER STYLING - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Max width constraint */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 400px; /* Max height constraint */
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Custom Scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00B4D8; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0077B6; 
+        }
+
+        /* Material Design Card Effect */
+        .infographic-card {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .infographic-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Palette Classes for Dynamic Usage */
+        .text-vibrant-blue { color: #00B4D8; }
+        .bg-vibrant-blue { background-color: #00B4D8; }
+        .text-energetic-orange { color: #FF9F1C; }
+        .bg-energetic-orange { background-color: #FF9F1C; }
+        .text-deep-navy { color: #03045E; }
+    </style>
+
+    <!-- Chosen Palette: "Brilliant Blues & Energetic Orange" -->
+    <!-- Hex Codes: #03045E (Deep Navy), #0077B6 (Strong Blue), #00B4D8 (Vibrant Cyan), #90E0EF (Light Cyan), #FF9F1C (Energetic Orange) -->
+    
+    <!-- Application Structure Plan:
+        1. Header: High-impact title identifying the mission (Reintegration via CPCP).
+        2. Context/Gap Analysis: Radar chart contrasting market rigidity with CPCP flexibility.
+        3. Capability Map: Bar chart highlighting "Civic-Low-Tech" skills value.
+        4. The Strategy Model: HTML-based Diagram showing the Async Workflow.
+        5. Impact Distribution: Doughnut chart showing where the profile adds value to CPCP.
+        6. Conclusion/Call to Action: Summary card.
+    -->
+
+    <!-- Visualization & Content Choices:
+        1. Context -> Goal: Compare -> Radar Chart -> Shows the "Fit" between Profile and CPCP vs Corporate Mismtach. (NO SVG)
+        2. Capabilities -> Goal: Compare -> Horizontal Bar Chart -> Quantifies the value of "Soft Skills" & "No-Code" vs "Hard Tech". (NO SVG)
+        3. Strategy -> Goal: Process -> HTML/CSS Diagram -> Visualizes the "Silence Radio" workflow. (NO SVG, NO Mermaid)
+        4. Impact -> Goal: Inform/Part -> Doughnut Chart -> Breaks down the project types suitable for the profile. (NO SVG)
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto space-y-8">
+        
+        <!-- SECTION 1: HEADER & INTRO -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-black text-deep-navy mb-4 tracking-tight">
+                INCLUSION <span class="text-vibrant-blue">ASYNCHRONE</span>
+            </h1>
+            <div class="h-2 w-32 bg-energetic-orange mx-auto rounded-full mb-6"></div>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Analyse stratégique pour la réinsertion professionnelle d'un profil <strong>Civic-Low-Tech (46 ans)</strong> au sein du <strong>CPCP</strong>. 
+                Comment transformer les contraintes médicales (Silence Radio) en opportunités opérationnelles ?
+            </p>
+        </header>
+
+        <!-- SECTION 2: THE GAP ANALYSIS (RADAR CHART) -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center infographic-card p-6 md:p-8">
+            <div class="order-2 lg:order-1">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold text-deep-navy mb-2 border-l-4 border-vibrant-blue pl-3">Le "Fit" Culturel & Structurel</h2>
+                    <p class="text-gray-600 text-sm md:text-base mb-4">
+                        Ce graphique compare les exigences du marché du travail classique (souvent rigide et synchrone) avec la réalité de vos besoins médicaux, 
+                        et démontre comment la structure du CPCP (orientée projet et réflexion) offre un terrain d'entente idéal.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center"><span class="text-energetic-orange mr-2">●</span> <strong>Zone de Friction :</strong> Le marché classique exige une présence constante.</li>
+                        <li class="flex items-center"><span class="text-vibrant-blue mr-2">●</span> <strong>Zone d'Opportunité :</strong> Le CPCP valorise l'autonomie et le fond.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="order-1 lg:order-2 w-full">
+                <!-- CHART CONTAINER -->
+                <div class="chart-container">
+                    <canvas id="radarGapChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SKILL VALUATION (HORIZONTAL BAR) -->
+        <section class="infographic-card p-6 md:p-8">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-deep-navy mb-2 border-l-4 border-energetic-orange pl-3">Valorisation du Profil "Low-Tech"</h2>
+                <p class="text-gray-600">
+                    À 46 ans, sans être développeur, votre valeur ne réside pas dans le code brut, mais dans la compréhension des besoins humains. 
+                    Le CPCP a besoin de "ponts" entre la technologie et les citoyens, pas d'ingénieurs en algorithmes complexes.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-2">
+                    <!-- CHART CONTAINER -->
+                    <div class="chart-container">
+                        <canvas id="skillsBarChart"></canvas>
+                    </div>
+                </div>
+                <div class="md:col-span-1 flex flex-col justify-center space-y-4">
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-deep-navy">Maitrise No-Code</h4>
+                        <p class="text-sm text-gray-600">Utiliser Notion ou Airtable a plus d'impact immédiat pour une ASBL que du C++.</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                        <h4 class="font-bold text-deep-navy">Expérience Vécu</h4>
+                        <p class="text-sm text-gray-600">Votre statut BIM vous donne une légitimité unique pour analyser les sujets de précarité.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: THE ASYNC WORKFLOW (HTML DIAGRAM) -->
+        <section class="infographic-card p-6 md:p-8 bg-gradient-to-br from-white to-blue-50">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl font-bold text-deep-navy mb-4">Le Protocole "Silence Radio"</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Comment collaborer efficacement quand la maladie impose des absences imprévisibles ? 
+                    La réponse est un workflow 100% asynchrone basé sur les résultats.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+                <!-- Step 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-gray-400 flex flex-col items-center text-center z-10">
+                    <div class="text-4xl mb-2">📥</div>
+                    <h3 class="font-bold text-deep-navy mb-2">1. Input (Brief)</h3>
+                    <p class="text-xs text-gray-500">Réception du besoin par email ou ticket. Pas de réunion Zoom.</p>
+                </div>
+
+                <!-- Connector Mobile (Hidden on MD) -->
+                <div class="md:hidden text-center text-gray-400 text-2xl">▼</div>
+
+                <!-- Step 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-energetic-orange flex flex-col items-center text-center z-10 relative">
+                    <div class="text-4xl mb-2">⚙️</div>
+                    <h3 class="font-bold text-deep-navy mb-2">2. Deep Work</h3>
+                    <p class="text-xs text-gray-500">Production autonome (rédaction, config no-code). Horaires libres.</p>
+                    <!-- Badge -->
+                    <span class="absolute -top-3 right-2 bg-energetic-orange text-white text-xs font-bold px-2 py-1 rounded-full">Zone Flexible</span>
+                </div>
+
+                <!-- Connector Mobile (Hidden on MD) -->
+                <div class="md:hidden text-center text-gray-400 text-2xl">▼</div>
+
+                <!-- Step 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-vibrant-blue flex flex-col items-center text-center z-10">
+                    <div class="text-4xl mb-2">📦</div>
+                    <h3 class="font-bold text-deep-navy mb-2">3. Livrable</h3>
+                    <p class="text-xs text-gray-500">Envoi du document, du lien ou de la vidéo explicative (Loom).</p>
+                </div>
+
+                <!-- Connector Mobile (Hidden on MD) -->
+                <div class="md:hidden text-center text-gray-400 text-2xl">▼</div>
+
+                <!-- Step 4 -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500 flex flex-col items-center text-center z-10">
+                    <div class="text-4xl mb-2">✅</div>
+                    <h3 class="font-bold text-deep-navy mb-2">4. Feedback</h3>
+                    <p class="text-xs text-gray-500">Commentaires écrits différés. Itération suivante.</p>
+                </div>
+
+                <!-- Desktop Connector Line -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-200 -z-0 transform -translate-y-1/2"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: IMPACT ZONES (DOUGHNUT CHART) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center infographic-card p-6 md:p-8">
+            <div class="order-2 md:order-1 w-full">
+                <!-- CHART CONTAINER -->
+                <div class="chart-container">
+                    <canvas id="impactDoughnutChart"></canvas>
+                </div>
+            </div>
+            <div class="order-1 md:order-2">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold text-deep-navy mb-2 border-l-4 border-vibrant-blue pl-3">Zones d'Impact au CPCP</h2>
+                    <p class="text-gray-600 mb-4">
+                        Où votre profil est-il le plus utile ? Ce graphique montre la répartition idéale de votre temps pour maximiser l'aide apportée au CPCP tout en minimisant le stress.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <span class="text-2xl mr-2">📝</span>
+                            <div>
+                                <h4 class="font-bold text-sm">Rédaction & Veille (40%)</h4>
+                                <p class="text-xs text-gray-500">Synthèses asynchrones, analyses de fond.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-2xl mr-2">🛠️</span>
+                            <div>
+                                <h4 class="font-bold text-sm">Outils No-Code (35%)</h4>
+                                <p class="text-xs text-gray-500">Création de formulaires, bases de données simples.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-2xl mr-2">👁️</span>
+                            <div>
+                                <h4 class="font-bold text-sm">Audit Usager (25%)</h4>
+                                <p class="text-xs text-gray-500">Test d'accessibilité cognitive des supports.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: CONCLUSION -->
+        <footer class="bg-deep-navy text-white rounded-xl p-8 text-center shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">Conclusion Stratégique</h2>
+            <p class="max-w-2xl mx-auto text-blue-200 mb-6">
+                Le handicap n'est pas un frein technique, mais une contrainte logistique. 
+                En adoptant une approche <strong>orientée résultats</strong> et en utilisant des outils <strong>No-Code</strong>, 
+                vous offrez au CPCP une agilité qu'ils ne possèdent pas en interne.
+            </p>
+            <div class="inline-block bg-energetic-orange text-deep-navy font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-200">
+                Proposer le Partenariat
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- UTILITIES ---
+
+        // Label Wrapping Function (Splits long strings into arrays)
+        function wrapLabel(label) {
+            const MAX_LENGTH = 16;
+            if (label.length <= MAX_LENGTH) return label;
+            
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length <= MAX_LENGTH) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Process labels for a chart config
+        function processLabels(labels) {
+            return labels.map(label => wrapLabel(label));
+        }
+
+        // Tooltip Callback Configuration (MANDATORY)
+        const commonTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- CHART 1: RADAR GAP CHART ---
+        const ctxRadar = document.getElementById('radarGapChart').getContext('2d');
+        const radarChart = new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: processLabels([
+                    'Flexibilité Horaire', 
+                    'Travail Asynchrone', 
+                    'Impact Social', 
+                    'Autonomie', 
+                    'Inclusion Diversité', 
+                    'Rythme Adapté'
+                ]),
+                datasets: [{
+                    label: 'Entreprise Classique',
+                    data: [20, 10, 30, 40, 40, 20],
+                    backgroundColor: 'rgba(3, 4, 94, 0.2)', // Deep Navy transparent
+                    borderColor: '#03045E',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#03045E'
+                }, {
+                    label: 'Modèle CPCP/Civic',
+                    data: [90, 85, 95, 90, 100, 85],
+                    backgroundColor: 'rgba(0, 180, 216, 0.4)', // Vibrant Cyan transparent
+                    borderColor: '#00B4D8',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#00B4D8'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 100,
+                        stepSize: 20, // Prevents "minimumFractionDigits" error
+                        pointLabels: {
+                            font: { size: 11, family: 'Roboto' },
+                            color: '#475569'
+                        },
+                        ticks: { display: false } // Hide numbers for cleaner look
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: commonTooltipConfig
+                }
+            }
+        });
+
+        // --- CHART 2: SKILLS BAR CHART (Horizontal) ---
+        const ctxBar = document.getElementById('skillsBarChart').getContext('2d');
+        const barChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: processLabels([
+                    'Dev Full-Stack (Code)', 
+                    'No-Code (Notion/Airtable)', 
+                    'Compréhension Sociale', 
+                    'Rédaction & Analyse',
+                    'Vitesse d\'exécution',
+                    'Qualité & Profondeur'
+                ]),
+                datasets: [{
+                    label: 'Valeur Ajoutée pour CPCP',
+                    data: [20, 90, 95, 85, 40, 95], // Low code value, high social value
+                    backgroundColor: [
+                        '#CBD5E1', // Gray (Low relevance)
+                        '#FF9F1C', // Orange (High relevance)
+                        '#FF9F1C', 
+                        '#00B4D8', // Blue
+                        '#CBD5E1',
+                        '#00B4D8'
+                    ],
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Horizontal Bar
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { display: false }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'Roboto' } }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: commonTooltipConfig
+                }
+            }
+        });
+
+        // --- CHART 3: IMPACT DOUGHNUT CHART ---
+        const ctxDoughnut = document.getElementById('impactDoughnutChart').getContext('2d');
+        const doughnutChart = new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: processLabels([
+                    'Rédaction & Veille', 
+                    'Architecture No-Code', 
+                    'Audit Accessibilité', 
+                    'Gestion Administrative'
+                ]),
+                datasets: [{
+                    data: [40, 35, 15, 10],
+                    backgroundColor: [
+                        '#0077B6', // Strong Blue
+                        '#00B4D8', // Vibrant Cyan
+                        '#90E0EF', // Light Cyan
+                        '#FF9F1C'  // Orange
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        position: 'right',
+                        labels: { boxWidth: 15, font: { size: 11 } }
+                    },
+                    tooltip: commonTooltipConfig
+                },
+                cutout: '60%' // Donut style
+            }
+        });
+
+    </script>
+</body>
+</html>
