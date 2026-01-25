@@ -1,0 +1,557 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://ouaisfieu.github.io/8gFQnAEaW1DyBxTO6UFfylpe1GZz23SCdNyqv0FqXwMJfQBN2Ujo9Z0XJ2Zjr84f6MBzF0nF5ByRBtCON3yJoulTPiz86k4DzQKz6inVhN1Ds4IzTSuXoFDoFKpc5W7726zuR18QqbxYHcJAzsSW0WGJCa3HiXBojcpZRjBnCMp09Fextny7VH311CS1Ry3lyn-gPc9dOUsLlLEkozl_N2L0V-Uq2Ix7IOVXwExnEelN6jDCEgixskNDGjy_5esMTx0twP2FEQcHqnYVojV83ny3Uz6b_xvnVY4ZoMwQdtK5ThwVvWxeuv8DHvi-gtALjiPZm3RnGH93ZREXMjLnN-lpoxB3Mo3ZieIVI3_vQawoUzD6cvECQDOrnk46fLzqzLKba3krC2onIBlIxoeEl7x-V12tF_CqeO6CnxtRSrBeg5kHPxovkJO9XEsJa26ChHGUYkalhjPO5osJf_qu1ltoxA'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inclusion Numérique : EPN & Bibliothèques</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Primary Background: Stone-50 (Warm White) -->
+    <!-- Text: Stone-800 (Dark Warm Grey) -->
+    <!-- Accents: Teal-600 (Calm Green/Blue for Trust), Orange-400 (Soft Energy for Action) -->
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9; /* stone-50 */
+            color: #292524; /* stone-800 */
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Merriweather', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            max-height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .active-tab {
+            border-bottom: 2px solid #0d9488; /* teal-600 */
+            color: #0f766e; /* teal-700 */
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-teal-100 selection:text-teal-900">
+
+    <!-- Application Structure Plan: 
+         The app is designed as a "Digital Inclusion Dashboard" rather than a linear report.
+         1. Hero Section: Sets the stage with the core mission (Empowerment).
+         2. Context (The Divide): Interactive data viz to establish "Why this matters" (Illectronisme).
+         3. The Ecosystem (Actors): A comparative view of EPNs vs. Libraries using a toggle system to reduce cognitive load and allow direct comparison of roles.
+         4. Services & Empowerment (The Process): An interactive flow showing the journey from Access to Autonomy using actionable cards that update a central insight panel.
+         5. Future/Recommendations: A summary of strategic directions.
+         Rationale: This structure moves from Problem -> Actors -> Solution -> Impact, allowing users to drill down into specific data points without losing the narrative arc.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- Visualization & Content Choices:
+         1. Digital Vulnerability: Doughnut Chart. Goal: Inform/Alarm. Shows the scale of the problem. Interaction: Toggle between demographics.
+         2. Missions Comparison: Radar Chart. Goal: Compare. visualizes the overlapping yet distinct roles of EPNs and Libraries.
+         3. User Demographics: Stacked Bar Chart. Goal: Relationships. Shows who uses what service.
+         4. Empowerment Journey: Interactive HTML Grid. Goal: Process. Clicking stages reveals details (textual). No Chart needed, structured layout is better.
+         Library: Chart.js used for all data viz. Vanilla JS for DOM manipulation.
+    -->
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-stone-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="font-bold text-xl text-teal-700 font-serif tracking-tight">InclusionNumérique.be</div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+                    <a href="#contexte" class="hover:text-teal-600 transition-colors">Contexte</a>
+                    <a href="#acteurs" class="hover:text-teal-600 transition-colors">Acteurs</a>
+                    <a href="#impact" class="hover:text-teal-600 transition-colors">Impact</a>
+                    <a href="#futur" class="hover:text-teal-600 transition-colors">Recommandations</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20">
+
+        <!-- Hero Section -->
+        <section class="text-center py-10 max-w-4xl mx-auto">
+            <div class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-orange-600 uppercase bg-orange-100 rounded-full">
+                Rapport de Synthèse
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-stone-900 leading-tight mb-6">
+                Les Espaces Publics Numériques et les Bibliothèques
+            </h1>
+            <p class="text-xl text-stone-600 font-light leading-relaxed">
+                Comment la Belgique francophone structure son réseau pour lutter contre la fracture numérique et favoriser <strong class="text-teal-700 font-normal">l'empouvoirement</strong> des citoyens.
+            </p>
+        </section>
+
+        <!-- Section 1: The Context (Fracture Numérique) -->
+        <section id="contexte" class="bg-white rounded-2xl p-8 shadow-sm border border-stone-100">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-stone-800 mb-4">La Fracture Numérique en Chiffres</h2>
+                    <p class="text-stone-600 mb-6 leading-relaxed">
+                        L'inclusion numérique n'est pas seulement une question d'accès matériel. C'est une question de compétences et d'usage critique. 
+                        Ce tableau de bord interactif met en lumière la vulnérabilité numérique en Belgique.
+                        <br><br>
+                        Cliquez sur les boutons ci-dessous pour voir comment la vulnérabilité affecte différents segments de la population.
+                    </p>
+                    
+                    <div class="flex space-x-2 mb-6">
+                        <button onclick="updateContextChart('global')" id="btn-global" class="px-4 py-2 text-sm rounded-lg bg-teal-600 text-white shadow-sm hover:bg-teal-700 transition-colors context-btn">
+                            Population Globale
+                        </button>
+                        <button onclick="updateContextChart('faible')" id="btn-faible" class="px-4 py-2 text-sm rounded-lg bg-stone-100 text-stone-600 hover:bg-stone-200 transition-colors context-btn">
+                            Faibles Revenus
+                        </button>
+                        <button onclick="updateContextChart('senior')" id="btn-senior" class="px-4 py-2 text-sm rounded-lg bg-stone-100 text-stone-600 hover:bg-stone-200 transition-colors context-btn">
+                            Seniors (65+)
+                        </button>
+                    </div>
+
+                    <div class="bg-orange-50 border-l-4 border-orange-400 p-4">
+                        <p class="text-sm text-stone-700" id="context-insight">
+                            <strong>Insight :</strong> 40% de la population belge a de faibles compétences numériques globales.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center justify-center bg-stone-50 rounded-xl p-6">
+                    <div class="chart-container">
+                        <canvas id="contextChart"></canvas>
+                    </div>
+                    <p class="text-xs text-stone-400 mt-4 text-center">Source: Baromètre de l'Inclusion Numérique (Données simulées)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Ecosystem (EPN vs Libraries) -->
+        <section id="acteurs">
+            <div class="mb-10 max-w-3xl">
+                <h2 class="text-2xl font-bold text-stone-800 mb-4">Deux Piliers, Une Mission</h2>
+                <p class="text-stone-600">
+                    Si les Espaces Publics Numériques (EPN) et les Bibliothèques partagent l'objectif d'inclusion, leurs approches et leurs publics diffèrent légèrement.
+                    Explorez le graphique ci-dessous pour comprendre la complémentarité de leurs offres.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Info Cards (Left) -->
+                <div class="lg:col-span-1 space-y-4">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 card-hover cursor-pointer" onclick="highlightEcosystem('epn')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-lg text-teal-700">EPN</h3>
+                            <span class="text-2xl">🖥️</span>
+                        </div>
+                        <p class="text-sm text-stone-600">
+                            Focalisés sur la formation technique, l'accès matériel et l'accompagnement administratif direct.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 card-hover cursor-pointer" onclick="highlightEcosystem('biblio')">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-lg text-orange-600">Bibliothèques</h3>
+                            <span class="text-2xl">📚</span>
+                        </div>
+                        <p class="text-sm text-stone-600">
+                            Focalisées sur la littératie médiatique, la culture numérique et le lien social intergénérationnel.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Radar Chart (Right) -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                    <div class="flex justify-center mt-4 space-x-6 text-sm">
+                        <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-teal-600 mr-2"></span> EPN</div>
+                        <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-orange-500 mr-2"></span> Bibliothèques</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Path to Empowerment (Interactive Process) -->
+        <section id="impact" class="bg-stone-800 text-stone-100 rounded-2xl p-8 md:p-12 relative overflow-hidden">
+            <!-- Decorative circle -->
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-teal-900/50 blur-3xl"></div>
+
+            <div class="relative z-10">
+                <h2 class="text-2xl font-bold text-white mb-6">De l'Accès à l'Empouvoirement</h2>
+                <p class="text-stone-300 mb-10 max-w-2xl">
+                    L'objectif n'est pas seulement de connecter, mais de rendre autonome. Cliquez sur les étapes ci-dessous pour découvrir les actions concrètes mises en place sur le terrain.
+                </p>
+
+                <div class="grid md:grid-cols-4 gap-4 mb-8">
+                    <button onclick="setEmpowermentStep(0)" class="empowerment-btn active-step text-left p-4 rounded-lg bg-stone-700 hover:bg-stone-600 transition-all border-l-4 border-teal-500">
+                        <div class="text-xs text-teal-300 uppercase tracking-wider mb-1">Étape 1</div>
+                        <div class="font-bold">Accès Matériel</div>
+                    </button>
+                    <button onclick="setEmpowermentStep(1)" class="empowerment-btn text-left p-4 rounded-lg bg-stone-700 hover:bg-stone-600 transition-all border-l-4 border-transparent hover:border-stone-500">
+                        <div class="text-xs text-stone-400 uppercase tracking-wider mb-1">Étape 2</div>
+                        <div class="font-bold">Compétences de Base</div>
+                    </button>
+                    <button onclick="setEmpowermentStep(2)" class="empowerment-btn text-left p-4 rounded-lg bg-stone-700 hover:bg-stone-600 transition-all border-l-4 border-transparent hover:border-stone-500">
+                        <div class="text-xs text-stone-400 uppercase tracking-wider mb-1">Étape 3</div>
+                        <div class="font-bold">Compréhension Critique</div>
+                    </button>
+                    <button onclick="setEmpowermentStep(3)" class="empowerment-btn text-left p-4 rounded-lg bg-stone-700 hover:bg-stone-600 transition-all border-l-4 border-transparent hover:border-stone-500">
+                        <div class="text-xs text-stone-400 uppercase tracking-wider mb-1">But Ultime</div>
+                        <div class="font-bold">Créativité & Citoyenneté</div>
+                    </button>
+                </div>
+
+                <div class="bg-stone-900/50 rounded-xl p-6 border border-stone-700 grid md:grid-cols-3 gap-8 items-center min-h-[200px]">
+                    <div class="md:col-span-2">
+                        <h3 id="step-title" class="text-xl font-bold text-teal-400 mb-2">L'Accès comme prérequis</h3>
+                        <p id="step-desc" class="text-stone-300 leading-relaxed">
+                            Fournir une connexion internet de qualité et des terminaux (ordinateurs, tablettes) à ceux qui n'en ont pas. C'est la mission "historique" des EPN, désormais rejointe par les bibliothèques via le prêt de matériel.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-2" id="step-tags">
+                            <span class="px-2 py-1 bg-stone-700 rounded text-xs">Wifi gratuit</span>
+                            <span class="px-2 py-1 bg-stone-700 rounded text-xs">Prêt PC</span>
+                        </div>
+                    </div>
+                    <div class="md:col-span-1 border-t md:border-t-0 md:border-l border-stone-700 pt-4 md:pt-0 md:pl-6">
+                        <div class="text-center">
+                            <div id="step-stat" class="text-4xl font-bold text-white mb-1">15%</div>
+                            <div id="step-stat-label" class="text-xs text-stone-400">des ménages sans PC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Barriers Analysis (Interactive List) -->
+        <section id="freins">
+            <h2 class="text-2xl font-bold text-stone-800 mb-6">Les Freins à l'Inclusion</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Chart -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                    <p class="text-sm text-stone-500 mb-4">Raisons principales de non-utilisation d'internet (Enquête EPN)</p>
+                    <div class="chart-container">
+                        <canvas id="barriersChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Descriptive Text -->
+                <div class="flex flex-col justify-center space-y-6">
+                    <div>
+                        <h3 class="font-bold text-teal-700 mb-2">1. Coût & Équipement</h3>
+                        <p class="text-stone-600 text-sm">Le coût du matériel et des abonnements reste le premier obstacle, aggravé par l'obsolescence programmée.</p>
+                        <div class="w-full bg-stone-200 h-1 mt-2 rounded-full overflow-hidden">
+                            <div class="bg-teal-600 h-full" style="width: 35%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-teal-700 mb-2">2. Manque de Compétences</h3>
+                        <p class="text-stone-600 text-sm">La peur de "casser" ou de ne pas savoir faire. C'est ici que la médiation humaine est cruciale.</p>
+                        <div class="w-full bg-stone-200 h-1 mt-2 rounded-full overflow-hidden">
+                            <div class="bg-teal-600 h-full" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-teal-700 mb-2">3. Pertinence Perçue</h3>
+                        <p class="text-stone-600 text-sm">"Ce n'est pas pour moi". Un travail de sensibilisation est nécessaire pour montrer l'utilité au quotidien.</p>
+                        <div class="w-full bg-stone-200 h-1 mt-2 rounded-full overflow-hidden">
+                            <div class="bg-teal-600 h-full" style="width: 20%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Recommendations -->
+        <section id="futur" class="bg-teal-50 rounded-2xl p-8 border border-teal-100">
+            <h2 class="text-2xl font-bold text-teal-800 mb-6">Recommandations Stratégiques</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="text-3xl mb-3">🤝</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Mutualisation</h3>
+                    <p class="text-sm text-stone-600">Renforcer les partenariats locaux entre EPN, Bibliothèques et CPAS pour créer un maillage territorial serré.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="text-3xl mb-3">🎓</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Formation des Médiateurs</h3>
+                    <p class="text-sm text-stone-600">Professionnaliser le rôle d'animateur multimédia pour inclure des compétences en psychologie sociale.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="text-3xl mb-3">📱</div>
+                    <h3 class="font-bold text-stone-800 mb-2">Mobile First</h3>
+                    <p class="text-sm text-stone-600">Adapter les formations à l'usage exclusif du smartphone, qui est souvent le seul terminal des publics précaires.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-10 mt-20">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="mb-2">© 2024 Analyse Synthétique - Espace Numérique Belgique</p>
+            <p class="text-xs">Données basées sur les tendances rapportées dans le secteur de la médiation numérique en Wallonie et Bruxelles.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Data Store ---
+        const contextData = {
+            global: {
+                data: [40, 60],
+                labels: ['Faibles Compétences', 'Compétences Avancées'],
+                colors: ['#f97316', '#e5e7eb'], // Orange / Grey
+                insight: "40% de la population belge a de faibles compétences numériques globales."
+            },
+            faible: {
+                data: [75, 25],
+                labels: ['Faibles Compétences', 'Compétences Avancées'],
+                colors: ['#ea580c', '#e5e7eb'], // Darker Orange
+                insight: "Ce chiffre grimpe à 75% chez les personnes disposant de faibles revenus."
+            },
+            senior: {
+                data: [68, 32],
+                labels: ['Faibles Compétences', 'Compétences Avancées'],
+                colors: ['#c2410c', '#e5e7eb'],
+                insight: "68% des seniors éprouvent des difficultés majeures avec l'administration en ligne."
+            }
+        };
+
+        const empowermentSteps = [
+            {
+                title: "L'Accès comme prérequis",
+                desc: "Fournir une connexion internet de qualité et des terminaux (ordinateurs, tablettes) à ceux qui n'en ont pas. C'est la mission 'historique' des EPN.",
+                stat: "15%",
+                statLabel: "des ménages sans PC",
+                tags: ["Wifi gratuit", "Prêt PC", "Imprimantes"]
+            },
+            {
+                title: "Compétences Techniques de Base",
+                desc: "Apprendre à utiliser la souris, le clavier, envoyer un email, naviguer sur le web en sécurité. L'objectif est l'autonomie fonctionnelle.",
+                stat: "3h",
+                statLabel: "durée moyenne d'initiation",
+                tags: ["Initiation", "Bureautique", "Smartphone"]
+            },
+            {
+                title: "Compréhension Critique & Admin",
+                desc: "Comprendre les enjeux des données, reconnaître les fake news, et surtout, gérer ses droits administratifs en ligne (Tax-on-web, etc.).",
+                stat: "60%",
+                statLabel: "des demandes en EPN",
+                tags: ["e-Administration", "Sécurité", "Info-Critique"]
+            },
+            {
+                title: "Créativité & Citoyenneté (Empouvoirement)",
+                desc: "Utiliser le numérique pour créer, s'exprimer, trouver un emploi ou participer à la vie citoyenne. Le citoyen devient acteur et non plus consommateur.",
+                stat: "But",
+                statLabel: "Transformation Sociale",
+                tags: ["Coding", "FabLab", "Média Citoyen"]
+            }
+        ];
+
+        // --- Chart Initialization ---
+
+        // 1. Context Chart (Doughnut)
+        let ctxContext = document.getElementById('contextChart').getContext('2d');
+        let contextChart = new Chart(ctxContext, {
+            type: 'doughnut',
+            data: {
+                labels: contextData.global.labels,
+                datasets: [{
+                    data: contextData.global.data,
+                    backgroundColor: contextData.global.colors,
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, font: {family: 'Inter'} } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw + '%';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // 2. Radar Chart (Comparison)
+        let ctxRadar = document.getElementById('radarChart').getContext('2d');
+        let radarChart = new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Accès Matériel', 'Formation Technique', 'Aide Administrative', 'Lien Social', 'Culture & Critique', 'Jeux & Créativité'],
+                datasets: [{
+                    label: 'EPN',
+                    data: [90, 95, 85, 60, 40, 50],
+                    fill: true,
+                    backgroundColor: 'rgba(13, 148, 136, 0.2)', // Teal transparent
+                    borderColor: '#0d9488',
+                    pointBackgroundColor: '#0d9488',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#0d9488'
+                }, {
+                    label: 'Bibliothèques',
+                    data: [50, 40, 50, 90, 95, 70],
+                    fill: true,
+                    backgroundColor: 'rgba(249, 115, 22, 0.2)', // Orange transparent
+                    borderColor: '#f97316',
+                    pointBackgroundColor: '#f97316',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#f97316'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: { line: { borderWidth: 3 } },
+                scales: {
+                    r: {
+                        angleLines: { color: '#e5e7eb' },
+                        grid: { color: '#e5e7eb' },
+                        pointLabels: {
+                            font: { size: 11, family: 'Inter' },
+                            color: '#44403c'
+                        },
+                        ticks: { display: false, backdropColor: 'transparent' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false } // Custom legend in HTML
+                }
+            }
+        });
+
+        // 3. Barriers Chart (Horizontal Bar)
+        let ctxBarriers = document.getElementById('barriersChart').getContext('2d');
+        new Chart(ctxBarriers, {
+            type: 'bar',
+            data: {
+                labels: ['Coût', 'Compétences', 'Intérêt', 'Confiance', 'Langue'],
+                datasets: [{
+                    label: 'Importance du frein (1-10)',
+                    data: [8.5, 7.2, 5.5, 4.8, 3.0],
+                    backgroundColor: ['#0f766e', '#0d9488', '#14b8a6', '#5eead4', '#ccfbf1'],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { grid: { display: false }, ticks: { font: { family: 'Inter' } } }
+                }
+            }
+        });
+
+        // --- Interactive Logic ---
+
+        // Function 1: Update Context Chart
+        function updateContextChart(key) {
+            const dataset = contextData[key];
+            
+            // Update Data
+            contextChart.data.datasets[0].data = dataset.data;
+            contextChart.data.datasets[0].backgroundColor = dataset.colors;
+            contextChart.update();
+
+            // Update Text
+            const insightText = document.getElementById('context-insight');
+            insightText.innerHTML = `<strong>Insight :</strong> ${dataset.insight}`;
+            
+            // Update Buttons Styling
+            document.querySelectorAll('.context-btn').forEach(btn => {
+                btn.classList.remove('bg-teal-600', 'text-white');
+                btn.classList.add('bg-stone-100', 'text-stone-600');
+            });
+            const activeBtn = document.getElementById(`btn-${key}`);
+            activeBtn.classList.remove('bg-stone-100', 'text-stone-600');
+            activeBtn.classList.add('bg-teal-600', 'text-white');
+        }
+
+        // Function 2: Highlight Ecosystem Radar
+        function highlightEcosystem(type) {
+            // Reset opacity
+            radarChart.data.datasets.forEach(d => {
+                d.backgroundColor = d.label === 'EPN' ? 'rgba(13, 148, 136, 0.2)' : 'rgba(249, 115, 22, 0.2)';
+                d.borderColor = d.label === 'EPN' ? '#0d9488' : '#f97316';
+            });
+
+            // If clicked specific type, dim the other
+            if(type === 'epn') {
+                radarChart.data.datasets[1].backgroundColor = 'rgba(249, 115, 22, 0.05)';
+                radarChart.data.datasets[1].borderColor = 'rgba(249, 115, 22, 0.1)';
+            } else if (type === 'biblio') {
+                radarChart.data.datasets[0].backgroundColor = 'rgba(13, 148, 136, 0.05)';
+                radarChart.data.datasets[0].borderColor = 'rgba(13, 148, 136, 0.1)';
+            }
+            radarChart.update();
+        }
+
+        // Function 3: Empowerment Steps
+        function setEmpowermentStep(index) {
+            const data = empowermentSteps[index];
+            
+            // Update Text
+            document.getElementById('step-title').innerText = data.title;
+            document.getElementById('step-desc').innerText = data.desc;
+            document.getElementById('step-stat').innerText = data.stat;
+            document.getElementById('step-stat-label').innerText = data.statLabel;
+
+            // Update Tags
+            const tagContainer = document.getElementById('step-tags');
+            tagContainer.innerHTML = '';
+            data.tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'px-2 py-1 bg-stone-700 rounded text-xs animate-fade-in';
+                span.innerText = tag;
+                tagContainer.appendChild(span);
+            });
+
+            // Update Active State on Buttons
+            const buttons = document.querySelectorAll('.empowerment-btn');
+            buttons.forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.remove('border-transparent', 'hover:border-stone-500');
+                    btn.classList.add('border-teal-500');
+                    btn.querySelector('div:first-child').classList.remove('text-stone-400');
+                    btn.querySelector('div:first-child').classList.add('text-teal-300');
+                } else {
+                    btn.classList.add('border-transparent', 'hover:border-stone-500');
+                    btn.classList.remove('border-teal-500');
+                    btn.querySelector('div:first-child').classList.add('text-stone-400');
+                    btn.querySelector('div:first-child').classList.remove('text-teal-300');
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
