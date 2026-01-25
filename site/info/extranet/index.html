@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPCP | Centre Permanent pour la Citoyenneté et la Participation</title>
+    <meta name="description" content="Intranet Knowledge Graph - Explorez le corpus interconnecté du CPCP sur la citoyenneté, les droits et la participation démocratique.">
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "NGO",
+        "name": "Centre Permanent pour la Citoyenneté et la Participation",
+        "alternateName": "CPCP",
+        "url": "https://www.cpcp.be",
+        "description": "Organisation d'éducation permanente œuvrant pour une citoyenneté active et critique en Belgique.",
+        "areaServed": "Belgium",
+        "knowsAbout": ["Citoyenneté", "Participation démocratique", "Éducation permanente", "Droits sociaux"]
+    }
+    </script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Cytoscape.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+    
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #f8f6f3;
+            --cream: #efe9e1;
+            --red: #e63946;
+            --orange: #f4a261;
+            --blue: #457b9d;
+            --green: #2a9d8f;
+            --purple: #9d4edd;
+            --gray: #6b7280;
+            --gray-light: #d1d5db;
+            
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Source Sans 3', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        /* ====== CURSOR ====== */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--red);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+            mix-blend-mode: difference;
+        }
+        
+        .cursor.active {
+            transform: scale(2);
+            background: var(--red);
+            opacity: 0.5;
+        }
+        
+        /* ====== LOADER ====== */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .loader-text {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            overflow: hidden;
+        }
+        
+        .loader-text span {
+            display: inline-block;
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(100%);
+        }
+        
+        .loader-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .loader-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--red), var(--orange));
+            width: 0%;
+            animation: loadBar 2s ease forwards;
+        }
+        
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes loadBar {
+            to { width: 100%; }
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        /* ====== NAVIGATION ====== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            mix-blend-mode: difference;
+        }
+        
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--white);
+        }
+        
+        .logo span {
+            color: var(--red);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--red);
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            padding: 10px;
+        }
+        
+        .menu-toggle span {
+            width: 30px;
+            height: 2px;
+            background: var(--white);
+            transition: var(--transition);
+        }
+        
+        /* ====== HERO ====== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 5vw 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(230, 57, 70, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(69, 123, 157, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(244, 162, 97, 0.05) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+        }
+        
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--red);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 2.2s both;
+        }
+        
+        .hero-tag::before {
+            content: '';
+            width: 40px;
+            height: 2px;
+            background: var(--red);
+        }
+        
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 .line {
+            display: block;
+            overflow: hidden;
+        }
+        
+        .hero h1 .line span {
+            display: inline-block;
+            animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: calc(2.3s + var(--i) * 0.1s);
+            opacity: 0;
+            transform: translateY(100%);
+        }
+        
+        .hero h1 em {
+            font-style: italic;
+            color: var(--red);
+        }
+        
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--gray-light);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease 2.6s both;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 2.8s both;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 0;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--red);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(230, 57, 70, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+        
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-3px);
+        }
+        
+        .btn svg {
+            width: 18px;
+            height: 18px;
+            transition: var(--transition);
+        }
+        
+        .btn:hover svg {
+            transform: translateX(5px);
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ====== STATS BANNER ====== */
+        .stats-banner {
+            background: linear-gradient(135deg, var(--red) 0%, #c62f3c 100%);
+            padding: 4rem 5vw;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.9;
+        }
+        
+        /* ====== KNOWLEDGE GRAPH SECTION ====== */
+        .graph-section {
+            padding: 8rem 5vw;
+            position: relative;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+        
+        .section-title span {
+            color: var(--red);
+        }
+        
+        .section-subtitle {
+            color: var(--gray);
+            max-width: 500px;
+            font-size: 1.1rem;
+        }
+        
+        .graph-container {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .graph-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .graph-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--white);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 100px;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--red);
+            border-color: var(--red);
+        }
+        
+        .filter-btn[data-filter="concepts"] { --accent: var(--orange); }
+        .filter-btn[data-filter="auteurs"] { --accent: var(--blue); }
+        .filter-btn[data-filter="themes"] { --accent: var(--green); }
+        .filter-btn[data-filter="publications"] { --accent: var(--purple); }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--accent, var(--red));
+            border-color: var(--accent, var(--red));
+        }
+        
+        .graph-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 10px;
+        }
+        
+        .control-btn:hover {
+            background: var(--red);
+            border-color: var(--red);
+        }
+        
+        #knowledge-graph {
+            width: 100%;
+            height: 500px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+        
+        .graph-legend {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--gray-light);
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .legend-dot.concept { background: var(--orange); }
+        .legend-dot.auteur { background: var(--blue); }
+        .legend-dot.theme { background: var(--green); }
+        .legend-dot.publication { background: var(--purple); }
+        
+        /* ====== SEARCH SECTION ====== */
+        .search-section {
+            padding: 6rem 5vw;
+            background: var(--cream);
+            color: var(--black);
+        }
+        
+        .search-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .search-wrapper .section-title {
+            margin-bottom: 1rem;
+        }
+        
+        .search-wrapper .section-subtitle {
+            margin: 0 auto 3rem;
+            color: var(--gray);
+        }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1.5rem 1.5rem 1.5rem 4rem;
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            border: 2px solid var(--black);
+            background: var(--white);
+            color: var(--black);
+            transition: var(--transition);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .search-input::placeholder {
+            color: var(--gray);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .search-tags {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-tag {
+            padding: 0.5rem 1rem;
+            background: var(--black);
+            color: var(--white);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .search-tag:hover {
+            background: var(--red);
+            transform: translateY(-2px);
+        }
+        
+        /* ====== PUBLICATIONS SECTION ====== */
+        .publications-section {
+            padding: 8rem 5vw;
+        }
+        
+        .publications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .publication-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .publication-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 0;
+            background: var(--accent, var(--red));
+            transition: var(--transition);
+        }
+        
+        .publication-card:hover {
+            background: rgba(255,255,255,0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .publication-card:hover::before {
+            height: 100%;
+        }
+        
+        .publication-type {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.3rem 0.8rem;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .publication-card[data-type="etude"] { --accent: var(--purple); }
+        .publication-card[data-type="analyse"] { --accent: var(--blue); }
+        .publication-card[data-type="billet"] { --accent: var(--green); }
+        
+        .publication-card[data-type="etude"] .publication-type { color: var(--purple); }
+        .publication-card[data-type="analyse"] .publication-type { color: var(--blue); }
+        .publication-card[data-type="billet"] .publication-type { color: var(--green); }
+        
+        .publication-title {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+        
+        .publication-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        .publication-excerpt {
+            color: var(--gray-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .publication-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .pub-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            background: rgba(230, 57, 70, 0.2);
+            color: var(--red);
+            border-radius: 100px;
+        }
+        
+        /* ====== THEMES SECTION ====== */
+        .themes-section {
+            padding: 8rem 5vw;
+            background: linear-gradient(180deg, var(--black) 0%, #111 100%);
+        }
+        
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .theme-card {
+            aspect-ratio: 1;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            transition: var(--transition);
+        }
+        
+        .theme-card:nth-child(1) { --bg-start: #e63946; --bg-end: #c62f3c; }
+        .theme-card:nth-child(2) { --bg-start: #457b9d; --bg-end: #2a5a7a; }
+        .theme-card:nth-child(3) { --bg-start: #2a9d8f; --bg-end: #1f7a6f; }
+        .theme-card:nth-child(4) { --bg-start: #f4a261; --bg-end: #e08a3d; }
+        
+        .theme-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.6) 100%);
+            z-index: 1;
+        }
+        
+        .theme-card:hover {
+            transform: scale(1.03);
+            z-index: 10;
+        }
+        
+        .theme-icon {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 3rem;
+            opacity: 0.3;
+            z-index: 2;
+        }
+        
+        .theme-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .theme-count {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+        
+        .theme-name {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        /* ====== INTRANET SECTION ====== */
+        .intranet-section {
+            padding: 8rem 5vw;
+            background: var(--cream);
+            color: var(--black);
+        }
+        
+        .intranet-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+        
+        .intranet-visual {
+            position: relative;
+        }
+        
+        .intranet-card {
+            background: var(--white);
+            padding: 3rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .intranet-card::before {
+            content: '🔒';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 60px;
+            height: 60px;
+            background: var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border-radius: 50%;
+        }
+        
+        .lock-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--black);
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            background: var(--cream);
+        }
+        
+        .lock-input:focus {
+            outline: none;
+            border-color: var(--red);
+        }
+        
+        .intranet-features {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.3rem;
+        }
+        
+        .feature-text h4 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-text p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        /* ====== FOOTER ====== */
+        footer {
+            background: var(--black);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 6rem 5vw 3rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+        
+        .footer-brand h3 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-brand h3 span {
+            color: var(--red);
+        }
+        
+        .footer-brand p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        .footer-col h4 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-col a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+        
+        .footer-col a:hover {
+            color: var(--red);
+        }
+        
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-social a:hover {
+            background: var(--red);
+            transform: translateY(-3px);
+        }
+        
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 1024px) {
+            .themes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .intranet-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+            
+            .stats-banner {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .themes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .theme-card {
+                aspect-ratio: 2/1;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .cursor {
+                display: none;
+            }
+        }
+        
+        /* ====== SCROLL ANIMATIONS ====== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-text">
+            <span style="animation-delay: 0.1s">C</span><span style="animation-delay: 0.15s">P</span><span style="animation-delay: 0.2s">C</span><span style="animation-delay: 0.25s">P</span>
+        </div>
+        <div class="loader-bar">
+            <div class="loader-bar-fill"></div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">CPCP<span>.</span></a>
+        <ul class="nav-links">
+            <li><a href="#graphe">Knowledge Graph</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#themes">Thématiques</a></li>
+            <li><a href="#intranet">Intranet</a></li>
+        </ul>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+            <div class="hero-tag">Éducation Permanente • Belgique</div>
+            <h1>
+                <span class="line"><span style="--i: 0">Le savoir</span></span>
+                <span class="line"><span style="--i: 1">citoyen en</span></span>
+                <span class="line"><span style="--i: 2"><em>graphe vivant</em></span></span>
+            </h1>
+            <p class="hero-description">
+                Explorez le corpus interconnecté du CPCP. Des centaines d'analyses, études et réflexions sur la citoyenneté, les droits sociaux et la démocratie — reliées en un Knowledge Graph sémantique.
+            </p>
+            <div class="hero-actions">
+                <a href="#graphe" class="btn btn-primary">
+                    Explorer le graphe
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </a>
+                <a href="#publications" class="btn btn-outline">Voir les publications</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Banner -->
+    <section class="stats-banner">
+        <div class="stat-item">
+            <div class="stat-number" data-count="523">0</div>
+            <div class="stat-label">Publications</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-count="87">0</div>
+            <div class="stat-label">Auteur·ices</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-count="156">0</div>
+            <div class="stat-label">Concepts clés</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-count="4">0</div>
+            <div class="stat-label">Piliers thématiques</div>
+        </div>
+    </section>
+    
+    <!-- Knowledge Graph Section -->
+    <section class="graph-section" id="graphe">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title reveal">Explorez le <span>Knowledge Graph</span></h2>
+                <p class="section-subtitle reveal">Naviguez visuellement entre les concepts, auteurs et publications. Découvrez les connexions cachées dans notre corpus.</p>
+            </div>
+        </div>
+        
+        <div class="graph-container reveal">
+            <div class="graph-toolbar">
+                <div class="graph-filters">
+                    <button class="filter-btn active" data-filter="all">Tout afficher</button>
+                    <button class="filter-btn" data-filter="concepts">Concepts</button>
+                    <button class="filter-btn" data-filter="auteurs">Auteur·ices</button>
+                    <button class="filter-btn" data-filter="themes">Thèmes</button>
+                    <button class="filter-btn" data-filter="publications">Publications</button>
+                </div>
+                <div class="graph-controls">
+                    <button class="control-btn" id="zoom-in" title="Zoom +">+</button>
+                    <button class="control-btn" id="zoom-out" title="Zoom -">−</button>
+                    <button class="control-btn" id="reset-view" title="Réinitialiser">⟲</button>
+                </div>
+            </div>
+            
+            <div id="knowledge-graph"></div>
+            
+            <div class="graph-legend">
+                <div class="legend-item">
+                    <div class="legend-dot concept"></div>
+                    <span>Concepts</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot auteur"></div>
+                    <span>Auteur·ices</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot theme"></div>
+                    <span>Thèmes</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot publication"></div>
+                    <span>Publications</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Search Section -->
+    <section class="search-section" id="recherche">
+        <div class="search-wrapper">
+            <h2 class="section-title reveal">Recherche <span>instantanée</span></h2>
+            <p class="section-subtitle reveal">Trouvez instantanément dans plus de 500 publications. Recherche locale, aucune donnée envoyée au serveur.</p>
+            
+            <div class="search-box reveal">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" class="search-input" placeholder="Rechercher : austérité, logement, démocratie..." id="searchInput">
+            </div>
+            
+            <div class="search-tags reveal">
+                <span class="search-tag">Droit au logement</span>
+                <span class="search-tag">Violence institutionnelle</span>
+                <span class="search-tag">Smart City</span>
+                <span class="search-tag">Sobriété numérique</span>
+                <span class="search-tag">Démocratie participative</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Publications Section -->
+    <section class="publications-section" id="publications">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title reveal">Dernières <span>publications</span></h2>
+                <p class="section-subtitle reveal">Analyses, études et billets d'humeur — le regard critique du CPCP sur les enjeux de société.</p>
+            </div>
+            <a href="#" class="btn btn-outline reveal">Voir tout →</a>
+        </div>
+        
+        <div class="publications-grid">
+            <article class="publication-card reveal" data-type="analyse">
+                <span class="publication-type">Analyse n°504</span>
+                <h3 class="publication-title">L'adresse de référence est-elle un droit?</h3>
+                <div class="publication-meta">
+                    <span>Emma Raucent</span>
+                    <span>15 sept. 2025</span>
+                </div>
+                <p class="publication-excerpt">Exploration des barrières administratives limitant l'accès à l'adresse de référence pour les sans-abri en Belgique.</p>
+                <div class="publication-tags">
+                    <span class="pub-tag">Droit au logement</span>
+                    <span class="pub-tag">Administration</span>
+                </div>
+            </article>
+            
+            <article class="publication-card reveal" data-type="etude">
+                <span class="publication-type">Étude n°53</span>
+                <h3 class="publication-title">Stratégies et luttes face à l'Autorité — Pratiques d'habitat</h3>
+                <div class="publication-meta">
+                    <span>Boris Fronteddu</span>
+                    <span>22 août 2025</span>
+                </div>
+                <p class="publication-excerpt">Comment les citoyens développent des stratégies de résistance face aux violences administratives liées au logement.</p>
+                <div class="publication-tags">
+                    <span class="pub-tag">Violence institutionnelle</span>
+                    <span class="pub-tag">Habitat</span>
+                </div>
+            </article>
+            
+            <article class="publication-card reveal" data-type="analyse">
+                <span class="publication-type">Analyse n°493</span>
+                <h3 class="publication-title">Smart City : obsolescence programmée de l'espace public?</h3>
+                <div class="publication-meta">
+                    <span>Benoît Debuigne</span>
+                    <span>10 juil. 2025</span>
+                </div>
+                <p class="publication-excerpt">La Smart City tend à remplacer la médiation humaine par une gestion algorithmique souvent discriminatoire.</p>
+                <div class="publication-tags">
+                    <span class="pub-tag">Smart City</span>
+                    <span class="pub-tag">Espace public</span>
+                </div>
+            </article>
+            
+            <article class="publication-card reveal" data-type="billet">
+                <span class="publication-type">Billet d'humeur</span>
+                <h3 class="publication-title">Pour une sobriété numérique assumée</h3>
+                <div class="publication-meta">
+                    <span>Olivia Martou</span>
+                    <span>3 juin 2025</span>
+                </div>
+                <p class="publication-excerpt">Réflexion sur l'empreinte écologique du numérique et les choix politiques qui en découlent.</p>
+                <div class="publication-tags">
+                    <span class="pub-tag">Sobriété numérique</span>
+                    <span class="pub-tag">Environnement</span>
+                </div>
+            </article>
+        </div>
+    </section>
+    
+    <!-- Themes Section -->
+    <section class="themes-section" id="themes">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title reveal">Les 4 <span>piliers</span> thématiques</h2>
+                <p class="section-subtitle reveal">Notre corpus s'articule autour de quatre grandes thématiques interconnectées.</p>
+            </div>
+        </div>
+        
+        <div class="themes-grid">
+            <div class="theme-card reveal">
+                <div class="theme-icon">🌍</div>
+                <div class="theme-content">
+                    <div class="theme-count">142 publications</div>
+                    <h3 class="theme-name">Sociétés & Environnement</h3>
+                </div>
+            </div>
+            
+            <div class="theme-card reveal">
+                <div class="theme-icon">⚖️</div>
+                <div class="theme-content">
+                    <div class="theme-count">98 publications</div>
+                    <h3 class="theme-name">Violences & Institutions</h3>
+                </div>
+            </div>
+            
+            <div class="theme-card reveal">
+                <div class="theme-icon">🏘️</div>
+                <div class="theme-content">
+                    <div class="theme-count">127 publications</div>
+                    <h3 class="theme-name">Lieux de vie & Espace public</h3>
+                </div>
+            </div>
+            
+            <div class="theme-card reveal">
+                <div class="theme-icon">📡</div>
+                <div class="theme-content">
+                    <div class="theme-count">156 publications</div>
+                    <h3 class="theme-name">Médias & Actions citoyennes</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Intranet Section -->
+    <section class="intranet-section" id="intranet">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title reveal">Espace <span>Intranet</span> sécurisé</h2>
+                <p class="section-subtitle reveal">Accès réservé à l'équipe CPCP. Documents internes, brouillons et mémos stratégiques.</p>
+            </div>
+        </div>
+        
+        <div class="intranet-grid">
+            <div class="intranet-visual reveal">
+                <div class="intranet-card">
+                    <h4 style="font-family: var(--font-display); margin-bottom: 1.5rem;">Connexion sécurisée</h4>
+                    <input type="password" class="lock-input" placeholder="Mot de passe...">
+                    <button class="btn btn-primary" style="width: 100%;">Déverrouiller l'accès</button>
+                    <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--gray);">
+                        Chiffrement AES-256 côté client. Aucune donnée n'est envoyée au serveur.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="intranet-features reveal">
+                <div class="feature-item">
+                    <div class="feature-icon">🔐</div>
+                    <div class="feature-text">
+                        <h4>Chiffrement militaire</h4>
+                        <p>Vos documents sont chiffrés en AES-256 localement. Le serveur ne voit jamais les données en clair.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🚫</div>
+                    <div class="feature-text">
+                        <h4>Zéro tracking</h4>
+                        <p>Aucun cookie, aucune session serveur, aucune donnée personnelle collectée.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">
+                        <h4>Accès instantané</h4>
+                        <p>Déchiffrement en temps réel dans votre navigateur. Fonctionne même hors ligne.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>CPCP<span>.</span></h3>
+                <p>Centre Permanent pour la Citoyenneté et la Participation. Organisation d'éducation permanente œuvrant pour une citoyenneté active et critique en Belgique depuis 1976.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="#graphe">Knowledge Graph</a></li>
+                    <li><a href="#publications">Publications</a></li>
+                    <li><a href="#themes">Thématiques</a></li>
+                    <li><a href="#intranet">Intranet</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Ressources</h4>
+                <ul>
+                    <li><a href="#">Études</a></li>
+                    <li><a href="#">Analyses</a></li>
+                    <li><a href="#">Revue Tumult</a></li>
+                    <li><a href="#">Cahiers du numérique</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="mailto:info@cpcp.be">info@cpcp.be</a></li>
+                    <li><a href="#">Rue des Deux Églises 45</a></li>
+                    <li><a href="#">1000 Bruxelles</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2025 CPCP. Site statique hébergé sur GitHub Pages. Code source ouvert.</p>
+            <div class="footer-social">
+                <a href="#" title="Twitter">𝕏</a>
+                <a href="#" title="LinkedIn">in</a>
+                <a href="#" title="GitHub">⌘</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // ====== LOADER ======
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 2200);
+        });
+        
+        // ====== CUSTOM CURSOR ======
+        const cursor = document.querySelector('.cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.left = cursorX - 10 + 'px';
+            cursor.style.top = cursorY - 10 + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+        
+        document.querySelectorAll('a, button, .publication-card, .theme-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+        
+        // ====== SCROLL REVEAL ======
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            reveals.forEach(el => {
+                const top = el.getBoundingClientRect().top;
+                if (top < window.innerHeight - 100) {
+                    el.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+        
+        // ====== COUNTER ANIMATION ======
+        const counters = document.querySelectorAll('.stat-number');
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const target = +counter.dataset.count;
+                const duration = 2000;
+                const start = performance.now();
+                
+                const update = (now) => {
+                    const elapsed = now - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 4);
+                    counter.textContent = Math.floor(target * eased);
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                requestAnimationFrame(update);
+            });
+        };
+        
+        const statsSection = document.querySelector('.stats-banner');
+        const statsObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                animateCounters();
+                statsObserver.disconnect();
+            }
+        }, { threshold: 0.5 });
+        statsObserver.observe(statsSection);
+        
+        // ====== KNOWLEDGE GRAPH (Cytoscape.js) ======
+        const graphData = {
+            nodes: [
+                // Thèmes (central)
+                { data: { id: 't1', label: 'Sociétés & Environnement', type: 'theme' } },
+                { data: { id: 't2', label: 'Violences & Institutions', type: 'theme' } },
+                { data: { id: 't3', label: 'Lieux de vie', type: 'theme' } },
+                { data: { id: 't4', label: 'Médias & Citoyenneté', type: 'theme' } },
+                
+                // Concepts
+                { data: { id: 'c1', label: 'Droit au logement', type: 'concept' } },
+                { data: { id: 'c2', label: 'Violence administrative', type: 'concept' } },
+                { data: { id: 'c3', label: 'Smart City', type: 'concept' } },
+                { data: { id: 'c4', label: 'Sobriété numérique', type: 'concept' } },
+                { data: { id: 'c5', label: 'Démocratie participative', type: 'concept' } },
+                { data: { id: 'c6', label: 'Précarité', type: 'concept' } },
+                { data: { id: 'c7', label: 'Austérité', type: 'concept' } },
+                { data: { id: 'c8', label: 'Adresse de référence', type: 'concept' } },
+                
+                // Auteurs
+                { data: { id: 'a1', label: 'Emma Raucent', type: 'auteur' } },
+                { data: { id: 'a2', label: 'Boris Fronteddu', type: 'auteur' } },
+                { data: { id: 'a3', label: 'Olivia Martou', type: 'auteur' } },
+                { data: { id: 'a4', label: 'Benoît Debuigne', type: 'auteur' } },
+                { data: { id: 'a5', label: 'Anne-Sophie Gerard', type: 'auteur' } },
+                
+                // Publications
+                { data: { id: 'p1', label: 'Analyse n°504', type: 'publication' } },
+                { data: { id: 'p2', label: 'Étude n°53', type: 'publication' } },
+                { data: { id: 'p3', label: 'Analyse n°493', type: 'publication' } },
+                { data: { id: 'p4', label: 'Cahier Numérique #12', type: 'publication' } },
+            ],
+            edges: [
+                // Thèmes → Concepts
+                { data: { source: 't1', target: 'c4' } },
+                { data: { source: 't2', target: 'c2' } },
+                { data: { source: 't2', target: 'c7' } },
+                { data: { source: 't3', target: 'c1' } },
+                { data: { source: 't3', target: 'c3' } },
+                { data: { source: 't3', target: 'c8' } },
+                { data: { source: 't4', target: 'c5' } },
+                
+                // Auteurs → Publications
+                { data: { source: 'a1', target: 'p1' } },
+                { data: { source: 'a2', target: 'p2' } },
+                { data: { source: 'a4', target: 'p3' } },
+                { data: { source: 'a3', target: 'p4' } },
+                
+                // Publications → Concepts
+                { data: { source: 'p1', target: 'c1' } },
+                { data: { source: 'p1', target: 'c8' } },
+                { data: { source: 'p2', target: 'c2' } },
+                { data: { source: 'p2', target: 'c1' } },
+                { data: { source: 'p3', target: 'c3' } },
+                { data: { source: 'p3', target: 'c5' } },
+                { data: { source: 'p4', target: 'c4' } },
+                
+                // Concepts → Concepts (relations sémantiques)
+                { data: { source: 'c1', target: 'c6' } },
+                { data: { source: 'c2', target: 'c6' } },
+                { data: { source: 'c7', target: 'c6' } },
+                { data: { source: 'c8', target: 'c1' } },
+            ]
+        };
+        
+        const cy = cytoscape({
+            container: document.getElementById('knowledge-graph'),
+            elements: graphData,
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        'label': 'data(label)',
+                        'text-valign': 'center',
+                        'text-halign': 'center',
+                        'font-size': '11px',
+                        'font-family': 'Source Sans 3, sans-serif',
+                        'color': '#fff',
+                        'text-wrap': 'wrap',
+                        'text-max-width': '80px',
+                        'background-color': '#666',
+                        'width': 50,
+                        'height': 50,
+                        'border-width': 2,
+                        'border-color': '#333',
+                    }
+                },
+                {
+                    selector: 'node[type="theme"]',
+                    style: {
+                        'background-color': '#2a9d8f',
+                        'width': 70,
+                        'height': 70,
+                        'font-size': '12px',
+                        'font-weight': 'bold',
+                        'border-color': '#1f7a6f',
+                    }
+                },
+                {
+                    selector: 'node[type="concept"]',
+                    style: {
+                        'background-color': '#f4a261',
+                        'width': 55,
+                        'height': 55,
+                        'border-color': '#e08a3d',
+                    }
+                },
+                {
+                    selector: 'node[type="auteur"]',
+                    style: {
+                        'background-color': '#457b9d',
+                        'width': 50,
+                        'height': 50,
+                        'border-color': '#2a5a7a',
+                    }
+                },
+                {
+                    selector: 'node[type="publication"]',
+                    style: {
+                        'background-color': '#9d4edd',
+                        'width': 55,
+                        'height': 55,
+                        'border-color': '#7b2cbf',
+                    }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        'width': 2,
+                        'line-color': 'rgba(255,255,255,0.15)',
+                        'curve-style': 'bezier',
+                        'target-arrow-shape': 'none',
+                    }
+                },
+                {
+                    selector: 'node:selected',
+                    style: {
+                        'border-width': 4,
+                        'border-color': '#e63946',
+                    }
+                }
+            ],
+            layout: {
+                name: 'cose',
+                idealEdgeLength: 120,
+                nodeOverlap: 30,
+                nodeRepulsion: 8000,
+                padding: 50,
+                animate: true,
+                animationDuration: 800,
+            },
+            minZoom: 0.5,
+            maxZoom: 2,
+        });
+        
+        // Graph controls
+        document.getElementById('zoom-in').addEventListener('click', () => {
+            cy.zoom({ level: cy.zoom() * 1.3, renderedPosition: { x: cy.width()/2, y: cy.height()/2 }});
+        });
+        
+        document.getElementById('zoom-out').addEventListener('click', () => {
+            cy.zoom({ level: cy.zoom() * 0.7, renderedPosition: { x: cy.width()/2, y: cy.height()/2 }});
+        });
+        
+        document.getElementById('reset-view').addEventListener('click', () => {
+            cy.fit(undefined, 50);
+        });
+        
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                
+                if (filter === 'all') {
+                    cy.elements().style('opacity', 1);
+                } else {
+                    cy.nodes().style('opacity', 0.2);
+                    cy.edges().style('opacity', 0.1);
+                    
+                    const typeMap = {
+                        'concepts': 'concept',
+                        'auteurs': 'auteur',
+                        'themes': 'theme',
+                        'publications': 'publication'
+                    };
+                    
+                    cy.nodes(`[type="${typeMap[filter]}"]`).style('opacity', 1);
+                    cy.nodes(`[type="${typeMap[filter]}"]`).connectedEdges().style('opacity', 0.4);
+                }
+            });
+        });
+        
+        // Node click interaction
+        cy.on('tap', 'node', function(evt) {
+            const node = evt.target;
+            cy.elements().style('opacity', 0.15);
+            node.style('opacity', 1);
+            node.neighborhood().style('opacity', 1);
+        });
+        
+        cy.on('tap', function(evt) {
+            if (evt.target === cy) {
+                cy.elements().style('opacity', 1);
+            }
+        });
+        
+        // ====== SEARCH TAGS ======
+        document.querySelectorAll('.search-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                document.getElementById('searchInput').value = tag.textContent;
+                document.getElementById('searchInput').focus();
+            });
+        });
+        
+        // ====== SMOOTH SCROLL ======
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
