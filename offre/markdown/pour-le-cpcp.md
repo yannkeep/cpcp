@@ -19,7 +19,7 @@ Pour la petite histoire j'avais imaginé une économie interne à un jeu vidéo 
 
 ## Le Projet
 
-> tout mes fichiers sont libres,
+> tous mes fichiers sont libres,
 > open source, 
 > et sans virus, ni traceur
 > les autres liens, je les noterai en entier par transparence
