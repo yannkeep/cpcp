@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Guerre des Esprits : Infographie Interactive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: "Electric Intelligence" 
+         Background: #F3F4F6 (Cool Gray)
+         Cards: #FFFFFF (White)
+         Primary Text: #111827 (Gray 900)
+         Accent Blue: #2563EB (Electric Blue)
+         Accent Indigo: #4F46E5 (Deep Indigo)
+         Accent Magenta: #DB2777 (Alert Magenta)
+         Accent Teal: #0D9488 (Analytical Teal)
+    -->
+
+    <!-- Application Structure Plan:
+         1. Hero Section: Title and Hook regarding the "Mental Mobilization".
+         2. Section 1 (Shift): Radar Chart comparing societal priorities (Peace vs. War eras).
+         3. Section 2 (Mechanisms): Polar Area Chart showing the intensity of psychological tools (Fear, Urgency).
+         4. Section 3 (Rhetoric): Horizontal Bar Chart quantifying the "coercive power" of specific keywords.
+         5. Section 4 (Resistance): HTML Grid Cards outlining critical thinking strategies.
+         6. Narrative: Linear flow from context -> mechanism -> tool -> solution.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Radar Chart (Chart.js):
+            - Goal: Compare "Before" (Peace Dividends) vs "After" (War Economy).
+            - Interaction: Tooltip details.
+            - Justification: Best for multivariate comparison of two distinct states/profiles.
+         2. Polar Area Chart (Chart.js):
+            - Goal: Organize and show the composition of mobilization tactics.
+            - Justification: Visually distinct, shows how different segments (tactics) contribute to the whole (mobilization).
+         3. Horizontal Bar Chart (Chart.js):
+            - Goal: Compare the impact of rhetorical terms.
+            - Justification: Allows for longer labels (the terms themselves) and clear ranking of "impact".
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px; /* Base height */
+            max-height: 450px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #2563EB, #DB2777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card-shadow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold tracking-tighter text-indigo-700">PAC-G <span class="text-gray-400 font-light">|</span> INFOGRAPHIE</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#basculement" class="text-gray-600 hover:text-indigo-600 font-semibold text-sm transition hidden md:block">Le Basculement</a>
+                    <a href="#mecaniques" class="text-gray-600 hover:text-indigo-600 font-semibold text-sm transition hidden md:block">Mécaniques</a>
+                    <a href="#rhetorique" class="text-gray-600 hover:text-indigo-600 font-semibold text-sm transition hidden md:block">Rhétorique</a>
+                    <a href="#resistance" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm font-bold shadow-md">Résistance</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white pb-12 pt-16 border-b border-gray-200">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wider text-indigo-100 uppercase bg-indigo-600 rounded-full">
+                Analyse Sociétale & Géopolitique
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+                La Mobilisation Guerrière : <br>
+                <span class="gradient-text">La Bataille des Esprits</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                La guerre ne se joue pas seulement sur le front militaire. Elle exige une transformation profonde de la psychologie collective. Cette infographie explore comment nos sociétés basculent d'une logique de paix à une logique de guerre.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <!-- SECTION 1: LE BASCULEMENT (Paradigm Shift) -->
+        <section id="basculement" class="scroll-mt-24">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <div class="bg-white rounded-2xl p-6 card-shadow border-t-4 border-blue-500">
+                        <!-- Chart Container -->
+                        <div class="chart-container">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Le Changement de Paradigme</h2>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        L'analyse identifie une rupture historique majeure. Après des décennies marquées par les "dividendes de la paix", l'Europe opère un virage brutal vers une "économie de guerre". Ce changement n'est pas seulement budgétaire ; il redéfinit les priorités morales et sociétales.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 font-bold">1</div>
+                            <p class="ml-4 text-gray-700"><strong>Marginalisation de la Diplomatie :</strong> La négociation est désormais perçue comme une faiblesse, voire une trahison.</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 font-bold">2</div>
+                            <p class="ml-4 text-gray-700"><strong>Réarmement Moral :</strong> Préparation des esprits à l'acceptation de sacrifices économiques au nom d'une "menace existentielle".</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MÉCANIQUES (Mechanisms) -->
+        <section id="mecaniques" class="scroll-mt-24 bg-indigo-50 rounded-3xl p-8 md:p-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Les Mécaniques de la Mobilisation</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">
+                    Pour obtenir le consentement de la population, des leviers psychologiques puissants sont activés. Ces mécanismes visent à court-circuiter la réflexion critique au profit de l'émotion et de l'adhésion immédiate.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-bold text-indigo-900 mb-6">L'Architecture du Consentement</h3>
+                    <ul class="space-y-6">
+                        <li class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-indigo-500">
+                            <h4 class="font-bold text-gray-900">Urgence Absolue</h4>
+                            <p class="text-sm text-gray-600 mt-1">Imposition d'un tempo médiatique frénétique qui empêche le recul historique et l'analyse des causes profondes.</p>
+                        </li>
+                        <li class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-indigo-500">
+                            <h4 class="font-bold text-gray-900">Manichéisme Binaire</h4>
+                            <p class="text-sm text-gray-600 mt-1">Réduction de la complexité géopolitique à un duel moral entre le "Bien" absolu et le "Mal" absolu.</p>
+                        </li>
+                        <li class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-indigo-500">
+                            <h4 class="font-bold text-gray-900">Amnésie Historique</h4>
+                            <p class="text-sm text-gray-600 mt-1">Effacement du contexte (OTAN, Donbass pré-2022) pour présenter le conflit comme un événement hors-sol et irrationnel.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-2xl p-6 card-shadow">
+                    <!-- Chart Container -->
+                    <div class="chart-container">
+                        <canvas id="polarChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-gray-400 mt-4 italic">Poids relatif des leviers psychologiques (Estimation Qualitative)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: RHÉTORIQUE (Rhetoric) -->
+        <section id="rhetorique" class="scroll-mt-24">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">La Bataille Sémantique</h2>
+                    <p class="text-gray-600 mb-6">
+                        Les mots sont des armes. L'analyse révèle comment un lexique spécifique est déployé pour disqualifier l'adversaire et interdire toute pensée divergente. L'usage de l'histoire (Munich) sert d'intimidation intellectuelle.
+                    </p>
+                    <div class="bg-pink-50 border border-pink-100 rounded-xl p-6">
+                        <h4 class="font-bold text-pink-700 mb-2">Le Danger :</h4>
+                        <p class="text-sm text-pink-800">
+                            "Traiter de 'Munichois' quiconque propose une négociation ne sert pas à éclairer le passé, mais à verrouiller l'avenir vers la guerre."
+                        </p>
+                    </div>
+                </div>
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-2xl p-6 card-shadow border-t-4 border-pink-500">
+                         <!-- Chart Container -->
+                         <div class="chart-container">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: RÉSISTANCE (Resistance) -->
+        <section id="resistance" class="scroll-mt-24 bg-gray-900 rounded-3xl p-8 md:p-16 text-white overflow-hidden relative">
+            <!-- Decorative background element via Tailwind (simulating shapes without SVG) -->
+            <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-indigo-800 rounded-full opacity-20 blur-3xl"></div>
+            
+            <div class="relative z-10 text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-6">Penser Contre la Guerre</h2>
+                <p class="text-indigo-200 text-lg max-w-2xl mx-auto">
+                    Face à l'enrôlement des esprits, la résistance intellectuelle est primordiale. L'analyse propose trois axes pour restaurer une pensée critique et œuvrer pour la paix.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                <!-- Card 1 -->
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-indigo-500 transition duration-300">
+                    <div class="text-4xl mb-4">♟️</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Complexité</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Refuser les explications monocausales. Comprendre l'adversaire (sa rationalité, ses peurs) n'est pas l'excuser, mais la condition <em>sine qua non</em> pour le combattre ou négocier efficacement.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-pink-500 transition duration-300">
+                    <div class="text-4xl mb-4">🕊️</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Réhabiliter la Paix</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Désacraliser la guerre. Rappeler que la paix est un combat politique difficile, et non une lâcheté. Oser parler de cessez-le-feu et de compromis sans craindre l'anathème.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-teal-500 transition duration-300">
+                    <div class="text-4xl mb-4">🔍</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Analyser les Intérêts</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Identifier "à qui profite le crime". Questionner les bénéfices du complexe militaro-industriel et les agendas géopolitiques des grandes puissances qui utilisent l'Europe comme terrain.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm py-12">
+            <p>© 2024 Analyse basée sur le rapport de PAC-G.</p>
+            <p class="mt-2">Généré pour visualisation éducative.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- UTILITY: LABEL WRAPPING ---
+        function splitLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxLen) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- COMMON CHART OPTIONS ---
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    backgroundColor: 'rgba(17, 24, 39, 0.9)',
+                    titleFont: { size: 14, weight: 'bold', family: 'Montserrat' },
+                    bodyFont: { size: 13, family: 'Open Sans' },
+                    padding: 12,
+                    cornerRadius: 8,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        font: { family: 'Open Sans', size: 12 },
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                }
+            }
+        };
+
+        // --- CHART 1: RADAR CHART (SHIFT) ---
+        const ctxRadar = document.getElementById('radarChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: [
+                    splitLabel("Priorité Militaire"),
+                    splitLabel("Effort Diplomatique"),
+                    splitLabel("Débat Démocratique"),
+                    splitLabel("Logique Binaire"),
+                    splitLabel("Investissement Social")
+                ],
+                datasets: [{
+                    label: 'Ère des Dividendes de la Paix (1991-2014)',
+                    data: [2, 9, 8, 3, 9],
+                    fill: true,
+                    backgroundColor: 'rgba(37, 99, 235, 0.2)', // Blue
+                    borderColor: 'rgb(37, 99, 235)',
+                    pointBackgroundColor: 'rgb(37, 99, 235)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(37, 99, 235)'
+                }, {
+                    label: 'Ère de la Mobilisation (2022+)',
+                    data: [9, 3, 4, 9, 4],
+                    fill: true,
+                    backgroundColor: 'rgba(219, 39, 119, 0.2)', // Pink/Magenta
+                    borderColor: 'rgb(219, 39, 119)',
+                    pointBackgroundColor: 'rgb(219, 39, 119)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(219, 39, 119)'
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    r: {
+                        angleLines: { display: true, color: 'rgba(0,0,0,0.1)' },
+                        grid: { color: 'rgba(0,0,0,0.1)' },
+                        suggestedMin: 0,
+                        suggestedMax: 10,
+                        ticks: { display: false },
+                        pointLabels: {
+                            font: { size: 11, family: 'Montserrat', weight: '600' },
+                            color: '#4B5563'
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- CHART 2: POLAR AREA CHART (MECHANISMS) ---
+        const ctxPolar = document.getElementById('polarChart').getContext('2d');
+        new Chart(ctxPolar, {
+            type: 'polarArea',
+            data: {
+                labels: [
+                    splitLabel("Urgence Médiatique"),
+                    splitLabel("Disqualification de l'Adversaire"),
+                    splitLabel("Amnésie Historique"),
+                    splitLabel("Manichéisme Moral"),
+                    splitLabel("Conformisme Intellectuel")
+                ],
+                datasets: [{
+                    label: 'Intensité du Mécanisme',
+                    data: [9, 8, 7, 9, 6],
+                    backgroundColor: [
+                        'rgba(219, 39, 119, 0.7)', // Pink
+                        'rgba(79, 70, 229, 0.7)',  // Indigo
+                        'rgba(37, 99, 235, 0.7)',  // Blue
+                        'rgba(245, 158, 11, 0.7)', // Amber/Warning
+                        'rgba(13, 148, 136, 0.7)'  // Teal
+                    ],
+                    borderWidth: 1,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    r: {
+                        ticks: { display: false },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    }
+                },
+                plugins: {
+                    ...commonOptions.plugins,
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: { family: 'Open Sans', size: 11 },
+                            boxWidth: 15
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- CHART 3: HORIZONTAL BAR CHART (RHETORIC) ---
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: [
+                    splitLabel("Accusation de 'Munichois'"),
+                    splitLabel("Étiquette 'Poutine-versteher'"),
+                    splitLabel("Rhétorique du 'Camp du Bien'"),
+                    splitLabel("Concept de 'Guerre de Civilisation'"),
+                    splitLabel("Terme 'Boussole Stratégique'")
+                ],
+                datasets: [{
+                    label: 'Indice de Pouvoir Coercitif (0-10)',
+                    data: [9.5, 8.8, 8.2, 7.5, 6.0],
+                    backgroundColor: 'rgba(79, 70, 229, 0.8)', // Indigo
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y', // Horizontal Bar
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 10,
+                        grid: { display: false },
+                        title: { display: true, text: 'Impact sur le débat public', font: {size: 10} }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Montserrat', weight: '600' },
+                            color: '#374151'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
