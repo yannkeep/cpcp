@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPCP.be - Explorateur de Publications & Ressources</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Font Awesome (Replacing SVG graphics) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts: Inter for clean readability -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Warm Neutrals (Stone, Sand, Terracotta) -->
+    <!-- Application Structure Plan:
+         1. Header: Branding and functional navigation.
+         2. Context & KPIs: Quick intro to the mission + key metrics (Total Pubs, Active Year) to establish authority.
+         3. Analytic Dashboard: Two key charts (Themes & Timeline) to allow users to "see" the scope of work before diving in.
+         4. Interactive Catalog: The core "Index". A grid of cards with search and type filtering. 
+            - Interaction: Clicking the "Themes" chart automatically filters this catalog.
+         5. Footer: Copyright and disclaimer.
+         Rationale: This flows from the general (stats) to the specific (documents), maximizing discoverability.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Doughnut Chart (Themes): Goal: Inform/Compare. Interaction: Filters the grid on click. Justification: Best for showing proportional distribution of topics without SVG.
+         2. Bar Chart (Timeline): Goal: Change. Shows production frequency over years. Justification: Standard analysis tool using Chart.js.
+         3. Filterable Grid (The Index): Goal: Organize. HTML + JS. Allows finding specific content instantly.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used (FontAwesome used). NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9; /* stone-50 */
+            color: #44403c; /* stone-700 */
+        }
+
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Constrain width */
+            margin-left: auto;
+            margin-right: auto; /* Center */
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Card Hover Effects */
+        .pub-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .pub-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Custom Scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; 
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navigation / Header -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Brand -->
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-orange-700 rounded flex items-center justify-center text-white">
+                        <i class="fa-solid fa-book-open text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold text-stone-800 tracking-tight">CPCP<span class="text-orange-700">Data</span></span>
+                        <span class="hidden sm:inline text-xs text-stone-500 ml-2 uppercase tracking-wider border-l border-stone-300 pl-2">Centre Permanent pour la Citoyenneté et la Participation</span>
+                    </div>
+                </div>
+                
+                <!-- Nav Links -->
+                <nav class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+                    <a href="#overview" class="hover:text-orange-700 transition-colors">Vue d'ensemble</a>
+                    <a href="#catalog" class="hover:text-orange-700 transition-colors">Catalogue</a>
+                    <a href="#" class="px-4 py-2 bg-stone-800 text-white rounded hover:bg-stone-700 transition-colors">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        
+        <!-- Hero & KPIs -->
+        <section id="overview" class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-100 p-8 mb-10">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    <div class="lg:col-span-2">
+                        <h1 class="text-3xl font-bold text-stone-800 mb-4">Index des Ressources & Analyses</h1>
+                        <p class="text-stone-600 text-lg leading-relaxed">
+                            Bienvenue sur l'interface numérique des publications du CPCP. 
+                            Cette plateforme centralise nos études, analyses, focus et outils pédagogiques. 
+                            Utilisez les visualisations ci-dessous pour filtrer les contenus par thématique ou recherchez 
+                            directement dans le catalogue complet.
+                        </p>
+                    </div>
+                    <!-- KPIs -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-stone-50 p-6 rounded-xl border border-stone-100 text-center">
+                            <i class="fa-solid fa-layer-group text-orange-600 text-xl mb-2"></i>
+                            <div id="kpi-total" class="text-3xl font-bold text-stone-800">--</div>
+                            <div class="text-xs uppercase tracking-wide text-stone-500 font-semibold">Publications</div>
+                        </div>
+                        <div class="bg-stone-50 p-6 rounded-xl border border-stone-100 text-center">
+                            <i class="fa-regular fa-calendar-check text-orange-600 text-xl mb-2"></i>
+                            <div id="kpi-year" class="text-3xl font-bold text-stone-800">--</div>
+                            <div class="text-xs uppercase tracking-wide text-stone-500 font-semibold">Année Active</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Theme Distribution -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 flex flex-col">
+                    <div class="mb-4 border-b border-stone-100 pb-2 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-stone-800">Répartition Thématique</h3>
+                        <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">Interactif</span>
+                    </div>
+                    <p class="text-sm text-stone-500 mb-4">Cliquez sur un segment pour filtrer le catalogue ci-dessous selon la thématique.</p>
+                    
+                    <div class="chart-container flex-grow">
+                        <canvas id="themeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Temporal Evolution -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 flex flex-col">
+                    <div class="mb-4 border-b border-stone-100 pb-2">
+                        <h3 class="text-lg font-bold text-stone-800">Évolution Temporelle</h3>
+                    </div>
+                    <p class="text-sm text-stone-500 mb-4">Volume de production d'analyses et d'études par année de publication.</p>
+                    
+                    <div class="chart-container flex-grow">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Catalog Section -->
+        <section id="catalog" class="bg-stone-100 border-t border-stone-200 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-stone-800 flex items-center gap-2">
+                            <i class="fa-solid fa-list-ul text-stone-400 text-lg"></i> Catalogue
+                        </h2>
+                        <p class="text-stone-500 mt-1">Explorez les documents disponibles.</p>
+                    </div>
+                    
+                    <!-- Search & Filters -->
+                    <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto bg-white p-2 rounded-lg shadow-sm border border-stone-200">
+                        <!-- Search -->
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-stone-400"></i>
+                            <input type="text" id="searchInput" placeholder="Rechercher un titre..." 
+                                class="pl-10 pr-4 py-2 bg-stone-50 border border-stone-200 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full sm:w-64 text-sm">
+                        </div>
+                        
+                        <!-- Type Filter -->
+                        <select id="typeFilter" class="px-4 py-2 bg-stone-50 border border-stone-200 rounded text-stone-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm cursor-pointer">
+                            <option value="All">Tous les types</option>
+                            <option value="Étude">Étude</option>
+                            <option value="Analyse">Analyse</option>
+                            <option value="Focus">Focus</option>
+                            <option value="Outil">Outil Pédagogique</option>
+                        </select>
+
+                        <!-- Reset -->
+                        <button id="resetBtn" class="px-4 py-2 bg-stone-200 hover:bg-stone-300 text-stone-600 rounded transition-colors text-sm" title="Réinitialiser">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Filter Tags -->
+                <div id="activeFilterContainer" class="hidden mb-6 flex flex-wrap gap-2 animate-fade-in">
+                    <span class="text-sm text-stone-500 py-1">Filtre actif :</span>
+                    <button id="themeTag" class="px-3 py-1 bg-orange-600 text-white text-xs font-bold rounded-full flex items-center gap-2 hover:bg-orange-700 transition-colors">
+                        <span id="themeTagText">Theme Name</span>
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Results Grid -->
+                <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards will be injected here via JS -->
+                </div>
+
+                <!-- No Results State -->
+                <div id="noResults" class="hidden flex flex-col items-center justify-center py-16 text-stone-400">
+                    <i class="fa-regular fa-folder-open text-4xl mb-3"></i>
+                    <p class="text-lg font-medium">Aucun résultat trouvé</p>
+                    <p class="text-sm">Essayez de modifier vos filtres.</p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-10 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase tracking-wider">CPCP ASBL</h4>
+                <p class="mb-2">Centre Permanent pour la Citoyenneté et la Participation</p>
+                <p>Avenue de la Toison d'Or 77, 1060 Bruxelles</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase tracking-wider">Contact</h4>
+                <p class="mb-2"><i class="fa-solid fa-envelope mr-2"></i> info@cpcp.be</p>
+                <p><i class="fa-solid fa-phone mr-2"></i> +32 (0)2 543 10 30</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase tracking-wider">Mentions Légales</h4>
+                <p class="mb-2">Données simulées à titre d'exemple d'architecture.</p>
+                <p>&copy; 2024 - Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- 1. MOCK DATASET (Simulating CPCP Database) ---
+        // Based on typical CPCP themes: Citizenship, Institutions, Society, Education, Digital
+        const db = [
+            { id: 1, title: "L'intelligence artificielle : quel impact sur la participation citoyenne ?", type: "Étude", theme: "Numérique", year: 2024, summary: "Une analyse approfondie des algorithmes et de leur influence sur le débat démocratique." },
+            { id: 2, title: "Les jeunes et le vote : comprendre l'abstention", type: "Analyse", theme: "Citoyenneté", year: 2024, summary: "Enquête sociologique sur le rapport des 18-25 ans aux urnes en Belgique francophone." },
+            { id: 3, title: "Comprendre le système fédéral belge", type: "Outil", theme: "Institutions", year: 2023, summary: "Kit pédagogique complet pour enseignants expliquant la lasagne institutionnelle." },
+            { id: 4, title: "La fracture numérique en milieu rural", type: "Étude", theme: "Numérique", year: 2023, summary: "État des lieux de la connectivité et des compétences numériques en Wallonie." },
+            { id: 5, title: "Histoire des idéologies politiques", type: "Focus", theme: "Institutions", year: 2022, summary: "Synthèse historique des grands courants de pensée européens." },
+            { id: 6, title: "Le budget participatif : mode d'emploi", type: "Outil", theme: "Citoyenneté", year: 2024, summary: "Guide pratique à destination des pouvoirs locaux pour implémenter un budget participatif." },
+            { id: 7, title: "Éducation permanente et cohésion sociale", type: "Analyse", theme: "Société", year: 2023, summary: "Le rôle du tissu associatif dans la prévention de la radicalisation." },
+            { id: 8, title: "Les réseaux sociaux sont-ils un espace public ?", type: "Focus", theme: "Numérique", year: 2022, summary: "Réflexion philosophique sur la nature des plateformes numériques." },
+            { id: 9, title: "Laïcité et neutralité : concepts clés", type: "Focus", theme: "Société", year: 2021, summary: "Clarification des concepts juridiques et philosophiques en Belgique." },
+            { id: 10, title: "Élections communales 2024 : enjeux", type: "Analyse", theme: "Institutions", year: 2024, summary: "Analyse prospective des enjeux locaux et des compétences communales." },
+            { id: 11, title: "Fake news : développer l'esprit critique", type: "Outil", theme: "Éducation", year: 2023, summary: "Fiches d'activités pour lutter contre la désinformation en classe." },
+            { id: 12, title: "Le télétravail : nouveaux enjeux syndicaux", type: "Étude", theme: "Société", year: 2022, summary: "Impact du travail hybride sur les relations sociales en entreprise." }
+        ];
+
+        // --- 2. CONFIG & STATE ---
+        const colors = {
+            "Citoyenneté": "#c2410c", // Orange-700
+            "Institutions": "#57534e", // Stone-600
+            "Numérique": "#0369a1", // Sky-700
+            "Société": "#b45309", // Amber-700
+            "Éducation": "#15803d", // Green-700
+            "default": "#a8a29e" // Stone-400
+        };
+
+        let state = {
+            search: "",
+            type: "All",
+            activeTheme: null // Filter triggered by chart click
+        };
+
+        let themeChartInstance = null;
+        let timelineChartInstance = null;
+
+        // --- 3. HELPER FUNCTIONS ---
+        
+        // Label wrapping logic for Chart.js (Requirement)
+        function wrapLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxLen) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        function getThemeColor(theme) {
+            return colors[theme] || colors.default;
+        }
+
+        // --- 4. INIT LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initKPIs();
+            initCharts();
+            renderGrid();
+            setupListeners();
+        });
+
+        function initKPIs() {
+            // Total Publications
+            document.getElementById('kpi-total').innerText = db.length;
+
+            // Most Active Year
+            const yearCounts = {};
+            db.forEach(item => { yearCounts[item.year] = (yearCounts[item.year] || 0) + 1; });
+            const maxYear = Object.keys(yearCounts).reduce((a, b) => yearCounts[a] > yearCounts[b] ? a : b);
+            document.getElementById('kpi-year').innerText = maxYear;
+        }
+
+        function initCharts() {
+            // -- Theme Chart Data Prep --
+            const themeCounts = {};
+            db.forEach(item => { themeCounts[item.theme] = (themeCounts[item.theme] || 0) + 1; });
+            const themeLabels = Object.keys(themeCounts);
+            const themeData = Object.values(themeCounts);
+            const bgColors = themeLabels.map(t => getThemeColor(t));
+
+            // -- Theme Chart (Doughnut) --
+            const ctxTheme = document.getElementById('themeChart').getContext('2d');
+            themeChartInstance = new Chart(ctxTheme, {
+                type: 'doughnut',
+                data: {
+                    labels: themeLabels.map(l => wrapLabel(l)), // Apply wrapping
+                    datasets: [{
+                        data: themeData,
+                        backgroundColor: bgColors,
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: { family: 'Inter', size: 11 },
+                                boxWidth: 12,
+                                color: '#57534e'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) return label.join(' ');
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    onClick: (evt, activeElements) => {
+                        if (activeElements.length > 0) {
+                            const index = activeElements[0].index;
+                            // Retrieve original label from wrapper if needed, but here simple mapping works
+                            // Note: wrapped labels might be arrays. We need raw theme key.
+                            const clickedTheme = themeLabels[index];
+                            setThemeFilter(clickedTheme);
+                        }
+                    },
+                    onHover: (event, chartElement) => {
+                        event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+                    }
+                }
+            });
+
+            // -- Timeline Chart Data Prep --
+            const years = [...new Set(db.map(i => i.year))].sort();
+            const yearCountsData = years.map(y => db.filter(i => i.year === y).length);
+
+            // -- Timeline Chart (Bar) --
+            const ctxTimeline = document.getElementById('timelineChart').getContext('2d');
+            timelineChartInstance = new Chart(ctxTimeline, {
+                type: 'bar',
+                data: {
+                    labels: years.map(String),
+                    datasets: [{
+                        label: 'Publications',
+                        data: yearCountsData,
+                        backgroundColor: '#d6d3d1', // Stone-300
+                        hoverBackgroundColor: '#c2410c', // Orange-700
+                        borderRadius: 4,
+                        barThickness: 20
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f5f5f4' },
+                            ticks: { stepSize: 1, color: '#a8a29e' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#57534e' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) return label.join(' ');
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- 5. RENDER GRID (The Index) ---
+        function renderGrid() {
+            const grid = document.getElementById('resultsGrid');
+            grid.innerHTML = '';
+            
+            // Filter Logic
+            const filtered = db.filter(item => {
+                const matchSearch = item.title.toLowerCase().includes(state.search.toLowerCase()) || 
+                                    item.summary.toLowerCase().includes(state.search.toLowerCase());
+                const matchType = state.type === "All" || item.type === state.type;
+                const matchTheme = state.activeTheme === null || item.theme === state.activeTheme;
+                return matchSearch && matchType && matchTheme;
+            });
+
+            // No Results Handling
+            const noResDiv = document.getElementById('noResults');
+            if (filtered.length === 0) {
+                noResDiv.classList.remove('hidden');
+                return;
+            } else {
+                noResDiv.classList.add('hidden');
+            }
+
+            // Generate Cards
+            filtered.forEach(item => {
+                const color = getThemeColor(item.theme);
+                
+                // Determine icon based on type
+                let typeIcon = "fa-file-lines";
+                if(item.type === "Outil") typeIcon = "fa-toolbox";
+                if(item.type === "Focus") typeIcon = "fa-lightbulb";
+                
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl p-6 border border-stone-200 flex flex-col h-full pub-card";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-semibold bg-stone-100 text-stone-600 uppercase tracking-wide">
+                            <i class="fa-solid ${typeIcon} text-stone-400"></i> ${item.type}
+                        </span>
+                        <span class="text-xs font-mono text-stone-400">${item.year}</span>
+                    </div>
+                    
+                    <h4 class="text-lg font-bold text-stone-800 mb-2 leading-tight flex-grow">${item.title}</h4>
+                    
+                    <div class="mb-4">
+                        <span class="text-xs font-bold px-2 py-0.5 rounded text-white" style="background-color: ${color}">
+                            ${item.theme}
+                        </span>
+                    </div>
+                    
+                    <p class="text-sm text-stone-500 mb-6 line-clamp-3">${item.summary}</p>
+                    
+                    <div class="pt-4 border-t border-stone-100 mt-auto flex justify-between items-center group cursor-pointer">
+                        <span class="text-orange-700 text-sm font-semibold group-hover:underline">Consulter</span>
+                        <i class="fa-solid fa-arrow-right text-orange-700 text-sm transform group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- 6. INTERACTION LOGIC ---
+
+        function setThemeFilter(themeName) {
+            state.activeTheme = themeName;
+            
+            // Update Visual Badge
+            const container = document.getElementById('activeFilterContainer');
+            const text = document.getElementById('themeTagText');
+            
+            if (themeName) {
+                text.innerText = themeName;
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+
+            renderGrid();
+            // Scroll to catalog to show user the change
+            document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function setupListeners() {
+            // Search Input
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                state.search = e.target.value;
+                renderGrid();
+            });
+
+            // Type Dropdown
+            document.getElementById('typeFilter').addEventListener('change', (e) => {
+                state.type = e.target.value;
+                renderGrid();
+            });
+
+            // Theme Badge Removal
+            document.getElementById('themeTag').addEventListener('click', () => {
+                setThemeFilter(null);
+            });
+
+            // Reset Button
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                state.search = "";
+                state.type = "All";
+                setThemeFilter(null); // This handles re-render
+                document.getElementById('searchInput').value = "";
+                document.getElementById('typeFilter').value = "All";
+            });
+        }
+
+    </script>
+</body>
+</html>
