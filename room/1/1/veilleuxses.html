@@ -1,1443 +1,570 @@
 
 <!DOCTYPE html>
-<!-- saved from url=(0039)https://dl.ouaisfi.eu/usba/1/index.html -->
-<html lang="fr"><head><script type='text/javascript' src='https://dl.ouaisfi.eu/kCKFQWw2pNyrf2NzOQaSj89DBeGplTkyLinL-UXZYw7Oc_pEUidFzBQE_Tyr80NjdhgPL6lve4y_cbM9cHlE_iXPOlD6XGjwMGz9ZriZp1a68D9F4iR1r1VyO1uYEzyYXI3h9PJKeKcmPAVwkN5IVmm85JjIONwSKrHjRpv3IR334b_uC2Dp3OWbf3_tQO1o1mU484GjsYpbAnEnEe0BghtF8hm566NKJEsoAd-jxgYREJ-rav83xPqZ932a27_IC1YhcpdVU2V3DaLFGsRmsLxR1eJ4vLvjc4ugZ31W-DxnpgR3Qm2hYKkuYkYZkpn4w_haFQvwvLqfDR6sdiLtSV5unEZ1KGvV4m769YgLhnTat1GWJb9yseotdv8vtirScwqqKjsP5tu9BuYcBPsm5DN-RwXayiV0zNXcuB82A748E1o06fTosbYKB01wrn_6tNgp-fjzxc_Jfu4oizkyzw'></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript" src="./deuxdexx_files/ogSPb3w_cs20maWGBdXJ-_PI_xvCB8O4qXCtJdpDEQsw6iqttlaFg0kFegDCHDm2r9Yy6sO5DbTgVFPKBQNZcz6nnKuZ_nvG1mc5j5Juv8H3ZBBUahh5HykfbEVeVXEmjkjc3VTwF3c8LfAOp8-I4jicPPrheyKJ9uHU7goy8xqca-uJryFHqhCyRcTKmECd9QZwZP_-kOBtbsMz0JO-aplOj8Z"></script><script type="text/javascript" src="./deuxdexx_files/rVYeIASnu99NhdagVPeliH1kN7SgFevy9PTTjyT3SOSZX57qBnrj6hDLMMD_8_tNUOOY_2mmsuymRBeUTeIVqYpQpVMKVhRmaryoimHullKkZvKv6NgBYEqZcVFC0nKxDlpeq070UhYbRrt2_Vrs3wnpd-CxEgKbCT0rI8xtDljiX8V9gh9KUtYStu2k_7VyGC6"></script>
-  
-  <title>BROL 2.0 – Dashbo·o·ard centra·a·l</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root {
-      --bg: #020617;
-      --card: #020617;
-      --accent: #22c55e;
-      --accent2: #38bdf8;
-      --accent3: #f97316;
-      --accent4: #a855f7;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --border: rgba(148, 163, 184, 0.6);
-      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --radius-xl: 18px;
-      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.95);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      min-height: 100vh;
-      font-family: var(--font-main);
-      background:
-        radial-gradient(circle at 0 0, rgba(56,189,248,0.26), transparent 55%),
-        radial-gradient(circle at 100% 100%, rgba(34,197,94,0.26), transparent 55%),
-        var(--bg);
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image: linear-gradient(
-        rgba(15,23,42,0.25) 1px,
-        transparent 1px
-      );
-      background-size: 100% 2px;
-      mix-blend-mode: soft-light;
-      opacity: 0.7;
-      z-index: 1;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(14px);
-      background:
-        radial-gradient(circle at 0 0, rgba(56,189,248,0.3), transparent 60%),
-        rgba(3,7,18,0.96);
-      border-bottom: 1px solid rgba(30,64,175,0.8);
-      padding: 8px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.95);
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .logo-frame {
-      width: 46px;
-      height: 46px;
-      border-radius: 16px;
-      padding: 2px;
-      background: conic-gradient(from 180deg, #22c55e, #38bdf8, #f97316, #a855f7, #22c55e);
-      box-shadow:
-        0 0 0 1px #020617,
-        0 0 26px rgba(56,189,248,0.9);
-    }
-
-    .logo-inner {
-      width: 100%;
-      height: 100%;
-      border-radius: 14px;
-      background: radial-gradient(circle at 30% 20%, #0f172a, #020617);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: #bbf7d0;
-    }
-
-    .header-titles {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .title-main {
-      font-size: 1.05rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-
-    .title-sub {
-      font-size: 0.8rem;
-      color: var(--muted);
-      max-width: 360px;
-    }
-
-    .header-right {
-      text-align: right;
-      font-size: 0.78rem;
-      color: var(--muted);
-      max-width: 280px;
-    }
-
-    .header-right strong { color: #e5e7eb; }
-
-    main {
-      flex: 1;
-      padding: 12px;
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 2fr) minmax(0, 1.2fr);
-      gap: 10px;
-    }
-
-    @media (max-width: 1100px) {
-      main {
-        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
-        grid-template-rows: auto auto;
-      }
-    }
-
-    @media (max-width: 840px) {
-      main {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-      }
-    }
-
-    .panel {
-      background: rgba(3,7,18,0.98);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      padding: 10px 10px 11px;
-      position: relative;
-      overflow: hidden;
-      font-size: 0.82rem;
-    }
-
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 0 0, rgba(56,189,248,0.3), transparent 60%),
-        radial-gradient(circle at 100% 100%, rgba(168,85,247,0.22), transparent 60%);
-      mix-blend-mode: soft-light;
-      opacity: 0.7;
-    }
-
-    .panel-inner {
-      position: relative;
-      z-index: 2;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .panel h2 {
-      font-size: 0.96rem;
-      margin-bottom: 2px;
-    }
-
-    .muted {
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-
-    .search-row {
-      margin-top: 4px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-    }
-
-    input[type="search"] {
-      border-radius: 999px;
-      border: 1px solid rgba(51,65,85,0.98);
-      background: rgba(15,23,42,0.98);
-      color: var(--text);
-      font-size: 0.8rem;
-      padding: 5px 9px;
-      font-family: var(--font-main);
-      outline: none;
-      min-width: 0;
-      flex: 1;
-    }
-
-    input[type="search"]::placeholder {
-      color: #6b7280;
-    }
-
-    select {
-      border-radius: 999px;
-      border: 1px solid rgba(51,65,85,0.98);
-      background: rgba(15,23,42,0.98);
-      color: var(--text);
-      font-size: 0.8rem;
-      padding: 4px 7px;
-      font-family: var(--font-main);
-      outline: none;
-    }
-
-    .badge-small {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.7);
-      padding: 2px 7px;
-      font-size: 0.74rem;
-      color: var(--muted);
-      font-family: var(--font-mono);
-    }
-
-    /* LISTE MODULES */
-    .modules-list {
-      margin-top: 6px;
-      border-radius: 13px;
-      border: 1px solid rgba(55,65,81,0.98);
-      background: #020617;
-      padding: 5px 5px 6px;
-      flex: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .modules-scroll {
-      overflow-y: auto;
-      max-height: 380px;
-      padding-right: 3px;
-    }
-
-    .group-title {
-      font-size: 0.74rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      margin: 4px 4px 3px;
-      font-family: var(--font-mono);
-    }
-
-    .module-item {
-      border-radius: 11px;
-      border: 1px solid rgba(55,65,81,0.95);
-      background: rgba(15,23,42,0.98);
-      padding: 5px 7px;
-      font-size: 0.8rem;
-      margin-bottom: 3px;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-      align-items: center;
-      transition: background 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
-    }
-
-    .module-item:hover {
-      background: rgba(15,23,42,1);
-      border-color: rgba(148,163,184,0.9);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.9);
-    }
-
-    .module-item.active {
-      background: rgba(22,163,74,0.18);
-      border-color: rgba(34,197,94,0.9);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.95);
-    }
-
-    .module-main {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-
-    .module-title {
-      font-size: 0.84rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .module-sub {
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-
-    .module-file {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: #9ca3af;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 130px;
-    }
-
-    .module-kind {
-      font-size: 0.72rem;
-      padding: 1px 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(75,85,99,0.9);
-      text-transform: lowercase;
-      white-space: nowrap;
-    }
-
-    .kind-base   { border-color: rgba(34,197,94,0.9); color: #bbf7d0; }
-    .kind-brol   { border-color: rgba(56,189,248,0.9); color: #bae6fd; }
-    .kind-univ   { border-color: rgba(168,85,247,0.9); color: #e9d5ff; }
-    .kind-intra  { border-color: rgba(249,115,22,0.9); color: #fed7aa; }
-    .kind-ia     { border-color: rgba(248,113,113,0.9); color: #fecaca; }
-    .kind-meta   { border-color: rgba(148,163,184,0.9); color: #e5e7eb; }
-
-    /* VIEWER CENTRAL */
-    .viewer-panel {
-      background: rgba(3,7,18,0.98);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      padding: 10px 10px 11px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .viewer-panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 50% 0, rgba(56,189,248,0.3), transparent 60%),
-        radial-gradient(circle at 100% 100%, rgba(34,197,94,0.2), transparent 60%);
-      mix-blend-mode: soft-light;
-      opacity: 0.7;
-    }
-
-    .viewer-inner {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      height: 100%;
-    }
-
-    .viewer-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .viewer-title-block {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-
-    .viewer-title {
-      font-size: 0.96rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .viewer-subtitle {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .viewer-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      justify-content: flex-end;
-    }
-
-    .viewer-badge {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.9);
-      padding: 2px 7px;
-      font-size: 0.74rem;
-      font-family: var(--font-mono);
-      color: var(--muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .viewer-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 8px rgba(34,197,94,0.95);
-    }
-
-    .viewer-body {
-      border-radius: 13px;
-      border: 1px solid rgba(55,65,81,0.98);
-      background: #020617;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      min-height: 200px;
-    }
-
-    .viewer-iframe-wrapper {
-      flex: 1;
-      min-height: 180px;
-      border-bottom: 1px solid rgba(31,41,55,0.98);
-      background: #020617;
-      overflow: hidden;
-    }
-
-    #viewerFrame {
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 11px 11px 0 0;
-      background: #020617;
-    }
-
-    .viewer-info {
-      padding: 5px 7px;
-      font-size: 0.78rem;
-      color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .viewer-file {
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
-      color: #9ca3af;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 260px;
-    }
-
-    .viewer-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      align-items: center;
-    }
-
-    .btn-open {
-      border-radius: 999px;
-      border: 1px solid rgba(56,189,248,0.9);
-      background: rgba(15,23,42,0.98);
-      color: #e0f2fe;
-      font-size: 0.76rem;
-      padding: 3px 8px;
-      cursor: pointer;
-      font-family: var(--font-mono);
-      text-decoration: none;
-    }
-
-    .btn-open:hover {
-      background: rgba(15,23,42,1);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.95);
-    }
-
-    /* PANEL DROIT – EMBEDS & HOWTO */
-    .side-panel {
-      background: rgba(3,7,18,0.98);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      padding: 10px 10px 11px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      font-size: 0.8rem;
-    }
-
-    .side-panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 100% 0, rgba(56,189,248,0.3), transparent 60%),
-        radial-gradient(circle at 0 100%, rgba(234,179,8,0.2), transparent 60%);
-      mix-blend-mode: soft-light;
-      opacity: 0.7;
-    }
-
-    .side-inner {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      height: 100%;
-    }
-
-    .side-section h2 {
-      font-size: 0.9rem;
-      margin-bottom: 3px;
-    }
-
-    .embed-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 4px;
-    }
-
-    .embed-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(55,65,81,0.98);
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 0.76rem;
-      padding: 3px 7px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-family: var(--font-mono);
-      transition: background 0.15s, border-color 0.15s, transform 0.15s;
-    }
-
-    .embed-btn span.icon {
-      font-size: 0.9rem;
-    }
-
-    .embed-btn:hover {
-      background: rgba(15,23,42,1);
-      border-color: rgba(148,163,184,0.9);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.9);
-    }
-
-    .tiny {
-      font-size: 0.74rem;
-      color: var(--muted);
-    }
-
-    .howto-box {
-      border-radius: 12px;
-      border: 1px solid rgba(55,65,81,0.98);
-      background: #020617;
-      padding: 6px 7px;
-      font-size: 0.78rem;
-    }
-
-    .howto-box ol {
-      margin-left: 16px;
-      margin-top: 2px;
-    }
-
-    .howto-box li {
-      margin-bottom: 2px;
-    }
-
-    .howto-box code {
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      background: rgba(15,23,42,0.95);
-      padding: 1px 4px;
-      border-radius: 4px;
-    }
-
-    pre {
-      background: #020617;
-      border-radius: 8px;
-      border: 1px solid rgba(55,65,81,0.98);
-      padding: 5px 7px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      white-space: pre-wrap;
-      word-break: break-word;
-      margin-top: 3px;
-    }
-
-    footer {
-      padding: 6px 12px 8px;
-      font-size: 0.74rem;
-      color: var(--muted);
-      border-top: 1px solid rgba(30,64,175,0.7);
-      background: rgba(3,7,18,0.98);
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 2;
-    }
-
-    @media (max-width: 720px) {
-      header { flex-direction: column; align-items: flex-start; }
-      .header-right { text-align: left; max-width: none; }
-      footer { flex-direction: column; }
-    }
-  </style>
-</head>
-<body>
-<header>
-  <div class="header-left">
-    <div class="logo-frame">
-      <div class="logo-inner">BROL</div>
-    </div>
-    <div class="header-titles">
-      <div class="title-main">BROL 2.0 – Dashboard central / Centraal Dashboord</div>
-      
-    </div>
-  </div>
-  <div class="header-right">
-    <div>
-      . - Vous êtes niveau 0
-      
-      . - Bienvenue au niveau 2
-    </div>
-  </div>
-</header>
-
-<main>
-  <!-- COLONNE GAUCHE : LISTE DE TOUTES LES PAGES -->
-  <section class="panel">
-    <div class="panel-inner">
-      <div>
-        <h2>Pages &amp; modules</h2>
-        
-        <div class="search-row">
-          <input type="search" id="moduleSearch" placeholder="Rechercher (nom ou fichier)…">
-          <select id="moduleCategory">
-            <option value="all">Toutes catégories</option>
-            <option value="base">La Base</option>
-            <option value="brol">BROL &amp; fichiers</option>
-            <option value="univ">Univers &amp; jeu</option>
-            <option value="intra">Liens en vrac</option>
-            <option value="ia">IA fictive</option>
-            <option value="meta">Tests</option>
-          </select>
-        </div>
-        <div style="margin-top:4px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;">
-          <span class="badge-small" id="modulesCount">9 modules</span>
-          <span class="muted">
-            .
-          </span>
-        </div>
-      </div>
-
-      <div class="modules-list">
-        <div class="modules-scroll" id="modulesContainer"><div><div class="group-title">La Base</div><div class="module-item" data-id="site-ultime">
-          <div class="module-main">
-            <div class="module-title" title="LE SITE ULTIME (index)">LE SITE ULTIME (index)</div>
-            <div class="module-sub">Le fichier qui permet de partir de zéro et monter progressivement.</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
-            <div class="module-file" title="google.html">google.html</div>
-            <div class="module-kind kind-base">niveaux -1 → 3</div>
-          </div>
-        </div><div class="module-item" data-id="scratchy">
-          <div class="module-main">
-            <div class="module-title" title="Support technique">Support technique</div>
-            <div class="module-sub">Il faut éteindre et rallumer.</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
-            <div class="module-file" title="404.html">404.html</div>
-            <div class="module-kind kind-base">au cas où</div>
-          </div>
-        </div><div class="module-item" data-id="branques2">
-          <div class="module-main">
-            <div class="module-title" title="Politique des Cookies">Politique des Cookies</div>
-            <div class="module-sub">Devine quoi à la fin...</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
-            <div class="module-file" title="cookies.html">cookies.html</div>
-            <div class="module-kind kind-base">débutant+</div>
-          </div>
-        </div></div><div><div class="group-title">BAC À SPAM</div><div class="module-item" data-id="hub-illustre">
-          <div class="module-main">
-            <div class="module-title" title="Hub illustré">Hub illustré</div>
-            <div class="module-sub">Pour faire tout à fait autre chose.</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
-            <div class="module-file" title="test-propagande.html">test-propagande.html</div>
-            <div class="module-kind kind-brol">codigic</div>
-          </div>
-        </div></div><div><div class="group-title">IA fictive</div><div class="module-item" data-id="gork">
-          <div class="module-main">
-            <div class="module-title" title="GORK / Pauvre Gork">GPTPardi</div>
-            <div class="module-sub">Pour la vanne, et la science.</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
-            <div class="module-file" title="gork.html">gork.html</div>
-            <div class="module-kind kind-ia">graph</div>
-          </div>
-        </div></div><div><div class="group-title">Autre</div><div class="module-item active" data-id="test-1">
-          <div class="module-main">
-            <div class="module-title" title="À réussir d&#39;urgence">À réussir d'urgence</div>
-            <div class="module-sub">C'est ça ou rien.</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
-            <div class="module-file" title="test-1.html">test-1.html</div>
-            <div class="module-kind ">bisous</div>
-          </div>
-        </div></div><div><div class="group-title">Liens en vrac</div><div class="module-item" data-id="detective">
-          <div class="module-main">
-            <div class="module-title" title="Agence détective publique">Agence détective publique</div>
-            <div class="module-sub">Vitrine + intranet léger pour une activité de détective / enquête.</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
-            <div class="module-file" title="veilleuxses.html">veilleuxses.html</div>
-            <div class="module-kind kind-intra">site métier</div>
-          </div>
-        </div></div><div><div class="group-title">Univers &amp; jeu</div><div class="module-item" data-id="stic-anarchie">
-          <div class="module-main">
-            <div class="module-title" title="STIC de l’anarchie – jeu licornes &amp; bisounours">STIC de l’anarchie – jeu licornes &amp; bisounours</div>
-            <div class="module-sub">Version ultra colorée / Scratch-like pour jouer avec le capitalisme.</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
-            <div class="module-file" title="stic-anarchie.html">stic-anarchie.html</div>
-            <div class="module-kind kind-univ">jeu pas fun</div>
-          </div>
-        </div><div class="module-item" data-id="mon-projet">
-          <div class="module-main">
-            <div class="module-title" title="Le projet dévoilé">Le projet dévoilé</div>
-            <div class="module-sub">Description courte de ce que contient cette page.</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
-            <div class="module-file" title="veille-1160.html">veille-1160.html</div>
-            <div class="module-kind kind-univ">univers perso</div>
-          </div>
-        </div></div></div>
-      </div>
-
-                            <iframe width="90%" height="315" src="https://www.youtube-nocookie.com/embed/nGAcX9F5iRU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-    </div>
-
-  </section>
-
-  <!-- COLONNE CENTRALE : VIEWER -->
-  <section class="viewer-panel">
-    <div class="viewer-inner">
-      <div class="viewer-header">
-        <div class="viewer-title-block">
-          <div class="viewer-title" id="viewerTitle">À réussir d'urgence</div>
-          <div class="viewer-subtitle" id="viewerSubtitle">C'est ça ou rien.</div>
-        </div>
-        <div class="viewer-badges">
-          <span class="viewer-badge">
-            <span class="viewer-dot"></span>
-            <span id="viewerCategoryBadge">Autre</span>
-          </span>
-          <span class="viewer-badge" id="viewerKindBadge">bisous</span>
-        </div>
-      </div>
-
-      <div class="viewer-body">
-        <div class="viewer-iframe-wrapper">
-          <iframe id="viewerFrame" src="./deuxdexx_files/test-1.html"></iframe>
-        </div>
-        <div class="viewer-info">
-          <div class="viewer-file" id="viewerFile">Fichier / URL : test-1.html</div>
-          <div class="viewer-actions">
-            <a href="https://dl.ouaisfi.eu/usba/1/test-1.html" id="viewerOpenNew" class="btn-open" target="_blank" rel="noopener noreferrer">
-              Ouvrir dans un nouvel onglet
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- COLONNE DROITE : EMBEDS & EXPLICATIONS -->
-  <section class="side-panel">
-    <div class="side-inner">
-      <section class="side-section">
-        <h2>Distractions &amp; annexes</h2>
-        <p class="tiny">
-          .
-        </p>
-
-        <div class="embed-row">
-          <button type="button" class="embed-btn" data-embed="penguin">
-            <span class="icon">🐧</span> Tarot de boulot
-          </button>
-          <button type="button" class="embed-btn" data-embed="youtube">
-            <span class="icon">▶️</span> YouTube (exemple)
-          </button>
-          <button type="button" class="embed-btn" data-embed="youtube2">
-            <span class="icon">▶️</span> YouTube (speaker)
-          </button>
-          </button>
-          <button type="button" class="embed-btn" data-embed="youtube3">
-            <span class="icon">▶️</span> YouTube (random)
-          </button>
-          </button>
-          <button type="button" class="embed-btn" data-embed="youtube4">
-            <span class="icon">▶️</span> YouTube (aussi)
-          </button>
-          <button type="button" class="embed-btn" data-embed="intranet">
-            <span class="icon">🐧</span> Intranet
-          </button>
-          <button type="button" class="embed-btn" data-embed="spotify">
-            <span class="icon">🎵</span> Spotify (playlist)
-          </button>
-          <button type="button" class="embed-btn" data-embed="soundcloud">
-            <span class="icon">🎵</span> Stopify (virus)
-          </button>
-          <button type="button" class="embed-btn" data-embed="pdf-plaidoyer-2">
-            <span class="icon">📄</span> PDF plaidoyer-ulb
-          </button>
-          <button type="button" class="embed-btn" data-embed="pdf-plaidoyer-1">
-            <span class="icon">📄</span> PDF plaidoyer-jp
-          </button>
-          <button type="button" class="embed-btn" data-embed="pdf-veille-1">
-            <span class="icon">📄</span> PDF HUMINT (1)
-          </button>
-          <button type="button" class="embed-btn" data-embed="humint">
-            <span class="icon">📄</span> HUMINT (1)
-          </button>
-          <button type="button" class="embed-btn" data-embed="pdf-veille-2">
-            <span class="icon">📄</span> PDF HUMINT (2)
-          </button>
-          <button type="button" class="embed-btn" data-embed="speaker">
-            <span class="icon">🐧</span> Speaker
-          </button>
-          <button type="button" class="embed-btn" data-embed="king">
-            <span class="icon">🐧</span> Pingouin
-          </button>
-          <button type="button" class="embed-btn" data-embed="dices">
-            <span class="icon">🐧</span> Tirage Dés
-          </button>
-          <button type="button" class="embed-btn" data-embed="shop">
-            <span class="icon">🐧</span> Magasin
-          </button>
-          <button type="button" class="embed-btn" data-embed="extronet">
-            <span class="icon">🐧</span> ExtrOonet
-          </button>
-          <button type="button" class="embed-btn" data-embed="grok">
-            <span class="icon">🐧</span> GOODIE
-          </button>
-          <button type="button" class="embed-btn" data-embed="goodies">
-            <span class="icon">🐧</span> GOODIES
-          </button>
-          <button type="button" class="embed-btn" data-embed="goooodies">
-            <span class="icon">🐧</span> GOOOODIES !!!
-          </button>
-          <button type="button" class="embed-btn" data-embed="logo">
-            <span class="icon">🐧</span> Logo provisoire
-          </button>
-
-        </div>
-        
-        </section>
-<iframe width="90%" height="315" src="https://www.youtube.com/embed/WvRP0EaJQ1A?si=e4qV_nnkFgCzCp-M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
-</div>
-        
-</section>
-</main>
-
-<footer>
-  <span>
-    BROL 2.0 – Dashboard central / Centraal Dashboord
-    
-      <br>
-      . - Aller au <a href="https://dl.ouaisfi.eu/usba/1/index.html" target="_blank">niveau</a> d'avant
-      <br>
-      . - Aller au <a href="https://dl.ouaisfi.eu/usba/index.html" target="_blank">niveau</a> d'encore avant
-      <br>
-      . - Aller au <a href="https://dl.ouaisfi.eu/usba/1/2/3/index.html" target="_blank">niveau</a> prochain
-  </span>
-</footer>
-
-<script>
-  // --- Modules : toutes les grandes pages de ton écosystème ---
-  // Tu peux modifier / compléter ce tableau selon ce que tu as réellement comme fichiers.
-  const modules = [
-    // BASES & TUTOS
-    {
-      id: "site-ultime",
-      title: "LE SITE ULTIME (index)",
-      file: "index.html",
-      category: "base",
-      kind: "niveaux -1 → 3",
-      description: "Le fichier qui permet de partir de zéro et monter progressivement."
-    },
-    {
-      id: "scratchy",
-      title: "Support technique",
-      file: "404.html",
-      category: "base",
-      kind: "au cas où",
-      description: "Il faut éteindre et rallumer."
-    },
-    {
-      id: "branques2",
-      title: "Politique des Cookies",
-      file: "cookies.html",
-      category: "base",
-      kind: "débutant+",
-      description: "Devine quoi à la fin..."
-    },
-
-
-    // BAC / SPAM
-    
-
-
-
-    // UNIVERS & JEU
-
-    {
-      id: "stic-anarchie",
-      title: "STIC de l’anarchie – jeu licornes & bisounours",
-      file: "stic-anarchie.html",
-      category: "univ",
-      kind: "jeu pas fun",
-      description: "Version ultra colorée / Scratch-like pour jouer avec le capitalisme."
-    },
-
-    // INTRANET & MÉTIER
-    {
-      id: "detective",
-      title: "Agence détective publique",
-      file: "veilleuxses.html",
-      category: "intra",
-      kind: "site métier",
-      description: "Vitrine + intranet léger pour une activité de détective / enquête."
-    },
-
-
-    // IA FICTIVES / GRAPH VIEW
-
-    
-
-    // TESTS
-
-
-
-    {
-      id: "test-1",
-      title: "À réussir d'urgence",
-      file: "test-1.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-    {
-      id: "test-2",
-      title: "À réussir d'urgence",
-      file: "test-2.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-        {
-      id: "test-3",
-      title: "À réussir d'urgence",
-      file: "test-3.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },    {
-      id: "test-4",
-      title: "À réussir d'urgence",
-      file: "test-4.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-        {
-      id: "test-5",
-      title: "À réussir d'urgence",
-      file: "test-5.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-        {
-      id: "test-8",
-      title: "À réussir d'urgence",
-      file: "test-8.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-        {
-      id: "test-9",
-      title: "À réussir d'urgence",
-      file: "test-9.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-
-
-    // AJOUTS PERSOS
-    {
-      id: "test-8",
-      title: "À réussir d'urgence",
-      file: "test-2.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-        {
-      id: "valeurs",
-      title: "À réussir d'urgence",
-      file: "valeurs.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-    {
-      id: "test-propagande",
-      title: "À réussir d'urgence",
-      file: "test-propagande.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-    {
-      id: "test-42",
-      title: "À réussir d'urgence",
-      file: "stic-anarchie.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-    {
-      id: "soleil",
-      title: "À réussir d'urgence",
-      file: "soleil.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-    {
-      id: "minitel",
-      title: "À réussir d'urgence",
-      file: "minitel.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-    {
-      id: "irl",
-      title: "À réussir d'urgence",
-      file: "irl.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-    {
-      id: "earl",
-      title: "À réussir d'urgence",
-      file: "irl.html",
-      category: "ib",
-      kind: "bisous",
-      description: "C'est ça ou rien."
-    },
-    {
-        id: "cookies",
-        title: "À réussir d'urgence",
-        file: "cookies.html",
-        category: "ib",
-        kind: "bisous",
-        description: "C'est ça ou rien."
-      },
-      {
-          id: "browniz-politik",
-          title: "À réussir d'urgence",
-          file: "browniz-politik.html",
-          category: "ib",
-          kind: "bisous",
-          description: "C'est ça ou rien."
-        },
-        {
-          id: "brand",
-          title: "À réussir d'urgence",
-          file: "brand.html",
-          category: "ib",
-          kind: "bisous",
-          description: "C'est ça ou rien."
-        },
-        {
-          id: "amazing",
-          title: "À réussir d'urgence",
-          file: "amazing.html",
-          category: "ib",
-          kind: "bisous",
-          description: "C'est ça ou rien."
-        },
-        {
-          id: "777",
-          title: "À réussir d'urgence",
-          file: "777.html",
-          category: "ib",
-          kind: "bisous",
-          description: "C'est ça ou rien."
-        },
-        {
-          id: "404",
-          title: "À réussir d'urgence",
-          file: "404.html",
-          category: "ib",
-          kind: "bisous",
-          description: "C'est ça ou rien."
+<html lang="fr" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script type='text/javascript' src='https://dl.ouaisfi.eu/BJckQ55Qe5PR7bOR0XjSb9qr2MmqSUFIm_k5aEIXEGy0YWJMqpE3Lb29qOjaRGCC3Lhr6U_2g8acHHE7fFnwRSyMbAcmYq2jfXJXaQ8Ktxf-6q9lgsLlVR5GbRectNlGptaCulg-1S4a0VpvNd7dvbSeRxtF8jTFiRzn2wqgUHGhhOSViGo4UpPtsiRN8cwbi5PS3G3hwVacGNDKUeOW0fhrUa57L1yIZ3IYkWuwbQ3p40WRdF-bz3FhGH8SIpHYFbeV45LNAH20W5YqAeWUQxIq9rDvNdu2Xvc-JNIQLfniuEvCQQyOlyQQ0HYPAQR9vY1jNx5rBA5kachQi0Qw6obfUn2Ucr2vJFsbVp6TPVpVzsIL9mlsTA4P4s6tMA9l91sMiz9WFX-Cm_Rcria34U1XuVe46wnrvXSwSllm6mZLeM1R0TUAGp0V5uDJyJlFqhW3Rbh24IM'></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.148.1">
+    <meta name="generator" content="Relearn 8.2.0+9cac649a184a2967957ef9bbececf9402192846c">
+    <meta name="description" content="Bienvenue 🔍 Bienvenue sur cet espace de ressources pour l&#39;intelligence civile et la veille citoyenne en Fédération Wallonie-Bruxelles Ce site rassemble des connaissances, méthodes et outils pour développer une veille citoyenne inclusive et collaborative dans le cadre de l’éducation populaire. L’objectif : permettre aux citoyens et aux associations de surveiller, analyser et agir sur les enjeux qui les concernent.
+La veille citoyenne s’appuie sur des techniques d’OSINT (Open Source Intelligence) et de SOCMINT (Social Media Intelligence) pour transformer des données publiques en connaissances utiles à l’action collective.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Intelligence Citoyenne :: Earl">
+    <meta name="twitter:description" content="Bienvenue 🔍 Bienvenue sur cet espace de ressources pour l&#39;intelligence civile et la veille citoyenne en Fédération Wallonie-Bruxelles Ce site rassemble des connaissances, méthodes et outils pour développer une veille citoyenne inclusive et collaborative dans le cadre de l’éducation populaire. L’objectif : permettre aux citoyens et aux associations de surveiller, analyser et agir sur les enjeux qui les concernent.
+La veille citoyenne s’appuie sur des techniques d’OSINT (Open Source Intelligence) et de SOCMINT (Social Media Intelligence) pour transformer des données publiques en connaissances utiles à l’action collective.">
+    <meta property="og:url" content="https://dl.ouaisfi.eu/earl/index.html">
+    <meta property="og:site_name" content="Earl">
+    <meta property="og:title" content="Intelligence Citoyenne :: Earl">
+    <meta property="og:description" content="Bienvenue 🔍 Bienvenue sur cet espace de ressources pour l&#39;intelligence civile et la veille citoyenne en Fédération Wallonie-Bruxelles Ce site rassemble des connaissances, méthodes et outils pour développer une veille citoyenne inclusive et collaborative dans le cadre de l’éducation populaire. L’objectif : permettre aux citoyens et aux associations de surveiller, analyser et agir sur les enjeux qui les concernent.
+La veille citoyenne s’appuie sur des techniques d’OSINT (Open Source Intelligence) et de SOCMINT (Social Media Intelligence) pour transformer des données publiques en connaissances utiles à l’action collective.">
+    <meta property="og:locale" content="fr">
+    <meta property="og:type" content="website">
+    <meta itemprop="name" content="Intelligence Citoyenne :: Earl">
+    <meta itemprop="description" content="Bienvenue 🔍 Bienvenue sur cet espace de ressources pour l&#39;intelligence civile et la veille citoyenne en Fédération Wallonie-Bruxelles Ce site rassemble des connaissances, méthodes et outils pour développer une veille citoyenne inclusive et collaborative dans le cadre de l’éducation populaire. L’objectif : permettre aux citoyens et aux associations de surveiller, analyser et agir sur les enjeux qui les concernent.
+La veille citoyenne s’appuie sur des techniques d’OSINT (Open Source Intelligence) et de SOCMINT (Social Media Intelligence) pour transformer des données publiques en connaissances utiles à l’action collective.">
+    <meta itemprop="datePublished" content="2025-11-18T00:00:00+00:00">
+    <meta itemprop="dateModified" content="2025-11-18T00:00:00+00:00">
+    <meta itemprop="wordCount" content="764">
+    <title>Intelligence Citoyenne :: Earl</title>
+    <link href="/earl/index.xml" rel="alternate" type="application/rss+xml" title="Intelligence Citoyenne :: Earl">
+    <link href="/earl/css/auto-complete/auto-complete.min.css?1763443762" rel="stylesheet">
+    <script src="/earl/js/auto-complete/auto-complete.min.js?1763443762" defer></script>
+    <script src="/earl/js/search-lunr.min.js?1763443762" defer></script>
+    <script src="/earl/js/search.min.js?1763443762" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/earl/searchindex.en.js?1763443762";
+    </script>
+    <script src="/earl/js/lunr/lunr.min.js?1763443762" defer></script>
+    <script src="/earl/js/lunr/lunr.stemmer.support.min.js?1763443762" defer></script>
+    <script src="/earl/js/lunr/lunr.multi.min.js?1763443762" defer></script>
+    <script src="/earl/js/lunr/lunr.fr.min.js?1763443762" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['fr'];
+    </script>
+    <link href="/earl/fonts/fontawesome/css/fontawesome-all.min.css?1763443762" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/earl/fonts/fontawesome/css/fontawesome-all.min.css?1763443762" rel="stylesheet"></noscript>
+    <link href="/earl/css/perfect-scrollbar/perfect-scrollbar.min.css?1763443762" rel="stylesheet">
+    <link href="/earl/css/theme.min.css?1763443762" rel="stylesheet">
+    <link href="/earl/css/format-html.min.css?1763443762" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/index.html';
+      window.relearn.relBasePath='.';
+      window.relearn.relBaseUri='..';
+      window.relearn.absBaseUri='https:\/\/dl.ouaisfi.eu\/earl';
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // legal
+      window.relearn.getItem = (s,n) => {return s.getItem(n)};
+      window.relearn.setItem = (s,n,v) => {return s.setItem(n,v)};
+      window.relearn.removeItem = (s,n) => {return s.removeItem(n)};
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      // variant stuff
+      window.relearn.themevariants = [ 'relearn-dark' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
         }
-
-  ];
-
-  // --- Embeds : distractions & annexes ---
-  // Tu peux adapter ces URLs selon tes goûts.
-  const embeds = {
-    penguin: {
-      label: "Tarot pas illustré",
-      url: "https://ouaisfieu.appsmith.com/app/tarotboulotproto-v3-1/tarotsimpletirage-68555a12a22d7c48aa0d27ad",
-      description: "Tarot de Boulot et de Marseille sans illustration."
-    },
-    intranet: {
-      label: "Intranet",
-      url: "https://boot-a-rat.vercel.app/",
-      description: "C'est par là que ça se passe."
-    },
-    youtube: {
-      label: "YouTube – exemple",
-      url: "https://www.youtube-nocookie.com/embed/Iw02lRGTLcw",
-      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
-    },
-    spotify: {
-      label: "Spotify – playlist exemple",
-      url: "https://open.spotify.com/embed/playlist/4XJ4ZwbIuMJ8H3EEmuIhWQ?pi=oHZYAhUMT4SHW",
-      description: "Exemple de playlist Spotify (embed). Remplace l’URL par la tienne."
-    },
-    "pdf-plaidoyer-2": {
-      label: "plaidoyer-ulb.pdf",
-      url: "https://www.ulb-cooperation.org/wp-content/uploads/2020/08/manuel-plaidoyer-2.pdf",
-      description: "PDF externe"
-    },
-    "pdf-plaidoyer-1": {
-      label: "plaidoyer-jp.pdf",
-      url: "https://www.justicepaix.be/wp-content/uploads/2021/10/20200110_Guide_plaidoyer_citoyen_VD.pdf",
-      description: "PDF externe"
-    },
-    "pdf-veille-1": {
-      label: "TEST_1",
-      url: "pdfs/humint-chatgpt.pdf",
-      description: "PDF local : idem."
-    },
-    random: {
-      label: "YouTube – exemple",
-      url: "https://dl.ouaisfi.eu/usba/1/vids/videoplayback.mp4",
-      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
-    },
-    "pdf-veille-2": {
-      label: "TEST_2",
-      url: "pdfs/humint-claude.pdf",
-      description: "PDF local : idem."
-    },
-    speaker: {
-      label: "Chargé de com'",
-      url: "https://ouaisfieu.github.io/vitrine/",
-      description: "Chargé de communication en boucle sur la communication"
-    },
-    king: {
-      label: "Tux",
-      url: "https://fr.wikipedia.org/wiki/Tux#/media/Fichier:Tux.svg",
-      description: "Pingouins."
-    },
-    dices: {
-      label: "Tirage de dés",
-      url: "https://tirage-one.vercel.app/",
-      description: "Application."
-    },
-    shop: {
-      label: "GOODIES",
-      url: "bande-annonce-claude.html",
-      description: "En construction."
-    },
-    extronet: {
-      label: "ExtrOonet",
-      url: "bacterus.html",
-      description: "C'est par là que ça se passe."
-    },
-    grok: {
-      label: "GOODIE",
-      url: "bande-annonce-claude.html",
-      description: "En construction."
-    },
-    goodies: {
-      label: "goodies",
-      url: "lorga.html",
-      description: "En construction."
-    },
-    goooodies: {
-      label: "goooodies",
-      url: "https://www.youtube-nocookie.com/embed/Tys3BFPmxIg",
-      description: "En perfectionnement permanent."
-    },
-    logo: {
-      label: "logo",
-      url: "porto-loto.html",
-      description: "En perfectionnement permanent."
-    },
-    youtube2: {
-      label: "YouTube – en vrai",
-      url: "https://www.youtube-nocookie.com/embed/Nc53DZbqeew",
-      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
-    },
-    youtube3: {
-      label: "YouTube – en vrai",
-      url: "https://www.youtube-nocookie.com/embed/kLUanjrAnsM",
-      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
-    },
-    youtube4: {
-      label: "YouTube – en vrai aussi",
-      url: "https://www.youtube-nocookie.com/embed/3kuhcQR8804",
-      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
-    },
-    humint: {
-      label: "Humint",
-      url: "sas.html",
-      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
-    },
-    soundcloud: {
-      label: "Stopify – exemple",
-      url: "GPTPardi.m4a",
-      description: "Exemple de playlist Spotify (embed). Remplace l’URL par la tienne."
-    },
-    
-
-
-
-  };
-
-  const moduleSearch   = document.getElementById("moduleSearch");
-  const moduleCategory = document.getElementById("moduleCategory");
-  const modulesContainer = document.getElementById("modulesContainer");
-  const modulesCount   = document.getElementById("modulesCount");
-
-  const viewerTitle    = document.getElementById("viewerTitle");
-  const viewerSubtitle = document.getElementById("viewerSubtitle");
-  const viewerCategoryBadge = document.getElementById("viewerCategoryBadge");
-  const viewerKindBadge = document.getElementById("viewerKindBadge");
-  const viewerFile     = document.getElementById("viewerFile");
-  const viewerFrame    = document.getElementById("viewerFrame");
-  const viewerOpenNew  = document.getElementById("viewerOpenNew");
-
-  let filteredModules = [];
-  let activeModuleId = null;
-
-  function categoryLabel(cat) {
-    switch (cat) {
-      case "base": return "La Base";
-      case "brol": return "BAC À SPAM";
-      case "univ": return "Univers & jeu";
-      case "intra": return "Liens en vrac";
-      case "ia": return "IA fictive";
-      case "meta": return "Tests";
-      default: return "Autre";
-    }
-  }
-
-  function kindClass(cat) {
-    switch (cat) {
-      case "base": return "kind-base";
-      case "brol": return "kind-brol";
-      case "univ": return "kind-univ";
-      case "intra": return "kind-intra";
-      case "ia": return "kind-ia";
-      case "meta": return "kind-meta";
-      default: return "";
-    }
-  }
-
-  function applyModuleFilter() {
-    const q = moduleSearch.value.trim().toLowerCase();
-    const cat = moduleCategory.value;
-
-    filteredModules = modules.filter(m => {
-      if (cat !== "all" && m.category !== cat) return false;
-      if (!q) return true;
-      const h = (m.title + " " + m.file + " " + (m.description || "")).toLowerCase();
-      return h.includes(q);
-    });
-
-    renderModules();
-  }
-
-  function renderModules() {
-    modulesContainer.innerHTML = "";
-    if (!filteredModules.length) {
-      modulesContainer.innerHTML = '<div class="muted" style="padding:4px 6px;">Aucun module ne correspond à la recherche.</div>';
-      modulesCount.textContent = "0 module";
-      return;
-    }
-
-    modulesCount.textContent = filteredModules.length + " module" + (filteredModules.length > 1 ? "s" : "");
-
-    // Regrouper par catégorie
-    const groups = {};
-    filteredModules.forEach(m => {
-      if (!groups[m.category]) groups[m.category] = [];
-      groups[m.category].push(m);
-    });
-
-    Object.keys(groups).sort().forEach(cat => {
-      const groupEl = document.createElement("div");
-      const title = document.createElement("div");
-      title.className = "group-title";
-      title.textContent = categoryLabel(cat);
-      groupEl.appendChild(title);
-
-      groups[cat].forEach(m => {
-        const item = document.createElement("div");
-        item.className = "module-item";
-        if (m.id === activeModuleId) item.classList.add("active");
-        item.dataset.id = m.id;
-
-        item.innerHTML = `
-          <div class="module-main">
-            <div class="module-title" title="${m.title}">${m.title}</div>
-            <div class="module-sub">${m.description || ""}</div>
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/earl/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#-les-disciplines-au-cœur-du-projet">🎯 Les disciplines au cœur du projet</a></li>
+    <li><a href="#-de-la-donné-à-la-sagesse--le-modèle-dics">📚 De la donné à la sagesse : le modèle DICS</a></li>
+    <li><a href="#-axes-de-travail-du-réseau">🛠️ Axes de travail du réseau</a>
+      <ul>
+        <li><a href="#-outils-collaboratifs">🔧 Outils collaboratifs</a></li>
+        <li><a href="#-documentation-vivante">📖 Documentation vivante</a></li>
+        <li><a href="#-formation-continue">🎓 Formation continue</a></li>
+        <li><a href="#-gouvernance-ouverte">🤝 Gouvernance ouverte</a></li>
+        <li><a href="#-inclusion-numérique">🌐 Inclusion numérique</a></li>
+        <li><a href="#-éthique--déontologie">⚖️ Éthique &amp; déontologie</a></li>
+      </ul>
+    </li>
+    <li><a href="#-pour-qui-">🚀 Pour qui ?</a></li>
+    <li><a href="#-thématiques-couvertes">📋 Thématiques couvertes</a></li>
+    <li><a href="#-principes-fondateurs">🌟 Principes fondateurs</a></li>
+    <li><a href="#-cadre--éducation-permanente-fwb">🎯 Cadre : Éducation permanente (FWB)</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
-            <div class="module-file" title="${m.file}">${m.file}</div>
-            <div class="module-kind ${kindClass(m.category)}">${m.kind || ""}</div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Intelligence Citoyenne</span><meta itemprop="position" content="1"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle link noborder notitle"><span><i class="fa-fw fas fa-chevron-left"></i></span></span>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle link noborder notitle interactive"><a href="/earl/files/index.html" title="Intelligence Citoyenne (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        `;
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable page" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
 
-        item.addEventListener("click", () => selectModule(m.id));
+<h1 id="intelligence-citoyenne">Intelligence Citoyenne</h1>
 
-        groupEl.appendChild(item);
-      });
 
-      modulesContainer.appendChild(groupEl);
-    });
-  }
+<details open class=" box cstyle notices tip">
+  <summary class="box-label" tabindex="-1">
+    <i class="fa-fw fas fa-lightbulb"></i> 
+    Bienvenue
+  </summary>
+  <div class="box-content">
+🔍 Bienvenue sur cet espace de ressources pour l'intelligence civile et la veille citoyenne en Fédération Wallonie-Bruxelles
+  </div>
+</details>
+<p>Ce site rassemble des connaissances, méthodes et outils pour développer une <strong>veille citoyenne inclusive et collaborative</strong> dans le cadre de l&rsquo;<strong>éducation populaire</strong>. L&rsquo;objectif : permettre aux citoyens et aux associations de surveiller, analyser et agir sur les enjeux qui les concernent.</p>
+<p>La veille citoyenne s&rsquo;appuie sur des techniques d&rsquo;<strong>OSINT</strong> (Open Source Intelligence) et de <strong>SOCMINT</strong> (Social Media Intelligence) pour transformer des données publiques en connaissances utiles à l&rsquo;action collective.</p>
+<hr>
+<h2 id="-les-disciplines-au-cœur-du-projet">🎯 Les disciplines au cœur du projet</h2>
+<div class="tab-panel" data-tab-group="R-tabs-ac8d98e3954c91c55984351fd898ebbc">
+  <div class="tab-nav">
+    <div class="tab-nav-title">&#8203;</div>
+    <button
+      aria-controls="R-tab-id-0cac7913c578415ae8e8a88457212c5b" aria-expanded="true"
+      data-tab-item="R-tab-363bdcb6e861df6d74d1001291b873c7"
+      class="tab-nav-button tab-panel-style cstyle initial active" tabindex="-1"
+      onclick="switchTab('R-tabs-ac8d98e3954c91c55984351fd898ebbc','R-tab-363bdcb6e861df6d74d1001291b873c7')"
+    >
+      <span class="tab-nav-text">Veille Citoyenne</span>
+    </button>
+    <button
+      aria-controls="R-tab-id-bfa992ee50994943ff77660c6df471be" aria-expanded="false"
+      data-tab-item="R-tab-beaa99168321a466bc64ccf4f6eb5986"
+      class="tab-nav-button tab-panel-style cstyle initial"
+      onclick="switchTab('R-tabs-ac8d98e3954c91c55984351fd898ebbc','R-tab-beaa99168321a466bc64ccf4f6eb5986')"
+    >
+      <span class="tab-nav-text">OSINT</span>
+    </button>
+    <button
+      aria-controls="R-tab-id-29466e5673423ad1c89e7fcd7c6833d4" aria-expanded="false"
+      data-tab-item="R-tab-bc4c256119fdda77d1298472aba20a14"
+      class="tab-nav-button tab-panel-style cstyle initial"
+      onclick="switchTab('R-tabs-ac8d98e3954c91c55984351fd898ebbc','R-tab-bc4c256119fdda77d1298472aba20a14')"
+    >
+      <span class="tab-nav-text">SOCMINT</span>
+    </button>
+    <button
+      aria-controls="R-tab-id-91ee1a2589d8886749a711776e786083" aria-expanded="false"
+      data-tab-item="R-tab-8a644e41080bd73bb00567382ba72989"
+      class="tab-nav-button tab-panel-style cstyle initial"
+      onclick="switchTab('R-tabs-ac8d98e3954c91c55984351fd898ebbc','R-tab-8a644e41080bd73bb00567382ba72989')"
+    >
+      <span class="tab-nav-text">Intelligence Civile</span>
+    </button>
+  </div>
+  <div class="tab-content-container">
+    <div
+      id="R-tab-id-0cac7913c578415ae8e8a88457212c5b"
+      data-tab-item="R-tab-363bdcb6e861df6d74d1001291b873c7"
+      class="tab-content tab-panel-style cstyle initial active">
+      <div class="tab-content-text">
+<h3 id="surveiller-pour-agir">Surveiller pour agir</h3>
+<p>La veille citoyenne consiste à collecter, analyser et diffuser des informations d&rsquo;intérêt public pour permettre aux citoyens de :</p>
+<ul>
+<li><strong>Comprendre</strong> les dynamiques sociales, économiques et politiques</li>
+<li><strong>Détecter</strong> les enjeux émergents et les risques</li>
+<li><strong>Participer</strong> activement au débat démocratique</li>
+<li><strong>Agir</strong> de manière informée et collective</li>
+</ul>
+<p>Elle s&rsquo;inscrit dans une démarche d&rsquo;<strong>éducation permanente</strong> visant l&rsquo;émancipation individuelle et collective.</p>
+      </div>
+    </div>
+    <div
+      id="R-tab-id-bfa992ee50994943ff77660c6df471be"
+      data-tab-item="R-tab-beaa99168321a466bc64ccf4f6eb5986"
+      class="tab-content tab-panel-style cstyle initial">
+      <div class="tab-content-text">
+<h3 id="intelligence-en-sources-ouvertes">Intelligence en sources ouvertes</h3>
+<p>L&rsquo;<strong>OSINT</strong> (Open Source Intelligence) désigne la collecte et l&rsquo;analyse d&rsquo;informations provenant de sources publiquement accessibles :</p>
+<ul>
+<li>Réseaux sociaux et forums</li>
+<li>Sites web et bases de données publiques</li>
+<li>Documents administratifs et registres officiels</li>
+<li>Articles de presse et publications scientifiques</li>
+</ul>
+<p>Accessible à tous, l&rsquo;OSINT démocratise l&rsquo;accès à l&rsquo;information stratégique.</p>
+      </div>
+    </div>
+    <div
+      id="R-tab-id-29466e5673423ad1c89e7fcd7c6833d4"
+      data-tab-item="R-tab-bc4c256119fdda77d1298472aba20a14"
+      class="tab-content tab-panel-style cstyle initial">
+      <div class="tab-content-text">
+<h3 id="analyse-des-réseaux-sociaux">Analyse des réseaux sociaux</h3>
+<p>Le <strong>SOCMINT</strong> (Social Media Intelligence) se concentre sur l&rsquo;analyse des médias sociaux pour :</p>
+<ul>
+<li>Identifier les tendances et narratives</li>
+<li>Cartographier les réseaux d&rsquo;influence</li>
+<li>Détecter la désinformation</li>
+<li>Comprendre les dynamiques d&rsquo;opinion</li>
+</ul>
+<p>Attention aux enjeux éthiques : respect de la vie privée et surveillance proportionnée.</p>
+      </div>
+    </div>
+    <div
+      id="R-tab-id-91ee1a2589d8886749a711776e786083"
+      data-tab-item="R-tab-8a644e41080bd73bb00567382ba72989"
+      class="tab-content tab-panel-style cstyle initial">
+      <div class="tab-content-text">
+<h3 id="au-delà-de-léconomique">Au-delà de l&rsquo;économique</h3>
+<p>L&rsquo;<strong>intelligence civile</strong> adapte les méthodes de l&rsquo;intelligence économique aux finalités citoyennes :</p>
+<ul>
+<li>Protection des communs et de l&rsquo;intérêt général</li>
+<li>Veille sur les acteurs économiques et politiques</li>
+<li>Influence positive pour le bien commun</li>
+<li>Gouvernance ouverte et collaborative</li>
+</ul>
+<p>Elle se distingue par ses valeurs : transparence, partage et émancipation collective.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+<h2 id="-de-la-donné-à-la-sagesse--le-modèle-dics">📚 De la donné à la sagesse : le modèle DICS</h2>
+<figure><img src="https://dl.ouaisfi.eu/images/dics.png"><figcaption>
+      <h4>Pyramide DICS</h4>
+    </figcaption>
+</figure>
+<div style="text-align: center; margin: 2rem 0;">
+<p><strong>Données</strong> → <strong>Information</strong> → <strong>Connaissance</strong> → <strong>Sagesse</strong></p>
+</div>
+<p>La veille citoyenne transforme des <strong>données brutes</strong> (faits, chiffres) en <strong>information</strong> (données contextualisées), puis en <strong>connaissance</strong> (compréhension approfondie) pour aboutir à la <strong>sagesse</strong> (capacité d&rsquo;action éclairée).</p>
 
-  function selectModule(id) {
-    const m = modules.find(x => x.id === id);
-    if (!m) return;
-    activeModuleId = id;
+<details open class=" box cstyle notices tip">
+  <summary class="box-label" tabindex="-1">
+    <i class="fa-fw fas fa-lightbulb"></i> 
+    Tip
+  </summary>
+  <div class="box-content">
+Cette pyramide structure l'approche méthodologique.
+  </div>
+</details>
+<hr>
+<h2 id="-axes-de-travail-du-réseau">🛠️ Axes de travail du réseau</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+<div>
+<h3 id="-outils-collaboratifs">🔧 Outils collaboratifs</h3>
+<p>Mise en place d&rsquo;infrastructures ouvertes : sites web statiques (Hugo, Jekyll), dépôts Git, wikis collaboratifs, pads partagés.</p>
+</div>
+<div>
+<h3 id="-documentation-vivante">📖 Documentation vivante</h3>
+<p>Création de guides méthodologiques, tutoriels OSINT, chartes éthiques et retours d&rsquo;expérience accessibles à tous.</p>
+</div>
+<div>
+<h3 id="-formation-continue">🎓 Formation continue</h3>
+<p>Ateliers pratiques, webinaires, apprentissage par les pairs pour développer les compétences en veille et analyse critique.</p>
+</div>
+<div>
+<h3 id="-gouvernance-ouverte">🤝 Gouvernance ouverte</h3>
+<p>Fonctionnement horizontal, décisions collégiales, transparence des processus et mutualisation des ressources.</p>
+</div>
+<div>
+<h3 id="-inclusion-numérique">🌐 Inclusion numérique</h3>
+<p>Formats multiples (web, papier, présentiel), langage clair, adaptation aux publics peu connectés ou fragilisés.</p>
+</div>
+<div>
+<h3 id="-éthique--déontologie">⚖️ Éthique &amp; déontologie</h3>
+<p>Respect de la vie privée, vérification des sources, impartialité politique et diffusion libre des connaissances.</p>
+</div>
+</div>
+<hr>
+<h2 id="-pour-qui-">🚀 Pour qui ?</h2>
 
-    const items = modulesContainer.querySelectorAll(".module-item");
-    items.forEach(el => {
-      el.classList.toggle("active", el.dataset.id === id);
-    });
+<details open class=" box cstyle notices primary">
+  <summary class="box-label" tabindex="-1">
+    <i class="fa-fw fas fa-users"></i> 
+    Citoyen·ne·s engagé·es
+  </summary>
+  <div class="box-content">
+<p>Vous souhaitez comprendre et agir sur les enjeux locaux ? Découvrez les <strong>bases de la veille citoyenne</strong> et rejoignez le mouvement.</p>
+  </div>
+</details>
 
-    // Mise à jour viewer
-    viewerTitle.textContent = m.title;
-    viewerSubtitle.textContent = m.description || "";
-    viewerCategoryBadge.textContent = categoryLabel(m.category);
-    viewerKindBadge.textContent = m.kind || "";
-    viewerFile.textContent = "Fichier / URL : " + m.file;
-    viewerFrame.src = m.file;
-    viewerOpenNew.href = m.file;
-  }
+<details open class=" box cstyle notices info">
+  <summary class="box-label" tabindex="-1">
+    <i class="fa-fw fas fa-handshake"></i> 
+    Associations &amp; collectifs
+  </summary>
+  <div class="box-content">
+<p>Vous voulez structurer votre veille ? Consultez le <strong>guide pour créer un réseau de veille</strong> et les ressources d&rsquo;éducation populaire.</p>
+  </div>
+</details>
 
-  moduleSearch.addEventListener("input", applyModuleFilter);
-  moduleCategory.addEventListener("change", applyModuleFilter);
+<details open class=" box cstyle notices warning">
+  <summary class="box-label" tabindex="-1">
+    <i class="fa-fw fas fa-chalkboard-teacher"></i> 
+    Formation &amp; animation
+  </summary>
+  <div class="box-content">
+<p>Vous accompagnez des publics ? Pourquoi ne pas co-construire une cellule de veille citoyenne&hellip; ou un réseau</p>
+  </div>
+</details>
+<hr>
+<h2 id="-thématiques-couvertes">📋 Thématiques couvertes</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Thème</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Intelligence économique</strong></td>
+          <td>Veille concurrentielle, protection du savoir, influence stratégique</td>
+      </tr>
+      <tr>
+          <td><strong>OSINT &amp; SOCMINT</strong></td>
+          <td>Techniques de collecte, outils gratuits, analyses de réseaux sociaux</td>
+      </tr>
+      <tr>
+          <td><strong>Guerre de l&rsquo;information</strong></td>
+          <td>Désinformation, narratives, guerre hybride et manipulation</td>
+      </tr>
+      <tr>
+          <td><strong>Participation citoyenne</strong></td>
+          <td>Empowerment, démocratie participative, lutte contre la particratie</td>
+      </tr>
+      <tr>
+          <td><strong>Éducation permanente</strong></td>
+          <td>Cadre réglementaire FWB, financement, reconnaissance des ASBL</td>
+      </tr>
+      <tr>
+          <td><strong>Géopolitique de l&rsquo;information</strong></td>
+          <td>Rapports de force, acteurs économiques, dynamiques internationales</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="-principes-fondateurs">🌟 Principes fondateurs</h2>
+<ul>
+<li>✅ <strong>Ouverture</strong> : Logiciels libres, données ouvertes, licences libres</li>
+<li>✅ <strong>Collaboration</strong> : Travail en réseau, mutualisation, intelligence collective</li>
+<li>✅ <strong>Transparence</strong> : Méthodes documentées, sources citées, processus publics</li>
+<li>✅ <strong>Inclusion</strong> : Accessibilité pour tous, formats variés, langage clair</li>
+<li>✅ <strong>Éthique</strong> : Respect de la vie privée, vérification, proportionnalité</li>
+<li>✅ <strong>Émancipation</strong> : Développement de l&rsquo;esprit critique, autonomie, pouvoir d&rsquo;agir</li>
+</ul>
+<hr>
+<h2 id="-cadre--éducation-permanente-fwb">🎯 Cadre : Éducation permanente (FWB)</h2>
+<p>Ce projet s&rsquo;inspire du <strong>Décret du 17 juillet 2003</strong> relatif à l&rsquo;Éducation permanente en Fédération Wallonie-Bruxelles. Les objectifs sont :</p>
+<ul>
+<li>Développer une <strong>analyse critique de la société</strong></li>
+<li>Favoriser la <strong>participation citoyenne active</strong></li>
+<li>Promouvoir l&rsquo;<strong>émancipation individuelle et collective</strong></li>
+<li>Renforcer la découverte et l&rsquo;exercice des <strong>droits</strong></li>
+</ul>
+<p>Les associations reconnues en EP peuvent accéder à des financements publics pour mener ces actions.</p>
+<hr>
 
-  // --- Embeds boutons ---
-  const embedButtons = document.querySelectorAll(".embed-btn");
-  embedButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const key = btn.dataset.embed;
-      const e = embeds[key];
-      if (!e) return;
-      activeModuleId = null;
+<details open class=" box cstyle notices " style=";--VARIABLE-BOX-color: success">
+  <summary class="box-label" tabindex="-1">
+    <i class="fa-fw fas fa-rocket"></i> 
+    Envie de contribuer ?
+  </summary>
+  <div class="box-content">
+<p>Ce site est collaboratif et évolutif. Vos retours, suggestions et contributions sont les bienvenus pour enrichir ces ressources communes. Ensemble, construisons une intelligence citoyenne forte et inclusive ! 🌱</p>
+  </div>
+</details>
 
-      const items = modulesContainer.querySelectorAll(".module-item");
-      items.forEach(el => el.classList.remove("active"));
-
-      viewerTitle.textContent = e.label;
-      viewerSubtitle.textContent = e.description || "";
-      viewerCategoryBadge.textContent = "Embed externe";
-      viewerKindBadge.textContent = "annexe / distraction";
-      viewerFile.textContent = "Fichier / URL : " + e.url;
-
-      // Pour Youtube/Spotify on laisse l’URL telle quelle, ça marche en iframe.
-      viewerFrame.src = e.url;
-      viewerOpenNew.href = e.url;
-    });
-  });
-
-  // Initialisation
-  document.addEventListener("DOMContentLoaded", () => {
-    applyModuleFilter();
-
-    // On peut automatiquement sélectionner un module par défaut si tu veux.
-    const defaultModule = modules.find(m => m.id === "site-ultime") || modules[0];
-    if (defaultModule) {
-      selectModule(defaultModule.id);
-    }
-  });
-</script>
-
-</body>
+  <footer class="footline">
+              <i class='fa-fw fas fa-calendar'></i> Nov 18, 2025
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+          <a id="R-logo" class="R-default" href="/earl/index.html">
+            <div class="logo-title">Earl</div>
+          </a>
+        </div>
+        <search><form action="/earl/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks">
+          <ul class="space collapsible-menu">
+            <li class="active " data-nav-url="/earl/index.html"><a class="padding" href="/earl/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-url="/earl/files/index.html"><input type="checkbox" id="R-section-31e56884d732922d4a0e407592968056" aria-controls="R-subsections-31e56884d732922d4a0e407592968056"><label for="R-section-31e56884d732922d4a0e407592968056"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Intelligence Citoyenne</span></label><a class="padding" href="/earl/files/index.html">Intelligence Citoyenne</a><ul id="R-subsections-31e56884d732922d4a0e407592968056" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/files/veille-citoyenne-guide-pratique/index.html"><a class="padding" href="/earl/files/veille-citoyenne-guide-pratique/index.html">Guide Pratique de la Veille Citoyenne</a></li>
+            <li class="" data-nav-url="/earl/files/cinquieme-pouvoir-contre-pouvoirs/index.html"><a class="padding" href="/earl/files/cinquieme-pouvoir-contre-pouvoirs/index.html">Du Cinquième Pouvoir aux Mobilisations Contemporaines</a></li></ul></li>
+            <li class="" data-nav-url="/earl/a-propos/index.html"><input type="checkbox" id="R-section-7e9984341ec863ebf45d12ed21b2d946" aria-controls="R-subsections-7e9984341ec863ebf45d12ed21b2d946"><label for="R-section-7e9984341ec863ebf45d12ed21b2d946"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu À propos</span></label><a class="padding" href="/earl/a-propos/index.html">À propos</a><ul id="R-subsections-7e9984341ec863ebf45d12ed21b2d946" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/a-propos/methodologie/index.html"><a class="padding" href="/earl/a-propos/methodologie/index.html">Méthodologie</a></li>
+            <li class="" data-nav-url="/earl/a-propos/l-auteur/index.html"><a class="padding" href="/earl/a-propos/l-auteur/index.html">L’auteur</a></li></ul></li>
+            <li class="" data-nav-url="/earl/notions/index.html"><input type="checkbox" id="R-section-e77933b919f912d2bf89daedbfd3f93a" aria-controls="R-subsections-e77933b919f912d2bf89daedbfd3f93a"><label for="R-section-e77933b919f912d2bf89daedbfd3f93a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Notions</span></label><a class="padding" href="/earl/notions/index.html">Notions</a><ul id="R-subsections-e77933b919f912d2bf89daedbfd3f93a" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/notions/intelligence-economique/index.html"><input type="checkbox" id="R-section-a25788aaf401ef8c27d24fd613726289" aria-controls="R-subsections-a25788aaf401ef8c27d24fd613726289"><label for="R-section-a25788aaf401ef8c27d24fd613726289"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu L&#39;Intelligence Économique (IE)</span></label><a class="padding" href="/earl/notions/intelligence-economique/index.html">L&#39;Intelligence Économique (IE)</a><ul id="R-subsections-a25788aaf401ef8c27d24fd613726289" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/notions/intelligence-economique/intelligence-economique-belgique/index.html"><a class="padding" href="/earl/notions/intelligence-economique/intelligence-economique-belgique/index.html">État des lieux de l&#39;intelligence économique en Belgique</a></li></ul></li>
+            <li class="" data-nav-url="/earl/notions/renseignement/index.html"><input type="checkbox" id="R-section-c68476dbb36aad6396b9526bb9804f93" aria-controls="R-subsections-c68476dbb36aad6396b9526bb9804f93"><label for="R-section-c68476dbb36aad6396b9526bb9804f93"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Le Renseignement</span></label><a class="padding" href="/earl/notions/renseignement/index.html">Le Renseignement</a><ul id="R-subsections-c68476dbb36aad6396b9526bb9804f93" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/notions/renseignement/osint/index.html"><a class="padding" href="/earl/notions/renseignement/osint/index.html">OSINT : Le Renseignement Open Source à la Portée de Tous</a></li>
+            <li class="" data-nav-url="/earl/notions/renseignement/socmint/index.html"><a class="padding" href="/earl/notions/renseignement/socmint/index.html">SOCMINT : Quand les Réseaux Sociaux Deviennent du Renseignement</a></li>
+            <li class="" data-nav-url="/earl/notions/renseignement/humint/index.html"><a class="padding" href="/earl/notions/renseignement/humint/index.html">Le Renseignement Humain (HUMINT) : L&#39;Art Millénaire de l&#39;Espionnage</a></li></ul></li>
+            <li class="" data-nav-url="/earl/notions/guerre-information-resilience-democratique/index.html"><a class="padding" href="/earl/notions/guerre-information-resilience-democratique/index.html">Guerre de l&#39;Information et Résilience Démocratique</a></li>
+            <li class="" data-nav-url="/earl/notions/information-pouvoir-economique/index.html"><a class="padding" href="/earl/notions/information-pouvoir-economique/index.html">L&#39;Information comme Facteur de Pouvoir Économique</a></li>
+            <li class="" data-nav-url="/earl/notions/particratie/index.html"><a class="padding" href="/earl/notions/particratie/index.html">La Particratie Belge : Concentration du Pouvoir et Dynamiques Institutionnelles</a></li>
+            <li class="" data-nav-url="/earl/notions/intelligence-citoyenne/index.html"><a class="padding" href="/earl/notions/intelligence-citoyenne/index.html">Intelligence Civile et Veille Citoyenne en Éducation Permanente</a></li>
+            <li class="" data-nav-url="/earl/notions/socio-internet/index.html"><a class="padding" href="/earl/notions/socio-internet/index.html">Sociologie Numérique : Comprendre les Transformations Sociales à l&#39;Ère du Digital</a></li></ul></li>
+            <li class="" data-nav-url="/earl/carnet/index.html"><input type="checkbox" id="R-section-f9289029c11a8eae83c1b35954aec79e" aria-controls="R-subsections-f9289029c11a8eae83c1b35954aec79e"><label for="R-section-f9289029c11a8eae83c1b35954aec79e"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Carnet</span></label><a class="padding" href="/earl/carnet/index.html">Carnet</a><ul id="R-subsections-f9289029c11a8eae83c1b35954aec79e" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/carnet/democratie-transparence/index.html"><input type="checkbox" id="R-section-2da766b7d49f1e65b4fae199bfa8b80e" aria-controls="R-subsections-2da766b7d49f1e65b4fae199bfa8b80e"><label for="R-section-2da766b7d49f1e65b4fae199bfa8b80e"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Démocratie et Transparence en Belgique</span></label><a class="padding" href="/earl/carnet/democratie-transparence/index.html">Démocratie et Transparence en Belgique</a><ul id="R-subsections-2da766b7d49f1e65b4fae199bfa8b80e" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/carnet/democratie-transparence/retransmission-conseils-communaux/index.html"><a class="padding" href="/earl/carnet/democratie-transparence/retransmission-conseils-communaux/index.html">La Retransmission en Ligne des Conseils Communaux</a></li>
+            <li class="" data-nav-url="/earl/carnet/democratie-transparence/opacite-executifs-belgique/index.html"><a class="padding" href="/earl/carnet/democratie-transparence/opacite-executifs-belgique/index.html">L&#39;Opacité des Exécutifs en Belgique Francophone</a></li></ul></li>
+            <li class="" data-nav-url="/earl/carnet/chatgpt/index.html"><a class="padding" href="/earl/carnet/chatgpt/index.html">cgpt - Démo ultime Hugo &#43; Relearn</a></li>
+            <li class="" data-nav-url="/earl/carnet/chatgpt4/index.html"><a class="padding" href="/earl/carnet/chatgpt4/index.html">Pouvoirs, Contre-Pouvoirs et Mobilisations Citoyennes : Cartographie d’un XXIᵉ Siècle sous Tension</a></li>
+            <li class="" data-nav-url="/earl/carnet/prendre-le-pouvoir/index.html"><a class="padding" href="/earl/carnet/prendre-le-pouvoir/index.html">Cartes du jeu</a></li>
+            <li class="" data-nav-url="/earl/carnet/majeste-mouches/index.html"><a class="padding" href="/earl/carnet/majeste-mouches/index.html">Sa Majesté des Mouches : Bestiaire Politico-Numérique</a></li>
+            <li class="" data-nav-url="/earl/carnet/tuoba/index.html"><a class="padding" href="/earl/carnet/tuoba/index.html">Tour de table : Quand ma stack technique se réunit</a></li>
+            <li class="" data-nav-url="/earl/carnet/ccc-incident/index.html"><a class="padding" href="/earl/carnet/ccc-incident/index.html">Incident au Conseil communal de Charleroi (23 juin 2025)</a></li>
+            <li class="" data-nav-url="/earl/carnet/about/index.html"><a class="padding" href="/earl/carnet/about/index.html">Tour de Table du Stack — Réunion de Famille Numérique</a></li>
+            <li class="" data-nav-url="/earl/carnet/essaimage-veille-citoyenne-education-populaire/index.html"><a class="padding" href="/earl/carnet/essaimage-veille-citoyenne-education-populaire/index.html">Essaimer la Veille Citoyenne : Stratégie Progressive pour l&#39;Éducation Populaire</a></li></ul></li>
+            <li class="" data-nav-url="/earl/journal/index.html"><input type="checkbox" id="R-section-a0e61f9e87a26c0b4709a8ab19106cb5" aria-controls="R-subsections-a0e61f9e87a26c0b4709a8ab19106cb5"><label for="R-section-a0e61f9e87a26c0b4709a8ab19106cb5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Journal</span></label><a class="padding" href="/earl/journal/index.html">Journal</a><ul id="R-subsections-a0e61f9e87a26c0b4709a8ab19106cb5" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/journal/010/index.html"><input type="checkbox" id="R-section-8888fca68e2a220621e620ec93a87098" aria-controls="R-subsections-8888fca68e2a220621e620ec93a87098"><label for="R-section-8888fca68e2a220621e620ec93a87098"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu 001</span></label><a class="padding" href="/earl/journal/010/index.html">001</a><ul id="R-subsections-8888fca68e2a220621e620ec93a87098" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/journal/010/010/index.html"><a class="padding" href="/earl/journal/010/010/index.html">Entrée #010 – Jour 1,5</a></li>
+            <li class="" data-nav-url="/earl/journal/010/011/index.html"><a class="padding" href="/earl/journal/010/011/index.html">Entrée #011 – Jour 1,5G</a></li>
+            <li class="" data-nav-url="/earl/journal/010/012/index.html"><a class="padding" href="/earl/journal/010/012/index.html">Entrée #012 – Jour 2,1T</a></li>
+            <li class="" data-nav-url="/earl/journal/010/013/index.html"><a class="padding" href="/earl/journal/010/013/index.html">Entrée #013 – Jour 2,1</a></li></ul></li>
+            <li class="" data-nav-url="/earl/journal/000/index.html"><a class="padding" href="/earl/journal/000/index.html">Entrée #000 – Jour 0</a></li>
+            <li class="" data-nav-url="/earl/journal/001/index.html"><a class="padding" href="/earl/journal/001/index.html">Entrée #001 – Jour 0</a></li>
+            <li class="" data-nav-url="/earl/journal/200/index.html"><input type="checkbox" id="R-section-73a9b8dfe9cfabfebc5bcf5fd59ecf9c" aria-controls="R-subsections-73a9b8dfe9cfabfebc5bcf5fd59ecf9c"><label for="R-section-73a9b8dfe9cfabfebc5bcf5fd59ecf9c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu 200</span></label><a class="padding" href="/earl/journal/200/index.html">200</a><ul id="R-subsections-73a9b8dfe9cfabfebc5bcf5fd59ecf9c" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/journal/200/242/index.html"><a class="padding" href="/earl/journal/200/242/index.html">Entrée #242 – Jour 2,6F</a></li></ul></li>
+            <li class="" data-nav-url="/earl/journal/002/index.html"><a class="padding" href="/earl/journal/002/index.html">Entrée #002 – Jour 0,5</a></li>
+            <li class="" data-nav-url="/earl/journal/003/index.html"><a class="padding" href="/earl/journal/003/index.html">Entrée #003 – Jour 0,5</a></li>
+            <li class="" data-nav-url="/earl/journal/004/index.html"><a class="padding" href="/earl/journal/004/index.html">Entrée #004 – Jour 1</a></li>
+            <li class="" data-nav-url="/earl/journal/005/index.html"><a class="padding" href="/earl/journal/005/index.html">Entrée #005 – Jour 1</a></li>
+            <li class="" data-nav-url="/earl/journal/600/index.html"><input type="checkbox" id="R-section-9235548ac9e467455f127c5e1ad63d77" aria-controls="R-subsections-9235548ac9e467455f127c5e1ad63d77"><label for="R-section-9235548ac9e467455f127c5e1ad63d77"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu 600T</span></label><a class="padding" href="/earl/journal/600/index.html">600T</a><ul id="R-subsections-9235548ac9e467455f127c5e1ad63d77" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/journal/600/066/index.html"><a class="padding" href="/earl/journal/600/066/index.html">Entrée #066 – Jour 1,5</a></li></ul></li>
+            <li class="" data-nav-url="/earl/journal/006/index.html"><a class="padding" href="/earl/journal/006/index.html">Entrée #006 – Jour 1</a></li>
+            <li class="" data-nav-url="/earl/journal/007/index.html"><a class="padding" href="/earl/journal/007/index.html">Entrée #007 – Jour 1</a></li>
+            <li class="" data-nav-url="/earl/journal/008/index.html"><a class="padding" href="/earl/journal/008/index.html">Entrée #008 – Jour 1</a></li>
+            <li class="" data-nav-url="/earl/journal/009/index.html"><a class="padding" href="/earl/journal/009/index.html">Entrée #009 – Jour 1</a></li>
+            <li class="" data-nav-url="/earl/journal/099/index.html"><a class="padding" href="/earl/journal/099/index.html">Entrée #099 – Jour 2,1G</a></li>
+            <li class="" data-nav-url="/earl/journal/042/index.html"><a class="padding" href="/earl/journal/042/index.html">Entrée #042 – Jour 1,5</a></li>
+            <li class="" data-nav-url="/earl/journal/666/index.html"><a class="padding" href="/earl/journal/666/index.html">Entrée #666 – Jour 1,5</a></li>
+            <li class="" data-nav-url="/earl/journal/998/index.html"><a class="padding" href="/earl/journal/998/index.html">Entrée #998 – Jour 1,75</a></li>
+            <li class="" data-nav-url="/earl/journal/999/index.html"><a class="padding" href="/earl/journal/999/index.html">Entrée #999 – Jour 1,5</a></li></ul></li>
+            <li class="" data-nav-url="/earl/autres-projets/index.html"><input type="checkbox" id="R-section-f32878b2dfa8795cea6688ba42e83745" aria-controls="R-subsections-f32878b2dfa8795cea6688ba42e83745"><label for="R-section-f32878b2dfa8795cea6688ba42e83745"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Autres Projets</span></label><a class="padding" href="/earl/autres-projets/index.html">Autres Projets</a><ul id="R-subsections-f32878b2dfa8795cea6688ba42e83745" class="collapsible-menu">
+            <li class="" data-nav-url="/earl/autres-projets/doctech/index.html"><a class="padding" href="/earl/autres-projets/doctech/index.html">DOCTech : Un espace de recherche assistée par IA</a></li>
+            <li class="" data-nav-url="/earl/autres-projets/bxl2030/index.html"><a class="padding" href="/earl/autres-projets/bxl2030/index.html">BXL2030 : Un template libre pour sites web documentaires</a></li>
+            <li class="" data-nav-url="/earl/autres-projets/1160/index.html"><a class="padding" href="/earl/autres-projets/1160/index.html">11·60 bis : Décrypter, Comprendre, Agir</a></li>
+            <li class="" data-nav-url="/earl/autres-projets/vitrine/index.html"><a class="padding" href="/earl/autres-projets/vitrine/index.html">Vitrine : Page web minimaliste pour vidéo en boucle</a></li>
+            <li class="" data-nav-url="/earl/autres-projets/magasin/index.html"><a class="padding" href="/earl/autres-projets/magasin/index.html">Catalogue de fichiers : 100% statique &amp; autonome</a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-url="https://mcshelby.github.io/hugo-theme-relearn/"><a class="padding" href="https://mcshelby.github.io/hugo-theme-relearn/" rel="external">Site du thème</a></li>
+            <li class="" data-nav-url="https://mcshelby.github.io/hugo-theme-relearn/introduction/quickstart/"><a class="padding" href="https://mcshelby.github.io/hugo-theme-relearn/introduction/quickstart/" rel="external">Quickstart</a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/earl/js/clipboard/clipboard.min.js?1763443762" defer></script>
+    <script src="/earl/js/perfect-scrollbar/perfect-scrollbar.min.js?1763443762" defer></script>
+    <script src="/earl/js/theme.min.js?1763443762" defer></script>
+  </body>
 </html>
