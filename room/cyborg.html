@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>CYBROG · Neural Core v1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-body: #020617;
+      --bg-screen: #020617;
+      --fg: #e5e7eb;
+      --soft: #9ca3af;
+      --accent: #22c55e;
+      --accent2: #67e8f9;
+      --warning: #facc15;
+      --danger: #f97316;
+      --border: #0f172a;
+      --card: #020617;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 0 0, #0f172a, #020617 65%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Mono", "Segoe UI", sans-serif;
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* SMARTPHONE CYBROG */
+
+    .phone-shell {
+      width: min(400px, 100vw - 24px);
+      height: min(820px, 100vh - 24px);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 0 0, #22c55e22, transparent 60%),
+        radial-gradient(circle at 100% 100%, #0ea5e933, transparent 60%),
+        #020617;
+      border: 1px solid #22c55e55;
+      box-shadow:
+        0 0 0 2px #000,
+        0 0 24px #22c55e55,
+        0 28px 80px rgba(0,0,0,0.9);
+      padding: 8px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .phone-frame-inner {
+      flex: 1;
+      border-radius: 24px;
+      background: radial-gradient(circle at 50% 0, #020617, #000);
+      padding: 10px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .phone-edge-led {
+      position: absolute;
+      inset: 4px;
+      border-radius: 22px;
+      border: 1px solid #22c55e33;
+      pointer-events: none;
+      box-shadow: inset 0 0 24px #22c55e22;
+    }
+
+    .phone-top-sensor {
+      position: absolute;
+      top: 9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 16px;
+      border-radius: 999px;
+      background: #000;
+      border: 1px solid #020617;
+      box-shadow: 0 0 12px rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      z-index: 5;
+    }
+
+    .sensor-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #22c55e, #020617);
+      box-shadow: 0 0 6px #22c55e;
+    }
+
+    .sensor-line {
+      width: 32px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22c55e44, #22c55e, #22c55e44);
+    }
+
+    .phone-screen {
+      flex: 1;
+      margin-top: 22px;
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 0 0, #22c55e18, transparent 55%),
+        radial-gradient(circle at 100% 100%, #0ea5e91b, transparent 60%),
+        #020617;
+      border: 1px solid #0f172a;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .side-notch {
+      position: absolute;
+      top: 120px;
+      right: -3px;
+      width: 4px;
+      height: 60px;
+      border-radius: 999px;
+      background: #111827;
+    }
+
+    .side-notch.left {
+      left: -3px;
+      right: auto;
+      top: 170px;
+      height: 48px;
+    }
+
+    /* ECRANS */
+
+    .boot-screen,
+    .home-screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .boot-screen {
+      align-items: center;
+      justify-content: center;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          #020617,
+          #020617 2px,
+          #030712 2px,
+          #030712 4px
+        );
+      color: var(--fg);
+      animation: bootFade 4.8s ease-in-out forwards;
+    }
+
+    @keyframes bootFade {
+      0%   { opacity: 1; }
+      85%  { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    .boot-logo {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 20px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .boot-logo span {
+      color: var(--accent);
+      text-shadow: 0 0 10px #22c55eaa;
+    }
+
+    .boot-sub {
+      font-size: 11px;
+      color: var(--soft);
+      margin-bottom: 14px;
+    }
+
+    .boot-sub code {
+      font-size: 10px;
+      color: var(--accent2);
+    }
+
+    .boot-terminal {
+      width: 240px;
+      max-width: 90%;
+      background: #000;
+      border-radius: 8px;
+      border: 1px solid #22c55e33;
+      box-shadow: 0 0 18px #22c55e33;
+      padding: 6px 8px;
+      font-size: 11px;
+      text-align: left;
+      overflow: hidden;
+    }
+
+    .boot-term-line {
+      color: #22c55e;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 1px solid #22c55e;
+      animation: typeLine 3s steps(24, end) forwards;
+    }
+
+    .boot-term-line:nth-child(2) {
+      animation-delay: 1s;
+    }
+
+    .boot-term-line:nth-child(3) {
+      animation-delay: 2s;
+    }
+
+    @keyframes typeLine {
+      from { width: 0; }
+      to { width: 100%; border-right-color: transparent; }
+    }
+
+    .boot-status {
+      margin-top: 10px;
+      font-size: 10px;
+      color: var(--soft);
+    }
+
+    .home-screen {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .7s ease-out;
+    }
+
+    .home-screen.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* STATUS BAR */
+
+    .status-bar {
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      font-size: 11px;
+      color: var(--soft);
+      background: linear-gradient(to right, #020617ee, #020617cc, #020617ee);
+      border-bottom: 1px solid #0f172a;
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-id {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent2);
+    }
+
+    .status-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-time {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .signal {
+      display: flex;
+      align-items: flex-end;
+      gap: 1px;
+    }
+
+    .signal span {
+      width: 2px;
+      border-radius: 999px;
+      background: var(--soft);
+    }
+
+    .signal span:nth-child(1) { height: 4px; opacity: .3; }
+    .signal span:nth-child(2) { height: 6px; opacity: .5; }
+    .signal span:nth-child(3) { height: 8px; opacity: .7; }
+    .signal span:nth-child(4) { height: 10px; opacity: 1; }
+
+    .battery {
+      width: 16px;
+      height: 8px;
+      border-radius: 3px;
+      border: 1px solid #4b5563;
+      position: relative;
+    }
+
+    .battery::after {
+      content: "";
+      position: absolute;
+      right: -3px;
+      top: 1px;
+      width: 2px;
+      height: 4px;
+      border-radius: 1px;
+      background: #4b5563;
+    }
+
+    .battery-fill {
+      position: absolute;
+      inset: 1px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #22c55e, #a3e635);
+      width: 84%;
+    }
+
+    /* HEADER PROFIL HACKER */
+
+    .top-info {
+      padding: 8px 12px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .avatar-holo {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid #22c55e55;
+      box-shadow:
+        0 0 0 1px #22c55e33,
+        0 0 18px #22c55e33;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--accent2);
+      background: radial-gradient(circle at 30% 0, #22c55e33, #020617);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-holo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 2px,
+        rgba(34,197,94,0.15) 2px,
+        rgba(34,197,94,0.15) 3px
+      );
+      mix-blend-mode: screen;
+      opacity: .6;
+      pointer-events: none;
+    }
+
+    .top-user {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .top-user-name {
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-user-role {
+      font-size: 11px;
+      color: var(--soft);
+    }
+
+    .top-user-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .top-tag {
+      font-size: 9px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: rgba(15,23,42,0.9);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--accent);
+    }
+
+    .top-cta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .pill-btn {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #22c55e66;
+      background: rgba(15,23,42,0.9);
+      color: var(--accent2);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pill-btn svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    .pill-status {
+      font-size: 9px;
+      color: var(--soft);
+    }
+
+    /* GRILLE APPS */
+
+    .app-section {
+      padding: 4px 10px 6px;
+    }
+
+    .app-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--soft);
+      margin-bottom: 4px;
+    }
+
+    .app-header-row strong {
+      color: var(--fg);
+      font-size: 12px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .app-icon {
+      text-align: center;
+      font-size: 10px;
+      color: var(--soft);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .app-bubble {
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 2px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(15,23,42,0.9);
+      font-size: 17px;
+      border: 1px solid #020617;
+    }
+
+    .app-terminal .app-bubble {
+      background: radial-gradient(circle at 30% 0, #22c55e, #14532d);
+    }
+    .app-netwatch .app-bubble {
+      background: radial-gradient(circle at 30% 0, #0ea5e9, #0f172a);
+    }
+    .app-map .app-bubble {
+      background: radial-gradient(circle at 30% 0, #a855f7, #312e81);
+    }
+    .app-vault .app-bubble {
+      background: radial-gradient(circle at 30% 0, #facc15, #713f12);
+    }
+    .app-feed .app-bubble {
+      background: radial-gradient(circle at 30% 0, #22c55e, #064e3b);
+    }
+    .app-tools .app-bubble {
+      background: radial-gradient(circle at 30% 0, #9ca3af, #020617);
+    }
+    .app-logs .app-bubble {
+      background: radial-gradient(circle at 30% 0, #0f172a, #000);
+    }
+    .app-settings .app-bubble {
+      background: radial-gradient(circle at 30% 0, #f97316, #7c2d12);
+    }
+
+    .app-label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .app-badge {
+      position: absolute;
+      top: -2px;
+      right: 10px;
+      min-width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      font-size: 9px;
+      background: #ef4444;
+      color: #fef2f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #b91c1c;
+    }
+
+    /* CONTENT / TABS */
+
+    .content-wrapper {
+      flex: 1;
+      padding: 4px 8px 6px;
+      overflow: hidden;
+    }
+
+    .content-tabs {
+      display: flex;
+      gap: 6px;
+      border-bottom: 1px solid #0f172a;
+      padding-bottom: 3px;
+    }
+
+    .content-tab {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      color: var(--soft);
+    }
+
+    .content-tab.active {
+      border-color: var(--accent);
+      color: var(--fg);
+      background: rgba(15,23,42,0.96);
+      font-weight: 500;
+      box-shadow: 0 0 10px #22c55e33;
+    }
+
+    .content-scroll {
+      position: relative;
+      margin-top: 4px;
+      height: calc(100% - 26px);
+      overflow: hidden;
+    }
+
+    .content-inner {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      padding-right: 4px;
+      font-size: 12px;
+    }
+
+    .card {
+      border-radius: 13px;
+      padding: 7px 9px;
+      margin-bottom: 6px;
+      background: rgba(15,23,42,0.98);
+      border: 1px solid #0f172a;
+      cursor: pointer;
+      transition: transform .1s ease-out, box-shadow .1s ease-out, border-color .1s ease-out;
+    }
+
+    .card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.85);
+      border-color: var(--accent);
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .card-meta {
+      font-size: 10px;
+      color: var(--soft);
+      display: flex;
+      justify-content: space-between;
+      margin-top: 3px;
+    }
+
+    .badge {
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    /* DOCK */
+
+    .dock {
+      height: 50px;
+      padding: 4px 16px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dock-inner {
+      flex: 1;
+      border-radius: 18px;
+      padding: 5px 10px;
+      background: rgba(15,23,42,0.97);
+      border: 1px solid #020617;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .dock-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #020617;
+      border: 1px solid #111827;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--soft);
+    }
+
+    .dock-icon-main {
+      background: radial-gradient(circle at 30% 0, #22c55e, #16a34a);
+      color: #022c22;
+      border-color: #22c55e;
+    }
+
+    /* MODALE GENERALE */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.82);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-backdrop.visible {
+      display: flex;
+    }
+
+    .modal {
+      width: min(360px, 100%);
+      max-height: min(520px, 100%);
+      background: #020617;
+      border-radius: 18px;
+      border: 1px solid #22c55e33;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.95);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+    }
+
+    .modal-header {
+      padding: 8px 12px;
+      border-bottom: 1px solid #111827;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-weight: 600;
+    }
+
+    .modal-sub {
+      font-size: 10px;
+      color: var(--soft);
+    }
+
+    .modal-close {
+      border: none;
+      background: transparent;
+      color: var(--soft);
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 8px 12px 10px;
+      overflow-y: auto;
+    }
+
+    .modal-body p {
+      margin: 4px 0;
+      color: var(--soft);
+    }
+
+    .modal-body code {
+      font-size: 11px;
+      background: #020617;
+      padding: 1px 3px;
+      border-radius: 4px;
+      border: 1px solid #1f2937;
+    }
+
+    .modal-body pre {
+      background: #020617;
+      border-radius: 8px;
+      border: 1px solid #1f2937;
+      padding: 6px 8px;
+      font-size: 11px;
+      overflow-x: auto;
+      color: #22c55e;
+    }
+
+    .modal-footer {
+      padding: 7px 12px;
+      border-top: 1px solid #111827;
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: var(--fg);
+      font-size: 11px;
+      padding: 4px 9px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn.primary {
+      border-color: var(--accent);
+      background: radial-gradient(circle at 20% 0, #bbf7d0, #22c55e);
+      color: #022c22;
+      font-weight: 600;
+    }
+
+    .btn.danger {
+      border-color: var(--danger);
+      color: #fed7aa;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    /* PANNEAU HACKER / MODE DEV */
+
+    .hack-panel {
+      position: absolute;
+      right: 0;
+      top: 26px;
+      bottom: 50px;
+      width: 0;
+      background: #020617;
+      border-left: 1px solid #22c55e33;
+      box-shadow: -16px 0 40px rgba(0,0,0,0.95);
+      transition: width .25s ease-out;
+      overflow: hidden;
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hack-panel.visible {
+      width: 58%;
+    }
+
+    .hack-header {
+      padding: 4px 8px;
+      font-size: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #111827;
+    }
+
+    .hack-header span {
+      color: var(--accent2);
+    }
+
+    .hack-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 3px 6px;
+      border-bottom: 1px solid #111827;
+    }
+
+    .hack-tab {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      color: var(--soft);
+    }
+
+    .hack-tab.active {
+      border-color: var(--accent);
+      color: var(--fg);
+    }
+
+    .hack-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 4px 6px;
+      font-size: 10px;
+    }
+
+    .hack-log {
+      flex: 1;
+      overflow-y: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      padding-right: 2px;
+    }
+
+    .hack-line {
+      margin: 1px 0;
+      color: #9ca3af;
+    }
+
+    .hack-line span.tag {
+      color: var(--accent);
+    }
+
+    .hack-actions {
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .hack-pill-on {
+      color: #4ade80;
+    }
+
+    .hack-pill-off {
+      color: #9ca3af;
+    }
+
+    .inspect-highlight {
+      outline: 2px dashed #22c55e;
+      outline-offset: 1px;
+    }
+  </style>
+</head>
+<body>
+<div class="phone-shell">
+  <div class="side-notch"></div>
+  <div class="side-notch left"></div>
+  <div class="phone-frame-inner">
+    <div class="phone-edge-led"></div>
+    <div class="phone-top-sensor">
+      <div class="sensor-dot"></div>
+      <div class="sensor-line"></div>
+      <div class="sensor-dot"></div>
+    </div>
+
+    <div class="phone-screen">
+      <!-- BOOT CYBROG -->
+      <div class="boot-screen" id="bootScreen">
+        <div class="boot-logo">CYB<span>ROG</span></div>
+        <div class="boot-sub">
+          NEURAL CORE v1 · <code>boot://hybrid-ops</code>
+        </div>
+        <div class="boot-terminal">
+          <div class="boot-term-line">[BOOT] scanning mental ports ...</div>
+          <div class="boot-term-line">[OK] user fingerprint loaded</div>
+          <div class="boot-term-line">[READY] press any thought to continue</div>
+        </div>
+        <div class="boot-status" id="bootStatus">
+          initialisation...
+        </div>
+      </div>
+
+      <!-- ECRAN HOME CYBROG -->
+      <div class="home-screen" id="homeScreen">
+        <div class="status-bar">
+          <div class="status-left">
+            <div class="status-id">CYBROG // NC</div>
+          </div>
+          <div class="status-right">
+            <div class="status-time" id="statusTime">06:42</div>
+            <div class="signal"><span></span><span></span><span></span><span></span></div>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+
+        <div class="top-info">
+          <div class="avatar-holo">λ</div>
+          <div class="top-user">
+            <div class="top-user-name">Opérateur·rice anonyme</div>
+            <div class="top-user-role">Technophile / veilleur hybride</div>
+            <div class="top-user-tags">
+              <div class="top-tag">ghost mode</div>
+              <div class="top-tag">signal hunter</div>
+            </div>
+          </div>
+          <div class="top-cta">
+            <button class="pill-btn" id="btnHackPanel">
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path fill="currentColor" d="M2 3h12v2H2V3zm2 4h8v2H4V7zm2 4h4v2H6v-2z"/>
+              </svg>
+              Dev / Hack
+            </button>
+            <div class="pill-status" id="ghostStatus">Ghost mode : OFF</div>
+          </div>
+        </div>
+
+        <div class="app-section">
+          <div class="app-header-row">
+            <strong>Modules actifs</strong>
+            <span style="font-size:10px;color:var(--soft);">tap = ouvrir · long press = frimer</span>
+          </div>
+          <div class="app-grid">
+            <div class="app-icon app-terminal" data-app="terminal">
+              <div class="app-bubble">⌨</div>
+              <div class="app-label">Terminal</div>
+            </div>
+            <div class="app-icon app-netwatch" data-app="netwatch">
+              <div class="app-bubble">📡</div>
+              <div class="app-label">Netwatch</div>
+              <div class="app-badge">3</div>
+            </div>
+            <div class="app-icon app-map" data-app="map">
+              <div class="app-bubble">🗺</div>
+              <div class="app-label">Map cells</div>
+            </div>
+            <div class="app-icon app-vault" data-app="vault">
+              <div class="app-bubble">🔐</div>
+              <div class="app-label">Vault</div>
+            </div>
+            <div class="app-icon app-feed" data-app="feed">
+              <div class="app-bubble">📰</div>
+              <div class="app-label">OSINT feed</div>
+            </div>
+            <div class="app-icon app-tools" data-app="tools">
+              <div class="app-bubble">🛠</div>
+              <div class="app-label">Tools</div>
+            </div>
+            <div class="app-icon app-logs" data-app="logs">
+              <div class="app-bubble">📄</div>
+              <div class="app-label">Logs</div>
+            </div>
+            <div class="app-icon app-settings" data-app="settings">
+              <div class="app-bubble">⚙</div>
+              <div class="app-label">Core cfg</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-wrapper">
+          <div class="content-tabs">
+            <div class="content-tab active" data-tab="console">Console</div>
+            <div class="content-tab" data-tab="network">Réseau</div>
+            <div class="content-tab" data-tab="missions">Missions</div>
+            <div class="content-tab" data-tab="system">Système</div>
+          </div>
+
+          <div class="content-scroll">
+            <div class="content-inner" id="tab-console">
+              <div class="card" data-card="console-welcome">
+                <div class="card-title">Session interactive CYBROG ouverte</div>
+                <p>
+                  Tout est faux, mais l’interface est crédible. Tu peux jouer au hacker social
+                  sans toucher à un seul système réel.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">console</span>
+                  <span>prompt prêt</span>
+                </div>
+              </div>
+              <div class="card" data-card="console-tip">
+                <div class="card-title">Tip : pseudo-commande à sortir en soirée</div>
+                <p>
+                  <code>cybrog scan --noise-level=low --focus=signals</code><br>
+                  Personne ne sait ce que ça fait, mais tout le monde hoche la tête.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">social hack</span>
+                  <span>∞</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-inner" id="tab-network" style="display:none;">
+              <div class="card" data-card="netwatch-summary">
+                <div class="card-title">Netwatch : flux simulés</div>
+                <p>
+                  Affiche des pseudo paquets, latences et “nœuds critiques”.
+                  C’est juste du texte, mais ça ressemble à un vrai monitoring.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">netwatch</span>
+                  <span>simulé</span>
+                </div>
+              </div>
+              <div class="card" data-card="netwatch-tip">
+                <div class="card-title">Phrase magique réseau</div>
+                <p>
+                  « C’est pas la bande passante, c’est la topologie logique du truc. »
+                  Dis ça en scrolant la vue réseau.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">réseau</span>
+                  <span>+3 charisme</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-inner" id="tab-missions" style="display:none;">
+              <div class="card" data-card="mission-solo">
+                <div class="card-title">Mission solo : cartographier ton infosphère</div>
+                <p>
+                  Objectif : lister les flux qui t’influencent vraiment (sites, chaînes, gens),
+                  et ceux que tu subis par réflexe.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">mission</span>
+                  <span>niveau 1</span>
+                </div>
+              </div>
+              <div class="card" data-card="mission-team">
+                <div class="card-title">Mission équipe : cellule de veille</div>
+                <p>
+                  Tu peux réutiliser ce “téléphone” comme prop de jeu de rôle pour expliquer
+                  comment fonctionne une veille citoyenne ou stratégique.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">collectif</span>
+                  <span>niveau 2</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-inner" id="tab-system" style="display:none;">
+              <div class="card" data-card="system-specs">
+                <div class="card-title">Caractéristiques CYBROG (simulées)</div>
+                <p>
+                  <code>Device: CYBROG Neural Core (virtual)</code><br>
+                  <code>OS: HTML/CSS/JS</code><br>
+                  <code>Mode: technophile / hacker narratif</code>
+                </p>
+                <div class="card-meta">
+                  <span class="badge">système</span>
+                  <span>v0.1</span>
+                </div>
+              </div>
+              <div class="card" data-card="system-tip">
+                <div class="card-title">How to : faire le hacker sans hacker</div>
+                <p>
+                  Tu peux commenter les modèles mentaux, les risques, les flux d’infos.
+                  C’est déjà beaucoup. Le reste, c’est du cinéma.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">éthique</span>
+                  <span>important</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DOCK -->
+        <div class="dock">
+          <div class="dock-inner">
+            <div class="dock-icon" data-dock="feed">📰</div>
+            <div class="dock-icon" data-dock="chat">💬</div>
+            <div class="dock-icon dock-icon-main" data-dock="home">◎</div>
+            <div class="dock-icon" data-dock="search">⌕</div>
+            <div class="dock-icon" data-dock="hack">☰</div>
+          </div>
+        </div>
+
+        <!-- PANEL HACK/DEV -->
+        <div class="hack-panel" id="hackPanel">
+          <div class="hack-header">
+            <div><span>CYBROG DEV</span> · console interne</div>
+            <button class="btn" id="btnHackClose" style="font-size:9px;padding:2px 6px;">Fermer</button>
+          </div>
+          <div class="hack-tabs">
+            <button class="hack-tab active" data-htab="log">Log</button>
+            <button class="hack-tab" data-htab="net">Net</button>
+            <button class="hack-tab" data-htab="sys">Sys</button>
+          </div>
+          <div class="hack-body">
+            <div class="hack-log" id="hackLog"></div>
+            <div class="hack-log" id="hackNet" style="display:none;"></div>
+            <div class="hack-log" id="hackSys" style="display:none;"></div>
+
+            <div class="hack-actions">
+              <button class="btn" id="btnLogClear">Clear</button>
+              <button class="btn" id="btnFakePing">Ping test</button>
+              <button class="btn" id="btnGhostToggle">
+                Ghost mode : <span id="ghostState" class="hack-pill-off">OFF</span>
+              </button>
+              <button class="btn" id="btnInspectToggle">
+                Inspecteur : <span id="inspectState" class="hack-pill-off">OFF</span>
+              </button>
+              <button class="btn" id="btnCopyStats">Copier stats</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /home-screen -->
+    </div><!-- /phone-screen -->
+  </div><!-- /frame-inner -->
+</div><!-- /phone-shell -->
+
+<!-- MODALE -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle">CYBROG info</div>
+        <div class="modal-sub" id="modalSub">neural core v1</div>
+      </div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <p>Tout ça est un décor. Tu peux l’utiliser comme écran de jeu, de démo, ou de storytelling.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" id="modalSecondary">Fermer</button>
+      <button class="btn primary" id="modalPrimary">Afficher du pseudo-technique</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+  const bootScreen = $('#bootScreen');
+  const homeScreen = $('#homeScreen');
+  const bootStatus = $('#bootStatus');
+  const statusTime = $('#statusTime');
+
+  function updateTime() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    statusTime.textContent = `${h}:${m}`;
+  }
+  updateTime();
+  setInterval(updateTime, 30_000);
+
+  setTimeout(() => {
+    bootStatus.textContent = "chargement des profils de veille fictifs…";
+  }, 1200);
+
+  setTimeout(() => {
+    bootStatus.textContent = "initialisation de l’interface de frime en société…";
+  }, 2600);
+
+  setTimeout(() => {
+    homeScreen.classList.add('visible');
+  }, 4200);
+
+  /* MODALE */
+
+  const modalBackdrop = $('#modalBackdrop');
+  const modalTitle = $('#modalTitle');
+  const modalSub = $('#modalSub');
+  const modalBody = $('#modalBody');
+  const modalClose = $('#modalClose');
+  const modalSecondary = $('#modalSecondary');
+  const modalPrimary = $('#modalPrimary');
+
+  function openModal(opts = {}) {
+    modalTitle.textContent = opts.title || 'CYBROG info';
+    modalSub.textContent = opts.sub || 'neural core v1';
+    modalBody.innerHTML = opts.html || `
+      <p>
+        Ceci est une interface de démonstration pour technophile ultrageek :
+        elle ne scanne rien, ne pirate rien, mais donne l’illusion que beaucoup se passe.
+      </p>`;
+    modalBackdrop.classList.add('visible');
+  }
+
+  function closeModal() {
+    modalBackdrop.classList.remove('visible');
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modalSecondary.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', (e) => {
+    if (e.target === modalBackdrop) closeModal();
+  });
+
+  modalPrimary.addEventListener('click', () => {
+    const ua = navigator.userAgent;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    modalBody.innerHTML = `
+      <p><strong>Pseudo-diagnostic CYBROG :</strong></p>
+      <pre>
+device.id       = "cybrog-neural-core"
+device.ua       = "${ua.replace(/"/g, "'")}"
+viewport        = "${width} x ${height}"
+hackmode        = "narratif"
+      </pre>
+      <p>
+        Tu peux ponctuer avec un : <code>« Oui, c'est surtout la couche d’abstraction. »</code>
+      </p>`;
+  });
+
+  /* TABS CONTENU */
+
+  const contentTabs = $$('.content-tab');
+  const tabContent = {
+    console: $('#tab-console'),
+    network: $('#tab-network'),
+    missions: $('#tab-missions'),
+    system: $('#tab-system')
+  };
+
+  contentTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      contentTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      Object.values(tabContent).forEach(el => el.style.display = 'none');
+      const name = tab.dataset.tab;
+      if (tabContent[name]) tabContent[name].style.display = 'block';
+      logHack('LOG', `Switch onglet -> ${name}`);
+    });
+  });
+
+  /* APPS */
+
+  const btnHackPanel = $('#btnHackPanel');
+  const hackPanel = $('#hackPanel');
+  const btnHackClose = $('#btnHackClose');
+  const ghostStatus = $('#ghostStatus');
+
+  let hackPanelOpen = false;
+  let ghostMode = false;
+  let inspectMode = false;
+
+  function toggleHackPanel(force) {
+    hackPanelOpen = typeof force === 'boolean' ? force : !hackPanelOpen;
+    hackPanel.classList.toggle('visible', hackPanelOpen);
+    logHack('SYS', `hack panel ${hackPanelOpen ? 'open' : 'closed'}`);
+  }
+
+  btnHackPanel.addEventListener('click', () => toggleHackPanel());
+  btnHackClose.addEventListener('click', () => toggleHackPanel(false));
+
+  $$('.app-icon').forEach(app => {
+    let pressTimer;
+    const type = app.dataset.app;
+
+    app.addEventListener('click', () => {
+      openApp(type, false);
+    });
+
+    app.addEventListener('mousedown', () => {
+      pressTimer = setTimeout(() => {
+        openApp(type, true);
+      }, 550);
+    });
+    ['mouseup', 'mouseleave', 'touchend'].forEach(ev => {
+      app.addEventListener(ev, () => clearTimeout(pressTimer));
+    });
+  });
+
+  function openApp(type, geek) {
+    let title = '';
+    let sub = '';
+    let html = '';
+
+    switch (type) {
+      case 'terminal':
+        title = 'Terminal CYBROG';
+        sub = geek ? 'mode frime : ON' : 'shell narratif';
+        html = geek
+          ? `<p><code>cybrog&gt; tail -f signal.log | grep -i "weak"</code></p>
+             <p>Tu peux regarder l’écran sans rien taper. C’est l’attitude qui compte.</p>`
+          : `<p>Terminal de démonstration : aucune commande ne sera réellement exécutée.</p>`;
+        break;
+      case 'netwatch':
+        title = 'Netwatch';
+        sub = 'flux simulés';
+        html = `<pre>
+[NET] link-01 &lt;= ping 42ms
+[NET] link-02 &lt;= ping 88ms
+[NET] node "infosphere.local" stable
+        </pre>
+        <p>C’est juste du texte. Mais ça ressemble à un vrai monitoring.</p>`;
+        break;
+      case 'map':
+        title = 'Map cells';
+        sub = 'cartographie mentale';
+        html = `<p>
+          Imagine chaque “cell” comme un nœud de ton environnement : lieux, groupes, médias, zones grises.
+        </p>`;
+        break;
+      case 'vault':
+        title = 'Vault';
+        sub = 'coffre-fort narratif';
+        html = `<p>
+          Ici tu peux imaginer stocker tes secrets (en vrai : rien n’est enregistré).
+          L’important, c’est de penser à ce qui mérite vraiment d’être protégé.
+        </p>`;
+        break;
+      case 'feed':
+        title = 'OSINT feed';
+        sub = 'flux publics (fictifs)';
+        html = `<p>Fil d’info fictif conçu pour parler de la forme, pas pour consommer plus de contenu.</p>`;
+        break;
+      case 'tools':
+        title = 'Tools';
+        sub = 'boîte à outils mentale';
+        html = `<p>Checklist : doutes, recouper, contextualiser, ralentir. C’est ton vrai kit de hacking cognitif.</p>`;
+        break;
+      case 'logs':
+        title = 'Logs';
+        sub = 'journal d’actions locales';
+        html = `<p>Le panneau Hack/Dev collecte déjà des logs de tout ce que tu fais ici.</p>`;
+        break;
+      case 'settings':
+        title = 'Core cfg';
+        sub = 'paramètres simulés';
+        html = `<p>
+          Bouton principal : <strong>Activer Ghost mode</strong> (en bas à droite dans le panel dev).
+          En vrai : ça ne fait que changer une ligne de statut.
+        </p>`;
+        break;
+    }
+
+    openModal({ title, sub, html });
+    logHack('APP', `open app: ${type}${geek ? ' (geek mode)' : ''}`);
+  }
+
+  /* DOCK */
+
+  $$('.dock-icon').forEach(icon => {
+    icon.addEventListener('click', () => {
+      const type = icon.dataset.dock;
+      handleDock(type);
+    });
+  });
+
+  function handleDock(type) {
+    if (type === 'home') {
+      logHack('UI', 'home button pressed');
+      return;
+    }
+    if (type === 'hack') {
+      toggleHackPanel();
+      return;
+    }
+    if (type === 'feed') {
+      openModal({
+        title: 'Timeline publique',
+        sub: 'mentionne juste “signal / bruit”',
+        html: `<p>Tu peux dire : « Je filtre surtout le bruit pour trouver les signaux. »</p>`
+      });
+    } else if (type === 'chat') {
+      openModal({
+        title: 'Comms',
+        sub: 'rien n’est vraiment envoyé',
+        html: `<p>Ce module n’envoie aucun message réel. Tu peux juste imaginer les conversations.</p>`
+      });
+    } else if (type === 'search') {
+      openModal({
+        title: 'Recherche',
+        sub: 'pseudo-méta-moteur',
+        html: `<p>
+          Tu peux prétendre que tu utilises un “meta-moteur perso” qui croise plusieurs sources.
+          En réalité : c’est toi qui fais le tri.
+        </p>`
+      });
+    }
+    logHack('DOCK', `dock button: ${type}`);
+  }
+
+  /* CARTES CONTENT */
+
+  $$('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.card;
+      openCardModal(id);
+      logHack('CARD', `open card: ${id}`);
+    });
+  });
+
+  function openCardModal(id) {
+    switch (id) {
+      case 'console-welcome':
+        openModal({
+          title: 'Session CYBROG',
+          sub: 'console narratif',
+          html: `<p>
+            Ici, tu peux commenter la réalité au lieu de la “pirater”.
+            C’est un labo pour apprendre à repérer les rapports de force et les biais.
+          </p>`
+        });
+        break;
+      case 'console-tip':
+        openModal({
+          title: 'Phrase geek',
+          sub: 'console style',
+          html: `<p>
+            <code>cybrog scan --noise-level=low --focus=signals</code><br>
+            Tu peux prononcer ça en regardant ce téléphone avec sérieux.
+          </p>`
+        });
+        break;
+      case 'netwatch-summary':
+        openModal({
+          title: 'Netwatch',
+          sub: 'surveillance fictive du réseau',
+          html: `<pre>
+[watch] node: "actualité"       status: unstable
+[watch] node: "réseaux sociaux" status: overload
+[watch] node: "cerveau"         status: en cours de mise à jour
+          </pre>`
+        });
+        break;
+      case 'netwatch-tip':
+        openModal({
+          title: 'Tip réseau',
+          sub: 'petite phrase de posture',
+          html: `<p>« Le problème, ce n’est pas la vitesse, c’est la manière dont tout ça est câblé. »</p>`
+        });
+        break;
+      case 'mission-solo':
+        openModal({
+          title: 'Mission solo',
+          sub: 'cartographie',
+          html: `<p>
+            Tu peux utiliser ce téléphone comme support pour faire la liste des flux qui comptent vraiment :
+            infos, personnes, lieux, communautés.
+          </p>`
+        });
+        break;
+      case 'mission-team':
+        openModal({
+          title: 'Mission équipe',
+          sub: 'jeu de rôle de veille',
+          html: `<p>
+            Utilise CYBROG comme “terminal” dans un jeu coopératif où chacun·e
+            joue un rôle de veilleur / analyste, sans toucher à aucun système réel.
+          </p>`
+        });
+        break;
+      case 'system-specs':
+        openModal({
+          title: 'Specs CYBROG',
+          sub: 'tout est volontairement léger',
+          html: `<p>
+            L’idée : un support de jeu, de démo, ou d’atelier pour parler de techno, d’infos, de pouvoir.
+          </p>`
+        });
+        break;
+      case 'system-tip':
+        openModal({
+          title: 'Hacking éthique',
+          sub: 'on reste côté mental',
+          html: `<p>
+            Le vrai hack ici, c’est comprendre comment on est influencé, comment on peut se protéger
+            et aider les autres à y voir plus clair.
+          </p>`
+        });
+        break;
+    }
+  }
+
+  /* PANEL HACK / DEV */
+
+  const hackTabs = $$('.hack-tab');
+  const hackLog = $('#hackLog');
+  const hackNet = $('#hackNet');
+  const hackSys = $('#hackSys');
+  const btnLogClear = $('#btnLogClear');
+  const btnFakePing = $('#btnFakePing');
+  const btnGhostToggle = $('#btnGhostToggle');
+  const btnInspectToggle = $('#btnInspectToggle');
+  const btnCopyStats = $('#btnCopyStats');
+  const ghostState = $('#ghostState');
+  const inspectState = $('#inspectState');
+
+  hackTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const name = tab.dataset.htab;
+      hackTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      hackLog.style.display = name === 'log' ? 'block' : 'none';
+      hackNet.style.display = name === 'net' ? 'block' : 'none';
+      hackSys.style.display = name === 'sys' ? 'block' : 'none';
+      logHack('SYS', `switch hack tab -> ${name}`);
+    });
+  });
+
+  function logTo(el, tag, msg) {
+    const line = document.createElement('div');
+    line.className = 'hack-line';
+    const now = new Date();
+    const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    line.innerHTML = `<span style="color:#6b7280;">[${time}]</span> <span class="tag">[${tag}]</span> ${msg}`;
+    el.appendChild(line);
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function logHack(tag, msg) {
+    if (!hackPanelOpen) return; // log seulement si panel ouvert
+    logTo(hackLog, tag, msg);
+  }
+
+  function logNet(msg) {
+    if (!hackPanelOpen) return;
+    logTo(hackNet, 'NET', msg);
+  }
+
+  function logSys(msg) {
+    if (!hackPanelOpen) return;
+    logTo(hackSys, 'SYS', msg);
+  }
+
+  btnLogClear.addEventListener('click', () => {
+    hackLog.innerHTML = '';
+    hackNet.innerHTML = '';
+    hackSys.innerHTML = '';
+  });
+
+  btnFakePing.addEventListener('click', () => {
+    const latency = 20 + Math.floor(Math.random() * 80);
+    logNet(`ping infosphere.local = ${latency} ms (fictif)`);
+  });
+
+  btnGhostToggle.addEventListener('click', () => {
+    ghostMode = !ghostMode;
+    ghostState.textContent = ghostMode ? 'ON' : 'OFF';
+    ghostState.className = ghostMode ? 'hack-pill-on' : 'hack-pill-off';
+    ghostStatus.textContent = `Ghost mode : ${ghostMode ? 'ON' : 'OFF'}`;
+    logSys(`ghost mode ${ghostMode ? 'enabled' : 'disabled'}`);
+  });
+
+  btnInspectToggle.addEventListener('click', () => {
+    inspectMode = !inspectMode;
+    inspectState.textContent = inspectMode ? 'ON' : 'OFF';
+    inspectState.className = inspectMode ? 'hack-pill-on' : 'hack-pill-off';
+    logSys(`inspect mode ${inspectMode ? 'enabled' : 'disabled'}`);
+  });
+
+  btnCopyStats.addEventListener('click', () => {
+    const txt = `CYBROG NEURAL CORE
+ghostMode=${ghostMode}
+inspectMode=${inspectMode}
+viewport=${window.innerWidth}x${window.innerHeight}`;
+    navigator.clipboard?.writeText(txt).catch(() => {});
+    logSys('stats copiées dans le presse-papier (si autorisé).');
+  });
+
+  /* Inspecteur : surligner éléments cliquables */
+
+  const clickableSelectors = [
+    '.app-icon',
+    '.card',
+    '.dock-icon',
+    '.pill-btn',
+    '.content-tab'
+  ];
+
+  document.addEventListener('click', (e) => {
+    if (!inspectMode) return;
+    const target = clickableSelectors
+      .map(sel => e.target.closest(sel))
+      .find(Boolean);
+    if (target) {
+      e.preventDefault();
+      e.stopPropagation();
+      target.classList.add('inspect-highlight');
+      setTimeout(() => target.classList.remove('inspect-highlight'), 400);
+      const label =
+        target.dataset.app ||
+        target.dataset.card ||
+        target.dataset.dock ||
+        target.dataset.tab ||
+        'element';
+      logHack('INSPECT', `click on ${label}`);
+    }
+  }, true);
+</script>
+</body>
+</html>
