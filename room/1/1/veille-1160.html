@@ -1,0 +1,1010 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📚 WIKI — 1160 Connect | Documentation Complète</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f0f14;
+      --bg-panel: #16161d;
+      --bg-card: #1c1c26;
+      --bg-elevated: #22222e;
+      --mint: #4ade80;
+      --mint-soft: #86efac;
+      --lilas: #c4b5fd;
+      --lilas-soft: #ddd6fe;
+      --gold: #fbbf24;
+      --coral: #f87171;
+      --cyan: #22d3ee;
+      --text-primary: #e8e6f0;
+      --text-muted: #8b8a9e;
+      --border: rgba(196, 181, 253, 0.15);
+      --glow-mint: 0 0 20px rgba(74, 222, 128, 0.3);
+      --glow-lilas: 0 0 20px rgba(196, 181, 253, 0.3);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* Layout */
+    .wiki-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 900px) {
+      .wiki-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border);
+      padding: 2rem 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 0 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--mint);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+    .sidebar-logo:hover { text-shadow: var(--glow-mint); }
+    .sidebar-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+    .nav-section {
+      padding: 0 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .nav-section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      padding: 0 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: rgba(74, 222, 128, 0.1);
+      color: var(--mint);
+    }
+    .nav-link.active {
+      background: rgba(74, 222, 128, 0.15);
+      color: var(--mint);
+      font-weight: 500;
+    }
+    .nav-link .icon { font-size: 1rem; }
+    .nav-link-sub {
+      padding-left: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .nav-link-sub:hover { color: var(--lilas); }
+
+    /* Main Content */
+    .main-content {
+      padding: 3rem;
+      max-width: 1000px;
+    }
+    .breadcrumb {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+    .breadcrumb a {
+      color: var(--lilas);
+      text-decoration: none;
+    }
+    .breadcrumb a:hover { color: var(--mint); }
+
+    /* Page Header */
+    .page-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--mint) 0%, var(--lilas) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .page-description {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+    .page-meta {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+    }
+    .meta-item .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--mint);
+      border-radius: 50%;
+    }
+
+    /* Content Sections */
+    .wiki-section {
+      margin-bottom: 3rem;
+    }
+    .wiki-section h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .wiki-section h2 .icon { color: var(--mint); }
+    .wiki-section h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 1.5rem 0 0.75rem;
+      color: var(--lilas);
+    }
+    .wiki-section p {
+      margin-bottom: 1rem;
+      color: var(--text-muted);
+    }
+    .wiki-section ul, .wiki-section ol {
+      margin: 1rem 0 1rem 1.5rem;
+      color: var(--text-muted);
+    }
+    .wiki-section li {
+      margin-bottom: 0.5rem;
+    }
+    .wiki-section strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .wiki-section code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
+      background: var(--bg-elevated);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      color: var(--mint);
+    }
+    .wiki-section a {
+      color: var(--lilas);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--lilas);
+    }
+    .wiki-section a:hover {
+      color: var(--mint);
+      border-color: var(--mint);
+    }
+
+    /* Info Boxes */
+    .info-box {
+      padding: 1.25rem 1.5rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      border-left: 4px solid;
+    }
+    .info-box.note {
+      background: rgba(74, 222, 128, 0.1);
+      border-color: var(--mint);
+    }
+    .info-box.warning {
+      background: rgba(251, 191, 36, 0.1);
+      border-color: var(--gold);
+    }
+    .info-box.danger {
+      background: rgba(248, 113, 113, 0.1);
+      border-color: var(--coral);
+    }
+    .info-box.info {
+      background: rgba(196, 181, 253, 0.1);
+      border-color: var(--lilas);
+    }
+    .info-box-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    .info-box.note .info-box-title { color: var(--mint); }
+    .info-box.warning .info-box-title { color: var(--gold); }
+    .info-box.danger .info-box-title { color: var(--coral); }
+    .info-box.info .info-box-title { color: var(--lilas); }
+
+    /* Tables */
+    .wiki-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+    }
+    .wiki-table th, .wiki-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .wiki-table th {
+      background: var(--bg-elevated);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--mint);
+    }
+    .wiki-table td {
+      color: var(--text-muted);
+    }
+    .wiki-table tr:hover td {
+      background: rgba(74, 222, 128, 0.05);
+    }
+
+    /* Code Blocks */
+    .code-block {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      overflow: hidden;
+    }
+    .code-header {
+      background: var(--bg-elevated);
+      padding: 0.5rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .code-content {
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      color: var(--mint);
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--mint);
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Sitemap Visual */
+    .sitemap-tree {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .sitemap-item {
+      padding: 0.5rem 0;
+      border-left: 2px solid var(--border);
+      padding-left: 1.5rem;
+      margin-left: 0.5rem;
+    }
+    .sitemap-item.root {
+      border-left: none;
+      padding-left: 0;
+      margin-left: 0;
+    }
+    .sitemap-item a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--mint);
+      text-decoration: none;
+    }
+    .sitemap-item a:hover {
+      text-decoration: underline;
+    }
+    .sitemap-item .desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+    .sitemap-item .priority {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gold);
+      margin-left: 0.5rem;
+    }
+
+    /* TOC */
+    .toc-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .toc-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--mint);
+      margin-bottom: 1rem;
+    }
+    .toc-list {
+      list-style: none;
+    }
+    .toc-list li {
+      margin-bottom: 0.5rem;
+    }
+    .toc-list a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .toc-list a:hover { color: var(--mint); }
+    .toc-list a::before {
+      content: "→";
+      color: var(--lilas);
+      font-size: 0.8rem;
+    }
+
+    /* Footer */
+    .wiki-footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .wiki-footer a { color: var(--lilas); }
+  </style>
+</head>
+<body>
+  <div class="wiki-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="sidebar-logo">📚 1160 Wiki</a>
+        <div class="sidebar-subtitle">Documentation technique</div>
+      </div>
+
+      <nav class="nav-section">
+        <div class="nav-section-title">Vue d'ensemble</div>
+        <a href="#introduction" class="nav-link active"><span class="icon">🏠</span> Introduction</a>
+        <a href="#sitemap" class="nav-link"><span class="icon">🗺️</span> Sitemap</a>
+        <a href="#architecture" class="nav-link"><span class="icon">🏗️</span> Architecture</a>
+      </nav>
+
+      <nav class="nav-section">
+        <div class="nav-section-title">Sections du site</div>
+        <a href="#section-dashboard" class="nav-link"><span class="icon">📊</span> Dashboard</a>
+        <a href="#section-analytics" class="nav-link"><span class="icon">📈</span> Analytics</a>
+        <a href="#section-directory" class="nav-link"><span class="icon">📇</span> Annuaire</a>
+      </nav>
+
+      <nav class="nav-section">
+        <div class="nav-section-title">Données</div>
+        <a href="#data-sources" class="nav-link"><span class="icon">🔗</span> Sources</a>
+        <a href="#data-structure" class="nav-link"><span class="icon">📦</span> Structure</a>
+        <a href="#data-stats" class="nav-link"><span class="icon">📉</span> Statistiques</a>
+      </nav>
+
+      <nav class="nav-section">
+        <div class="nav-section-title">Technique</div>
+        <a href="#tech-stack" class="nav-link"><span class="icon">⚙️</span> Stack technique</a>
+        <a href="#tech-api" class="nav-link"><span class="icon">🔌</span> API / Intégration</a>
+        <a href="#tech-deploy" class="nav-link"><span class="icon">🚀</span> Déploiement</a>
+      </nav>
+
+      <nav class="nav-section">
+        <div class="nav-section-title">Projet</div>
+        <a href="#context" class="nav-link"><span class="icon">🎯</span> Contexte RC</a>
+        <a href="#roadmap" class="nav-link"><span class="icon">📅</span> Roadmap</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      
+      <div class="breadcrumb">
+        <a href="https://ouaisfieu.github.io/1160/">1160 Connect</a> / Wiki / Documentation
+      </div>
+
+      <header class="page-header">
+        <h1 class="page-title">Wiki — 1160 Connect</h1>
+        <p class="page-description">
+          Documentation complète de l'observatoire numérique du secteur associatif d'Auderghem.
+          Architecture, données, fonctionnalités et intégration avec le projet Résistance Cognitive.
+        </p>
+        <div class="page-meta">
+          <span class="meta-item"><span class="dot"></span> Dernière màj : 14 janvier 2026</span>
+          <span class="meta-item">Version : 1.0.0</span>
+          <span class="meta-item">Domaine : ouaisfieu.github.io/1160</span>
+        </div>
+      </header>
+
+      <!-- Table of Contents -->
+      <div class="toc-box">
+        <div class="toc-title">📑 Table des matières</div>
+        <ul class="toc-list">
+          <li><a href="#introduction">Introduction & Objectifs</a></li>
+          <li><a href="#sitemap">Sitemap complet</a></li>
+          <li><a href="#architecture">Architecture du site</a></li>
+          <li><a href="#section-dashboard">Section : Dashboard</a></li>
+          <li><a href="#section-analytics">Section : Analytics</a></li>
+          <li><a href="#section-directory">Section : Annuaire</a></li>
+          <li><a href="#data-sources">Sources de données</a></li>
+          <li><a href="#data-stats">Statistiques clés</a></li>
+          <li><a href="#tech-stack">Stack technique</a></li>
+          <li><a href="#context">Contexte Résistance Cognitive</a></li>
+        </ul>
+      </div>
+
+      <!-- Introduction -->
+      <section class="wiki-section" id="introduction">
+        <h2><span class="icon">🏠</span> Introduction</h2>
+        
+        <p>
+          <strong>1160 Connect</strong> est un observatoire numérique dédié au secteur associatif de la commune d'Auderghem (code postal 1160, Région de Bruxelles-Capitale). Il recense, analyse et visualise la dynamique des ASBL, comités de quartier et initiatives citoyennes qui font vivre le territoire.
+        </p>
+
+        <h3>Objectifs</h3>
+        <ul>
+          <li><strong>Cartographier</strong> l'écosystème associatif auderghemois (247 entités identifiées)</li>
+          <li><strong>Analyser</strong> les tendances sectorielles et géographiques</li>
+          <li><strong>Faciliter</strong> la mise en réseau entre acteurs locaux</li>
+          <li><strong>Documenter</strong> l'évolution historique du tissu social</li>
+          <li><strong>Servir</strong> de base de données pour le projet Résistance Cognitive</li>
+        </ul>
+
+        <div class="info-box note">
+          <div class="info-box-title">💡 Intégration RC</div>
+          <p>Ce site fait partie de l'infrastructure numérique du projet <strong>Résistance Cognitive</strong> — future locale PAC Auderghem. Il sert de ressource documentaire pour l'arpentage citoyen et l'ARG "Souveraineté Fantôme".</p>
+        </div>
+
+        <h3>URL de production</h3>
+        <div class="code-block">
+          <div class="code-header">URL</div>
+          <div class="code-content">https://ouaisfieu.github.io/1160/</div>
+        </div>
+      </section>
+
+      <!-- Sitemap -->
+      <section class="wiki-section" id="sitemap">
+        <h2><span class="icon">🗺️</span> Sitemap</h2>
+        
+        <p>
+          Le site est une <strong>Single Page Application (SPA)</strong> avec navigation par ancres. Toutes les sections sont accessibles depuis la page principale via des hash-links.
+        </p>
+
+        <div class="sitemap-tree">
+          <div class="sitemap-item root">
+            <a href="https://ouaisfieu.github.io/1160/">https://ouaisfieu.github.io/1160/</a>
+            <span class="priority">priority: 1.0</span>
+            <div class="desc">Page principale — Landing & Navigation</div>
+          </div>
+          
+          <div class="sitemap-item">
+            <a href="https://ouaisfieu.github.io/1160/#dashboard">#dashboard</a>
+            <span class="priority">priority: 0.9</span>
+            <div class="desc">Vue d'ensemble — Signaux vitaux du secteur associatif</div>
+          </div>
+          
+          <div class="sitemap-item">
+            <a href="https://ouaisfieu.github.io/1160/#analytics">#analytics</a>
+            <span class="priority">priority: 0.8</span>
+            <div class="desc">Analyses thématiques — Visualisations de données</div>
+            
+            <div class="sitemap-item">
+              <a href="https://ouaisfieu.github.io/1160/#analytics-secteurs">→ Secteurs</a>
+              <div class="desc">Répartition par domaine d'activité</div>
+            </div>
+            <div class="sitemap-item">
+              <a href="https://ouaisfieu.github.io/1160/#analytics-quartiers">→ Quartiers</a>
+              <div class="desc">Densité associative par zone géographique</div>
+            </div>
+            <div class="sitemap-item">
+              <a href="https://ouaisfieu.github.io/1160/#analytics-evolution">→ Évolution</a>
+              <div class="desc">Chronologie des créations (2010-2024)</div>
+            </div>
+          </div>
+          
+          <div class="sitemap-item">
+            <a href="https://ouaisfieu.github.io/1160/#directory">#directory</a>
+            <span class="priority">priority: 0.9</span>
+            <div class="desc">Annuaire exploratoire — Recherche et filtrage des entités</div>
+          </div>
+        </div>
+
+        <h3>Fichier sitemap.xml</h3>
+        <div class="code-block">
+          <div class="code-header">sitemap.xml</div>
+          <div class="code-content">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://ouaisfieu.github.io/1160/&lt;/loc&gt;
+    &lt;priority&gt;1.0&lt;/priority&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://ouaisfieu.github.io/1160/#dashboard&lt;/loc&gt;
+    &lt;priority&gt;0.9&lt;/priority&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://ouaisfieu.github.io/1160/#analytics&lt;/loc&gt;
+    &lt;priority&gt;0.8&lt;/priority&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://ouaisfieu.github.io/1160/#directory&lt;/loc&gt;
+    &lt;priority&gt;0.9&lt;/priority&gt;
+  &lt;/url&gt;
+&lt;/urlset&gt;</div>
+        </div>
+      </section>
+
+      <!-- Architecture -->
+      <section class="wiki-section" id="architecture">
+        <h2><span class="icon">🏗️</span> Architecture</h2>
+        
+        <p>
+          Le site est construit selon une architecture <strong>Static-First</strong> alignée avec les principes du projet Résistance Cognitive (Lighthouse 100/100 visé).
+        </p>
+
+        <table class="wiki-table">
+          <thead>
+            <tr>
+              <th>Composant</th>
+              <th>Technologie</th>
+              <th>Rôle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hébergement</td>
+              <td>GitHub Pages</td>
+              <td>Déploiement statique gratuit</td>
+            </tr>
+            <tr>
+              <td>Framework</td>
+              <td>HTML/CSS/JS vanilla</td>
+              <td>Pas de dépendances lourdes</td>
+            </tr>
+            <tr>
+              <td>Visualisations</td>
+              <td>Chart.js / D3.js (probable)</td>
+              <td>Graphiques interactifs</td>
+            </tr>
+            <tr>
+              <td>Données</td>
+              <td>JSON embarqué</td>
+              <td>Base de données statique</td>
+            </tr>
+            <tr>
+              <td>Style</td>
+              <td>CSS custom (dark mode)</td>
+              <td>Esthétique rétro-futuriste</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-box info">
+          <div class="info-box-title">🔗 Repo GitHub</div>
+          <p>Le code source est hébergé sur <code>github.com/ouaisfieu/1160</code> — branche <code>gh-pages</code> ou <code>main</code> selon configuration.</p>
+        </div>
+      </section>
+
+      <!-- Section Dashboard -->
+      <section class="wiki-section" id="section-dashboard">
+        <h2><span class="icon">📊</span> Section : Dashboard</h2>
+        
+        <p>
+          Le dashboard présente les <strong>signaux vitaux</strong> du tissu associatif auderghemois sous forme de KPIs (Key Performance Indicators).
+        </p>
+
+        <h3>Indicateurs affichés</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">247</div>
+            <div class="stat-label">Entités recensées</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">~3,200</div>
+            <div class="stat-label">Bénévoles actifs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">18 ans</div>
+            <div class="stat-label">Âge moyen ASBL</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">450+</div>
+            <div class="stat-label">Emplois directs (ETP)</div>
+          </div>
+        </div>
+
+        <h3>Méthodologie</h3>
+        <ul>
+          <li><strong>Entités recensées</strong> : Extraction du Moniteur Belge (Annexes ASBL) + validation terrain</li>
+          <li><strong>Bénévoles</strong> : Estimation basée sur déclarations volontaires (source : PFV)</li>
+          <li><strong>Âge moyen</strong> : Calcul sur date de publication au MB</li>
+          <li><strong>Emploi</strong> : Agrégation des données ONSS secteur non-marchand 1160</li>
+        </ul>
+      </section>
+
+      <!-- Section Analytics -->
+      <section class="wiki-section" id="section-analytics">
+        <h2><span class="icon">📈</span> Section : Analytics</h2>
+        
+        <p>
+          Analyses thématiques avec visualisations interactives. Trois axes d'exploration :
+        </p>
+
+        <h3>1. Répartition sectorielle</h3>
+        <p>
+          Distribution des 247 entités par domaine d'activité. Les catégories principales :
+        </p>
+        <ul>
+          <li><strong>Sport & Loisirs</strong> — Dominante forte (proximité Forêt de Soignes, Centre Wiloun)</li>
+          <li><strong>Environnement & Nature</strong> — Spécificité locale (Rouge-Cloître, biodiversité)</li>
+          <li><strong>Culture & Arts</strong> — Concentré autour du Centre Culturel</li>
+          <li><strong>Social & Solidarité</strong> — CPAS, aide aux personnes</li>
+          <li><strong>Jeunesse & Éducation</strong> — Écoles, mouvements de jeunesse</li>
+        </ul>
+
+        <div class="info-box warning">
+          <div class="info-box-title">⚠️ Biais identifié</div>
+          <p>Le secteur culturel apparaît sous-représenté dans les données MB car beaucoup d'initiatives fonctionnent en collectifs informels ou sous égide du Centre Culturel.</p>
+        </div>
+
+        <h3>2. Densité par quartier</h3>
+        <p>
+          Cartographie de la concentration associative par zone géographique :
+        </p>
+        <ul>
+          <li><strong>Rouge-Cloître</strong> — Plus haute densité artistique au km²</li>
+          <li><strong>Delta / Herrmann-Debroux</strong> — Hub tertiaire, peu d'associatif</li>
+          <li><strong>Chant d'Oiseau</strong> — Dominante résidentielle, comités de quartier</li>
+          <li><strong>Transvaal</strong> — Sous-représentation malgré besoins sociaux élevés</li>
+          <li><strong>Pinoy</strong> — Transition écologique, initiatives citoyennes émergentes</li>
+        </ul>
+
+        <h3>3. Évolution temporelle</h3>
+        <p>
+          Chronologie des créations d'ASBL sur la période 2010-2024. Tendances observées :
+        </p>
+        <ul>
+          <li>Pic de créations post-2015 (simplification administrative)</li>
+          <li>Ralentissement 2020-2021 (COVID)</li>
+          <li>Rebond 2022-2024 (nouvelles thématiques : climat, numérique, santé mentale)</li>
+        </ul>
+      </section>
+
+      <!-- Section Annuaire -->
+      <section class="wiki-section" id="section-directory">
+        <h2><span class="icon">📇</span> Section : Annuaire</h2>
+        
+        <p>
+          Module de recherche et exploration des 247 entités recensées. Fonctionnalités :
+        </p>
+
+        <h3>Filtres disponibles</h3>
+        <table class="wiki-table">
+          <thead>
+            <tr>
+              <th>Filtre</th>
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Catégorie</td>
+              <td>Sport & Loisirs, Culture & Arts, Social & Solidarité, Environnement & Durable, Jeunesse & Éducation</td>
+            </tr>
+            <tr>
+              <td>Quartier</td>
+              <td>Delta, Chant d'Oiseau, Rouge-Cloître, Transvaal, Pinoy, etc.</td>
+            </tr>
+            <tr>
+              <td>Statut</td>
+              <td>ASBL active, Collectif informel, Comité de quartier</td>
+            </tr>
+            <tr>
+              <td>Recherche</td>
+              <td>Texte libre sur nom de l'entité</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Structure des données</h3>
+        <div class="code-block">
+          <div class="code-header">Schéma JSON — Entité</div>
+          <div class="code-content">{
+  "id": "string",
+  "name": "string",
+  "category": "string",
+  "quartier": "string",
+  "status": "asbl" | "collectif" | "comite",
+  "address": "string",
+  "contact": "string",
+  "created_at": "date",
+  "description": "string"
+}</div>
+        </div>
+      </section>
+
+      <!-- Data Sources -->
+      <section class="wiki-section" id="data-sources">
+        <h2><span class="icon">🔗</span> Sources de données</h2>
+        
+        <table class="wiki-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Type</th>
+              <th>Usage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Moniteur Belge (Annexes)</td>
+              <td>Officiel</td>
+              <td>Liste des ASBL, dates de création, statuts</td>
+            </tr>
+            <tr>
+              <td>Commune d'Auderghem</td>
+              <td>Institutionnel</td>
+              <td>Validation terrain, données quartiers</td>
+            </tr>
+            <tr>
+              <td>Plateforme Francophone du Volontariat</td>
+              <td>Associatif</td>
+              <td>Estimation bénévolat, tendances secteur</td>
+            </tr>
+            <tr>
+              <td>ONSS</td>
+              <td>Statistique</td>
+              <td>Emploi secteur non-marchand</td>
+            </tr>
+            <tr>
+              <td>BCE (Banque Carrefour des Entreprises)</td>
+              <td>Officiel</td>
+              <td>Numéros d'entreprise, adresses siège</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Stats -->
+      <section class="wiki-section" id="data-stats">
+        <h2><span class="icon">📉</span> Statistiques clés</h2>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">247</div>
+            <div class="stat-label">Total entités</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">+12%</div>
+            <div class="stat-label">Croissance depuis 2020</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Catégories principales</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">8</div>
+            <div class="stat-label">Quartiers couverts</div>
+          </div>
+        </div>
+
+        <h3>Répartition sectorielle (estimation)</h3>
+        <table class="wiki-table">
+          <thead>
+            <tr>
+              <th>Secteur</th>
+              <th>Part estimée</th>
+              <th>Tendance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sport & Loisirs</td>
+              <td>~35%</td>
+              <td>Stable</td>
+            </tr>
+            <tr>
+              <td>Environnement & Nature</td>
+              <td>~20%</td>
+              <td>↗ En hausse</td>
+            </tr>
+            <tr>
+              <td>Culture & Arts</td>
+              <td>~18%</td>
+              <td>Stable</td>
+            </tr>
+            <tr>
+              <td>Social & Solidarité</td>
+              <td>~15%</td>
+              <td>↗ En hausse</td>
+            </tr>
+            <tr>
+              <td>Jeunesse & Éducation</td>
+              <td>~12%</td>
+              <td>Stable</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Tech Stack -->
+      <section class="wiki-section" id="tech-stack">
+        <h2><span class="icon">⚙️</span> Stack technique</h2>
+        
+        <table class="wiki-table">
+          <thead>
+            <tr>
+              <th>Couche</th>
+              <th>Technologie</th>
+              <th>Justification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hébergement</td>
+              <td>GitHub Pages</td>
+              <td>Gratuit, HTTPS, CDN global</td>
+            </tr>
+            <tr>
+              <td>Build</td>
+              <td>Static HTML (ou Eleventy)</td>
+              <td>Pas de serveur, Lighthouse 100/100</td>
+            </tr>
+            <tr>
+              <td>Style</td>
+              <td>CSS vanilla + variables</td>
+              <td>Maintenabilité, dark mode natif</td>
+            </tr>
+            <tr>
+              <td>Interactivité</td>
+              <td>JavaScript ES6+</td>
+              <td>Filtres, recherche, tabs</td>
+            </tr>
+            <tr>
+              <td>Charts</td>
+              <td>Chart.js ou D3.js</td>
+              <td>Visualisations légères</td>
+            </tr>
+            <tr>
+              <td>Données</td>
+              <td>JSON statique</td>
+              <td>Pas de base de données</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-box note">
+          <div class="info-box-title">🎯 Objectif Lighthouse</div>
+          <p>Le site vise un score <strong>Lighthouse 100/100</strong> sur les 4 métriques (Performance, Accessibility, Best Practices, SEO) conformément aux standards du projet Résistance Cognitive.</p>
+        </div>
+      </section>
+
+      <!-- Context RC -->
+      <section class="wiki-section" id="context">
+        <h2><span class="icon">🎯</span> Contexte Résistance Cognitive</h2>
+        
+        <p>
+          <strong>1160 Connect</strong> s'inscrit dans l'infrastructure numérique du projet <strong>Résistance Cognitive</strong> — future section locale PAC Auderghem. Il remplit plusieurs fonctions stratégiques :
+        </p>
+
+        <h3>Usages dans le projet RC</h3>
+        <ul>
+          <li><strong>Arpentage Citoyen</strong> — Base documentaire pour les sessions de lecture collective sur le tissu associatif local</li>
+          <li><strong>ARG "Souveraineté Fantôme"</strong> — Les entités recensées peuvent devenir des "points d'intérêt" dans le jeu</li>
+          <li><strong>Cartographie des alliés</strong> — Identification des partenaires potentiels (ex: Babel'Zin)</li>
+          <li><strong>Diagnostic territorial</strong> — Données de base pour les dossiers de subvention (Innoviris, COCOF)</li>
+          <li><strong>Transparence</strong> — Open data sur le secteur associatif = valeur d'exemple</li>
+        </ul>
+
+        <h3>Intégration technique</h3>
+        <p>
+          Le site peut être connecté aux autres composants de l'infrastructure RC :
+        </p>
+        <ul>
+          <li><strong>War Room</strong> — Embed iframe dans le viewer central</li>
+          <li><strong>Solid Pods</strong> — Les données pourraient migrer vers un pod souverain</li>
+          <li><strong>Decidim</strong> — Lien vers les consultations citoyennes</li>
+          <li><strong>Git Scraping</strong> — Archivage automatique des évolutions</li>
+        </ul>
+
+        <div class="info-box info">
+          <div class="info-box-title">📅 Roadmap</div>
+          <p>
+            <strong>Phase 1 (actuel)</strong> : Site statique de visualisation<br>
+            <strong>Phase 2 (Q2 2026)</strong> : Intégration CMS pour mises à jour collaboratives<br>
+            <strong>Phase 3 (Q4 2026)</strong> : API ouverte pour réutilisation des données
+          </p>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="wiki-footer">
+        <p>
+          📚 Wiki 1160 Connect — Documentation technique<br>
+          Projet <a href="#">Résistance Cognitive</a> · PAC Auderghem · 2026<br>
+          <span style="color: var(--mint);">[ OPEN SOURCE — OPEN DATA — OPEN MIND ]</span>
+        </p>
+      </footer>
+
+    </main>
+  </div>
+</body>
+</html>
