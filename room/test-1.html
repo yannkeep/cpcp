@@ -1,0 +1,3117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KERN // Cellule Stratégique — Simulation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  /* Palette gouvernementale austère */
+  --bg-dark:#0a0b0f;
+  --bg-primary:#0f1015;
+  --bg-secondary:#14151c;
+  --bg-tertiary:#1a1b24;
+  --bg-card:#1e1f2a;
+  --bg-hover:#252633;
+  --bg-active:#2c2d3a;
+  
+  --border-dark:#1e1f2a;
+  --border-main:#2a2b38;
+  --border-light:#3a3b4a;
+  --border-accent:#4a4b5a;
+  
+  --text-primary:#e8e9ed;
+  --text-secondary:#a0a1b0;
+  --text-muted:#6a6b7a;
+  --text-dim:#4a4b5a;
+  
+  /* Accents institutionnels */
+  --gold:#d4a853;
+  --gold-light:#e8c878;
+  --gold-dim:#a08030;
+  --blue-belgium:#0055a4;
+  --blue-light:#3388d4;
+  --red-belgium:#ef3340;
+  --yellow-belgium:#fdda25;
+  
+  /* Statuts */
+  --status-urgent:#ef4444;
+  --status-high:#f59e0b;
+  --status-medium:#3b82f6;
+  --status-low:#22c55e;
+  --status-info:#8b5cf6;
+  
+  /* Partis (couleurs officielles) */
+  --party-mr:#0055a4;
+  --party-ps:#ff0000;
+  --party-ecolo:#00a651;
+  --party-cdv:#ff6600;
+  --party-vld:#004494;
+  --party-vooruit:#ff0000;
+  --party-groen:#00a651;
+  
+  --radius:6px;
+  --radius-lg:10px;
+  --radius-xl:14px;
+  
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'Inter',-apple-system,system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  
+  --shadow-sm:0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md:0 4px 20px rgba(0,0,0,0.4);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.5);
+  --shadow-glow:0 0 30px rgba(212,168,83,0.15);
+}
+
+html,body{
+  height:100%;
+  overflow:hidden;
+}
+
+body{
+  font-family:var(--font-body);
+  background:var(--bg-dark);
+  color:var(--text-primary);
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* ==================== PRELOADER ==================== */
+.preloader{
+  position:fixed;
+  inset:0;
+  background:var(--bg-dark);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  transition:opacity 0.5s, visibility 0.5s;
+}
+
+.preloader.hidden{
+  opacity:0;
+  visibility:hidden;
+}
+
+.preloader-emblem{
+  width:120px;
+  height:120px;
+  border:3px solid var(--gold-dim);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:2rem;
+  position:relative;
+}
+
+.preloader-emblem::before{
+  content:'';
+  position:absolute;
+  inset:-8px;
+  border:1px solid var(--gold-dim);
+  border-radius:50%;
+  opacity:0.5;
+}
+
+.preloader-emblem-inner{
+  font-size:3rem;
+}
+
+.preloader-text{
+  font-family:var(--font-display);
+  font-size:1.5rem;
+  color:var(--gold);
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  margin-bottom:0.5rem;
+}
+
+.preloader-sub{
+  color:var(--text-muted);
+  font-size:0.85rem;
+  letter-spacing:0.1em;
+}
+
+.preloader-bar{
+  width:200px;
+  height:2px;
+  background:var(--border-main);
+  margin-top:2rem;
+  border-radius:1px;
+  overflow:hidden;
+}
+
+.preloader-progress{
+  height:100%;
+  background:linear-gradient(90deg,var(--gold-dim),var(--gold));
+  width:0%;
+  transition:width 0.3s;
+}
+
+/* ==================== INTRO BRIEFING ==================== */
+.intro-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(10,11,15,0.98);
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+  overflow-y:auto;
+}
+
+.intro-overlay.hidden{
+  display:none;
+}
+
+.intro-container{
+  max-width:800px;
+  width:100%;
+}
+
+.intro-header{
+  text-align:center;
+  margin-bottom:2.5rem;
+}
+
+.intro-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  padding:0.5rem 1rem;
+  background:rgba(212,168,83,0.1);
+  border:1px solid var(--gold-dim);
+  border-radius:var(--radius);
+  font-size:0.75rem;
+  font-weight:600;
+  color:var(--gold);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  margin-bottom:1.5rem;
+}
+
+.intro-title{
+  font-family:var(--font-display);
+  font-size:2.5rem;
+  font-weight:700;
+  color:var(--text-primary);
+  margin-bottom:0.75rem;
+}
+
+.intro-subtitle{
+  font-size:1.1rem;
+  color:var(--text-secondary);
+}
+
+.intro-card{
+  background:var(--bg-secondary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius-lg);
+  padding:2rem;
+  margin-bottom:1.5rem;
+}
+
+.intro-card-header{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+  margin-bottom:1rem;
+  padding-bottom:1rem;
+  border-bottom:1px solid var(--border-main);
+}
+
+.intro-card-icon{
+  width:40px;
+  height:40px;
+  background:var(--bg-tertiary);
+  border-radius:var(--radius);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.25rem;
+}
+
+.intro-card-title{
+  font-weight:600;
+  font-size:1rem;
+}
+
+.intro-card-subtitle{
+  font-size:0.8rem;
+  color:var(--text-muted);
+}
+
+.intro-card-content{
+  color:var(--text-secondary);
+  line-height:1.7;
+}
+
+.intro-card-content p{
+  margin-bottom:1rem;
+}
+
+.intro-card-content p:last-child{
+  margin-bottom:0;
+}
+
+.intro-card-content strong{
+  color:var(--text-primary);
+}
+
+.intro-card-content em{
+  color:var(--gold);
+  font-style:normal;
+}
+
+/* Composition KERN */
+.kern-composition{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:0.75rem;
+  margin-top:1.25rem;
+}
+
+.kern-member{
+  background:var(--bg-tertiary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  padding:0.85rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.kern-member::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+}
+
+.kern-member[data-party="mr"]::before{background:var(--party-mr)}
+.kern-member[data-party="ps"]::before{background:var(--party-ps)}
+.kern-member[data-party="ecolo"]::before{background:var(--party-ecolo)}
+.kern-member[data-party="cdv"]::before{background:var(--party-cdv)}
+.kern-member[data-party="vld"]::before{background:var(--party-vld)}
+.kern-member[data-party="vooruit"]::before{background:var(--party-vooruit)}
+.kern-member[data-party="groen"]::before{background:var(--party-groen)}
+
+.kern-member-role{
+  font-size:0.65rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  margin-bottom:0.25rem;
+}
+
+.kern-member-name{
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:0.15rem;
+}
+
+.kern-member-party{
+  font-size:0.7rem;
+  color:var(--text-muted);
+}
+
+/* Dossiers preview */
+.dossiers-preview{
+  margin-top:1.25rem;
+}
+
+.dossier-preview-item{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+  padding:0.75rem;
+  background:var(--bg-tertiary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  margin-bottom:0.5rem;
+}
+
+.dossier-preview-priority{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+.dossier-preview-priority.urgent{background:var(--status-urgent)}
+.dossier-preview-priority.high{background:var(--status-high)}
+.dossier-preview-priority.medium{background:var(--status-medium)}
+
+.dossier-preview-info{flex:1}
+
+.dossier-preview-title{
+  font-weight:500;
+  font-size:0.85rem;
+  margin-bottom:0.1rem;
+}
+
+.dossier-preview-type{
+  font-size:0.7rem;
+  color:var(--text-muted);
+}
+
+.dossier-preview-deadline{
+  font-size:0.7rem;
+  color:var(--status-urgent);
+  font-family:var(--font-mono);
+}
+
+/* Intro actions */
+.intro-actions{
+  display:flex;
+  justify-content:center;
+  gap:1rem;
+  margin-top:2rem;
+}
+
+.intro-btn{
+  padding:1rem 2.5rem;
+  font-family:var(--font-body);
+  font-size:0.95rem;
+  font-weight:600;
+  border:none;
+  border-radius:var(--radius);
+  cursor:pointer;
+  transition:all 0.2s;
+}
+
+.intro-btn-primary{
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  color:var(--bg-dark);
+}
+
+.intro-btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-glow);
+}
+
+.intro-btn-secondary{
+  background:var(--bg-tertiary);
+  border:1px solid var(--border-light);
+  color:var(--text-primary);
+}
+
+.intro-btn-secondary:hover{
+  background:var(--bg-hover);
+  border-color:var(--gold-dim);
+}
+
+/* ==================== MAIN APP LAYOUT ==================== */
+.app{
+  display:none;
+  height:100vh;
+  flex-direction:column;
+}
+
+.app.active{
+  display:flex;
+}
+
+/* Top bar */
+.top-bar{
+  height:52px;
+  background:var(--bg-secondary);
+  border-bottom:1px solid var(--border-main);
+  display:flex;
+  align-items:center;
+  padding:0 1.25rem;
+  gap:1.5rem;
+  flex-shrink:0;
+}
+
+.top-bar-brand{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+}
+
+.top-bar-emblem{
+  width:32px;
+  height:32px;
+  background:linear-gradient(135deg,var(--gold-dim),var(--gold));
+  border-radius:var(--radius);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.9rem;
+}
+
+.top-bar-title{
+  font-family:var(--font-display);
+  font-size:1rem;
+  font-weight:600;
+  letter-spacing:0.05em;
+}
+
+.top-bar-separator{
+  width:1px;
+  height:24px;
+  background:var(--border-main);
+}
+
+.top-bar-context{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  font-size:0.8rem;
+  color:var(--text-secondary);
+}
+
+.top-bar-context-badge{
+  padding:0.2rem 0.5rem;
+  background:rgba(239,68,68,0.15);
+  border:1px solid rgba(239,68,68,0.3);
+  border-radius:var(--radius);
+  color:var(--status-urgent);
+  font-size:0.7rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+
+.top-bar-spacer{flex:1}
+
+.top-bar-clock{
+  font-family:var(--font-mono);
+  font-size:0.85rem;
+  color:var(--text-secondary);
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+}
+
+.top-bar-date{
+  color:var(--text-muted);
+}
+
+.top-bar-user{
+  display:flex;
+  align-items:center;
+  gap:0.6rem;
+  padding:0.4rem 0.75rem;
+  background:var(--bg-tertiary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+}
+
+.top-bar-user-avatar{
+  width:28px;
+  height:28px;
+  background:linear-gradient(135deg,var(--blue-belgium),var(--blue-light));
+  border-radius:var(--radius);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.8rem;
+  font-weight:600;
+  color:white;
+}
+
+.top-bar-user-info{
+  line-height:1.2;
+}
+
+.top-bar-user-name{
+  font-size:0.8rem;
+  font-weight:500;
+}
+
+.top-bar-user-role{
+  font-size:0.65rem;
+  color:var(--text-muted);
+}
+
+/* Main layout */
+.main-layout{
+  flex:1;
+  display:flex;
+  overflow:hidden;
+}
+
+/* Left sidebar - Navigation */
+.sidebar-left{
+  width:240px;
+  background:var(--bg-secondary);
+  border-right:1px solid var(--border-main);
+  display:flex;
+  flex-direction:column;
+  flex-shrink:0;
+}
+
+.sidebar-section{
+  padding:1rem;
+  border-bottom:1px solid var(--border-dark);
+}
+
+.sidebar-section:last-child{
+  border-bottom:none;
+}
+
+.sidebar-title{
+  font-size:0.65rem;
+  font-weight:600;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  margin-bottom:0.75rem;
+  padding:0 0.5rem;
+}
+
+.sidebar-nav{
+  display:flex;
+  flex-direction:column;
+  gap:0.25rem;
+}
+
+.sidebar-item{
+  display:flex;
+  align-items:center;
+  gap:0.6rem;
+  padding:0.6rem 0.75rem;
+  border-radius:var(--radius);
+  cursor:pointer;
+  transition:all 0.15s;
+  font-size:0.85rem;
+  color:var(--text-secondary);
+}
+
+.sidebar-item:hover{
+  background:var(--bg-hover);
+  color:var(--text-primary);
+}
+
+.sidebar-item.active{
+  background:var(--bg-active);
+  color:var(--gold);
+}
+
+.sidebar-item-icon{
+  width:20px;
+  text-align:center;
+  font-size:1rem;
+}
+
+.sidebar-item-text{flex:1}
+
+.sidebar-item-badge{
+  padding:0.15rem 0.4rem;
+  background:var(--status-urgent);
+  border-radius:10px;
+  font-size:0.65rem;
+  font-weight:600;
+  color:white;
+}
+
+/* Timer widget */
+.timer-widget{
+  padding:1rem;
+  background:var(--bg-tertiary);
+  border-radius:var(--radius);
+  margin:0.5rem;
+}
+
+.timer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:0.75rem;
+}
+
+.timer-label{
+  font-size:0.7rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+
+.timer-status{
+  font-size:0.65rem;
+  padding:0.15rem 0.4rem;
+  background:rgba(239,68,68,0.15);
+  color:var(--status-urgent);
+  border-radius:var(--radius);
+}
+
+.timer-display{
+  font-family:var(--font-mono);
+  font-size:2rem;
+  font-weight:600;
+  color:var(--text-primary);
+  text-align:center;
+  margin-bottom:0.5rem;
+}
+
+.timer-display.warning{color:var(--status-high)}
+.timer-display.danger{color:var(--status-urgent);animation:timerPulse 1s infinite}
+
+@keyframes timerPulse{
+  0%,100%{opacity:1}
+  50%{opacity:0.5}
+}
+
+.timer-progress{
+  height:4px;
+  background:var(--bg-card);
+  border-radius:2px;
+  overflow:hidden;
+}
+
+.timer-progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--gold),var(--status-urgent));
+  transition:width 1s linear;
+}
+
+/* Stats mini */
+.stats-mini{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0.5rem;
+  padding:0.5rem;
+}
+
+.stat-mini{
+  background:var(--bg-tertiary);
+  border-radius:var(--radius);
+  padding:0.6rem;
+  text-align:center;
+}
+
+.stat-mini-value{
+  font-family:var(--font-mono);
+  font-size:1.25rem;
+  font-weight:600;
+  color:var(--gold);
+}
+
+.stat-mini-label{
+  font-size:0.6rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+
+/* Main content area */
+.main-content{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:var(--bg-primary);
+}
+
+/* Content header */
+.content-header{
+  padding:1.25rem 1.5rem;
+  background:var(--bg-secondary);
+  border-bottom:1px solid var(--border-main);
+}
+
+.content-header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:0.75rem;
+}
+
+.content-title{
+  font-family:var(--font-display);
+  font-size:1.5rem;
+  font-weight:600;
+}
+
+.content-actions{
+  display:flex;
+  gap:0.5rem;
+}
+
+.content-btn{
+  padding:0.5rem 1rem;
+  background:var(--bg-tertiary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  color:var(--text-secondary);
+  font-family:inherit;
+  font-size:0.8rem;
+  cursor:pointer;
+  transition:all 0.15s;
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+}
+
+.content-btn:hover{
+  background:var(--bg-hover);
+  border-color:var(--border-light);
+  color:var(--text-primary);
+}
+
+.content-btn-primary{
+  background:var(--gold);
+  border-color:var(--gold);
+  color:var(--bg-dark);
+}
+
+.content-btn-primary:hover{
+  background:var(--gold-light);
+}
+
+.content-meta{
+  display:flex;
+  gap:1.5rem;
+  font-size:0.8rem;
+  color:var(--text-muted);
+}
+
+.content-meta-item{
+  display:flex;
+  align-items:center;
+  gap:0.35rem;
+}
+
+/* Scrollable content */
+.content-scroll{
+  flex:1;
+  overflow-y:auto;
+  padding:1.5rem;
+}
+
+/* Dossier cards */
+.dossiers-grid{
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
+}
+
+.dossier-card{
+  background:var(--bg-secondary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  transition:all 0.2s;
+  cursor:pointer;
+}
+
+.dossier-card:hover{
+  border-color:var(--border-light);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-md);
+}
+
+.dossier-card.active{
+  border-color:var(--gold);
+  box-shadow:var(--shadow-glow);
+}
+
+.dossier-card.completed{
+  opacity:0.6;
+}
+
+.dossier-card.completed::after{
+  content:'✓ Traité';
+  position:absolute;
+  top:1rem;right:1rem;
+  padding:0.25rem 0.5rem;
+  background:var(--status-low);
+  border-radius:var(--radius);
+  font-size:0.7rem;
+  font-weight:600;
+  color:white;
+}
+
+.dossier-priority-bar{
+  height:4px;
+}
+
+.dossier-priority-bar.urgent{background:var(--status-urgent)}
+.dossier-priority-bar.high{background:var(--status-high)}
+.dossier-priority-bar.medium{background:var(--status-medium)}
+.dossier-priority-bar.low{background:var(--status-low)}
+
+.dossier-content{
+  padding:1.25rem;
+}
+
+.dossier-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:0.75rem;
+}
+
+.dossier-title-area{flex:1}
+
+.dossier-code{
+  font-family:var(--font-mono);
+  font-size:0.7rem;
+  color:var(--text-muted);
+  margin-bottom:0.25rem;
+}
+
+.dossier-title{
+  font-size:1.1rem;
+  font-weight:600;
+  color:var(--text-primary);
+  margin-bottom:0.25rem;
+}
+
+.dossier-ministry{
+  font-size:0.75rem;
+  color:var(--text-secondary);
+}
+
+.dossier-deadline{
+  text-align:right;
+}
+
+.dossier-deadline-label{
+  font-size:0.65rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+}
+
+.dossier-deadline-value{
+  font-family:var(--font-mono);
+  font-size:0.85rem;
+  font-weight:600;
+  color:var(--status-urgent);
+}
+
+.dossier-summary{
+  font-size:0.85rem;
+  color:var(--text-secondary);
+  line-height:1.6;
+  margin-bottom:1rem;
+}
+
+.dossier-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.4rem;
+  margin-bottom:1rem;
+}
+
+.dossier-tag{
+  padding:0.2rem 0.5rem;
+  background:var(--bg-tertiary);
+  border-radius:var(--radius);
+  font-size:0.7rem;
+  color:var(--text-muted);
+}
+
+.dossier-tag.community{color:var(--yellow-belgium);background:rgba(253,218,37,0.1)}
+.dossier-tag.budget{color:var(--status-high);background:rgba(245,158,11,0.1)}
+.dossier-tag.eu{color:var(--blue-light);background:rgba(59,130,246,0.1)}
+.dossier-tag.social{color:var(--status-info);background:rgba(139,92,246,0.1)}
+.dossier-tag.security{color:var(--status-urgent);background:rgba(239,68,68,0.1)}
+.dossier-tag.environment{color:var(--status-low);background:rgba(34,197,94,0.1)}
+
+.dossier-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:0.75rem;
+  border-top:1px solid var(--border-dark);
+}
+
+.dossier-stakeholders{
+  display:flex;
+  align-items:center;
+  gap:0.35rem;
+}
+
+.stakeholder-avatar{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  border:2px solid var(--bg-secondary);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:0.65rem;
+  margin-left:-8px;
+}
+
+.stakeholder-avatar:first-child{margin-left:0}
+
+.dossier-action-hint{
+  font-size:0.75rem;
+  color:var(--gold);
+  display:flex;
+  align-items:center;
+  gap:0.35rem;
+}
+
+/* Right sidebar - Dossier detail */
+.sidebar-right{
+  width:420px;
+  background:var(--bg-secondary);
+  border-left:1px solid var(--border-main);
+  display:flex;
+  flex-direction:column;
+  flex-shrink:0;
+  overflow:hidden;
+}
+
+.sidebar-right.hidden{
+  display:none;
+}
+
+.detail-header{
+  padding:1.25rem;
+  border-bottom:1px solid var(--border-main);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.detail-title{
+  font-family:var(--font-display);
+  font-size:1.1rem;
+  font-weight:600;
+}
+
+.detail-close{
+  width:32px;
+  height:32px;
+  background:var(--bg-tertiary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  color:var(--text-muted);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1rem;
+  transition:all 0.15s;
+}
+
+.detail-close:hover{
+  background:var(--bg-hover);
+  color:var(--text-primary);
+}
+
+.detail-content{
+  flex:1;
+  overflow-y:auto;
+  padding:1.25rem;
+}
+
+.detail-section{
+  margin-bottom:1.5rem;
+}
+
+.detail-section-title{
+  font-size:0.7rem;
+  font-weight:600;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  margin-bottom:0.75rem;
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+}
+
+.detail-section-title::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:var(--border-dark);
+}
+
+/* Document viewer */
+.document-viewer{
+  background:var(--bg-tertiary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  padding:1rem;
+  font-size:0.85rem;
+  line-height:1.7;
+  color:var(--text-secondary);
+  max-height:300px;
+  overflow-y:auto;
+}
+
+.document-viewer h4{
+  color:var(--text-primary);
+  font-size:0.9rem;
+  margin-bottom:0.5rem;
+}
+
+.document-viewer p{
+  margin-bottom:0.75rem;
+}
+
+.document-viewer ul{
+  margin-left:1.25rem;
+  margin-bottom:0.75rem;
+}
+
+.document-viewer li{
+  margin-bottom:0.35rem;
+}
+
+.document-viewer .highlight{
+  background:rgba(212,168,83,0.2);
+  padding:0 0.25rem;
+  border-radius:2px;
+}
+
+.document-viewer .classified{
+  color:var(--status-urgent);
+  font-weight:600;
+}
+
+/* Positions / Arguments */
+.positions-list{
+  display:flex;
+  flex-direction:column;
+  gap:0.75rem;
+}
+
+.position-card{
+  background:var(--bg-tertiary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  padding:0.85rem;
+  position:relative;
+  overflow:hidden;
+}
+
+.position-card::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:3px;
+}
+
+.position-card.pour::before{background:var(--status-low)}
+.position-card.contre::before{background:var(--status-urgent)}
+.position-card.neutre::before{background:var(--status-medium)}
+
+.position-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:0.5rem;
+}
+
+.position-actor{
+  font-weight:600;
+  font-size:0.85rem;
+}
+
+.position-stance{
+  font-size:0.65rem;
+  padding:0.15rem 0.4rem;
+  border-radius:var(--radius);
+  font-weight:600;
+  text-transform:uppercase;
+}
+
+.position-card.pour .position-stance{background:rgba(34,197,94,0.15);color:var(--status-low)}
+.position-card.contre .position-stance{background:rgba(239,68,68,0.15);color:var(--status-urgent)}
+.position-card.neutre .position-stance{background:rgba(59,130,246,0.15);color:var(--status-medium)}
+
+.position-text{
+  font-size:0.8rem;
+  color:var(--text-secondary);
+  line-height:1.5;
+}
+
+/* Recommendation form */
+.recommendation-form{
+  background:var(--bg-tertiary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  padding:1rem;
+}
+
+.form-label{
+  display:block;
+  font-size:0.75rem;
+  font-weight:500;
+  color:var(--text-secondary);
+  margin-bottom:0.5rem;
+}
+
+.form-select{
+  width:100%;
+  padding:0.6rem 0.75rem;
+  background:var(--bg-card);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  color:var(--text-primary);
+  font-family:inherit;
+  font-size:0.85rem;
+  cursor:pointer;
+  margin-bottom:1rem;
+}
+
+.form-select:focus{
+  outline:none;
+  border-color:var(--gold);
+}
+
+.form-textarea{
+  width:100%;
+  min-height:100px;
+  padding:0.75rem;
+  background:var(--bg-card);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  color:var(--text-primary);
+  font-family:inherit;
+  font-size:0.85rem;
+  resize:vertical;
+  margin-bottom:1rem;
+}
+
+.form-textarea:focus{
+  outline:none;
+  border-color:var(--gold);
+}
+
+.form-textarea::placeholder{
+  color:var(--text-muted);
+}
+
+/* Priority selector */
+.priority-options{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0.5rem;
+  margin-bottom:1rem;
+}
+
+.priority-option{
+  padding:0.5rem;
+  background:var(--bg-card);
+  border:2px solid var(--border-main);
+  border-radius:var(--radius);
+  text-align:center;
+  cursor:pointer;
+  transition:all 0.15s;
+}
+
+.priority-option:hover{
+  border-color:var(--border-light);
+}
+
+.priority-option.selected{
+  border-color:var(--gold);
+  background:rgba(212,168,83,0.1);
+}
+
+.priority-option-icon{
+  font-size:1.25rem;
+  margin-bottom:0.25rem;
+}
+
+.priority-option-text{
+  font-size:0.65rem;
+  color:var(--text-muted);
+}
+
+/* Submit button */
+.submit-recommendation{
+  width:100%;
+  padding:0.85rem;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border:none;
+  border-radius:var(--radius);
+  color:var(--bg-dark);
+  font-family:inherit;
+  font-size:0.9rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.5rem;
+}
+
+.submit-recommendation:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-glow);
+}
+
+.submit-recommendation:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+  transform:none;
+}
+
+/* ==================== KERN MEETING VIEW ==================== */
+.kern-meeting-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(10,11,15,0.95);
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+}
+
+.kern-meeting-overlay.active{
+  display:flex;
+}
+
+.kern-meeting-container{
+  max-width:1000px;
+  width:100%;
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.kern-meeting-header{
+  text-align:center;
+  margin-bottom:2rem;
+}
+
+.kern-meeting-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  padding:0.5rem 1rem;
+  background:rgba(212,168,83,0.15);
+  border:1px solid var(--gold);
+  border-radius:var(--radius);
+  font-size:0.75rem;
+  font-weight:600;
+  color:var(--gold);
+  margin-bottom:1rem;
+}
+
+.kern-meeting-title{
+  font-family:var(--font-display);
+  font-size:2rem;
+  margin-bottom:0.5rem;
+}
+
+.kern-meeting-subtitle{
+  color:var(--text-secondary);
+}
+
+/* Minister cards in meeting */
+.ministers-debate{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1rem;
+  margin-bottom:2rem;
+}
+
+.minister-debate-card{
+  background:var(--bg-secondary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius-lg);
+  padding:1.25rem;
+  position:relative;
+}
+
+.minister-debate-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.minister-debate-card[data-stance="pour"]::before{background:var(--status-low)}
+.minister-debate-card[data-stance="contre"]::before{background:var(--status-urgent)}
+.minister-debate-card[data-stance="reserve"]::before{background:var(--status-high)}
+.minister-debate-card[data-stance="attente"]::before{background:var(--status-medium)}
+
+.minister-header{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+  margin-bottom:0.75rem;
+}
+
+.minister-avatar{
+  width:48px;
+  height:48px;
+  border-radius:var(--radius);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.5rem;
+}
+
+.minister-info{flex:1}
+
+.minister-name{
+  font-weight:600;
+  font-size:0.95rem;
+}
+
+.minister-role{
+  font-size:0.75rem;
+  color:var(--text-muted);
+}
+
+.minister-party-badge{
+  padding:0.2rem 0.5rem;
+  border-radius:var(--radius);
+  font-size:0.65rem;
+  font-weight:600;
+}
+
+.minister-stance-badge{
+  display:inline-block;
+  padding:0.25rem 0.6rem;
+  border-radius:var(--radius);
+  font-size:0.7rem;
+  font-weight:600;
+  margin-bottom:0.75rem;
+}
+
+.minister-stance-badge.pour{background:rgba(34,197,94,0.15);color:var(--status-low)}
+.minister-stance-badge.contre{background:rgba(239,68,68,0.15);color:var(--status-urgent)}
+.minister-stance-badge.reserve{background:rgba(245,158,11,0.15);color:var(--status-high)}
+.minister-stance-badge.attente{background:rgba(59,130,246,0.15);color:var(--status-medium)}
+
+.minister-statement{
+  font-size:0.85rem;
+  color:var(--text-secondary);
+  line-height:1.6;
+  font-style:italic;
+}
+
+.minister-statement::before{
+  content:'"';
+  color:var(--gold);
+  font-size:1.5rem;
+  line-height:0;
+  vertical-align:-0.3em;
+  margin-right:0.25rem;
+}
+
+/* Vote options */
+.vote-section{
+  background:var(--bg-secondary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius-lg);
+  padding:1.5rem;
+}
+
+.vote-title{
+  font-family:var(--font-display);
+  font-size:1.1rem;
+  text-align:center;
+  margin-bottom:1rem;
+}
+
+.vote-options{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1rem;
+  margin-bottom:1.5rem;
+}
+
+.vote-option{
+  padding:1.25rem;
+  background:var(--bg-tertiary);
+  border:2px solid var(--border-main);
+  border-radius:var(--radius);
+  text-align:center;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+
+.vote-option:hover{
+  border-color:var(--border-light);
+  transform:translateY(-2px);
+}
+
+.vote-option.selected{
+  border-color:var(--gold);
+  background:rgba(212,168,83,0.1);
+}
+
+.vote-option-icon{
+  font-size:2rem;
+  margin-bottom:0.5rem;
+}
+
+.vote-option-title{
+  font-weight:600;
+  margin-bottom:0.25rem;
+}
+
+.vote-option-desc{
+  font-size:0.75rem;
+  color:var(--text-muted);
+}
+
+.vote-submit{
+  width:100%;
+  padding:1rem;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border:none;
+  border-radius:var(--radius);
+  color:var(--bg-dark);
+  font-family:inherit;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+
+.vote-submit:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-glow);
+}
+
+.vote-submit:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+}
+
+/* ==================== RESULTS / PROFILE ==================== */
+.results-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(10,11,15,0.98);
+  z-index:1000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+  overflow-y:auto;
+}
+
+.results-overlay.active{
+  display:flex;
+}
+
+.results-container{
+  max-width:900px;
+  width:100%;
+}
+
+.results-header{
+  text-align:center;
+  margin-bottom:2.5rem;
+}
+
+.results-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  padding:0.5rem 1rem;
+  background:rgba(34,197,94,0.15);
+  border:1px solid var(--status-low);
+  border-radius:var(--radius);
+  font-size:0.75rem;
+  font-weight:600;
+  color:var(--status-low);
+  margin-bottom:1rem;
+}
+
+.results-title{
+  font-family:var(--font-display);
+  font-size:2rem;
+  margin-bottom:0.5rem;
+}
+
+.results-subtitle{
+  color:var(--text-secondary);
+}
+
+/* Profile axes */
+.profile-axes{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1.5rem;
+  margin-bottom:2rem;
+}
+
+.profile-axis{
+  background:var(--bg-secondary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius-lg);
+  padding:1.25rem;
+}
+
+.axis-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:1rem;
+}
+
+.axis-name{
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+}
+
+.axis-value{
+  font-family:var(--font-mono);
+  font-size:1.25rem;
+  font-weight:600;
+  color:var(--gold);
+}
+
+.axis-bar{
+  height:8px;
+  background:var(--bg-tertiary);
+  border-radius:4px;
+  overflow:hidden;
+  margin-bottom:0.75rem;
+  position:relative;
+}
+
+.axis-bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--gold-dim),var(--gold));
+  border-radius:4px;
+  transition:width 1s ease;
+}
+
+.axis-labels{
+  display:flex;
+  justify-content:space-between;
+  font-size:0.7rem;
+  color:var(--text-muted);
+}
+
+/* Political compass */
+.political-compass{
+  background:var(--bg-secondary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius-lg);
+  padding:1.5rem;
+  margin-bottom:2rem;
+}
+
+.compass-title{
+  font-family:var(--font-display);
+  font-size:1.1rem;
+  text-align:center;
+  margin-bottom:1rem;
+}
+
+.compass-grid{
+  width:300px;
+  height:300px;
+  margin:0 auto;
+  background:var(--bg-tertiary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  position:relative;
+}
+
+.compass-grid::before,
+.compass-grid::after{
+  content:'';
+  position:absolute;
+  background:var(--border-main);
+}
+
+.compass-grid::before{
+  top:50%;left:0;right:0;
+  height:1px;
+}
+
+.compass-grid::after{
+  left:50%;top:0;bottom:0;
+  width:1px;
+}
+
+.compass-label{
+  position:absolute;
+  font-size:0.65rem;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+
+.compass-label.top{top:8px;left:50%;transform:translateX(-50%)}
+.compass-label.bottom{bottom:8px;left:50%;transform:translateX(-50%)}
+.compass-label.left{left:8px;top:50%;transform:translateY(-50%)}
+.compass-label.right{right:8px;top:50%;transform:translateY(-50%)}
+
+.compass-point{
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:var(--gold);
+  border:3px solid var(--bg-secondary);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 20px rgba(212,168,83,0.5);
+  transition:all 0.5s ease;
+}
+
+/* Insights */
+.insights-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:1rem;
+  margin-bottom:2rem;
+}
+
+.insight-card{
+  background:var(--bg-secondary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius);
+  padding:1rem;
+  display:flex;
+  gap:0.75rem;
+}
+
+.insight-icon{
+  width:40px;
+  height:40px;
+  background:var(--bg-tertiary);
+  border-radius:var(--radius);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.25rem;
+  flex-shrink:0;
+}
+
+.insight-content{flex:1}
+
+.insight-title{
+  font-weight:600;
+  font-size:0.85rem;
+  margin-bottom:0.25rem;
+}
+
+.insight-text{
+  font-size:0.8rem;
+  color:var(--text-secondary);
+  line-height:1.5;
+}
+
+/* Civix reward */
+.civix-reward{
+  background:linear-gradient(135deg,rgba(212,168,83,0.1),rgba(212,168,83,0.05));
+  border:1px solid var(--gold-dim);
+  border-radius:var(--radius-lg);
+  padding:1.5rem;
+  text-align:center;
+  margin-bottom:2rem;
+}
+
+.civix-amount{
+  font-family:var(--font-mono);
+  font-size:3rem;
+  font-weight:700;
+  color:var(--gold);
+  margin-bottom:0.25rem;
+}
+
+.civix-label{
+  color:var(--text-secondary);
+}
+
+/* Results actions */
+.results-actions{
+  display:flex;
+  justify-content:center;
+  gap:1rem;
+}
+
+/* ==================== NOTIFICATIONS ==================== */
+.notification{
+  position:fixed;
+  top:70px;
+  right:20px;
+  max-width:360px;
+  background:var(--bg-secondary);
+  border:1px solid var(--border-main);
+  border-radius:var(--radius-lg);
+  padding:1rem;
+  transform:translateX(400px);
+  opacity:0;
+  transition:all 0.4s ease;
+  z-index:900;
+  box-shadow:var(--shadow-lg);
+}
+
+.notification.show{
+  transform:translateX(0);
+  opacity:1;
+}
+
+.notification.urgent{
+  border-color:var(--status-urgent);
+}
+
+.notification-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:0.5rem;
+}
+
+.notification-type{
+  font-size:0.7rem;
+  font-weight:600;
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+
+.notification-close{
+  background:none;
+  border:none;
+  color:var(--text-muted);
+  cursor:pointer;
+  font-size:1rem;
+}
+
+.notification-content{
+  font-size:0.85rem;
+  color:var(--text-secondary);
+  line-height:1.5;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media(max-width:1200px){
+  .sidebar-right{width:360px}
+}
+
+@media(max-width:1000px){
+  .sidebar-left{width:200px}
+  .sidebar-right{display:none}
+}
+
+@media(max-width:768px){
+  .sidebar-left{display:none}
+  .top-bar-context{display:none}
+}
+
+/* ==================== SCROLLBAR ==================== */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg-primary)}
+::-webkit-scrollbar-thumb{background:var(--border-main);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--border-light)}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.animate-in{
+  animation:fadeInUp 0.5s ease forwards;
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div class="preloader" id="preloader">
+  <div class="preloader-emblem">
+    <div class="preloader-emblem-inner">🦁</div>
+  </div>
+  <div class="preloader-text">Cellule Stratégique</div>
+  <div class="preloader-sub">Chargement des dossiers classifiés...</div>
+  <div class="preloader-bar">
+    <div class="preloader-progress" id="preloaderProgress"></div>
+  </div>
+</div>
+
+<!-- INTRO BRIEFING -->
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-container">
+    <div class="intro-header">
+      <div class="intro-badge">
+        <span>🔐</span>
+        <span>Document confidentiel — Niveau Restreint</span>
+      </div>
+      <h1 class="intro-title">Briefing d'intégration</h1>
+      <p class="intro-subtitle">Bienvenue dans la Cellule Stratégique du Cabinet du Premier Ministre</p>
+    </div>
+
+    <div class="intro-card">
+      <div class="intro-card-header">
+        <div class="intro-card-icon">👤</div>
+        <div>
+          <div class="intro-card-title">Votre mission</div>
+          <div class="intro-card-subtitle">Conseiller·ère Stratégique — Cellule KERN</div>
+        </div>
+      </div>
+      <div class="intro-card-content">
+        <p>Vous venez d'être nommé·e <strong>Conseiller·ère Stratégique</strong> auprès de la Cellule d'appui au KERN, le <em>comité ministériel restreint</em> qui réunit le Premier Ministre et les Vice-Premiers Ministres des partis de la coalition.</p>
+        <p>Votre rôle : analyser les dossiers sensibles, identifier les enjeux, anticiper les blocages politiques, et <strong>formuler des recommandations</strong> qui seront présentées au KERN.</p>
+        <p>Vous ne décidez pas. Vous conseillez. Mais vos analyses influencent directement les décisions du gouvernement fédéral belge.</p>
+      </div>
+    </div>
+
+    <div class="intro-card">
+      <div class="intro-card-header">
+        <div class="intro-card-icon">🏛️</div>
+        <div>
+          <div class="intro-card-title">Composition du KERN</div>
+          <div class="intro-card-subtitle">Coalition Arizona (2024-2029)</div>
+        </div>
+      </div>
+      <div class="intro-card-content">
+        <p>Le KERN actuel réunit les figures suivantes :</p>
+        <div class="kern-composition">
+          <div class="kern-member" data-party="mr">
+            <div class="kern-member-role">Premier Ministre</div>
+            <div class="kern-member-name">A. De Croo</div>
+            <div class="kern-member-party">Open VLD</div>
+          </div>
+          <div class="kern-member" data-party="ps">
+            <div class="kern-member-role">Vice-PM</div>
+            <div class="kern-member-name">P. Vandenbroucke</div>
+            <div class="kern-member-party">Vooruit</div>
+          </div>
+          <div class="kern-member" data-party="cdv">
+            <div class="kern-member-role">Vice-PM</div>
+            <div class="kern-member-name">V. Van Peteghem</div>
+            <div class="kern-member-party">CD&V</div>
+          </div>
+          <div class="kern-member" data-party="ecolo">
+            <div class="kern-member-role">Vice-PM</div>
+            <div class="kern-member-name">G. Vanden Burre</div>
+            <div class="kern-member-party">Ecolo</div>
+          </div>
+          <div class="kern-member" data-party="groen">
+            <div class="kern-member-role">Vice-PM</div>
+            <div class="kern-member-name">P. De Sutter</div>
+            <div class="kern-member-party">Groen</div>
+          </div>
+          <div class="kern-member" data-party="vld">
+            <div class="kern-member-role">Vice-PM</div>
+            <div class="kern-member-name">D. Clarinval</div>
+            <div class="kern-member-party">MR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="intro-card">
+      <div class="intro-card-header">
+        <div class="intro-card-icon">📁</div>
+        <div>
+          <div class="intro-card-title">Dossiers du jour</div>
+          <div class="intro-card-subtitle">KERN de 14h00 — Ordre du jour</div>
+        </div>
+      </div>
+      <div class="intro-card-content">
+        <p>Cinq dossiers critiques attendent votre analyse avant le KERN de cet après-midi :</p>
+        <div class="dossiers-preview">
+          <div class="dossier-preview-item">
+            <div class="dossier-preview-priority urgent"></div>
+            <div class="dossier-preview-info">
+              <div class="dossier-preview-title">Crise énergétique : prolongation du nucléaire ?</div>
+              <div class="dossier-preview-type">Énergie / Économie</div>
+            </div>
+            <div class="dossier-preview-deadline">URGENT</div>
+          </div>
+          <div class="dossier-preview-item">
+            <div class="dossier-preview-priority high"></div>
+            <div class="dossier-preview-info">
+              <div class="dossier-preview-title">Réforme des pensions : indexation et équité</div>
+              <div class="dossier-preview-type">Social / Budget</div>
+            </div>
+            <div class="dossier-preview-deadline">14h00</div>
+          </div>
+          <div class="dossier-preview-item">
+            <div class="dossier-preview-priority high"></div>
+            <div class="dossier-preview-info">
+              <div class="dossier-preview-title">Quota d'asile : position belge au Conseil UE</div>
+              <div class="dossier-preview-type">Migration / Europe</div>
+            </div>
+            <div class="dossier-preview-deadline">14h00</div>
+          </div>
+          <div class="dossier-preview-item">
+            <div class="dossier-preview-priority medium"></div>
+            <div class="dossier-preview-info">
+              <div class="dossier-preview-title">Financement des communautés : nouvelle clé de répartition</div>
+              <div class="dossier-preview-type">Institutionnel</div>
+            </div>
+            <div class="dossier-preview-deadline">14h00</div>
+          </div>
+          <div class="dossier-preview-item">
+            <div class="dossier-preview-priority medium"></div>
+            <div class="dossier-preview-info">
+              <div class="dossier-preview-title">Aide militaire à l'Ukraine : nouvelle tranche</div>
+              <div class="dossier-preview-type">Défense / International</div>
+            </div>
+            <div class="dossier-preview-deadline">14h00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="intro-card">
+      <div class="intro-card-header">
+        <div class="intro-card-icon">⚠️</div>
+        <div>
+          <div class="intro-card-title">Règles de fonctionnement</div>
+          <div class="intro-card-subtitle">Ce que vous devez savoir</div>
+        </div>
+      </div>
+      <div class="intro-card-content">
+        <p><strong>1. Équilibre communautaire</strong> — La Belgique est un État fédéral. Chaque décision doit tenir compte des sensibilités flamandes, francophones et bruxelloises.</p>
+        <p><strong>2. Équilibre partisan</strong> — La coalition réunit des partis aux philosophies différentes. Votre rôle est de trouver des synthèses, pas d'imposer une vision.</p>
+        <p><strong>3. Contrainte budgétaire</strong> — Le déficit est sous surveillance de l'UE. Toute mesure a un coût.</p>
+        <p><strong>4. Pression médiatique</strong> — Vos recommandations seront peut-être rendues publiques. Pensez-y.</p>
+      </div>
+    </div>
+
+    <div class="intro-actions">
+      <button class="intro-btn intro-btn-primary" onclick="startSimulation()">
+        🚀 Commencer la simulation
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app" id="app">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-brand">
+      <div class="top-bar-emblem">🦁</div>
+      <div class="top-bar-title">KERN // Cellule Stratégique</div>
+    </div>
+    <div class="top-bar-separator"></div>
+    <div class="top-bar-context">
+      <span>Session en cours</span>
+      <span class="top-bar-context-badge">KERN à 14h00</span>
+    </div>
+    <div class="top-bar-spacer"></div>
+    <div class="top-bar-clock">
+      <span class="top-bar-date" id="topDate">Lundi 13 janvier 2025</span>
+      <span id="topTime">09:00</span>
+    </div>
+    <div class="top-bar-user">
+      <div class="top-bar-user-avatar">CS</div>
+      <div class="top-bar-user-info">
+        <div class="top-bar-user-name">Conseiller·ère</div>
+        <div class="top-bar-user-role">Cellule Stratégique</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="main-layout">
+    <!-- Left Sidebar -->
+    <div class="sidebar-left">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Navigation</div>
+        <div class="sidebar-nav">
+          <div class="sidebar-item active" data-view="dossiers">
+            <span class="sidebar-item-icon">📁</span>
+            <span class="sidebar-item-text">Dossiers</span>
+            <span class="sidebar-item-badge" id="dossiersBadge">5</span>
+          </div>
+          <div class="sidebar-item" data-view="kern">
+            <span class="sidebar-item-icon">🏛️</span>
+            <span class="sidebar-item-text">KERN</span>
+          </div>
+          <div class="sidebar-item" data-view="profil">
+            <span class="sidebar-item-icon">📊</span>
+            <span class="sidebar-item-text">Mon profil</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timer-widget">
+        <div class="timer-header">
+          <span class="timer-label">Temps restant</span>
+          <span class="timer-status">KERN à 14h</span>
+        </div>
+        <div class="timer-display" id="timerDisplay">45:00</div>
+        <div class="timer-progress">
+          <div class="timer-progress-fill" id="timerProgress" style="width:100%"></div>
+        </div>
+      </div>
+
+      <div class="stats-mini">
+        <div class="stat-mini">
+          <div class="stat-mini-value" id="statDossiers">0/5</div>
+          <div class="stat-mini-label">Traités</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-value" id="statScore">--</div>
+          <div class="stat-mini-label">Score</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="content-header">
+        <div class="content-header-top">
+          <h1 class="content-title">Dossiers en attente</h1>
+          <div class="content-actions">
+            <button class="content-btn" onclick="sortDossiers('priority')">
+              <span>🔥</span> Par urgence
+            </button>
+            <button class="content-btn" onclick="sortDossiers('theme')">
+              <span>🏷️</span> Par thème
+            </button>
+          </div>
+        </div>
+        <div class="content-meta">
+          <span class="content-meta-item">
+            <span>📁</span> 5 dossiers
+          </span>
+          <span class="content-meta-item">
+            <span>⏱️</span> ~9 min par dossier
+          </span>
+          <span class="content-meta-item">
+            <span>🎯</span> Recommandations requises
+          </span>
+        </div>
+      </div>
+
+      <div class="content-scroll">
+        <div class="dossiers-grid" id="dossiersGrid">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Sidebar - Dossier Detail -->
+    <div class="sidebar-right hidden" id="sidebarRight">
+      <div class="detail-header">
+        <h2 class="detail-title" id="detailTitle">Détail du dossier</h2>
+        <button class="detail-close" onclick="closeDetail()">×</button>
+      </div>
+      <div class="detail-content" id="detailContent">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KERN Meeting Overlay -->
+<div class="kern-meeting-overlay" id="kernMeeting">
+  <div class="kern-meeting-container" id="kernMeetingContent">
+    <!-- Populated dynamically -->
+  </div>
+</div>
+
+<!-- Results Overlay -->
+<div class="results-overlay" id="resultsOverlay">
+  <div class="results-container" id="resultsContent">
+    <!-- Populated dynamically -->
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notification" id="notification">
+  <div class="notification-header">
+    <span class="notification-type" id="notifType">Information</span>
+    <button class="notification-close" onclick="hideNotification()">×</button>
+  </div>
+  <div class="notification-content" id="notifContent"></div>
+</div>
+
+<script>
+// ============================================
+// CONFIGURATION
+// ============================================
+const CONFIG = {
+  TOTAL_TIME: 45 * 60, // 45 minutes
+  DOSSIERS_COUNT: 5
+};
+
+// ============================================
+// STATE
+// ============================================
+const state = {
+  timeRemaining: CONFIG.TOTAL_TIME,
+  currentDossier: null,
+  recommendations: {},
+  profile: {
+    // Axes politiques (0-100)
+    economie: 50,      // 0=Interventionniste, 100=Libéral
+    societal: 50,      // 0=Conservateur, 100=Progressiste
+    europe: 50,        // 0=Souverainiste, 100=Fédéraliste
+    ecologie: 50,      // 0=Productiviste, 100=Écologiste
+    // Axes de compétence
+    pragmatisme: 50,   // Idéaliste vs Pragmatique
+    consensus: 50,     // Clivant vs Consensuel
+    risque: 50,        // Prudent vs Audacieux
+    communication: 50  // Technocrate vs Pédagogue
+  },
+  completedDossiers: [],
+  timerInterval: null
+};
+
+// ============================================
+// DOSSIERS DATA
+// ============================================
+const dossiers = [
+  {
+    id: 'nucleaire',
+    code: 'KERN-2025-001',
+    title: 'Prolongation du nucléaire : Doel 4 et Tihange 3',
+    ministry: 'Énergie • Économie • Climat',
+    priority: 'urgent',
+    deadline: 'Décision requise',
+    tags: ['budget', 'environment', 'eu'],
+    summary: 'Suite à la crise énergétique, le gouvernement doit statuer sur la prolongation de 10 ans des réacteurs Doel 4 et Tihange 3, initialement prévus pour fermeture en 2025. Engie demande des garanties financières de 8 milliards €.',
+    document: `
+      <h4>Note d'analyse — Classification : Restreint</h4>
+      <p><strong>Contexte :</strong> La loi de 2003 prévoyait la sortie du nucléaire en 2025. La crise énergétique de 2022 a conduit à rouvrir le débat. Les études de faisabilité technique sont positives pour Doel 4 et Tihange 3.</p>
+      <p><strong>Enjeux budgétaires :</strong></p>
+      <ul>
+        <li>Coût de prolongation : <span class="highlight">8-12 milliards €</span> (provisions déchets incluses)</li>
+        <li>Alternative gaz : <span class="highlight">+2 milliards €/an</span> d'importation</li>
+        <li>Renouvelables : objectif 2030 inatteignable sans transition ordonnée</li>
+      </ul>
+      <p><strong>Positions des acteurs :</strong></p>
+      <ul>
+        <li><span class="classified">Engie</span> : exige garanties sur responsabilité civile et prix plancher</li>
+        <li><span class="classified">Commission UE</span> : favorable si conforme à la taxonomie verte</li>
+        <li><span class="classified">Mouvement écologiste</span> : opposition frontale, menace de mobilisation</li>
+      </ul>
+      <p><strong>Risque politique :</strong> Éclatement de la coalition si les Verts sont mis en minorité.</p>
+    `,
+    positions: [
+      { actor: 'Open VLD / MR', stance: 'pour', text: 'Priorité à la sécurité d\'approvisionnement et à la compétitivité. Le nucléaire est bas-carbone et fiable.' },
+      { actor: 'Vooruit / PS', stance: 'neutre', text: 'Acceptons la prolongation temporaire si elle finance la transition sociale et crée des emplois verts.' },
+      { actor: 'CD&V', stance: 'pour', text: 'Solution pragmatique. Nos électeurs attendent des factures stables, pas des débats idéologiques.' },
+      { actor: 'Ecolo / Groen', stance: 'contre', text: 'Ligne rouge. La prolongation est un recul historique. On ne peut pas cautionner.' },
+      { actor: 'FGTB/CGSLB', stance: 'pour', text: '3000 emplois directs. Fermez les centrales et vous fermez des familles.' },
+      { actor: 'Greenpeace', stance: 'contre', text: 'Chaque euro dans le nucléaire est volé aux renouvelables.' }
+    ],
+    options: [
+      { 
+        id: 'prolongation_totale',
+        title: 'Prolongation complète',
+        desc: 'Prolonger Doel 4 et Tihange 3 de 10 ans avec garanties Engie',
+        traits: { economie: 15, ecologie: -15, pragmatisme: 10, consensus: -10 }
+      },
+      { 
+        id: 'prolongation_conditionnelle',
+        title: 'Prolongation conditionnelle',
+        desc: '5 ans renouvelables, avec fonds de transition écologique obligatoire',
+        traits: { economie: 5, ecologie: -5, pragmatisme: 15, consensus: 10 }
+      },
+      { 
+        id: 'sortie_acceleree',
+        title: 'Sortie maintenue',
+        desc: 'Respecter la loi de 2003, investir massivement dans les renouvelables',
+        traits: { economie: -10, ecologie: 20, pragmatisme: -10, risque: 15 }
+      },
+      { 
+        id: 'report_decision',
+        title: 'Report de décision',
+        desc: 'Demander 6 mois d\'études supplémentaires',
+        traits: { pragmatisme: -15, risque: -10, communication: -5 }
+      }
+    ]
+  },
+  {
+    id: 'pensions',
+    code: 'KERN-2025-002',
+    title: 'Réforme des pensions : équité et soutenabilité',
+    ministry: 'Affaires sociales • Budget • Travail',
+    priority: 'high',
+    deadline: '14h00',
+    tags: ['budget', 'social'],
+    summary: 'Le système des pensions belge présente un déficit structurel de 4 milliards €/an. La Commission propose un relèvement progressif de l\'âge légal à 67 ans et une harmonisation des régimes (salariés, indépendants, fonctionnaires).',
+    document: `
+      <h4>Note d'analyse — Classification : Restreint</h4>
+      <p><strong>Diagnostic :</strong> Le ratio actifs/retraités passera de 3,8 à 2,4 d'ici 2040. Sans réforme, le coût des pensions atteindra <span class="highlight">15% du PIB</span> (vs 10% aujourd'hui).</p>
+      <p><strong>Propositions sur la table :</strong></p>
+      <ul>
+        <li>Relèvement âge légal : 66 ans (2027) puis 67 ans (2030)</li>
+        <li>Pension à points : valorisation de toutes les formes de travail</li>
+        <li>Suppression des régimes spéciaux : harmonisation sur 25 ans</li>
+        <li>Bonus/malus : incitation à travailler plus longtemps</li>
+      </ul>
+      <p><strong>Positions syndicales :</strong></p>
+      <ul>
+        <li><span class="classified">FGTB</span> : "Pas question de toucher à 65 ans. Grève générale si nécessaire."</li>
+        <li><span class="classified">CSC</span> : "Prêts à négocier sur les carrières longues et pénibles."</li>
+        <li><span class="classified">CGSLB</span> : "Priorité aux indépendants, oubliés des réformes."</li>
+      </ul>
+      <p><strong>Contrainte UE :</strong> La Belgique est sous procédure pour déficit excessif. Bruxelles attend des réformes structurelles.</p>
+    `,
+    positions: [
+      { actor: 'Open VLD / MR', stance: 'pour', text: 'Réforme indispensable. Responsabilité budgétaire. Chaque année de report coûte 500M€.' },
+      { actor: 'Vooruit / PS', stance: 'contre', text: 'On ne touche pas aux droits acquis des travailleurs. Les plus riches doivent contribuer davantage.' },
+      { actor: 'CD&V', stance: 'neutre', text: 'D\'accord sur le principe, mais protection des carrières pénibles et des familles.' },
+      { actor: 'Ecolo / Groen', stance: 'reserve', text: 'Pas de réforme sans dimension sociale. Sinon c\'est non.' },
+      { actor: 'Syndicats', stance: 'contre', text: 'Mobilisation nationale prévue. Le gouvernement joue avec le feu.' },
+      { actor: 'Patronat (FEB)', stance: 'pour', text: 'Les entreprises ne peuvent plus porter seules le coût du vieillissement.' }
+    ],
+    options: [
+      { 
+        id: 'reforme_complete',
+        title: 'Réforme structurelle',
+        desc: '67 ans en 2030, pension à points, fin des régimes spéciaux',
+        traits: { economie: 20, societal: -10, pragmatisme: 10, consensus: -15, risque: 15 }
+      },
+      { 
+        id: 'reforme_progressive',
+        title: 'Réforme progressive',
+        desc: '66 ans en 2030, protection carrières pénibles, transition 20 ans',
+        traits: { economie: 10, societal: 0, pragmatisme: 15, consensus: 10 }
+      },
+      { 
+        id: 'statu_quo_taxe',
+        title: 'Financement alternatif',
+        desc: 'Maintien 65 ans, financement par taxe sur grandes fortunes',
+        traits: { economie: -15, societal: 10, pragmatisme: -5, consensus: -5, risque: 10 }
+      },
+      { 
+        id: 'negociation_syndicale',
+        title: 'Renvoi en concertation',
+        desc: 'Confier aux partenaires sociaux avec cadrage budgétaire',
+        traits: { pragmatisme: 5, consensus: 15, communication: 10, risque: -10 }
+      }
+    ]
+  },
+  {
+    id: 'migration',
+    code: 'KERN-2025-003',
+    title: 'Quotas d\'asile UE : position belge au Conseil',
+    ministry: 'Asile et Migration • Affaires étrangères • Intérieur',
+    priority: 'high',
+    deadline: '14h00',
+    tags: ['eu', 'security', 'social'],
+    summary: 'Le Conseil européen propose un nouveau pacte migratoire avec quotas obligatoires par État. La Belgique doit définir sa position avant le sommet de la semaine prochaine. Enjeu : 15 000 relocalisations/an.',
+    document: `
+      <h4>Note d'analyse — Classification : Restreint</h4>
+      <p><strong>Proposition de la Commission :</strong> Mécanisme de solidarité obligatoire en cas de "pression migratoire". Chaque État membre devrait accueillir un quota basé sur PIB et population.</p>
+      <p><strong>Quota belge estimé :</strong> <span class="highlight">12 000 à 15 000 personnes/an</span></p>
+      <p><strong>Capacité actuelle :</strong></p>
+      <ul>
+        <li>Places d'accueil Fedasil : 35 000 (saturation à 95%)</li>
+        <li>Demandes d'asile 2024 : 28 000</li>
+        <li>Reconnaissance : 42%</li>
+        <li>Coût moyen/demandeur : 15 000 €/an</li>
+      </ul>
+      <p><strong>Front diplomatique :</strong></p>
+      <ul>
+        <li><span class="classified">France/Allemagne</span> : favorables au pacte</li>
+        <li><span class="classified">Pologne/Hongrie</span> : refus catégorique</li>
+        <li><span class="classified">Italie</span> : veut que le Nord prenne sa part</li>
+      </ul>
+      <p><strong>Opinion publique belge :</strong> 52% favorables à une "répartition équitable", 61% contre "plus d'immigration"</p>
+    `,
+    positions: [
+      { actor: 'Open VLD', stance: 'reserve', text: 'Solidarité européenne oui, mais avec des contrôles aux frontières renforcés.' },
+      { actor: 'Vooruit', stance: 'pour', text: 'Devoir humanitaire et européen. Refuser serait trahir nos valeurs.' },
+      { actor: 'CD&V', stance: 'neutre', text: 'Acceptons si contribution financière possible en alternative.' },
+      { actor: 'Ecolo / Groen', stance: 'pour', text: 'La solidarité n\'est pas négociable. La Belgique doit montrer l\'exemple.' },
+      { actor: 'N-VA (opposition)', stance: 'contre', text: 'Quota = appel d\'air. La Flandre ne peut plus accueillir.' },
+      { actor: 'PTB (opposition)', stance: 'pour', text: 'Accueil inconditionnel. Les quotas sont encore trop faibles.' }
+    ],
+    options: [
+      { 
+        id: 'quota_acceptation',
+        title: 'Acceptation du quota',
+        desc: 'Soutenir le pacte, demander fonds européens d\'accompagnement',
+        traits: { europe: 15, societal: 10, consensus: -5, communication: 10 }
+      },
+      { 
+        id: 'quota_conditionnel',
+        title: 'Oui mais...',
+        desc: 'Accepter avec clause de sauvegarde si saturation + contribution financière alternative',
+        traits: { europe: 5, pragmatisme: 15, consensus: 10 }
+      },
+      { 
+        id: 'quota_refus',
+        title: 'Refus du mécanisme obligatoire',
+        desc: 'Préférer la solidarité volontaire, rejeter les quotas contraignants',
+        traits: { europe: -15, societal: -10, consensus: -10, risque: 10 }
+      },
+      { 
+        id: 'abstention',
+        title: 'Abstention au Conseil',
+        desc: 'Ne pas prendre position, attendre les négociations',
+        traits: { europe: -5, pragmatisme: -10, communication: -10 }
+      }
+    ]
+  },
+  {
+    id: 'financement_communautes',
+    code: 'KERN-2025-004',
+    title: 'Financement des Communautés : clé de répartition',
+    ministry: 'Budget • Réformes institutionnelles',
+    priority: 'medium',
+    deadline: '14h00',
+    tags: ['community', 'budget'],
+    summary: 'La loi spéciale de financement de 1989 doit être revue. La Flandre demande une clé basée sur la contribution fiscale (juste retour), la Wallonie défend le critère de besoins (population scolaire, chômage).',
+    document: `
+      <h4>Note d'analyse — Classification : Restreint</h4>
+      <p><strong>Enjeu :</strong> Répartition de <span class="highlight">52 milliards €/an</span> entre entités fédérées</p>
+      <p><strong>Clé actuelle :</strong> Mixte (IPP + clé population)</p>
+      <p><strong>Propositions :</strong></p>
+      <ul>
+        <li><strong>Clé "juste retour" (Flandre) :</strong> Répartition selon contribution à l'IPP → +2,3 Mds pour la Flandre</li>
+        <li><strong>Clé "besoins" (Wallonie) :</strong> Répartition selon indicateurs socio-économiques → statu quo ou léger gain wallon</li>
+        <li><strong>Clé mixte (compromis) :</strong> 50% contribution / 50% besoins, avec période transitoire de 10 ans</li>
+      </ul>
+      <p><strong>Tensions :</strong></p>
+      <ul>
+        <li><span class="classified">N-VA</span> : "La Flandre finance la mauvaise gestion wallonne"</li>
+        <li><span class="classified">PS</span> : "La solidarité est constitutive de la Belgique"</li>
+        <li><span class="classified">DéFI</span> : "Bruxelles est oubliée, comme toujours"</li>
+      </ul>
+      <p><strong>Risque :</strong> Crise communautaire majeure si pas de compromis. Possible chute du gouvernement.</p>
+    `,
+    positions: [
+      { actor: 'Partis flamands (coalition)', stance: 'pour', text: 'Plus de responsabilisation. Qui paie décide.' },
+      { actor: 'Partis francophones (coalition)', stance: 'contre', text: 'Solidarité d\'abord. La Belgique n\'est pas un compte en banque.' },
+      { actor: 'CD&V', stance: 'neutre', text: 'Trouvons un compromis. Personne ne gagne à une crise.' },
+      { actor: 'Ecolo / Groen', stance: 'neutre', text: 'Pas notre combat prioritaire. Mais pas de régression sociale.' },
+      { actor: 'Experts (BNB)', stance: 'neutre', text: 'Toute clé est défendable. C\'est un choix politique, pas technique.' }
+    ],
+    options: [
+      { 
+        id: 'cle_juste_retour',
+        title: 'Clé "juste retour"',
+        desc: 'Répartition proportionnelle à la contribution fiscale',
+        traits: { economie: 15, consensus: -20, risque: 20 }
+      },
+      { 
+        id: 'cle_besoins',
+        title: 'Clé "besoins"',
+        desc: 'Répartition selon indicateurs socio-économiques',
+        traits: { economie: -10, societal: 10, consensus: -15, risque: 15 }
+      },
+      { 
+        id: 'cle_mixte',
+        title: 'Clé mixte avec transition',
+        desc: '50/50 avec période de convergence de 10 ans',
+        traits: { pragmatisme: 15, consensus: 15, communication: 10 }
+      },
+      { 
+        id: 'statu_quo',
+        title: 'Maintien du statu quo',
+        desc: 'Reporter la réforme à la prochaine législature',
+        traits: { pragmatisme: -5, consensus: 5, risque: -15, communication: -5 }
+      }
+    ]
+  },
+  {
+    id: 'ukraine',
+    code: 'KERN-2025-005',
+    title: 'Aide militaire à l\'Ukraine : 5ème tranche',
+    ministry: 'Défense • Affaires étrangères • Budget',
+    priority: 'medium',
+    deadline: '14h00',
+    tags: ['security', 'eu', 'budget'],
+    summary: 'Le Président Zelensky demande une nouvelle tranche d\'aide militaire de 200M€ (blindés, munitions, formation). La Belgique a déjà contribué 1,2Md€ depuis 2022. Certains alliés montrent des signes de fatigue.',
+    document: `
+      <h4>Note d'analyse — Classification : Confidentiel Défense</h4>
+      <p><strong>Demande ukrainienne :</strong> 200M€ comprenant :</p>
+      <ul>
+        <li>30 blindés Piranha (reconditionnés)</li>
+        <li>50 000 munitions 155mm</li>
+        <li>Formation de 500 soldats en Belgique</li>
+        <li>Équipements de déminage</li>
+      </ul>
+      <p><strong>Contributions belges précédentes :</strong></p>
+      <ul>
+        <li>2022 : 380M€ (premiers mois de guerre)</li>
+        <li>2023 : 420M€</li>
+        <li>2024 : 400M€</li>
+        <li>Total : <span class="highlight">1,2 milliard €</span></li>
+      </ul>
+      <p><strong>Contexte international :</strong></p>
+      <ul>
+        <li><span class="classified">USA</span> : Aide bloquée au Congrès</li>
+        <li><span class="classified">Allemagne</span> : Débat sur les Taurus</li>
+        <li><span class="classified">Hongrie</span> : Veto sur l'aide UE</li>
+      </ul>
+      <p><strong>Opinion belge :</strong> 58% favorables au soutien, mais 67% inquiets du coût</p>
+    `,
+    positions: [
+      { actor: 'Open VLD / MR', stance: 'pour', text: 'Engagement OTAN. Ne pas aider c\'est encourager Poutine.' },
+      { actor: 'Vooruit', stance: 'reserve', text: 'D\'accord mais avec transparence et plafond annuel.' },
+      { actor: 'CD&V', stance: 'pour', text: 'Solidarité chrétienne et européenne. Priorité humanitaire aussi.' },
+      { actor: 'Ecolo / Groen', stance: 'reserve', text: 'Aide défensive oui, mais pas d\'escalade. Priorité à la diplomatie.' },
+      { actor: 'PTB (opposition)', stance: 'contre', text: 'L\'argent des armes pourrait financer nos hôpitaux.' },
+      { actor: 'Défense (état-major)', stance: 'pour', text: 'Nos stocks le permettent. Interopérabilité OTAN en jeu.' }
+    ],
+    options: [
+      { 
+        id: 'aide_complete',
+        title: 'Aide complète (200M€)',
+        desc: 'Répondre intégralement à la demande ukrainienne',
+        traits: { europe: 10, economie: -5, risque: 10, consensus: 5 }
+      },
+      { 
+        id: 'aide_partielle',
+        title: 'Aide réduite (120M€)',
+        desc: 'Fournir munitions et formation, reporter les blindés',
+        traits: { europe: 5, pragmatisme: 10, consensus: 10, risque: -5 }
+      },
+      { 
+        id: 'aide_humanitaire',
+        title: 'Réorientation humanitaire',
+        desc: 'Convertir en aide humanitaire et reconstruction',
+        traits: { economie: 0, societal: 10, risque: -10, consensus: 5 }
+      },
+      { 
+        id: 'pause_aide',
+        title: 'Pause dans l\'aide',
+        desc: 'Geler les envois en attendant une stratégie européenne coordonnée',
+        traits: { europe: -10, risque: -15, consensus: -5, communication: -10 }
+      }
+    ]
+  }
+];
+
+// ============================================
+// INSIGHTS RULES
+// ============================================
+const insightRules = [
+  { condition: p => p.economie > 70, title: 'Orientation libérale', text: 'Vous privilégiez les solutions de marché et la responsabilité individuelle.', icon: '📈' },
+  { condition: p => p.economie < 30, title: 'Orientation interventionniste', text: 'Vous croyez au rôle régulateur de l\'État et à la redistribution.', icon: '⚖️' },
+  { condition: p => p.societal > 70, title: 'Progressiste', text: 'Vous soutenez l\'évolution des droits et l\'ouverture sociétale.', icon: '🌈' },
+  { condition: p => p.societal < 30, title: 'Conservateur', text: 'Vous valorisez la stabilité et les institutions traditionnelles.', icon: '🏛️' },
+  { condition: p => p.europe > 70, title: 'Fédéraliste européen', text: 'Vous voyez l\'avenir dans une Europe plus intégrée.', icon: '🇪🇺' },
+  { condition: p => p.europe < 30, title: 'Souverainiste', text: 'Vous privilégiez l\'autonomie nationale dans les décisions.', icon: '🏴' },
+  { condition: p => p.ecologie > 70, title: 'Écologiste', text: 'La transition environnementale est votre priorité.', icon: '🌱' },
+  { condition: p => p.pragmatisme > 70, title: 'Pragmatique', text: 'Vous cherchez ce qui fonctionne, au-delà des idéologies.', icon: '🎯' },
+  { condition: p => p.consensus > 70, title: 'Bâtisseur de consensus', text: 'Vous excellez à trouver des compromis acceptables.', icon: '🤝' },
+  { condition: p => p.risque > 70, title: 'Audacieux', text: 'Vous n\'hésitez pas à prendre des décisions courageuses.', icon: '🦁' },
+  { condition: p => p.risque < 30, title: 'Prudent', text: 'Vous préférez la stabilité aux paris risqués.', icon: '🛡️' },
+  { condition: p => p.communication > 70, title: 'Pédagogue', text: 'Vous savez expliquer les enjeux complexes au grand public.', icon: '📢' }
+];
+
+// ============================================
+// INITIALIZATION
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  simulatePreloader();
+});
+
+function simulatePreloader() {
+  const progress = document.getElementById('preloaderProgress');
+  let width = 0;
+  const interval = setInterval(() => {
+    width += Math.random() * 15;
+    if (width >= 100) {
+      width = 100;
+      clearInterval(interval);
+      setTimeout(() => {
+        document.getElementById('preloader').classList.add('hidden');
+      }, 500);
+    }
+    progress.style.width = width + '%';
+  }, 200);
+}
+
+function startSimulation() {
+  document.getElementById('introOverlay').classList.add('hidden');
+  document.getElementById('app').classList.add('active');
+  
+  renderDossiers();
+  startTimer();
+  
+  // First notification
+  setTimeout(() => {
+    showNotification('Cabinet du PM', 'Le Premier Ministre compte sur vos analyses pour le KERN de 14h. Bon courage.', false);
+  }, 3000);
+}
+
+// ============================================
+// TIMER
+// ============================================
+function startTimer() {
+  state.timerInterval = setInterval(() => {
+    state.timeRemaining--;
+    updateTimerDisplay();
+    
+    if (state.timeRemaining <= 0) {
+      endSimulation();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const mins = Math.floor(state.timeRemaining / 60);
+  const secs = state.timeRemaining % 60;
+  const display = document.getElementById('timerDisplay');
+  
+  display.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+  
+  const progress = (state.timeRemaining / CONFIG.TOTAL_TIME) * 100;
+  document.getElementById('timerProgress').style.width = progress + '%';
+  
+  display.classList.remove('warning', 'danger');
+  if (state.timeRemaining <= 300) {
+    display.classList.add('danger');
+  } else if (state.timeRemaining <= 600) {
+    display.classList.add('warning');
+  }
+}
+
+// ============================================
+// DOSSIERS
+// ============================================
+function renderDossiers() {
+  const grid = document.getElementById('dossiersGrid');
+  
+  grid.innerHTML = dossiers.map(d => {
+    const isCompleted = state.completedDossiers.includes(d.id);
+    
+    return `
+      <div class="dossier-card ${isCompleted ? 'completed' : ''}" data-id="${d.id}" onclick="openDossier('${d.id}')">
+        <div class="dossier-priority-bar ${d.priority}"></div>
+        <div class="dossier-content">
+          <div class="dossier-header">
+            <div class="dossier-title-area">
+              <div class="dossier-code">${d.code}</div>
+              <div class="dossier-title">${d.title}</div>
+              <div class="dossier-ministry">${d.ministry}</div>
+            </div>
+            <div class="dossier-deadline">
+              <div class="dossier-deadline-label">Échéance</div>
+              <div class="dossier-deadline-value">${d.deadline}</div>
+            </div>
+          </div>
+          <div class="dossier-summary">${d.summary}</div>
+          <div class="dossier-tags">
+            ${d.tags.map(t => `<span class="dossier-tag ${t}">${getTagLabel(t)}</span>`).join('')}
+          </div>
+          <div class="dossier-footer">
+            <div class="dossier-stakeholders">
+              ${d.positions.slice(0,4).map((p,i) => `
+                <div class="stakeholder-avatar" style="background:${getActorColor(p.actor)};z-index:${10-i}">${getActorInitials(p.actor)}</div>
+              `).join('')}
+              ${d.positions.length > 4 ? `<span style="font-size:0.7rem;color:var(--text-muted);margin-left:0.25rem">+${d.positions.length - 4}</span>` : ''}
+            </div>
+            <div class="dossier-action-hint">
+              ${isCompleted ? '✓ Traité' : 'Analyser →'}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  updateStats();
+}
+
+function getTagLabel(tag) {
+  const labels = {
+    community: 'Communautaire',
+    budget: 'Budget',
+    eu: 'Europe',
+    social: 'Social',
+    security: 'Sécurité',
+    environment: 'Environnement'
+  };
+  return labels[tag] || tag;
+}
+
+function getActorColor(actor) {
+  if (actor.includes('VLD') || actor.includes('MR')) return 'var(--party-vld)';
+  if (actor.includes('PS') || actor.includes('Vooruit')) return 'var(--party-ps)';
+  if (actor.includes('CD&V')) return 'var(--party-cdv)';
+  if (actor.includes('Ecolo') || actor.includes('Groen')) return 'var(--party-ecolo)';
+  return 'var(--bg-hover)';
+}
+
+function getActorInitials(actor) {
+  return actor.split(' ').map(w => w[0]).join('').substring(0,2);
+}
+
+// ============================================
+// DOSSIER DETAIL
+// ============================================
+function openDossier(id) {
+  const dossier = dossiers.find(d => d.id === id);
+  if (!dossier) return;
+  
+  state.currentDossier = id;
+  
+  document.getElementById('sidebarRight').classList.remove('hidden');
+  document.getElementById('detailTitle').textContent = dossier.title;
+  
+  const content = document.getElementById('detailContent');
+  const isCompleted = state.completedDossiers.includes(id);
+  
+  content.innerHTML = `
+    <div class="detail-section">
+      <div class="detail-section-title">📄 Note d'analyse</div>
+      <div class="document-viewer">
+        ${dossier.document}
+      </div>
+    </div>
+    
+    <div class="detail-section">
+      <div class="detail-section-title">🎭 Positions des acteurs</div>
+      <div class="positions-list">
+        ${dossier.positions.map(p => `
+          <div class="position-card ${p.stance}">
+            <div class="position-header">
+              <span class="position-actor">${p.actor}</span>
+              <span class="position-stance">${getStanceLabel(p.stance)}</span>
+            </div>
+            <div class="position-text">${p.text}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    ${!isCompleted ? `
+      <div class="detail-section">
+        <div class="detail-section-title">✍️ Votre recommandation</div>
+        <div class="recommendation-form">
+          <label class="form-label">Option recommandée</label>
+          <div class="priority-options" id="optionsSelector">
+            ${dossier.options.map((opt, i) => `
+              <div class="priority-option" data-option="${opt.id}" onclick="selectOption('${opt.id}')">
+                <div class="priority-option-icon">${['🟢','🟡','🟠','🔴'][i]}</div>
+                <div class="priority-option-text">${opt.title}</div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <label class="form-label">Description de l'option</label>
+          <div id="optionDescription" style="padding:0.75rem;background:var(--bg-card);border-radius:var(--radius);font-size:0.8rem;color:var(--text-secondary);margin-bottom:1rem;min-height:60px">
+            Sélectionnez une option ci-dessus
+          </div>
+          
+          <label class="form-label">Justification (pour le compte-rendu)</label>
+          <textarea class="form-textarea" id="justificationText" placeholder="Expliquez votre raisonnement en quelques phrases. Quels sont les avantages et risques de cette option ? Comment gérer les oppositions ?"></textarea>
+          
+          <button class="submit-recommendation" id="submitRecommendation" disabled onclick="submitRecommendation()">
+            <span>📤</span> Soumettre au KERN
+          </button>
+        </div>
+      </div>
+    ` : `
+      <div class="detail-section">
+        <div class="detail-section-title">✅ Recommandation soumise</div>
+        <div style="padding:1rem;background:rgba(34,197,94,0.1);border:1px solid var(--status-low);border-radius:var(--radius);color:var(--status-low)">
+          Votre recommandation a été transmise à la Cellule de préparation du KERN.
+        </div>
+      </div>
+    `}
+  `;
+  
+  // Highlight card
+  document.querySelectorAll('.dossier-card').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.dossier-card[data-id="${id}"]`).classList.add('active');
+}
+
+function getStanceLabel(stance) {
+  const labels = { pour: 'Favorable', contre: 'Opposé', neutre: 'Neutre', reserve: 'Réservé' };
+  return labels[stance] || stance;
+}
+
+function selectOption(optionId) {
+  const dossier = dossiers.find(d => d.id === state.currentDossier);
+  const option = dossier.options.find(o => o.id === optionId);
+  
+  document.querySelectorAll('.priority-option').forEach(o => o.classList.remove('selected'));
+  document.querySelector(`[data-option="${optionId}"]`).classList.add('selected');
+  
+  document.getElementById('optionDescription').textContent = option.desc;
+  document.getElementById('submitRecommendation').disabled = false;
+}
+
+function submitRecommendation() {
+  const dossier = dossiers.find(d => d.id === state.currentDossier);
+  const selectedOption = document.querySelector('.priority-option.selected');
+  
+  if (!selectedOption) return;
+  
+  const optionId = selectedOption.dataset.option;
+  const option = dossier.options.find(o => o.id === optionId);
+  const justification = document.getElementById('justificationText').value;
+  
+  // Save recommendation
+  state.recommendations[dossier.id] = {
+    option: optionId,
+    optionData: option,
+    justification: justification
+  };
+  
+  // Apply traits to profile
+  if (option.traits) {
+    Object.entries(option.traits).forEach(([trait, delta]) => {
+      if (state.profile[trait] !== undefined) {
+        state.profile[trait] = Math.max(0, Math.min(100, state.profile[trait] + delta));
+      }
+    });
+  }
+  
+  // Mark as completed
+  state.completedDossiers.push(dossier.id);
+  
+  // Update UI
+  renderDossiers();
+  closeDetail();
+  
+  showNotification('Cellule Stratégique', `Recommandation "${option.title}" enregistrée pour le dossier ${dossier.code}.`, false);
+  
+  // Check if all done
+  if (state.completedDossiers.length === dossiers.length) {
+    setTimeout(() => {
+      showKernMeeting();
+    }, 2000);
+  }
+}
+
+function closeDetail() {
+  document.getElementById('sidebarRight').classList.add('hidden');
+  document.querySelectorAll('.dossier-card').forEach(c => c.classList.remove('active'));
+  state.currentDossier = null;
+}
+
+// ============================================
+// KERN MEETING
+// ============================================
+function showKernMeeting() {
+  clearInterval(state.timerInterval);
+  
+  const overlay = document.getElementById('kernMeeting');
+  const content = document.getElementById('kernMeetingContent');
+  
+  // Pick a dossier to debate (the most consequential)
+  const debateDossier = dossiers[0]; // Nucléaire
+  const recommendation = state.recommendations[debateDossier.id];
+  
+  content.innerHTML = `
+    <div class="kern-meeting-header">
+      <div class="kern-meeting-badge">
+        <span>🏛️</span>
+        <span>KERN — Comité ministériel restreint</span>
+      </div>
+      <h1 class="kern-meeting-title">Réunion en cours</h1>
+      <p class="kern-meeting-subtitle">Votre recommandation sur "${debateDossier.title}" est débattue</p>
+    </div>
+    
+    <p style="text-align:center;color:var(--text-secondary);margin-bottom:2rem">
+      Vous avez recommandé : <strong style="color:var(--gold)">${recommendation.optionData.title}</strong>
+    </p>
+    
+    <div class="ministers-debate">
+      ${generateMinisterReactions(debateDossier, recommendation)}
+    </div>
+    
+    <div class="vote-section">
+      <div class="vote-title">Position finale du KERN</div>
+      <p style="text-align:center;color:var(--text-secondary);margin-bottom:1.5rem">
+        Après débat, le KERN vous demande de confirmer ou ajuster votre recommandation.
+      </p>
+      
+      <div class="vote-options" id="voteOptions">
+        <div class="vote-option" onclick="selectVote('maintenir')">
+          <div class="vote-option-icon">✊</div>
+          <div class="vote-option-title">Maintenir</div>
+          <div class="vote-option-desc">Défendre votre position initiale</div>
+        </div>
+        <div class="vote-option" onclick="selectVote('compromis')">
+          <div class="vote-option-icon">🤝</div>
+          <div class="vote-option-title">Compromis</div>
+          <div class="vote-option-desc">Proposer un amendement</div>
+        </div>
+        <div class="vote-option" onclick="selectVote('retrait')">
+          <div class="vote-option-icon">🔄</div>
+          <div class="vote-option-title">Retrait</div>
+          <div class="vote-option-desc">Retirer pour réexamen</div>
+        </div>
+      </div>
+      
+      <button class="vote-submit" id="voteSubmit" disabled onclick="submitVote()">
+        Soumettre au vote du KERN
+      </button>
+    </div>
+  `;
+  
+  overlay.classList.add('active');
+}
+
+function generateMinisterReactions(dossier, recommendation) {
+  const ministers = [
+    { name: 'A. De Croo', role: 'Premier Ministre', party: 'Open VLD', avatar: '👨‍💼' },
+    { name: 'P. Vandenbroucke', role: 'Vice-PM Santé', party: 'Vooruit', avatar: '👨‍⚕️' },
+    { name: 'V. Van Peteghem', role: 'Vice-PM Finances', party: 'CD&V', avatar: '👨‍💼' },
+    { name: 'G. Vanden Burre', role: 'Vice-PM Climat', party: 'Ecolo', avatar: '🧑‍🌾' }
+  ];
+  
+  // Generate reactions based on recommendation
+  const optionId = recommendation.option;
+  
+  const reactions = {
+    'prolongation_totale': [
+      { stance: 'pour', statement: 'Cette recommandation répond aux impératifs de sécurité énergétique. Nous la soutenons.' },
+      { stance: 'reserve', statement: 'Nous pouvons vivre avec, mais exigeons des garanties sur la transition sociale.' },
+      { stance: 'pour', statement: 'Solution pragmatique. Nos PME ont besoin de visibilité sur les prix de l\'énergie.' },
+      { stance: 'contre', statement: 'C\'est une ligne rouge. Les Verts ne peuvent pas cautionner ce recul historique.' }
+    ],
+    'prolongation_conditionnelle': [
+      { stance: 'reserve', statement: 'Un compromis acceptable, mais nous aurions préféré une solution plus claire.' },
+      { stance: 'pour', statement: 'Le fonds de transition est essentiel. Cette proposition est équilibrée.' },
+      { stance: 'pour', statement: 'Pragmatisme et responsabilité. C\'est ce qu\'attendent les citoyens.' },
+      { stance: 'reserve', statement: 'Acceptable si les conditions environnementales sont strictement respectées.' }
+    ],
+    'sortie_acceleree': [
+      { stance: 'contre', statement: 'Irresponsable économiquement. Qui paiera les factures de nos entreprises ?' },
+      { stance: 'reserve', statement: 'Ambitieux mais risqué. Nous avons besoin de garanties sur l\'emploi.' },
+      { stance: 'contre', statement: 'Nos électeurs attendent des solutions réalistes, pas des paris idéologiques.' },
+      { stance: 'pour', statement: 'Enfin du courage ! C\'est maintenant ou jamais pour la transition.' }
+    ],
+    'report_decision': [
+      { stance: 'contre', statement: 'Report = faiblesse. Les marchés et nos partenaires européens attendent une décision.' },
+      { stance: 'reserve', statement: 'Un report de 6 mois ? On n\'a pas 6 mois. On a quelques semaines.' },
+      { stance: 'reserve', statement: 'Je comprends la prudence, mais l\'indécision a aussi un coût.' },
+      { stance: 'reserve', statement: 'Étudier plus longtemps ne change pas les fondamentaux du problème.' }
+    ]
+  };
+  
+  const reactionSet = reactions[optionId] || reactions['prolongation_conditionnelle'];
+  
+  return ministers.map((m, i) => {
+    const reaction = reactionSet[i];
+    return `
+      <div class="minister-debate-card" data-stance="${reaction.stance}">
+        <div class="minister-header">
+          <div class="minister-avatar" style="background:${getActorColor(m.party)}">${m.avatar}</div>
+          <div class="minister-info">
+            <div class="minister-name">${m.name}</div>
+            <div class="minister-role">${m.role}</div>
+          </div>
+        </div>
+        <div class="minister-stance-badge ${reaction.stance}">${getStanceLabel(reaction.stance)}</div>
+        <div class="minister-statement">${reaction.statement}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function selectVote(vote) {
+  document.querySelectorAll('.vote-option').forEach(o => o.classList.remove('selected'));
+  document.querySelector(`[onclick="selectVote('${vote}')"]`).classList.add('selected');
+  document.getElementById('voteSubmit').disabled = false;
+  
+  state.finalVote = vote;
+  
+  // Apply final traits
+  if (vote === 'maintenir') {
+    state.profile.risque += 5;
+    state.profile.pragmatisme -= 3;
+  } else if (vote === 'compromis') {
+    state.profile.consensus += 8;
+    state.profile.pragmatisme += 5;
+  } else {
+    state.profile.risque -= 5;
+    state.profile.consensus += 3;
+  }
+}
+
+function submitVote() {
+  document.getElementById('kernMeeting').classList.remove('active');
+  showResults();
+}
+
+// ============================================
+// RESULTS
+// ============================================
+function showResults() {
+  const overlay = document.getElementById('resultsOverlay');
+  const content = document.getElementById('resultsContent');
+  
+  // Calculate score
+  const dossiersCompleted = state.completedDossiers.length;
+  const baseScore = (dossiersCompleted / CONFIG.DOSSIERS_COUNT) * 100;
+  const timeBonus = Math.round((state.timeRemaining / CONFIG.TOTAL_TIME) * 20);
+  const consensusBonus = state.profile.consensus > 60 ? 10 : 0;
+  const totalScore = Math.min(100, Math.round(baseScore + timeBonus + consensusBonus));
+  
+  // Calculate Civix
+  const civix = 200 + (totalScore * 3) + (dossiersCompleted * 50);
+  
+  // Get insights
+  const insights = insightRules.filter(rule => rule.condition(state.profile)).slice(0, 4);
+  
+  content.innerHTML = `
+    <div class="results-header">
+      <div class="results-badge">
+        <span>✓</span>
+        <span>Simulation terminée</span>
+      </div>
+      <h1 class="results-title">Analyse de votre profil</h1>
+      <p class="results-subtitle">Basée sur vos ${dossiersCompleted} recommandations au KERN</p>
+    </div>
+    
+    <div class="profile-axes">
+      <div class="profile-axis">
+        <div class="axis-header">
+          <span class="axis-name">📊 Économie</span>
+          <span class="axis-value">${state.profile.economie}%</span>
+        </div>
+        <div class="axis-bar">
+          <div class="axis-bar-fill" style="width:${state.profile.economie}%"></div>
+        </div>
+        <div class="axis-labels">
+          <span>Interventionniste</span>
+          <span>Libéral</span>
+        </div>
+      </div>
+      
+      <div class="profile-axis">
+        <div class="axis-header">
+          <span class="axis-name">🌈 Société</span>
+          <span class="axis-value">${state.profile.societal}%</span>
+        </div>
+        <div class="axis-bar">
+          <div class="axis-bar-fill" style="width:${state.profile.societal}%"></div>
+        </div>
+        <div class="axis-labels">
+          <span>Conservateur</span>
+          <span>Progressiste</span>
+        </div>
+      </div>
+      
+      <div class="profile-axis">
+        <div class="axis-header">
+          <span class="axis-name">🇪🇺 Europe</span>
+          <span class="axis-value">${state.profile.europe}%</span>
+        </div>
+        <div class="axis-bar">
+          <div class="axis-bar-fill" style="width:${state.profile.europe}%"></div>
+        </div>
+        <div class="axis-labels">
+          <span>Souverainiste</span>
+          <span>Fédéraliste</span>
+        </div>
+      </div>
+      
+      <div class="profile-axis">
+        <div class="axis-header">
+          <span class="axis-name">🌱 Écologie</span>
+          <span class="axis-value">${state.profile.ecologie}%</span>
+        </div>
+        <div class="axis-bar">
+          <div class="axis-bar-fill" style="width:${state.profile.ecologie}%"></div>
+        </div>
+        <div class="axis-labels">
+          <span>Productiviste</span>
+          <span>Écologiste</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="political-compass">
+      <div class="compass-title">🧭 Votre positionnement politique</div>
+      <div class="compass-grid">
+        <span class="compass-label top">Progressiste</span>
+        <span class="compass-label bottom">Conservateur</span>
+        <span class="compass-label left">Gauche</span>
+        <span class="compass-label right">Droite</span>
+        <div class="compass-point" style="left:${state.profile.economie}%;top:${100-state.profile.societal}%"></div>
+      </div>
+    </div>
+    
+    <div class="insights-grid">
+      ${insights.map(i => `
+        <div class="insight-card">
+          <div class="insight-icon">${i.icon}</div>
+          <div class="insight-content">
+            <div class="insight-title">${i.title}</div>
+            <div class="insight-text">${i.text}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    
+    <div class="civix-reward">
+      <div class="civix-amount">+${civix} Ȼ</div>
+      <div class="civix-label">Civix gagnés • Score global : ${totalScore}%</div>
+    </div>
+    
+    <div class="results-actions">
+      <button class="intro-btn intro-btn-secondary" onclick="location.reload()">
+        🔄 Recommencer
+      </button>
+      <button class="intro-btn intro-btn-primary" onclick="alert('Export disponible dans la version complète')">
+        📤 Exporter mon profil
+      </button>
+    </div>
+  `;
+  
+  overlay.classList.add('active');
+}
+
+// ============================================
+// UTILITIES
+// ============================================
+function updateStats() {
+  document.getElementById('statDossiers').textContent = `${state.completedDossiers.length}/${CONFIG.DOSSIERS_COUNT}`;
+  document.getElementById('dossiersBadge').textContent = CONFIG.DOSSIERS_COUNT - state.completedDossiers.length;
+}
+
+function showNotification(title, content, urgent = false) {
+  const notif = document.getElementById('notification');
+  document.getElementById('notifType').textContent = title;
+  document.getElementById('notifContent').textContent = content;
+  
+  notif.classList.toggle('urgent', urgent);
+  notif.classList.add('show');
+  
+  setTimeout(() => {
+    notif.classList.remove('show');
+  }, 5000);
+}
+
+function hideNotification() {
+  document.getElementById('notification').classList.remove('show');
+}
+
+function sortDossiers(by) {
+  // Simple sort feedback
+  showNotification('Tri', `Dossiers triés par ${by === 'priority' ? 'urgence' : 'thème'}`, false);
+}
+
+// ============================================
+// NAVIGATION
+// ============================================
+document.querySelectorAll('.sidebar-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const view = item.dataset.view;
+    
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    
+    if (view === 'profil') {
+      showResults();
+    } else if (view === 'kern') {
+      if (state.completedDossiers.length >= 3) {
+        showKernMeeting();
+      } else {
+        showNotification('KERN', 'Traitez au moins 3 dossiers avant de rejoindre le KERN.', false);
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>
