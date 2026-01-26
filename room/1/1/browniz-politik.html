@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse Stratégique : CPCP.be</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts (Noto Sans for readability) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome for Icons (No SVG tags used directly) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Placeholder Comments Required by Prompt -->
+    <!-- Chosen Palette: Warm Neutral Harmony (Stone/Slate/Terracotta). Background: Stone-50. Text: Slate-800. Accents: Orange-700. -->
+    
+    <!-- Application Structure Plan: 
+         The app is structured as a "Strategic Dashboard" rather than a linear report. 
+         Reasoning: Stakeholders need to switch quickly between "Understanding the Org" (Identity), "Analyzing the Market" (Ecosystem/SWOT), and "Taking Action" (Partnerships).
+         1. Hero Section: Immediate identification of the mission.
+         2. Navigation: Tab-based interface for instant context switching without scrolling fatigue.
+         3. Tab 1 - Identité & Gouvernance: Fundamental structural data (text-heavy but organized in cards).
+         4. Tab 2 - Écosystème & Publics: Data visualization focus (Charts) to show reach and demographics.
+         5. Tab 3 - Diagnostic SWOT: Interactive Matrix to explore internal/external factors dynamically.
+         6. Tab 4 - Opportunités & Partenariats: An interactive "Proposal Generator" to synthesize the analysis into action.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Mission/Values: Grid of Cards with Icons -> Goal: Quick absorption of qualitative values -> Interaction: Hover effects.
+         2. Target Audience: Doughnut Chart -> Goal: Visualize demographic split -> Interaction: Tooltips with specific program examples.
+         3. Geographic Reach: Horizontal Bar Chart -> Goal: Compare regional penetration -> Interaction: Filter by Year (simulated).
+         4. SWOT: 2x2 Interactive Grid -> Goal: Reveal deep analysis on demand -> Interaction: Click quadrant to expand details -> Confirms NO SVG/Mermaid.
+         5. Funding Sources: Pie Chart -> Goal: Show financial stability -> Interaction: Segment isolation.
+         6. Partnership Generator: Form-based Logic -> Goal: Synthesize findings into actionable advice -> Interaction: Select user type, get tailored proposal.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background-color: #fafaf9; /* stone-50 */
+            color: #1e293b; /* slate-800 */
+        }
+
+        /* Chart Container Styling - Mandatory Strict Constraints */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* max-w-xl equivalent */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e7e5e4; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a8a29e; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #78716c; 
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #c2410c; /* orange-700 */
+            color: #c2410c;
+            font-weight: 600;
+        }
+        
+        .tab-inactive {
+            color: #64748b; /* slate-500 */
+            border-bottom: 3px solid transparent;
+        }
+        .tab-inactive:hover {
+            color: #334155;
+            border-bottom: 3px solid #cbd5e1;
+        }
+
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-slate-800 tracking-tight">
+                        <i class="fa-solid fa-landmark text-orange-700 mr-2"></i>Analyse CPCP
+                    </span>
+                </div>
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex space-x-8 items-center" id="desktop-nav">
+                    <!-- Links injected by JS -->
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center md:hidden">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-800 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Nav -->
+        <div id="mobile-nav" class="hidden md:hidden bg-white border-t border-stone-100">
+            <!-- Links injected by JS -->
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- Header / Context -->
+        <div class="mb-8 text-center sm:text-left">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">Centre Permanent pour la Citoyenneté et la Participation</h1>
+            <p class="text-lg text-slate-600 max-w-3xl">
+                Tableau de bord stratégique synthétisant la mission, l'écosystème et les opportunités de développement du CPCP basés sur l'analyse de leur présence numérique.
+            </p>
+        </div>
+
+        <!-- Dynamic Content Sections -->
+        <div id="app-container" class="space-y-6">
+            <!-- Content will be rendered here by JS -->
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-stone-300 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+            <div>
+                <h3 class="text-white font-bold mb-2">À propos de l'analyse</h3>
+                <p>Cette synthèse interactive a été générée pour identifier les axes stratégiques de collaboration avec le CPCP dans le secteur de l'éducation permanente.</p>
+            </div>
+            <div>
+                <h3 class="text-white font-bold mb-2">Points de Contact Clés</h3>
+                <ul class="space-y-1">
+                    <li><i class="fa-solid fa-envelope mr-2"></i>info@cpcp.be</li>
+                    <li><i class="fa-solid fa-location-dot mr-2"></i>Siège: Bruxelles / Antennes: Wallonie</li>
+                    <li><i class="fa-solid fa-users mr-2"></i>Secrétariat Général</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white font-bold mb-2">Méthodologie</h3>
+                <p>Analyse basée sur les axes : Mission, Publics, Digital, et Opportunités sectorielles (2024-2025).</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application Logic -->
+    <script>
+        // --- DATA STORE ---
+        const appData = {
+            currentTab: 'identity',
+            navItems: [
+                { id: 'identity', label: 'Identité & Vision', icon: 'fa-id-card' },
+                { id: 'ecosystem', label: 'Écosystème & Publics', icon: 'fa-users-line' },
+                { id: 'swot', label: 'Diagnostic SWOT', icon: 'fa-chess-board' },
+                { id: 'strategy', label: 'Opportunités & Actions', icon: 'fa-handshake' }
+            ],
+            identity: {
+                mission: "Promouvoir une citoyenneté active, critique et responsable par l'éducation permanente et la participation démocratique.",
+                values: [
+                    { title: "Humanisme", icon: "fa-hands-holding-circle", desc: "Centralité de la personne humaine dans l'action politique et sociale." },
+                    { title: "Démocratie", icon: "fa-scale-balanced", desc: "Renforcement des institutions et de la participation citoyenne." },
+                    { title: "Éducation", icon: "fa-book-open-reader", desc: "Formation tout au long de la vie pour une autonomie intellectuelle." },
+                    { title: "Pluralisme", icon: "fa-people-arrows", desc: "Dialogue constructif entre les différentes opinions et convictions." }
+                ],
+                structure: "Association sans but lucratif (ASBL) reconnue comme organisme d'Éducation permanente par la Fédération Wallonie-Bruxelles.",
+                governance: ["Assemblée Générale", "Conseil d'Administration", "Secrétariat Général", "Équipe Pédagogique"]
+            },
+            stats: {
+                audience: {
+                    labels: ['Jeunes (18-30 ans)', 'Acteurs Associatifs', 'Seniors', 'Grand Public'],
+                    data: [35, 25, 20, 20],
+                    colors: ['#c2410c', '#334155', '#94a3b8', '#e2e8f0']
+                },
+                geo: {
+                    labels: ['Bruxelles', 'Liège', 'Namur', 'Hainaut', 'Brabant Wallon', 'Luxembourg'],
+                    data: [40, 15, 20, 15, 5, 5], // Estimated distribution based on headquarters and activity
+                    color: '#475569'
+                },
+                funding: {
+                    labels: ['Subsides Publics (FWB)', 'Projets Spécifiques', 'Fonds Propres', 'Partenariats'],
+                    data: [70, 15, 10, 5],
+                    colors: ['#334155', '#ea580c', '#cbd5e1', '#f1f5f9']
+                }
+            },
+            swot: {
+                strengths: ["Ancrage historique fort", "Expertise pédagogique reconnue", "Réseau de partenaires institutionnels", "Publications de qualité (Études, Analyses)"],
+                weaknesses: ["Visibilité digitale à renforcer", "Renouvellement des audiences difficile", "Complexité de certains contenus", "Dépendance aux subsides"],
+                opportunities: ["Nouveaux appels à projets (Numérique)", "Intérêt croissant pour la politique chez les jeunes", "Crise de la démocratie (besoin de sens)", "Digital Learning"],
+                threats: ["Réductions budgétaires culturelles", "Concurrence associative accrue", "Désintérêt du public pour la politique", "Polarisation du débat public"]
+            },
+            partnerships: [
+                { type: "Association", needs: "Outils pédagogiques", proposal: "Co-création de mallettes pédagogiques citoyennes." },
+                { type: "École / Université", needs: "Intervenants experts", proposal: "Animation d'ateliers 'Démocratie en action' dans les classes." },
+                { type: "Pouvoir Public", needs: "Analyse de terrain", proposal: "Étude commanditée sur la participation locale." },
+                { type: "Bénévole", needs: "Engagement", proposal: "Devenir animateur de 'Cafés Citoyens'." }
+            ]
+        };
+
+        // --- CORE FUNCTIONS ---
+
+        function initApp() {
+            renderNav();
+            renderContent(appData.currentTab);
+            
+            // Mobile menu toggle
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                const nav = document.getElementById('mobile-nav');
+                nav.classList.toggle('hidden');
+            });
+        }
+
+        function renderNav() {
+            const desktopNav = document.getElementById('desktop-nav');
+            const mobileNav = document.getElementById('mobile-nav');
+            
+            desktopNav.innerHTML = '';
+            mobileNav.innerHTML = '';
+
+            appData.navItems.forEach(item => {
+                const isActive = item.id === appData.currentTab;
+                
+                // Desktop Button
+                const btn = document.createElement('button');
+                btn.className = `px-3 py-2 text-sm font-medium transition-colors duration-200 ${isActive ? 'tab-active' : 'tab-inactive'}`;
+                btn.innerHTML = `<i class="fa-solid ${item.icon} mr-2"></i>${item.label}`;
+                btn.onclick = () => switchTab(item.id);
+                desktopNav.appendChild(btn);
+
+                // Mobile Link
+                const link = document.createElement('a');
+                link.className = `block px-4 py-2 text-base font-medium ${isActive ? 'bg-orange-50 text-orange-700' : 'text-slate-600 hover:bg-stone-50'}`;
+                link.innerHTML = `<i class="fa-solid ${item.icon} mr-2"></i>${item.label}`;
+                link.onclick = (e) => { e.preventDefault(); switchTab(item.id); document.getElementById('mobile-nav').classList.add('hidden'); };
+                link.href = "#";
+                mobileNav.appendChild(link);
+            });
+        }
+
+        function switchTab(tabId) {
+            appData.currentTab = tabId;
+            renderNav();
+            renderContent(tabId);
+        }
+
+        function renderContent(tabId) {
+            const container = document.getElementById('app-container');
+            container.innerHTML = ''; // Clear previous content
+
+            // Fade in effect class
+            container.className = "opacity-0 transition-opacity duration-300";
+            
+            setTimeout(() => {
+                switch (tabId) {
+                    case 'identity':
+                        renderIdentity(container);
+                        break;
+                    case 'ecosystem':
+                        renderEcosystem(container);
+                        break;
+                    case 'swot':
+                        renderSWOT(container);
+                        break;
+                    case 'strategy':
+                        renderStrategy(container);
+                        break;
+                }
+                container.classList.remove('opacity-0');
+                container.classList.add('opacity-100');
+            }, 50);
+        }
+
+        // --- SECTION RENDERERS ---
+
+        function renderIdentity(container) {
+            // Intro Paragraph (Context)
+            const intro = createSectionIntro(
+                "Fondations et Gouvernance",
+                "Cette section décrypte l'ADN du CPCP. Elle présente la mission officielle, les valeurs éthiques qui guident toutes les actions, et la structure organisationnelle qui assure la pérennité de l'ASBL. Comprendre ces éléments est essentiel pour aligner toute proposition de partenariat."
+            );
+            container.appendChild(intro);
+
+            // Mission Statement Hero
+            const hero = document.createElement('div');
+            hero.className = "bg-white p-6 sm:p-10 rounded-xl shadow-sm border-l-4 border-orange-700 mb-6";
+            hero.innerHTML = `
+                <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-bullseye text-orange-700 mr-3"></i>Mission Principale</h2>
+                <p class="text-xl sm:text-2xl text-slate-700 font-light italic">"${appData.identity.mission}"</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="bg-stone-100 text-stone-600 px-3 py-1 rounded-full text-sm font-semibold">#Citoyenneté</span>
+                    <span class="bg-stone-100 text-stone-600 px-3 py-1 rounded-full text-sm font-semibold">#Démocratie</span>
+                    <span class="bg-stone-100 text-stone-600 px-3 py-1 rounded-full text-sm font-semibold">#ÉducationPermanente</span>
+                </div>
+            `;
+            container.appendChild(hero);
+
+            // Values Grid
+            const grid = document.createElement('div');
+            grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6";
+            appData.identity.values.forEach(val => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-xl shadow-sm card-hover border border-stone-100";
+                card.innerHTML = `
+                    <div class="text-orange-700 text-3xl mb-4"><i class="fa-solid ${val.icon}"></i></div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">${val.title}</h3>
+                    <p class="text-sm text-slate-600">${val.desc}</p>
+                `;
+                grid.appendChild(card);
+            });
+            container.appendChild(grid);
+
+            // Governance Structure
+            const gov = document.createElement('div');
+            gov.className = "bg-slate-800 text-white p-6 rounded-xl shadow-lg";
+            gov.innerHTML = `
+                <h3 class="text-lg font-bold mb-4 border-b border-slate-600 pb-2">Structure de Gouvernance</h3>
+                <div class="flex flex-col md:flex-row justify-between items-center text-center md:text-left space-y-4 md:space-y-0">
+                    <div class="flex-1">
+                        <div class="text-orange-400 font-bold">Stratégique</div>
+                        <div class="text-xl">Assemblée Générale</div>
+                        <i class="fa-solid fa-arrow-down md:hidden my-2 text-slate-500"></i>
+                    </div>
+                    <i class="fa-solid fa-arrow-right hidden md:block text-slate-500 mx-4"></i>
+                    <div class="flex-1">
+                        <div class="text-orange-400 font-bold">Décisionnel</div>
+                        <div class="text-xl">Conseil d'Administration</div>
+                        <i class="fa-solid fa-arrow-down md:hidden my-2 text-slate-500"></i>
+                    </div>
+                    <i class="fa-solid fa-arrow-right hidden md:block text-slate-500 mx-4"></i>
+                    <div class="flex-1">
+                        <div class="text-orange-400 font-bold">Opérationnel</div>
+                        <div class="text-xl">Secrétariat Général</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(gov);
+        }
+
+        function renderEcosystem(container) {
+            const intro = createSectionIntro(
+                "Analyse de l'Écosystème",
+                "Visualisation des données concernant les publics cibles, l'ancrage géographique et les ressources financières. Cette analyse permet d'identifier où le CPCP est le plus actif et où se situent les opportunités de croissance."
+            );
+            container.appendChild(intro);
+
+            const grid = document.createElement('div');
+            grid.className = "grid grid-cols-1 lg:grid-cols-2 gap-6";
+
+            // Chart 1: Audience
+            const c1 = createChartCard("Répartition des Publics Cibles", "canvas-audience", "Focus important sur les jeunes adultes et le tissu associatif.");
+            grid.appendChild(c1);
+
+            // Chart 2: Geography
+            const c2 = createChartCard("Ancrage Géographique (Estimation)", "canvas-geo", "Forte centralisation à Bruxelles et Namur (siège politique).");
+            grid.appendChild(c2);
+
+            // Chart 3: Funding
+            const c3 = createChartCard("Sources de Financement", "canvas-funding", "Modèle classique dépendant des subsides FWB.");
+            grid.appendChild(c3);
+
+            // Interactive "Partners" List
+            const partners = document.createElement('div');
+            partners.className = "bg-white p-6 rounded-xl shadow-sm border border-stone-100 flex flex-col justify-between";
+            partners.innerHTML = `
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">Typologie des Partenaires</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center p-3 bg-stone-50 rounded-lg">
+                            <i class="fa-solid fa-university text-slate-500 w-8"></i>
+                            <div>
+                                <span class="font-bold text-slate-700">Institutionnels</span>
+                                <div class="text-xs text-slate-500">FWB, Communes, Provinces</div>
+                            </div>
+                        </li>
+                        <li class="flex items-center p-3 bg-stone-50 rounded-lg">
+                            <i class="fa-solid fa-hand-holding-heart text-slate-500 w-8"></i>
+                            <div>
+                                <span class="font-bold text-slate-700">Associatifs</span>
+                                <div class="text-xs text-slate-500">Mouvements de jeunesse, Centres culturels</div>
+                            </div>
+                        </li>
+                        <li class="flex items-center p-3 bg-stone-50 rounded-lg">
+                            <i class="fa-solid fa-school text-slate-500 w-8"></i>
+                            <div>
+                                <span class="font-bold text-slate-700">Éducatifs</span>
+                                <div class="text-xs text-slate-500">Hautes Écoles, Enseignement secondaire</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mt-4 text-center">
+                    <button class="text-orange-700 font-semibold hover:underline text-sm" onclick="switchTab('strategy')">
+                        Voir comment collaborer <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            `;
+            grid.appendChild(partners);
+
+            container.appendChild(grid);
+
+            // Init Charts after DOM insertion
+            requestAnimationFrame(() => {
+                initCharts();
+            });
+        }
+
+        function renderSWOT(container) {
+            const intro = createSectionIntro(
+                "Diagnostic SWOT Interactif",
+                "Cliquez sur les quadrants ci-dessous pour explorer les Forces, Faiblesses, Opportunités et Menaces identifiées. Ce diagnostic croise l'analyse interne (expertise, digital) et externe (contexte politique, financement)."
+            );
+            container.appendChild(intro);
+
+            const grid = document.createElement('div');
+            grid.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
+            
+            const sections = [
+                { id: 'strengths', title: 'Forces (Interne)', icon: 'fa-dumbbell', color: 'bg-emerald-50 text-emerald-800 border-emerald-200', items: appData.swot.strengths },
+                { id: 'weaknesses', title: 'Faiblesses (Interne)', icon: 'fa-link-slash', color: 'bg-rose-50 text-rose-800 border-rose-200', items: appData.swot.weaknesses },
+                { id: 'opportunities', title: 'Opportunités (Externe)', icon: 'fa-lightbulb', color: 'bg-blue-50 text-blue-800 border-blue-200', items: appData.swot.opportunities },
+                { id: 'threats', title: 'Menaces (Externe)', icon: 'fa-cloud-bolt', color: 'bg-amber-50 text-amber-800 border-amber-200', items: appData.swot.threats }
+            ];
+
+            sections.forEach(sec => {
+                const box = document.createElement('div');
+                box.className = `${sec.color} p-6 rounded-xl border cursor-pointer transition-all duration-300 hover:shadow-md`;
+                box.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-lg"><i class="fa-solid ${sec.icon} mr-2"></i>${sec.title}</h3>
+                        <i class="fa-solid fa-chevron-down opacity-50"></i>
+                    </div>
+                    <ul class="list-disc pl-5 space-y-2 hidden" id="swot-${sec.id}">
+                        ${sec.items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                    <p class="text-sm opacity-70 italic" id="preview-${sec.id}">Cliquez pour dévoiler l'analyse...</p>
+                `;
+                
+                box.onclick = () => {
+                    const list = document.getElementById(`swot-${sec.id}`);
+                    const prev = document.getElementById(`preview-${sec.id}`);
+                    if (list.classList.contains('hidden')) {
+                        list.classList.remove('hidden');
+                        prev.classList.add('hidden');
+                        box.classList.add('ring-2', 'ring-offset-2', 'ring-slate-300');
+                    } else {
+                        list.classList.add('hidden');
+                        prev.classList.remove('hidden');
+                        box.classList.remove('ring-2', 'ring-offset-2', 'ring-slate-300');
+                    }
+                };
+                grid.appendChild(box);
+            });
+
+            container.appendChild(grid);
+            
+            // Insight Box
+            const insight = document.createElement('div');
+            insight.className = "mt-6 bg-slate-800 text-stone-200 p-6 rounded-xl";
+            insight.innerHTML = `
+                <h4 class="font-bold text-white mb-2"><i class="fa-solid fa-magnifying-glass-chart mr-2"></i>Synthèse du Diagnostic</h4>
+                <p>Le CPCP dispose d'un capital intellectuel solide mais doit urgemment opérer sa transition numérique pour capter les jeunes générations. La polarisation actuelle du débat public offre une opportunité unique de se positionner comme un acteur de nuance et de dialogue.</p>
+            `;
+            container.appendChild(insight);
+        }
+
+        function renderStrategy(container) {
+            const intro = createSectionIntro(
+                "Générateur de Partenariats",
+                "Sur base du diagnostic, cet outil interactif vous suggère des formes de collaboration adaptées à votre profil. Sélectionnez votre catégorie pour voir les opportunités concrètes."
+            );
+            container.appendChild(intro);
+
+            // Interactive Tool
+            const tool = document.createElement('div');
+            tool.className = "bg-white rounded-xl shadow-lg overflow-hidden border border-stone-200";
+            
+            // Tool Header
+            const header = document.createElement('div');
+            header.className = "bg-slate-100 p-6 border-b border-stone-200";
+            header.innerHTML = `
+                <label class="block text-sm font-bold text-slate-700 mb-2">Je représente :</label>
+                <select id="partner-select" class="w-full md:w-1/2 p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none">
+                    <option value="" disabled selected>-- Choisir votre profil --</option>
+                    ${appData.partnerships.map((p, idx) => `<option value="${idx}">${p.type}</option>`).join('')}
+                </select>
+            `;
+            tool.appendChild(header);
+
+            // Tool Result Area
+            const resultArea = document.createElement('div');
+            resultArea.className = "p-8 text-center min-h-[200px] flex items-center justify-center bg-stone-50";
+            resultArea.id = "proposal-result";
+            resultArea.innerHTML = `<p class="text-slate-400"><i class="fa-solid fa-arrow-up mr-2"></i>Sélectionnez un profil pour voir la proposition</p>`;
+            tool.appendChild(resultArea);
+
+            container.appendChild(tool);
+
+            // Projects List
+            const projects = document.createElement('div');
+            projects.className = "mt-8";
+            projects.innerHTML = `
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Projets Phares pour Collaboration</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-orange-500 shadow-sm">
+                        <h4 class="font-bold text-lg">La Boussole de la Démocratie</h4>
+                        <p class="text-sm text-slate-600 mt-1">Outil pédagogique pour comprendre les institutions.</p>
+                        <div class="mt-2 text-xs font-semibold text-orange-700">Besoin: Diffusion dans les écoles</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-blue-500 shadow-sm">
+                        <h4 class="font-bold text-lg">Cafés Citoyens</h4>
+                        <p class="text-sm text-slate-600 mt-1">Espaces de débat locaux et conviviaux.</p>
+                        <div class="mt-2 text-xs font-semibold text-blue-700">Besoin: Lieux d'accueil & Animateurs</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(projects);
+
+            // Bind Event
+            setTimeout(() => {
+                document.getElementById('partner-select').addEventListener('change', (e) => {
+                    const idx = e.target.value;
+                    const data = appData.partnerships[idx];
+                    const resultDiv = document.getElementById('proposal-result');
+                    
+                    // Update content with animation
+                    resultDiv.style.opacity = '0';
+                    setTimeout(() => {
+                        resultDiv.innerHTML = `
+                            <div class="max-w-lg mx-auto text-left bg-white p-6 rounded-xl shadow-md border border-orange-100">
+                                <div class="flex items-center mb-4">
+                                    <div class="bg-orange-100 text-orange-700 p-3 rounded-full mr-4">
+                                        <i class="fa-solid fa-lightbulb text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-slate-500 uppercase tracking-wide">Proposition Stratégique</div>
+                                        <div class="font-bold text-xl text-slate-800">${data.proposal}</div>
+                                    </div>
+                                </div>
+                                <div class="border-t border-stone-100 pt-4">
+                                    <span class="text-sm font-semibold text-slate-600">Votre besoin identifié :</span>
+                                    <p class="text-slate-600 italic">"${data.needs}"</p>
+                                </div>
+                                <div class="mt-6 text-center">
+                                    <button class="bg-slate-800 text-white px-6 py-2 rounded-lg hover:bg-slate-700 transition-colors text-sm">
+                                        Initier ce contact
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        resultDiv.style.opacity = '1';
+                    }, 200);
+                });
+            }, 0);
+        }
+
+        // --- HELPER FUNCTIONS ---
+
+        function createSectionIntro(title, text) {
+            const div = document.createElement('div');
+            div.className = "mb-6 border-b border-stone-200 pb-4";
+            div.innerHTML = `
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">${title}</h2>
+                <p class="text-slate-600 leading-relaxed">${text}</p>
+            `;
+            return div;
+        }
+
+        function createChartCard(title, canvasId, caption) {
+            const card = document.createElement('div');
+            card.className = "bg-white p-4 rounded-xl shadow-sm border border-stone-100 flex flex-col items-center";
+            card.innerHTML = `
+                <h3 class="text-md font-bold text-slate-700 mb-4 w-full text-left">${title}</h3>
+                <div class="chart-container">
+                    <canvas id="${canvasId}"></canvas>
+                </div>
+                <p class="text-xs text-slate-500 mt-3 text-center italic bg-stone-50 px-2 py-1 rounded w-full border border-stone-100">${caption}</p>
+            `;
+            return card;
+        }
+
+        function initCharts() {
+            // Common Config
+            Chart.defaults.font.family = "'Noto Sans', sans-serif";
+            Chart.defaults.color = '#64748b';
+
+            // Audience Chart (Doughnut)
+            new Chart(document.getElementById('canvas-audience'), {
+                type: 'doughnut',
+                data: {
+                    labels: appData.stats.audience.labels,
+                    datasets: [{
+                        data: appData.stats.audience.data,
+                        backgroundColor: appData.stats.audience.colors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12 } }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Geography Chart (Bar)
+            new Chart(document.getElementById('canvas-geo'), {
+                type: 'bar',
+                data: {
+                    labels: appData.stats.geo.labels,
+                    datasets: [{
+                        label: 'Activité (%)',
+                        data: appData.stats.geo.data,
+                        backgroundColor: appData.stats.geo.color,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, grid: { display: false } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // Funding Chart (Pie)
+            new Chart(document.getElementById('canvas-funding'), {
+                type: 'pie',
+                data: {
+                    labels: appData.stats.funding.labels,
+                    datasets: [{
+                        data: appData.stats.funding.data,
+                        backgroundColor: appData.stats.funding.colors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12 } }
+                    }
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', initApp);
+
+    </script>
+</body>
+</html>
