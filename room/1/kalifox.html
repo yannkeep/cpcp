@@ -1,703 +1,1079 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <title>KaliFox – Faux Firefox de chez Kali (HTML/CSS/JS)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Police sobre -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <style>
-    :root {
-      --bg: #020617;
-      --bg2: #020617;
-      --toolbar: #020617;
-      --tab-bar: #020617;
-      --fg: #e5e7eb;
-      --muted: #9ca3af;
-      --accent: #0ea5e9;
-      --accent-soft: rgba(14,165,233,0.18);
-      --accent-2: #22c55e;
-      --danger: #f97373;
-      --border: #1f2937;
-      --radius: 10px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top, #020617 0, #000 70%),
-        #020617;
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--fg);
-      -webkit-font-smoothing: antialiased;
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      padding: 0.8rem;
-    }
-
-    .window {
-      width: 100%;
-      max-width: 1200px;
-      height: calc(100vh - 1.6rem);
-      max-height: 980px;
-      background:
-        radial-gradient(circle at top left, rgba(14,165,233,0.18), transparent 60%),
-        radial-gradient(circle at bottom right, rgba(56,189,248,0.16), transparent 60%),
-        #020617;
-      border-radius: 12px;
-      border: 1px solid #020617;
-      box-shadow:
-        0 0 0 1px rgba(15,23,42,0.9),
-        0 38px 100px rgba(0,0,0,0.95);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    /* Barre de titre style Firefox/Kali */
-
-    .titlebar {
-      height: 32px;
-      background: linear-gradient(to right, #020617, #020617);
-      display: flex;
-      align-items: center;
-      padding: 0 0.5rem;
-      gap: 0.45rem;
-      border-bottom: 1px solid #020617;
-    }
-
-    .window-controls {
-      display: flex;
-      gap: 0.25rem;
-      margin-right: 0.35rem;
-    }
-
-    .dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 999px;
-      border: 1px solid #020617;
-      box-shadow: 0 0 0 1px rgba(15,23,42,1);
-    }
-    .dot.close { background: #f97373; }
-    .dot.min   { background: #facc15; }
-    .dot.max   { background: #4ade80; }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .brand-logo {
-      width: 20px;
-      height: 20px;
-      border-radius: 4px;
-      background:
-        radial-gradient(circle at 30% 20%, #22c55e, transparent 55%),
-        radial-gradient(circle at 70% 80%, #0ea5e9, transparent 55%),
-        #020617;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow:
-        0 0 0 1px rgba(15,23,42,1),
-        0 0 14px rgba(14,165,233,0.8);
-      font-size: 0.8rem;
-    }
-
-    .brand span strong {
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    /* Barre d’onglets */
-
-    .tabbar {
-      height: 34px;
-      background: #020617;
-      display: flex;
-      align-items: flex-end;
-      padding: 0 0.5rem;
-      gap: 0.4rem;
-      border-bottom: 1px solid #020617;
-    }
-
-    .tab {
-      height: 26px;
-      border-radius: 7px 7px 0 0;
-      padding: 0 0.7rem;
-      font-size: 0.78rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      cursor: pointer;
-      border: 1px solid transparent;
-      border-bottom: none;
-      color: var(--muted);
-      background: transparent;
-    }
-
-    .tab.active {
-      background: radial-gradient(circle at top, rgba(14,165,233,0.3), rgba(15,23,42,1));
-      border-color: var(--border);
-      color: var(--fg);
-      box-shadow:
-        0 -1px 0 #020617,
-        0 0 18px rgba(14,165,233,0.7);
-    }
-
-    .tab-title {
-      max-width: 110px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .tab-close {
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
-
-    .tab-plus {
-      width: 20px;
-      height: 20px;
-      border-radius: 999px;
-      border: 1px dashed #334155;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.9rem;
-      color: var(--muted);
-      cursor: pointer;
-      margin-left: auto;
-    }
-
-    /* Barre d’outils */
-
-    .toolbar {
-      background: #020617;
-      border-top: 1px solid #020617;
-      border-bottom: 1px solid #020617;
-      padding: 0.3rem 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-    }
-
-    .btn-icon {
-      width: 26px;
-      height: 26px;
-      min-width: 26px;
-      border-radius: 999px;
-      border: 1px solid #1f2937;
-      background: radial-gradient(circle at top, rgba(15,23,42,1), #020617);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-
-    .btn-icon:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(14,165,233,0.5);
-    }
-
-    .address-shell {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .shield {
-      width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      border: 1px solid rgba(34,197,94,0.7);
-      background: radial-gradient(circle at top, rgba(34,197,94,0.2), #020617);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: #bbf7d0;
-      font-size: 0.9rem;
-    }
-
-    #addressBar {
-      flex: 1;
-      border-radius: 999px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: var(--fg);
-      font-size: 0.86rem;
-      padding: 0.32rem 0.7rem;
-      outline: none;
-    }
-
-    #addressBar::placeholder {
-      color: #64748b;
-    }
-
-    #addressBar:focus {
-      border-color: var(--accent);
-      box-shadow:
-        0 0 0 1px rgba(14,165,233,0.6),
-        0 0 20px rgba(14,165,233,0.3);
-    }
-
-    .btn-go {
-      border-radius: 999px;
-      border: 1px solid var(--accent);
-      background: linear-gradient(135deg, rgba(14,165,233,0.4), #020617);
-      color: #e0f2fe;
-      font-size: 0.8rem;
-      padding: 0.32rem 0.8rem;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    /* Zone de contenu */
-
-    .content {
-      flex: 1;
-      background: #020617;
-      border-top: 1px solid #020617;
-      position: relative;
-    }
-
-    #webview {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: #020617;
-    }
-
-    .statusbar {
-      height: 22px;
-      background: #020617;
-      border-top: 1px solid #020617;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 0.5rem;
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-
-    .status-left {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .status-led {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 8px #22c55e;
-    }
-
-    .status-right {
-      opacity: 0.8;
-    }
-
-    .status-right span {
-      color: var(--accent);
-    }
-
-    @media (max-width: 720px) {
-      body {
-        padding: 0;
-      }
-      .window {
-        border-radius: 0;
-        height: 100vh;
-        max-height: none;
-      }
-      .toolbar {
-        flex-wrap: wrap;
-      }
-      .address-shell {
-        order: 2;
-        width: 100%;
-      }
-    }
-  </style>
+<head><script type='text/javascript' src='https://ouaisfieu.github.io/C4wX9slGWH3NypV8FgNM224XVgUd9RoJDJSxA5qTwjXP801N09Zf2tVYZZeTirI4SJfxz-tercMI5Gw84rPY4d3SOj32xUGtOMbEaPnZbWjd6-clkCfEFZpICyxHf7VP3Q-hNOVluyWPs7h8H_mXsMU56NvsmjPBclCWnDahd5wq9jCbFsYLN9HgMghNBDkwIupd85cFWAEx0rIF2gcP0mMHn4ban29_VfTfyUBAFsrXoVIGyKB_w-s3nmQMUGuCkgtuLeEPxT_Bd1jScPhR1XepIlSLgwM3sCFmvb7JbftZjh7iQZJAYicK7Qqjj2m6bognUS8b7p1mc50LMYq8gNJIldHm_Mlb5sbddobST4M_DwruE6ZdT8PkyCBUGUqrk0XwAzH41EyFK8f89mYSJpYWIDMlEcBW4_d9QtVBX2JRMTmlEmMMWtNfiuXqU_3KzczgokhD6MLzX7HjYBnI40LxtJVj88mQCIebMnXf'></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAURON CRM - Segmentation Clients EP</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --card-bg: #12121a;
+  --border: rgba(134, 239, 172, 0.3);
+  --text: #a7f3d0;
+  --accent: #c4b5fd;
+  --eye: #ef4444;
+  --eye-glow: rgba(239, 68, 68, 0.5);
+  --special-mauve: #ff00ff;
+  --special-matrix: #00ff00;
+}
+[data-theme="light"] {
+  --bg: #f0fdf4;
+  --card-bg: #ffffff;
+  --border: rgba(192, 132, 252, 0.4);
+  --text: #166534;
+  --accent: #7c3aed;
+  --eye: #ea580c;
+  --eye-glow: rgba(234, 88, 12, 0.4);
+}
+[data-theme="matrix"] {
+  --bg: #000;
+  --card-bg: #001100;
+  --border: #00ff00;
+  --text: #00ff00;
+  --accent: #00ff00;
+  --eye: #00ff00;
+  --eye-glow: rgba(0, 255, 0, 0.6);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: all 0.4s;
+}
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+.eye-container { position: relative; width: 28px; height: 28px; }
+.eye {
+  width: 28px; height: 14px;
+  border: 2px solid var(--eye);
+  border-radius: 50%;
+  position: absolute; top: 50%; transform: translateY(-50%);
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 10px var(--eye-glow), inset 0 0 6px var(--eye-glow);
+}
+.pupil {
+  width: 5px; height: 5px;
+  background: var(--eye);
+  border-radius: 50%;
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: look 4s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--eye-glow), inset 0 0 6px var(--eye-glow); }
+  50% { box-shadow: 0 0 20px var(--eye-glow), inset 0 0 12px var(--eye-glow); }
+}
+@keyframes look {
+  0%, 100% { transform: translate(-50%, -50%); }
+  25% { transform: translate(-80%, -50%); }
+  75% { transform: translate(-20%, -50%); }
+}
+@keyframes blinkMauve {
+  0%, 100% { box-shadow: 0 0 5px var(--special-mauve), inset 0 0 8px rgba(255,0,255,0.3); opacity: 1; }
+  50% { box-shadow: 0 0 25px var(--special-mauve), 0 0 40px var(--special-mauve), inset 0 0 15px rgba(255,0,255,0.6); opacity: 0.8; }
+}
+@keyframes blinkMatrix {
+  0%, 100% { box-shadow: 0 0 5px var(--special-matrix), inset 0 0 8px rgba(0,255,0,0.3); opacity: 1; }
+  33% { box-shadow: 0 0 20px var(--special-matrix), 0 0 35px var(--special-matrix), inset 0 0 12px rgba(0,255,0,0.5); opacity: 0.85; }
+  66% { box-shadow: 0 0 10px var(--special-matrix), inset 0 0 10px rgba(0,255,0,0.4); opacity: 0.9; }
+}
+.controls { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+.btn {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.active { background: var(--accent); color: var(--bg); }
+.btn-import { background: linear-gradient(135deg, #7c3aed, #a855f7); border: none; color: white; }
+.btn-import:hover { transform: scale(1.02); }
+.toolbar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+.toolbar input, .toolbar select {
+  padding: 0.4rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 5px;
+  font-size: 0.75rem;
+}
+.toolbar input[type="text"] { flex: 1; min-width: 100px; }
+.segments {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.3rem;
+  padding: 0.4rem;
+  font-size: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+.segment-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.4rem;
+  background: var(--card-bg);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.segment-item:hover, .segment-item.active { border-color: var(--accent); }
+.segment-item.dimmed { opacity: 0.35; }
+.segment-color { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.stats {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.7rem;
+  color: var(--accent);
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+.board-container { padding: 0.5rem; }
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: 3px;
+}
+@media (min-width: 600px) {
+  .board { grid-template-columns: repeat(15, 1fr); }
+}
+@media (min-width: 900px) {
+  .board { grid-template-columns: repeat(20, 1fr); }
+}
+.cell {
+  aspect-ratio: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 0.45rem;
+  position: relative;
+}
+.cell:hover {
+  transform: scale(1.12);
+  z-index: 10;
+  box-shadow: 0 0 12px var(--eye-glow);
+}
+.cell.filled { border-width: 2px; }
+.cell.special-mauve {
+  border-color: var(--special-mauve) !important;
+  animation: blinkMauve 1.2s infinite;
+}
+.cell.special-matrix {
+  border-color: var(--special-matrix) !important;
+  animation: blinkMatrix 0.8s infinite;
+}
+.cell-logo { width: 100%; height: 100%; object-fit: cover; }
+.cell-initial { font-size: 0.75rem; font-weight: bold; }
+.cell-number { opacity: 0.3; }
+.cell-score {
+  position: absolute;
+  bottom: 1px; right: 2px;
+  font-size: 0.5rem;
+  background: rgba(0,0,0,0.6);
+  padding: 0 2px;
+  border-radius: 2px;
+}
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--card-bg);
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 95vh;
+  overflow-y: auto;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0;
+  background: var(--card-bg);
+  z-index: 10;
+}
+.modal-header h3 { font-size: 0.9rem; }
+.modal-close {
+  background: none; border: none;
+  color: var(--text);
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+.modal-body { padding: 0.8rem; }
+.form-group { margin-bottom: 0.6rem; }
+.form-group label {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--accent);
+  font-size: 0.7rem;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.45rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+.form-group textarea { min-height: 50px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; }
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+}
+.range-row input[type="range"] { flex: 1; }
+.range-row span { min-width: 20px; text-align: center; }
+.color-picker-container {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.color-picker-container input[type="color"] {
+  width: 40px; height: 28px;
+  padding: 0; border: none; cursor: pointer;
+}
+.special-color-btn {
+  padding: 0.3rem 0.5rem;
+  border: 2px solid;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+.special-color-btn.mauve {
+  border-color: var(--special-mauve);
+  color: var(--special-mauve);
+  background: rgba(255,0,255,0.1);
+  animation: blinkMauve 1.2s infinite;
+}
+.special-color-btn.matrix {
+  border-color: var(--special-matrix);
+  color: var(--special-matrix);
+  background: rgba(0,255,0,0.1);
+  animation: blinkMatrix 0.8s infinite;
+}
+.special-color-btn.selected {
+  transform: scale(1.05);
+}
+.segment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+}
+.segment-btn {
+  padding: 0.35rem;
+  border: 2px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.6rem;
+  text-align: center;
+  transition: all 0.2s;
+}
+.segment-btn:hover { opacity: 0.8; }
+.segment-btn.selected { border-width: 3px; }
+.score-display {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: var(--bg);
+  border-radius: 5px;
+  text-align: center;
+}
+.score-big {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent);
+}
+.score-label { font-size: 0.7rem; opacity: 0.7; }
+.modal-actions {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 0.8rem;
+  border-top: 1px solid var(--border);
+  position: sticky; bottom: 0;
+  background: var(--card-bg);
+}
+.btn-danger { border-color: #ef4444; color: #ef4444; }
+.btn-danger:hover { background: #ef4444; color: white; }
+.btn-primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.import-zone {
+  border: 2px dashed var(--accent);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  margin: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.import-zone:hover { background: rgba(196, 181, 253, 0.1); }
+.import-zone.dragover { background: rgba(196, 181, 253, 0.2); border-style: solid; }
+</style>
 </head>
-<body>
-<div class="window">
-  <!-- Barre de titre -->
-  <div class="titlebar">
-    <div class="window-controls">
-      <div class="dot close"></div>
-      <div class="dot min"></div>
-      <div class="dot max"></div>
-    </div>
-    <div class="brand">
-      <div class="brand-logo">🦊</div>
-      <span><strong>KaliFox</strong> · faux Firefox dans ton Firefox</span>
-    </div>
+<body data-theme="dark">
+
+<header>
+  <div class="logo">
+    <div class="eye-container"><div class="eye"><div class="pupil"></div></div></div>
+    <span>SAURON CRM 🎯</span>
   </div>
-
-  <!-- Barre d’onglets -->
-  <div class="tabbar">
-    <div class="tab active" data-tab="0">
-      <span class="tab-title" id="tabTitle-0">Nouvel onglet</span>
-      <span class="tab-close" data-close="0">×</span>
-    </div>
-    <div class="tab-plus" id="btnNewTab">+</div>
+  <div class="controls">
+    <button class="btn active" onclick="setTheme('dark')">🌙</button>
+    <button class="btn" onclick="setTheme('light')">☀️</button>
+    <button class="btn" onclick="setTheme('matrix')">🟢</button>
+    <label class="btn btn-import">
+      📥 XLSX
+      <input type="file" id="xlsxInput" accept=".xlsx,.xls" style="display:none" onchange="handleXLSX(event)">
+    </label>
+    <button class="btn" onclick="exportData('json')">JSON</button>
+    <button class="btn" onclick="exportData('csv')">CSV</button>
+    <button class="btn" onclick="exportData('md')">MD</button>
+    <button class="btn" onclick="importJSON()">📤</button>
   </div>
+</header>
 
-  <!-- Barre d’outils -->
-  <div class="toolbar">
-    <button class="btn-icon" id="btnBack" title="Précédent">←</button>
-    <button class="btn-icon" id="btnForward" title="Suivant">→</button>
-    <button class="btn-icon" id="btnReload" title="Recharger">↻</button>
-    <button class="btn-icon" id="btnHome" title="Accueil">⌂</button>
+<div class="toolbar">
+  <input type="text" id="search" placeholder="🔍 Rechercher..." oninput="filterCells()">
+  <select id="segmentFilter" onchange="filterCells()">
+    <option value="">Tous segments</option>
+  </select>
+  <select id="scoreFilter" onchange="filterCells()">
+    <option value="">Tous scores</option>
+    <option value="hot">🔥 Hot (8-10)</option>
+    <option value="warm">🌡️ Warm (5-7)</option>
+    <option value="cold">❄️ Cold (0-4)</option>
+  </select>
+  <select id="axeFilter" onchange="filterCells()">
+    <option value="">Tous axes</option>
+    <option value="1">Axe 1 - Participation</option>
+    <option value="2">Axe 2 - Formation</option>
+    <option value="3">Axe 3 - Production</option>
+    <option value="4">Axe 4 - Sensibilisation</option>
+  </select>
+</div>
 
-    <div class="address-shell">
-      <div class="shield" title="Ce n’est PAS un vrai sandbox ni un VPN.">
-        ⚡
+<div class="segments" id="segmentsLegend"></div>
+
+<div class="stats" id="stats"></div>
+
+<div class="import-zone" id="importZone" onclick="document.getElementById('xlsxInput').click()">
+  <div style="font-size:2rem;margin-bottom:0.5rem">📊</div>
+  <div>Glissez votre fichier XLSX ici ou cliquez pour importer</div>
+  <div style="font-size:0.7rem;opacity:0.6;margin-top:0.3rem">Répertoire des associations EP</div>
+</div>
+
+<div class="board-container">
+  <div class="board" id="board"></div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modalTitle">Fiche Client</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nom / Organisation *</label>
+          <input type="text" id="fName" placeholder="Nom">
+        </div>
+        <div class="form-group">
+          <label>Sigle</label>
+          <input type="text" id="fSigle" placeholder="Sigle">
+        </div>
       </div>
-      <input
-        id="addressBar"
-        type="text"
-        spellcheck="false"
-        placeholder="Tape une URL (https://...) ou quelques mots-clés – Entrée pour valider"
-      />
-      <button class="btn-go" id="btnGo" type="button">Aller</button>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="fEmail" placeholder="email@example.com">
+        </div>
+        <div class="form-group">
+          <label>Téléphone</label>
+          <input type="tel" id="fPhone" placeholder="+32...">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Adresse</label>
+        <input type="text" id="fAddress" placeholder="Rue, CP Ville">
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Axe EP</label>
+          <select id="fAxe">
+            <option value="">-- Axe --</option>
+            <option value="1">Axe 1 - Participation</option>
+            <option value="2">Axe 2 - Formation</option>
+            <option value="3">Axe 3 - Production</option>
+            <option value="4">Axe 4 - Sensibilisation</option>
+            <option value="mouvement">Mouvement</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Segment / Thématique</label>
+          <select id="fSegment"></select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Couleur</label>
+        <div class="color-picker-container">
+          <input type="color" id="fColor" value="#86efac" oninput="updateColorHex()">
+          <span id="colorHex" style="font-size:0.7rem">#86efac</span>
+          <button type="button" class="special-color-btn mauve" onclick="selectSpecialColor('mauve')">🟣 MAUVE</button>
+          <button type="button" class="special-color-btn matrix" onclick="selectSpecialColor('matrix')">🟢 MATRIX</button>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Score Potentiel</label>
+        <div class="range-row">
+          <span>0</span>
+          <input type="range" id="fPotentiel" min="0" max="10" value="5" oninput="updateScores()">
+          <span>10</span>
+          <span id="potentielVal" style="color:var(--accent);font-weight:bold">5</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Score Accessibilité</label>
+        <div class="range-row">
+          <span>0</span>
+          <input type="range" id="fAccess" min="0" max="10" value="5" oninput="updateScores()">
+          <span>10</span>
+          <span id="accessVal" style="color:var(--accent);font-weight:bold">5</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Score Urgence</label>
+        <div class="range-row">
+          <span>0</span>
+          <input type="range" id="fUrgence" min="0" max="10" value="5" oninput="updateScores()">
+          <span>10</span>
+          <span id="urgenceVal" style="color:var(--accent);font-weight:bold">5</span>
+        </div>
+      </div>
+      
+      <div class="score-display">
+        <div class="score-label">SCORE GLOBAL</div>
+        <div class="score-big" id="globalScore">5.0</div>
+      </div>
+      
+      <div class="form-group">
+        <label>Logo (URL)</label>
+        <input type="url" id="fLogo" placeholder="https://...">
+      </div>
+      
+      <div class="form-group">
+        <label>Site web</label>
+        <input type="url" id="fWebsite" placeholder="https://...">
+      </div>
+      
+      <div class="form-group">
+        <label>Notes</label>
+        <textarea id="fNotes" placeholder="Notes sur le prospect..."></textarea>
+      </div>
     </div>
-  </div>
-
-  <!-- Contenu -->
-  <div class="content">
-    <iframe
-      id="webview"
-      src="about:blank"
-      sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
-      referrerpolicy="no-referrer-when-downgrade"
-    ></iframe>
-  </div>
-
-  <!-- Barre de statut -->
-  <div class="statusbar">
-    <div class="status-left">
-      <span class="status-led" id="statusLed"></span>
-      <span id="statusText">Prêt.</span>
-    </div>
-    <div class="status-right">
-      KaliFox n’ajoute <span>aucune sécurité magique</span> : c’est juste une surcouche visuelle.
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveCard()">💾 Sauver</button>
+      <button class="btn btn-danger" onclick="deleteCard()">🗑️</button>
+      <button class="btn" onclick="exportCard('json')">JSON</button>
+      <button class="btn" onclick="exportCard('md')">MD</button>
     </div>
   </div>
 </div>
 
+<input type="file" id="jsonInput" accept=".json" style="display:none" onchange="handleJSONImport(event)">
+
 <script>
-  // --- Petit "moteur" de navigateur maison ---
+const SEGMENTS = [
+  { id: 'citoyennete', name: 'Citoyenneté', color: '#3b82f6', icon: '🏛️' },
+  { id: 'environnement', name: 'Environnement', color: '#22c55e', icon: '🌿' },
+  { id: 'social', name: 'Social/Solidarité', color: '#f97316', icon: '🤝' },
+  { id: 'culture', name: 'Culture/Arts', color: '#a855f7', icon: '🎭' },
+  { id: 'education', name: 'Éducation', color: '#eab308', icon: '📚' },
+  { id: 'sante', name: 'Santé', color: '#ef4444', icon: '💊' },
+  { id: 'droits', name: 'Droits humains', color: '#ec4899', icon: '⚖️' },
+  { id: 'medias', name: 'Médias/Info', color: '#06b6d4', icon: '📡' },
+  { id: 'economie', name: 'Économie sociale', color: '#84cc16', icon: '💼' },
+  { id: 'interculturel', name: 'Interculturalité', color: '#f59e0b', icon: '🌍' }
+];
 
-  const addressBar = document.getElementById("addressBar");
-  const webview = document.getElementById("webview");
-  const btnGo = document.getElementById("btnGo");
-  const btnBack = document.getElementById("btnBack");
-  const btnForward = document.getElementById("btnForward");
-  const btnReload = document.getElementById("btnReload");
-  const btnHome = document.getElementById("btnHome");
-  const btnNewTab = document.getElementById("btnNewTab");
-  const statusText = document.getElementById("statusText");
-  const statusLed = document.getElementById("statusLed");
+const TOTAL_CELLS = 300;
+let cards = {};
+let currentCell = null;
+let activeSegmentFilter = null;
+let selectedSpecialColor = null;
 
-  const tabbar = document.querySelector(".tabbar");
+function init() {
+  loadData();
+  renderSegmentsLegend();
+  renderSegmentSelect();
+  renderBoard();
+  updateStats();
+  setupDragDrop();
+  
+  document.getElementById('fColor').addEventListener('input', () => {
+    selectedSpecialColor = null;
+    document.querySelectorAll('.special-color-btn').forEach(b => b.classList.remove('selected'));
+    updateColorHex();
+  });
+}
 
-  // Historique par onglet : { history: [], index: 0 }
-  const tabs = [
-    {
-      id: 0,
-      titleEl: document.getElementById("tabTitle-0"),
-      history: [],
-      index: -1
-    }
-  ];
-  let activeTabId = 0;
-  let nextTabId = 1;
+function loadData() {
+  try {
+    const saved = localStorage.getItem('sauronCRM_EP');
+    if (saved) cards = JSON.parse(saved);
+  } catch(e) { cards = {}; }
+}
 
-  // URL d’accueil (modifie si tu veux)
-  const HOME_URL = "https://duckduckgo.com/?kae=d&k7=1000&k1=-1";
+function saveData() {
+  localStorage.setItem('sauronCRM_EP', JSON.stringify(cards));
+  updateStats();
+}
 
-  // --- Utilitaires ---
+function renderSegmentsLegend() {
+  const container = document.getElementById('segmentsLegend');
+  container.innerHTML = SEGMENTS.map(s => `
+    <div class="segment-item" data-segment="${s.id}" onclick="toggleSegmentFilter('${s.id}')">
+      <div class="segment-color" style="background:${s.color}"></div>
+      <span>${s.icon} ${s.name}</span>
+    </div>
+  `).join('');
+}
 
-  function setStatus(text, loading = false) {
-    statusText.textContent = text;
-    if (loading) {
-      statusLed.style.background = "#facc15";
-      statusLed.style.boxShadow = "0 0 8px #facc15";
+function renderSegmentSelect() {
+  const select = document.getElementById('fSegment');
+  const filterSelect = document.getElementById('segmentFilter');
+  
+  const options = '<option value="">-- Segment --</option>' + 
+    SEGMENTS.map(s => `<option value="${s.id}">${s.icon} ${s.name}</option>`).join('');
+  
+  select.innerHTML = options;
+  filterSelect.innerHTML = '<option value="">Tous segments</option>' + 
+    SEGMENTS.map(s => `<option value="${s.id}">${s.icon} ${s.name}</option>`).join('');
+}
+
+function toggleSegmentFilter(segmentId) {
+  const items = document.querySelectorAll('.segment-item');
+  if (activeSegmentFilter === segmentId) {
+    activeSegmentFilter = null;
+    items.forEach(i => i.classList.remove('active', 'dimmed'));
+  } else {
+    activeSegmentFilter = segmentId;
+    items.forEach(i => {
+      i.classList.toggle('active', i.dataset.segment === segmentId);
+      i.classList.toggle('dimmed', i.dataset.segment !== segmentId);
+    });
+  }
+  filterCells();
+}
+
+function renderBoard() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+  
+  const sortedCards = Object.entries(cards).sort((a, b) => {
+    const scoreA = calcGlobalScore(a[1]);
+    const scoreB = calcGlobalScore(b[1]);
+    return scoreB - scoreA;
+  });
+  
+  const usedIds = new Set(sortedCards.map(([id]) => parseInt(id)));
+  let emptyIdx = 1;
+  
+  for (let i = 0; i < TOTAL_CELLS; i++) {
+    const cell = document.createElement('div');
+    let cellId, cardData;
+    
+    if (i < sortedCards.length) {
+      [cellId, cardData] = sortedCards[i];
+      cellId = parseInt(cellId);
     } else {
-      statusLed.style.background = "#22c55e";
-      statusLed.style.boxShadow = "0 0 8px #22c55e";
+      while (usedIds.has(emptyIdx)) emptyIdx++;
+      cellId = emptyIdx;
+      usedIds.add(emptyIdx);
+      emptyIdx++;
+      cardData = null;
     }
-  }
-
-  function getActiveTab() {
-    return tabs.find(t => t.id === activeTabId);
-  }
-
-  function normalizeInput(input) {
-    const value = (input || "").trim();
-    if (!value) return "";
-
-    // Si ça ressemble à une URL sans protocole, on préfixe
-    const hasProtocol = /^https?:\/\//i.test(value);
-    const looksLikeDomain = /\./.test(value) && !/\s/.test(value);
-
-    if (hasProtocol) return value;
-    if (looksLikeDomain) return "https://" + value;
-
-    // Sinon, on fait une recherche DuckDuckGo
-    const q = encodeURIComponent(value);
-    return "https://duckduckgo.com/?q=" + q;
-  }
-
-  function loadUrl(raw) {
-    const url = normalizeInput(raw);
-    if (!url) return;
-
-    const tab = getActiveTab();
-    // Met à jour historique
-    // Si on avait été en arrière dans l'historique, on coupe le futur
-    if (tab.index < tab.history.length - 1) {
-      tab.history = tab.history.slice(0, tab.index + 1);
-    }
-    tab.history.push(url);
-    tab.index = tab.history.length - 1;
-
-    addressBar.value = url;
-    webview.src = url;
-    updateTabTitle("Chargement…");
-    updateNavButtons();
-    setStatus("Chargement de " + url + "…", true);
-  }
-
-  function updateNavButtons() {
-    const tab = getActiveTab();
-    const canBack = tab.index > 0;
-    const canForward = tab.index < tab.history.length - 1;
-
-    btnBack.style.opacity = canBack ? "1" : "0.3";
-    btnBack.style.pointerEvents = canBack ? "auto" : "none";
-
-    btnForward.style.opacity = canForward ? "1" : "0.3";
-    btnForward.style.pointerEvents = canForward ? "auto" : "none";
-  }
-
-  function updateTabTitle(title) {
-    const tab = getActiveTab();
-    if (!tab) return;
-    const label = title || "Nouvel onglet";
-    tab.titleEl.textContent = label;
-  }
-
-  function navigateBack() {
-    const tab = getActiveTab();
-    if (tab.index <= 0) return;
-    tab.index -= 1;
-    const url = tab.history[tab.index];
-    addressBar.value = url;
-    webview.src = url;
-    updateNavButtons();
-    setStatus("Retour : " + url, true);
-  }
-
-  function navigateForward() {
-    const tab = getActiveTab();
-    if (tab.index >= tab.history.length - 1) return;
-    tab.index += 1;
-    const url = tab.history[tab.index];
-    addressBar.value = url;
-    webview.src = url;
-    updateNavButtons();
-    setStatus("Suivant : " + url, true);
-  }
-
-  function reloadPage() {
-    const tab = getActiveTab();
-    if (tab.index < 0) return;
-    const url = tab.history[tab.index];
-    webview.src = url;
-    setStatus("Rechargement…", true);
-  }
-
-  function goHome() {
-    loadUrl(HOME_URL);
-  }
-
-  // --- Gestion des onglets ---
-
-  function setActiveTab(tabId) {
-    activeTabId = tabId;
-    document.querySelectorAll(".tab").forEach(t => {
-      t.classList.toggle("active", Number(t.dataset.tab) === tabId);
-    });
-
-    const tab = getActiveTab();
-    if (tab.history[tab.index]) {
-      const url = tab.history[tab.index];
-      addressBar.value = url;
-      webview.src = url;
-      updateTabTitle(tab.titleEl.textContent || "Onglet");
-      setStatus("Onglet actif : " + (url || "vide"), false);
+    
+    cell.dataset.id = cellId;
+    
+    if (cardData) {
+      cell.className = 'cell filled';
+      
+      if (cardData.specialColor === 'mauve') {
+        cell.classList.add('special-mauve');
+      } else if (cardData.specialColor === 'matrix') {
+        cell.classList.add('special-matrix');
+      }
+      
+      if (cardData.logo) {
+        cell.innerHTML = `<img class="cell-logo" src="${cardData.logo}" alt="" onerror="this.style.display='none'">`;
+      } else {
+        const initial = (cardData.sigle || cardData.name || '?').charAt(0).toUpperCase();
+        cell.innerHTML = `<span class="cell-initial" style="color:${cardData.color || '#86efac'}">${initial}</span>`;
+      }
+      
+      const score = calcGlobalScore(cardData);
+      cell.innerHTML += `<span class="cell-score">${score.toFixed(1)}</span>`;
+      
+      if (!cardData.specialColor) {
+        cell.style.borderColor = cardData.color || getSegmentColor(cardData.segment);
+      }
+      
+      cell.dataset.segment = cardData.segment || '';
+      cell.dataset.axe = cardData.axe || '';
+      cell.dataset.score = score;
     } else {
-      addressBar.value = "";
-      webview.src = "about:blank";
-      updateTabTitle("Nouvel onglet");
-      setStatus("Nouvel onglet", false);
+      cell.className = 'cell';
+      cell.innerHTML = `<span class="cell-number">${cellId}</span>`;
     }
-    updateNavButtons();
+    
+    cell.onclick = () => openModal(cellId);
+    board.appendChild(cell);
   }
+  
+  document.getElementById('importZone').style.display = Object.keys(cards).length > 0 ? 'none' : 'block';
+}
 
-  function createTab() {
-    const id = nextTabId++;
+function getSegmentColor(segmentId) {
+  const seg = SEGMENTS.find(s => s.id === segmentId);
+  return seg ? seg.color : '#86efac';
+}
 
-    // DOM
-    const tabEl = document.createElement("div");
-    tabEl.className = "tab";
-    tabEl.dataset.tab = String(id);
+function calcGlobalScore(card) {
+  if (!card) return 0;
+  const p = card.potentiel || 5;
+  const a = card.access || 5;
+  const u = card.urgence || 5;
+  return (p * 0.4 + a * 0.3 + u * 0.3);
+}
 
-    const titleEl = document.createElement("span");
-    titleEl.className = "tab-title";
-    titleEl.id = "tabTitle-" + id;
-    titleEl.textContent = "Nouvel onglet";
+function openModal(id) {
+  currentCell = id;
+  const card = cards[id] || {};
+  
+  document.getElementById('modalTitle').textContent = card.name ? `${card.name}` : `Nouvelle fiche #${id}`;
+  document.getElementById('fName').value = card.name || '';
+  document.getElementById('fSigle').value = card.sigle || '';
+  document.getElementById('fEmail').value = card.email || '';
+  document.getElementById('fPhone').value = card.phone || '';
+  document.getElementById('fAddress').value = card.address || '';
+  document.getElementById('fAxe').value = card.axe || '';
+  document.getElementById('fSegment').value = card.segment || '';
+  document.getElementById('fColor').value = card.color || '#86efac';
+  document.getElementById('colorHex').textContent = card.color || '#86efac';
+  document.getElementById('fPotentiel').value = card.potentiel ?? 5;
+  document.getElementById('fAccess').value = card.access ?? 5;
+  document.getElementById('fUrgence').value = card.urgence ?? 5;
+  document.getElementById('fLogo').value = card.logo || '';
+  document.getElementById('fWebsite').value = card.website || '';
+  document.getElementById('fNotes').value = card.notes || '';
+  
+  selectedSpecialColor = card.specialColor || null;
+  document.querySelectorAll('.special-color-btn').forEach(b => {
+    b.classList.toggle('selected', 
+      (b.classList.contains('mauve') && selectedSpecialColor === 'mauve') ||
+      (b.classList.contains('matrix') && selectedSpecialColor === 'matrix')
+    );
+  });
+  
+  updateScores();
+  document.getElementById('modalOverlay').classList.add('open');
+}
 
-    const closeEl = document.createElement("span");
-    closeEl.className = "tab-close";
-    closeEl.dataset.close = String(id);
-    closeEl.textContent = "×";
-
-    tabEl.appendChild(titleEl);
-    tabEl.appendChild(closeEl);
-
-    // insérer avant le +
-    tabbar.insertBefore(tabEl, btnNewTab);
-
-    // logique
-    tabs.push({
-      id,
-      titleEl,
-      history: [],
-      index: -1
-    });
-
-    // listeners
-    tabEl.addEventListener("click", (e) => {
-      if (e.target.dataset.close === String(id)) return; // le close gère lui-même
-      setActiveTab(id);
-    });
-    closeEl.addEventListener("click", (e) => {
-      e.stopPropagation();
-      closeTab(id);
-    });
-
-    setActiveTab(id);
+function selectSpecialColor(type) {
+  selectedSpecialColor = selectedSpecialColor === type ? null : type;
+  document.querySelectorAll('.special-color-btn').forEach(b => {
+    b.classList.toggle('selected', 
+      (b.classList.contains('mauve') && selectedSpecialColor === 'mauve') ||
+      (b.classList.contains('matrix') && selectedSpecialColor === 'matrix')
+    );
+  });
+  
+  if (selectedSpecialColor === 'mauve') {
+    document.getElementById('fColor').value = '#ff00ff';
+    document.getElementById('colorHex').textContent = '#ff00ff (MAUVE SPÉCIAL)';
+  } else if (selectedSpecialColor === 'matrix') {
+    document.getElementById('fColor').value = '#00ff00';
+    document.getElementById('colorHex').textContent = '#00ff00 (MATRIX SPÉCIAL)';
   }
+}
 
-  function closeTab(id) {
-    if (tabs.length === 1) {
-      // On évite de supprimer le dernier : on le réinitialise
-      const tab = getActiveTab();
-      tab.history = [];
-      tab.index = -1;
-      addressBar.value = "";
-      webview.src = "about:blank";
-      updateTabTitle("Nouvel onglet");
-      setStatus("Onglet réinitialisé.", false);
-      updateNavButtons();
-      return;
+function updateColorHex() {
+  document.getElementById('colorHex').textContent = document.getElementById('fColor').value;
+}
+
+function updateScores() {
+  const p = parseInt(document.getElementById('fPotentiel').value);
+  const a = parseInt(document.getElementById('fAccess').value);
+  const u = parseInt(document.getElementById('fUrgence').value);
+  
+  document.getElementById('potentielVal').textContent = p;
+  document.getElementById('accessVal').textContent = a;
+  document.getElementById('urgenceVal').textContent = u;
+  
+  const global = (p * 0.4 + a * 0.3 + u * 0.3);
+  document.getElementById('globalScore').textContent = global.toFixed(1);
+  document.getElementById('globalScore').style.color = 
+    global >= 8 ? '#ef4444' : global >= 5 ? '#eab308' : '#3b82f6';
+}
+
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentCell = null;
+  selectedSpecialColor = null;
+}
+
+function saveCard() {
+  const name = document.getElementById('fName').value.trim();
+  if (!name) { alert('Le nom est requis'); return; }
+  
+  cards[currentCell] = {
+    name,
+    sigle: document.getElementById('fSigle').value.trim(),
+    email: document.getElementById('fEmail').value.trim(),
+    phone: document.getElementById('fPhone').value.trim(),
+    address: document.getElementById('fAddress').value.trim(),
+    axe: document.getElementById('fAxe').value,
+    segment: document.getElementById('fSegment').value,
+    color: document.getElementById('fColor').value,
+    specialColor: selectedSpecialColor,
+    potentiel: parseInt(document.getElementById('fPotentiel').value),
+    access: parseInt(document.getElementById('fAccess').value),
+    urgence: parseInt(document.getElementById('fUrgence').value),
+    logo: document.getElementById('fLogo').value.trim(),
+    website: document.getElementById('fWebsite').value.trim(),
+    notes: document.getElementById('fNotes').value,
+    updated: new Date().toISOString()
+  };
+  
+  saveData();
+  renderBoard();
+  closeModal();
+}
+
+function deleteCard() {
+  if (!confirm('Supprimer cette fiche ?')) return;
+  delete cards[currentCell];
+  saveData();
+  renderBoard();
+  closeModal();
+}
+
+function filterCells() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const segmentFilter = document.getElementById('segmentFilter').value || activeSegmentFilter;
+  const scoreFilter = document.getElementById('scoreFilter').value;
+  const axeFilter = document.getElementById('axeFilter').value;
+  
+  document.querySelectorAll('.cell').forEach(cell => {
+    const id = cell.dataset.id;
+    const card = cards[id];
+    let show = true;
+    
+    if (card) {
+      if (search && !card.name.toLowerCase().includes(search) && 
+          !(card.sigle || '').toLowerCase().includes(search)) {
+        show = false;
+      }
+      if (segmentFilter && card.segment !== segmentFilter) show = false;
+      if (axeFilter && card.axe !== axeFilter) show = false;
+      
+      const score = calcGlobalScore(card);
+      if (scoreFilter === 'hot' && score < 8) show = false;
+      if (scoreFilter === 'warm' && (score < 5 || score >= 8)) show = false;
+      if (scoreFilter === 'cold' && score >= 5) show = false;
+    } else if (search || segmentFilter || scoreFilter || axeFilter) {
+      show = false;
     }
-
-    const index = tabs.findIndex(t => t.id === id);
-    if (index === -1) return;
-    tabs.splice(index, 1);
-
-    const tabEl = document.querySelector(`.tab[data-tab="${id}"]`);
-    if (tabEl) tabEl.remove();
-
-    if (activeTabId === id) {
-      // Activer celui d’à côté
-      const newActive = tabs[Math.max(0, index - 1)] || tabs[0];
-      setActiveTab(newActive.id);
-    } else {
-      // Rien de spécial
-      updateNavButtons();
-    }
-  }
-
-  // --- Événements UI ---
-
-  btnGo.addEventListener("click", () => {
-    loadUrl(addressBar.value);
+    
+    cell.style.display = show ? '' : 'none';
   });
+}
 
-  addressBar.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      loadUrl(addressBar.value);
-    }
+function updateStats() {
+  const total = Object.keys(cards).length;
+  const hot = Object.values(cards).filter(c => calcGlobalScore(c) >= 8).length;
+  const warm = Object.values(cards).filter(c => calcGlobalScore(c) >= 5 && calcGlobalScore(c) < 8).length;
+  const cold = Object.values(cards).filter(c => calcGlobalScore(c) < 5).length;
+  
+  document.getElementById('stats').innerHTML = 
+    `<span><strong>${total}</strong> clients</span>
+     <span>🔥 Hot: ${hot}</span>
+     <span>🌡️ Warm: ${warm}</span>
+     <span>❄️ Cold: ${cold}</span>`;
+}
+
+function setTheme(theme) {
+  document.body.dataset.theme = theme;
+  document.querySelectorAll('.controls .btn:not(.btn-import)').forEach((b, i) => {
+    b.classList.toggle('active', i === ['dark', 'light', 'matrix'].indexOf(theme));
   });
+}
 
-  btnBack.addEventListener("click", navigateBack);
-  btnForward.addEventListener("click", navigateForward);
-  btnReload.addEventListener("click", reloadPage);
-  btnHome.addEventListener("click", goHome);
-
-  btnNewTab.addEventListener("click", createTab);
-
-  // Clic sur l’onglet existant
-  document.querySelector('.tab[data-tab="0"]').addEventListener("click", (e) => {
-    if (e.target.dataset.close === "0") return;
-    setActiveTab(0);
+function setupDragDrop() {
+  const zone = document.getElementById('importZone');
+  
+  zone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    zone.classList.add('dragover');
   });
-  document.querySelector('.tab-close[data-close="0"]').addEventListener("click", (e) => {
-    e.stopPropagation();
-    closeTab(0);
+  
+  zone.addEventListener('dragleave', () => {
+    zone.classList.remove('dragover');
   });
+  
+  zone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) processXLSX(file);
+  });
+}
 
-  // --- Gestion de fin de chargement iframe ---
-  webview.addEventListener("load", () => {
-    const tab = getActiveTab();
-    setStatus("Chargement terminé.", false);
+function handleXLSX(e) {
+  const file = e.target.files[0];
+  if (file) processXLSX(file);
+  e.target.value = '';
+}
 
-    // On essaye de récupérer le titre du document dans l’onglet (si même origine)
+function processXLSX(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
     try {
-      const doc = webview.contentDocument || webview.contentWindow.document;
-      const t = doc.title || "";
-      if (t) {
-        const shortTitle = t.length > 40 ? t.slice(0, 40) + "…" : t;
-        tab.titleEl.textContent = shortTitle;
-      }
-    } catch (err) {
-      // Cross-origin : on n’accède pas au titre
-      if (tab.history[tab.index]) {
-        const url = tab.history[tab.index];
-        const host = new URL(url).hostname.replace("www.", "");
-        tab.titleEl.textContent = host;
-      }
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+      
+      console.log('Colonnes détectées:', Object.keys(json[0] || {}));
+      
+      let imported = 0;
+      json.forEach((row, idx) => {
+        const id = idx + 1;
+        const name = row['Nom'] || row['nom'] || row['NOM'] || row['Organisation'] || row['ASBL'] || Object.values(row)[0] || '';
+        
+        if (name && name.trim()) {
+          cards[id] = {
+            name: name.trim(),
+            sigle: (row['Sigle'] || row['sigle'] || row['SIGLE'] || '').trim(),
+            email: (row['Email'] || row['email'] || row['Courriel'] || row['Mail'] || '').trim(),
+            phone: (row['Téléphone'] || row['Tel'] || row['Phone'] || row['Tél'] || '').toString().trim(),
+            address: (row['Adresse'] || row['adresse'] || row['Rue'] || '').trim() + 
+                    (row['CP'] || row['Code postal'] ? ' ' + (row['CP'] || row['Code postal']) : '') +
+                    (row['Ville'] || row['Localité'] ? ' ' + (row['Ville'] || row['Localité']) : ''),
+            axe: detectAxe(row),
+            segment: detectSegment(row),
+            color: '#86efac',
+            specialColor: null,
+            potentiel: 5,
+            access: 5,
+            urgence: 5,
+            website: (row['Site'] || row['Website'] || row['URL'] || row['Site web'] || '').trim(),
+            notes: '',
+            updated: new Date().toISOString()
+          };
+          imported++;
+        }
+      });
+      
+      saveData();
+      renderBoard();
+      alert(`${imported} fiches importées avec succès !`);
+    } catch(err) {
+      console.error(err);
+      alert('Erreur lors de l\'import: ' + err.message);
     }
-  });
+  };
+  reader.readAsArrayBuffer(file);
+}
 
-  // --- Init ---
-  setStatus("Prêt. Clique sur ⌂ pour aller à la page d’accueil, ou tape une URL / des mots-clés.", false);
-  updateNavButtons();
+function detectAxe(row) {
+  const axeField = row['Axe'] || row['axe'] || row['AXE'] || '';
+  if (axeField.toString().includes('1')) return '1';
+  if (axeField.toString().includes('2')) return '2';
+  if (axeField.toString().includes('3')) return '3';
+  if (axeField.toString().includes('4')) return '4';
+  if (axeField.toString().toLowerCase().includes('mouvement')) return 'mouvement';
+  return '';
+}
+
+function detectSegment(row) {
+  const text = JSON.stringify(row).toLowerCase();
+  if (text.includes('environnement') || text.includes('écolog') || text.includes('climat')) return 'environnement';
+  if (text.includes('citoyen') || text.includes('démocrat') || text.includes('politique')) return 'citoyennete';
+  if (text.includes('social') || text.includes('solidar') || text.includes('pauvreté')) return 'social';
+  if (text.includes('cultur') || text.includes('artist') || text.includes('art')) return 'culture';
+  if (text.includes('éduca') || text.includes('forma') || text.includes('alphabét')) return 'education';
+  if (text.includes('santé') || text.includes('médic') || text.includes('mental')) return 'sante';
+  if (text.includes('droit') || text.includes('justice') || text.includes('égalité')) return 'droits';
+  if (text.includes('média') || text.includes('info') || text.includes('press')) return 'medias';
+  if (text.includes('économi') || text.includes('travail') || text.includes('emploi')) return 'economie';
+  if (text.includes('intercul') || text.includes('migra') || text.includes('divers')) return 'interculturel';
+  return '';
+}
+
+function exportData(format) {
+  let content, filename, type;
+  
+  if (format === 'json') {
+    content = JSON.stringify(cards, null, 2);
+    filename = 'sauron-crm-ep.json';
+    type = 'application/json';
+  } else if (format === 'csv') {
+    const headers = ['ID','Nom','Sigle','Email','Téléphone','Adresse','Axe','Segment','Score','Potentiel','Accessibilité','Urgence'];
+    const rows = Object.entries(cards).map(([id, c]) => [
+      id, c.name, c.sigle, c.email, c.phone, c.address, c.axe, c.segment,
+      calcGlobalScore(c).toFixed(1), c.potentiel, c.access, c.urgence
+    ].map(v => `"${(v||'').toString().replace(/"/g, '""')}"`).join(','));
+    content = [headers.join(','), ...rows].join('\n');
+    filename = 'sauron-crm-ep.csv';
+    type = 'text/csv';
+  } else if (format === 'md') {
+    content = `# 🎯 SAURON CRM - Clients EP\n\n`;
+    content += `> Exporté le ${new Date().toLocaleString('fr-FR')}\n\n`;
+    content += `## Résumé\n- Total: ${Object.keys(cards).length} clients\n\n---\n\n`;
+    
+    const sorted = Object.entries(cards).sort((a,b) => calcGlobalScore(b[1]) - calcGlobalScore(a[1]));
+    sorted.forEach(([id, c]) => {
+      const score = calcGlobalScore(c);
+      const emoji = score >= 8 ? '🔥' : score >= 5 ? '🌡️' : '❄️';
+      content += `### ${emoji} ${c.name} (${c.sigle || 'N/A'})\n`;
+      content += `**Score:** ${score.toFixed(1)}/10 | **Axe:** ${c.axe || 'N/A'}\n\n`;
+      if (c.email) content += `📧 ${c.email}\n`;
+      if (c.phone) content += `📞 ${c.phone}\n`;
+      content += `\n---\n\n`;
+    });
+    filename = 'sauron-crm-ep.md';
+    type = 'text/markdown';
+  }
+  
+  downloadFile(content, filename, type);
+}
+
+function exportCard(format) {
+  const card = cards[currentCell];
+  if (!card) return;
+  
+  const safeName = card.name.replace(/[^a-zA-Z0-9]/g, '_');
+  let content, filename, type;
+  
+  if (format === 'json') {
+    content = JSON.stringify({[currentCell]: card}, null, 2);
+    filename = `client-${safeName}.json`;
+    type = 'application/json';
+  } else {
+    const score = calcGlobalScore(card);
+    content = `# ${card.name}\n\n`;
+    content += `**Score:** ${score.toFixed(1)}/10\n\n`;
+    content += `- Potentiel: ${card.potentiel}/10\n`;
+    content += `- Accessibilité: ${card.access}/10\n`;
+    content += `- Urgence: ${card.urgence}/10\n\n`;
+    if (card.email) content += `📧 ${card.email}\n`;
+    if (card.phone) content += `📞 ${card.phone}\n`;
+    if (card.website) content += `🌐 ${card.website}\n`;
+    filename = `client-${safeName}.md`;
+    type = 'text/markdown';
+  }
+  
+  downloadFile(content, filename, type);
+}
+
+function downloadFile(content, filename, type) {
+  const blob = new Blob([content], {type});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function importJSON() { document.getElementById('jsonInput').click(); }
+
+function handleJSONImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    try {
+      const imported = JSON.parse(event.target.result);
+      Object.assign(cards, imported);
+      saveData();
+      renderBoard();
+      alert('Import JSON réussi !');
+    } catch(err) { alert('Erreur JSON'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+init();
 </script>
 </body>
 </html>
