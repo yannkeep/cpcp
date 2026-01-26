@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Mobilisation des Esprits - Analyse Interactive</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Placeholder Comments -->
+    <!-- Chosen Palette: "Warm Intellectual" - Background: Warm Off-White (#FDFBF7), Text: Dark Slate (#334155), Accents: Muted Clay (#9F1239) for war concepts, Deep Indigo (#312E81) for analytical concepts. Designed to be readable, calm, and serious. -->
+    
+    <!-- Application Structure Plan: 
+         Structure: A tab-based "Exploration Dashboard".
+         Why: The report deals with abstract concepts (propaganda, psychology, rhetoric). A linear scroll can be exhausting. A tabbed interface allows the user to focus on one dimension of the analysis at a time (Context, Mechanisms, Language, Solutions).
+         Flow:
+         1. Intro/Hero: Sets the stage (The "Return of War").
+         2. Section 1 (Context): Uses a Radar Chart to visualize the qualitative shift from "Peace Dividends" to "War Economy". This makes the "paradigm shift" described in the text immediately visible.
+         3. Section 2 (Mechanisms): Grid of interactive cards explaining psychological mobilization (Fear, Binary Logic, etc.).
+         4. Section 3 (Rhetoric): A "Decoder" interface where users click "War Terms" to see the "Critical Analysis".
+         5. Section 4 (Resistance): Actionable takeaways.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Radar Chart (Chart.js): 
+            - Goal: Compare the societal mindset "Before" vs "Now" (Post-2022).
+            - Interaction: Toggle between eras.
+            - Justification: The text contrasts two distinct periods. A radar chart effectively shows the expansion of "Military Logic" and the contraction of "Diplomatic Logic".
+         2. Interactive Cards (DOM Manipulation):
+            - Goal: Explain the "Mechanisms of Mobilization".
+            - Interaction: Hover/Click to reveal details.
+            - Justification: Breaks down dense text into digestible concepts.
+         3. "Rhetoric Decoder" (List + Dynamic View):
+            - Goal: Analyze specific terms (e.g., "Munichois").
+            - Interaction: Select a term to read the deep-dive analysis.
+            - Justification: Highlights the importance of language emphasized in the report.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7; /* Warm neutral */
+            color: #334155;
+        }
+        
+        h1, h2, h3, .serif-font {
+            font-family: 'Merriweather', serif;
+        }
+
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Constraint */
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 400px;
+        }
+
+        /* Custom Scrollbar for text areas */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Interactive Element States */
+        .nav-btn.active {
+            border-bottom: 3px solid #9F1239;
+            color: #1e293b;
+            font-weight: 600;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-stone-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-stone-800 serif-font">Analyse PAC-G</span>
+                </div>
+                <div class="hidden sm:flex sm:space-x-8" id="nav-container">
+                    <button onclick="app.navigate('intro')" class="nav-btn active px-1 pt-1 text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors">
+                        Introduction
+                    </button>
+                    <button onclick="app.navigate('context')" class="nav-btn px-1 pt-1 text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors">
+                        Le Basculement
+                    </button>
+                    <button onclick="app.navigate('mechanisms')" class="nav-btn px-1 pt-1 text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors">
+                        Mécaniques
+                    </button>
+                    <button onclick="app.navigate('rhetoric')" class="nav-btn px-1 pt-1 text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors">
+                        La Bataille des Mots
+                    </button>
+                    <button onclick="app.navigate('resistance')" class="nav-btn px-1 pt-1 text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors">
+                        Résistance
+                    </button>
+                </div>
+                <!-- Mobile menu button placeholder -->
+                <div class="flex items-center sm:hidden">
+                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="p-2 text-stone-500">
+                        ☰
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden sm:hidden bg-white border-b border-stone-200 p-4">
+            <button onclick="app.navigate('intro')" class="block w-full text-left py-2">Introduction</button>
+            <button onclick="app.navigate('context')" class="block w-full text-left py-2">Le Basculement</button>
+            <button onclick="app.navigate('mechanisms')" class="block w-full text-left py-2">Mécaniques</button>
+            <button onclick="app.navigate('rhetoric')" class="block w-full text-left py-2">La Bataille des Mots</button>
+            <button onclick="app.navigate('resistance')" class="block w-full text-left py-2">Résistance</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- SECTION: INTRO -->
+        <section id="intro" class="view-section fade-in block">
+            <div class="max-w-3xl mx-auto text-center py-12">
+                <div class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-red-800 uppercase bg-red-100 rounded-full">
+                    Analyse Sociétale
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold text-stone-900 mb-6 serif-font leading-tight">
+                    La mobilisation guerrière se joue aussi au niveau de la pensée.
+                </h1>
+                <p class="text-lg text-stone-600 mb-8 leading-relaxed">
+                    Le retour de la guerre de haute intensité sur le continent européen ne mobilise pas seulement des armées. Il engage une <strong>"mobilisation mentale"</strong>. Comment le discours politique et médiatique prépare-t-il les esprits à l'acceptation du conflit ? Comment la nuance disparaît-elle au profit d'une logique binaire ?
+                </p>
+                <p class="text-sm text-stone-500 mb-8 italic">
+                    Basé sur l'analyse n°15 de PAC-G, rédigée par Alain Willaume.
+                </p>
+                <button onclick="app.navigate('context')" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-stone-800 hover:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stone-500 transition-all">
+                    Commencer l'Exploration
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-5xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-100">
+                    <div class="text-2xl mb-2 text-stone-800">⚠️</div>
+                    <h3 class="font-bold text-lg mb-2">Urgence</h3>
+                    <p class="text-stone-600 text-sm">L'installation d'un sentiment d'urgence qui court-circuite le temps démocratique et la réflexion.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-100">
+                    <div class="text-2xl mb-2 text-stone-800">⚔️</div>
+                    <h3 class="font-bold text-lg mb-2">Manichéisme</h3>
+                    <p class="text-stone-600 text-sm">La réduction de la complexité géopolitique à un affrontement moral entre le Bien et le Mal.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-100">
+                    <div class="text-2xl mb-2 text-stone-800">🗣️</div>
+                    <h3 class="font-bold text-lg mb-2">Pensée Unique</h3>
+                    <p class="text-stone-600 text-sm">La marginalisation, voire la criminalisation, de toute parole pacifiste ou nuancée.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: CONTEXT (The Shift) -->
+        <section id="context" class="view-section hidden fade-in">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4 serif-font">Le Basculement de Paradigme</h2>
+                <p class="text-stone-600 max-w-3xl">
+                    Cette section illustre la transformation radicale de l'atmosphère politique en Europe. Nous sommes passés de l'ère des "dividendes de la paix" post-Guerre Froide à une "économie de guerre" mentale et matérielle. Observez l'évolution des priorités sociétales selon l'analyse du rapport.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <!-- Text Context -->
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-800">
+                        <h3 class="font-bold text-lg text-blue-900 mb-2">L'ère précédente (Post-1991)</h3>
+                        <p class="text-sm text-stone-600 mb-2">Caractérisée par la croyance en une paix durable, la primauté du commerce ("Wandel durch Handel") et la diplomatie comme outil principal.</p>
+                        <ul class="text-sm text-stone-600 list-disc list-inside">
+                            <li>Armée vue comme accessoire</li>
+                            <li>Débat ouvert</li>
+                            <li>Priorité au social/économique</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-red-800">
+                        <h3 class="font-bold text-lg text-red-900 mb-2">Le Nouveau Réalisme (2022+)</h3>
+                        <p class="text-sm text-stone-600 mb-2">Le "réveil stratégique" et la "boussole stratégique" de l'UE. La guerre devient l'horizon indépassable.</p>
+                        <ul class="text-sm text-stone-600 list-disc list-inside">
+                            <li>Réarmement massif</li>
+                            <li>Discours guerrier "décomplexé"</li>
+                            <li>Alignement atlantiste strict</li>
+                        </ul>
+                    </div>
+                    
+                    <button onclick="updateChart('before')" class="w-full py-2 bg-stone-200 hover:bg-stone-300 rounded text-stone-700 font-medium mb-2 transition">Voir: L'ère des Dividendes de la Paix</button>
+                    <button onclick="updateChart('after')" class="w-full py-2 bg-red-100 hover:bg-red-200 rounded text-red-800 font-medium transition">Voir: L'ère de la Mobilisation</button>
+                </div>
+
+                <!-- Visualization -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-stone-700">Visualisation du Changement de Priorités</h3>
+                        <span class="text-xs bg-stone-100 px-2 py-1 rounded text-stone-500">Données qualitatives estimées</span>
+                    </div>
+                    
+                    <!-- Chart Container -->
+                    <div class="chart-container">
+                        <canvas id="shiftChart"></canvas>
+                    </div>
+                    
+                    <div class="mt-4 text-sm text-stone-500 text-center italic">
+                        Ce graphique radar illustre conceptuellement l'intensité relative des discours et des priorités politiques avant et après le début du conflit en Ukraine, tel que décrit dans l'analyse.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: MECHANISMS -->
+        <section id="mechanisms" class="view-section hidden fade-in">
+            <div class="mb-8 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4 serif-font">La Fabrique du Consentement</h2>
+                <p class="text-stone-600">
+                    La mobilisation ne se fait pas uniquement par les décrets, mais par une préparation psychologique de la population. L'analyse identifie plusieurs mécanismes clés utilisés pour aligner l'opinion publique sur la logique de guerre.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden card-hover transition-all duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-red-700 font-bold text-xl mr-4">1</div>
+                            <h3 class="text-xl font-bold text-stone-800">L'Injonction Binaire</h3>
+                        </div>
+                        <p class="text-stone-600 mb-4">
+                            La complexité du monde est effacée au profit d'une vision simpliste : <strong>"Nous" (le Bien, la Démocratie) contre "Eux" (le Mal, l'Autocratie)</strong>.
+                        </p>
+                        <div class="bg-stone-50 p-4 rounded text-sm text-stone-700 italic border-l-2 border-red-400">
+                            "Une grille de lecture univoque s'impose : le camp du Bien contre le camp du Mal. Toute nuance est perçue comme une trahison."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden card-hover transition-all duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-700 font-bold text-xl mr-4">2</div>
+                            <h3 class="text-xl font-bold text-stone-800">La Disqualification de l'Adversaire</h3>
+                        </div>
+                        <p class="text-stone-600 mb-4">
+                            L'utilisation d'étiquettes infamantes pour faire taire la critique. Le pacifisme est assimilé à de la naïveté ou de la complicité.
+                        </p>
+                        <div class="bg-stone-50 p-4 rounded text-sm text-stone-700 italic border-l-2 border-orange-400">
+                            "Le terme 'Poutine-versteher' (celui qui comprend Poutine) ou l'accusation de 'Munichois' servent à interdire toute analyse des causes profondes du conflit."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden card-hover transition-all duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-xl mr-4">3</div>
+                            <h3 class="text-xl font-bold text-stone-800">L'Union Sacrée Médiatique</h3>
+                        </div>
+                        <p class="text-stone-600 mb-4">
+                            Un alignement quasi-total des médias dominants sur la ligne gouvernementale et atlantiste, créant un effet de sidération.
+                        </p>
+                        <div class="bg-stone-50 p-4 rounded text-sm text-stone-700 italic border-l-2 border-blue-400">
+                            "Le journalisme de guerre tend à devenir un journalisme de préfecture, relayant sans distance les éléments de langage officiels."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden card-hover transition-all duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-xl mr-4">4</div>
+                            <h3 class="text-xl font-bold text-stone-800">L'Oubli de l'Histoire</h3>
+                        </div>
+                        <p class="text-stone-600 mb-4">
+                            Le conflit est présenté hors sol, sans contexte historique (élargissement de l'OTAN, guerre du Donbass depuis 2014), rendant la diplomatie impossible.
+                        </p>
+                        <div class="bg-stone-50 p-4 rounded text-sm text-stone-700 italic border-l-2 border-slate-400">
+                            "L'histoire ne commence pas en février 2022. Effacer le passé permet de présenter la réaction militaire comme la seule option logique."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: RHETORIC (The Words) -->
+        <section id="rhetoric" class="view-section hidden fade-in">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-900 mb-4 serif-font">La Bataille des Mots : Le Décodeur</h2>
+                <p class="text-stone-600 max-w-3xl">
+                    Les mots ne sont pas neutres. Ils cadrent notre pensée. Cliquez sur les termes ci-dessous pour voir comment l'analyse décrypte leur usage dans le débat public actuel.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 h-[600px]">
+                <!-- List of Terms -->
+                <div class="md:col-span-1 bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden flex flex-col h-full">
+                    <div class="p-4 bg-stone-50 border-b border-stone-200 font-semibold text-stone-700">
+                        Lexique du "Réarmement Moral"
+                    </div>
+                    <div class="overflow-y-auto custom-scroll flex-grow p-2 space-y-2">
+                        <button onclick="selectTerm('munichois')" class="term-btn w-full text-left px-4 py-3 rounded hover:bg-stone-100 focus:bg-stone-100 focus:outline-none transition-colors border-l-4 border-transparent hover:border-red-500 active-term" data-term="munichois">
+                            "Munichois" / Esprit de Munich
+                        </button>
+                        <button onclick="selectTerm('poutine')" class="term-btn w-full text-left px-4 py-3 rounded hover:bg-stone-100 focus:bg-stone-100 focus:outline-none transition-colors border-l-4 border-transparent hover:border-red-500" data-term="poutine">
+                            "Poutine-versteher"
+                        </button>
+                        <button onclick="selectTerm('civilisation')" class="term-btn w-full text-left px-4 py-3 rounded hover:bg-stone-100 focus:bg-stone-100 focus:outline-none transition-colors border-l-4 border-transparent hover:border-red-500" data-term="civilisation">
+                            Guerre de Civilisation
+                        </button>
+                        <button onclick="selectTerm('boussole')" class="term-btn w-full text-left px-4 py-3 rounded hover:bg-stone-100 focus:bg-stone-100 focus:outline-none transition-colors border-l-4 border-transparent hover:border-red-500" data-term="boussole">
+                            Boussole Stratégique
+                        </button>
+                        <button onclick="selectTerm('camp')" class="term-btn w-full text-left px-4 py-3 rounded hover:bg-stone-100 focus:bg-stone-100 focus:outline-none transition-colors border-l-4 border-transparent hover:border-red-500" data-term="camp">
+                            Le Camp du Bien
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Definition Display -->
+                <div class="md:col-span-2 bg-white rounded-lg shadow-lg border border-stone-200 p-8 flex flex-col justify-center relative overflow-hidden h-full">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <span class="text-9xl serif-font">"</span>
+                    </div>
+                    
+                    <div id="term-content">
+                        <!-- Content injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: RESISTANCE -->
+        <section id="resistance" class="view-section hidden fade-in">
+             <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-stone-900 mb-4 serif-font">Penser Contre la Guerre</h2>
+                    <p class="text-stone-600">
+                        Face à l'enrôlement des esprits, l'analyse propose des pistes pour maintenir une pensée critique et œuvrer pour la paix sans naïveté.
+                    </p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-white border-l-4 border-emerald-600 p-6 shadow-sm rounded-r-lg">
+                        <h3 class="text-xl font-bold text-stone-800 mb-2">1. Réintroduire la Complexité</h3>
+                        <p class="text-stone-600">
+                            Refuser les explications monocausales. Comprendre que l'on peut condamner l'agression russe tout en analysant les responsabilités partagées de l'expansion de l'OTAN et les échecs de la diplomatie européenne. La vérité est souvent grise, pas noire ou blanche.
+                        </p>
+                    </div>
+
+                    <div class="bg-white border-l-4 border-emerald-600 p-6 shadow-sm rounded-r-lg">
+                        <h3 class="text-xl font-bold text-stone-800 mb-2">2. Réhabiliter le Mot "Paix"</h3>
+                        <p class="text-stone-600">
+                            La paix ne doit pas être un mot sale ou synonyme de capitulation. C'est un projet politique qui demande plus de courage que la guerre. Il faut oser parler de "cessez-le-feu" et de "négociations" sans se laisser intimider par l'accusation de trahison.
+                        </p>
+                    </div>
+
+                    <div class="bg-white border-l-4 border-emerald-600 p-6 shadow-sm rounded-r-lg">
+                        <h3 class="text-xl font-bold text-stone-800 mb-2">3. Questionner les Intérêts</h3>
+                        <p class="text-stone-600">
+                            Qui profite de la guerre ? Analyser les bénéfices du complexe militaro-industriel et les agendas géopolitiques des grandes puissances (USA, Chine) qui utilisent l'Europe comme terrain d'affrontement.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-stone-800 text-white p-8 rounded-lg mt-8 text-center shadow-lg">
+                        <p class="text-lg serif-font italic mb-4">"La guerre est un caméléon qui change de nature à chaque époque. Aujourd'hui, elle se gagne d'abord dans les têtes."</p>
+                        <p class="font-bold">- Conclusion de l'analyse</p>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 mt-auto">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-stone-500 text-sm">
+                Basé sur l'Analyse 15 de PAC-G.
+            </p>
+            <p class="text-stone-400 text-xs mt-2 md:mt-0">
+                Application Interactive à but pédagogique.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- DATA STORE ---
+        const termData = {
+            'munichois': {
+                title: 'L\'accusation de "Munichois"',
+                definition: 'Référence aux accords de Munich de 1938 (Daladier/Chamberlain face à Hitler).',
+                analysis: 'Cet anathème historique est utilisé comme arme de dissuasion massive. Il sert à clore le débat avant même qu\'il ne commence. Quiconque propose la négociation est immédiatement assimilé à ceux qui ont capitulé devant le nazisme. Cette analogie historique douteuse empêche de penser la spécificité du conflit actuel (nucléaire, économique).'
+            },
+            'poutine': {
+                title: '"Poutine-versteher"',
+                definition: 'Terme allemand signifiant "celui qui comprend Poutine", utilisé péjorativement.',
+                analysis: 'Initialement descriptif, ce terme est devenu une insulte synonyme de "complice". Il confond délibérément "comprendre" (analyser les raisons, la rationalité de l\'autre) et "excuser" (valider moralement). Or, on ne peut pas combattre un adversaire sans comprendre sa logique interne.'
+            },
+            'civilisation': {
+                title: 'Guerre de Civilisation',
+                definition: 'La rhétorique opposant les "valeurs européennes" à la "barbarie asiatique/russe".',
+                analysis: 'Ce cadre de pensée réactive de vieux mythes orientalistes. Il transforme un conflit territorial et politique en une lutte existentielle et métaphysique. Si l\'ennemi est la "barbarie" absolue, aucun compromis n\'est possible, seule sa destruction totale est envisageable. C\'est la porte ouverte à la guerre totale.'
+            },
+            'boussole': {
+                title: 'La "Boussole Stratégique"',
+                definition: 'Document de l\'UE (2022) définissant sa stratégie de défense.',
+                analysis: 'Ce document marque l\'officialisation du tournant guerrier de l\'Europe. Il acte le passage d\'une puissance civile ("Soft Power") à une puissance qui assume le rapport de force ("Hard Power"). Le vocabulaire utilisé ("réveil", "menace", "compétition") entérine la vision d\'un monde dangereux où l\'UE doit s\'armer.'
+            },
+            'camp': {
+                title: 'Le Camp du Bien',
+                definition: 'L\'auto-désignation de l\'Occident comme garant de la morale universelle.',
+                analysis: 'Cette posture morale rend l\'Occident aveugle à ses propres contradictions (interventions en Irak, Libye, soutien à d\'autres autocraties). Elle aliène une grande partie du "Sud Global" qui perçoit cette morale comme un outil de domination géopolitique à géométrie variable.'
+            }
+        };
+
+        const chartData = {
+            before: {
+                label: 'Période Post-Guerre Froide (1991-2014)',
+                data: [2, 3, 9, 8, 3], // Arbitrary scale 0-10
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: 'rgba(59, 130, 246, 1)'
+            },
+            after: {
+                label: 'Période Actuelle (2022+)',
+                data: [9, 9, 3, 2, 8], // Arbitrary scale 0-10
+                backgroundColor: 'rgba(159, 18, 57, 0.2)',
+                borderColor: 'rgba(159, 18, 57, 1)'
+            }
+        };
+
+        // --- APP LOGIC ---
+        const app = {
+            currentView: 'intro',
+            chart: null,
+
+            init: function() {
+                this.navigate('intro');
+                this.initChart();
+                // Select default term
+                selectTerm('munichois');
+            },
+
+            navigate: function(viewId) {
+                // Update State
+                this.currentView = viewId;
+
+                // Update UI: Nav Buttons
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('onclick').includes(viewId)) {
+                        btn.classList.add('active');
+                    }
+                });
+
+                // Update UI: View Sections
+                document.querySelectorAll('.view-section').forEach(section => {
+                    section.classList.add('hidden');
+                    section.classList.remove('block');
+                });
+                
+                const targetSection = document.getElementById(viewId);
+                targetSection.classList.remove('hidden');
+                targetSection.classList.add('block');
+                
+                // Re-render chart if navigating to context to ensure size is correct
+                if (viewId === 'context' && this.chart) {
+                    this.chart.resize();
+                }
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+            },
+
+            initChart: function() {
+                const ctx = document.getElementById('shiftChart').getContext('2d');
+                
+                this.chart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: [
+                            'Priorité Militaire', 
+                            'Discours Guerrier', 
+                            'Tolérance à la Critique', 
+                            'Focus Diplomatique', 
+                            'Alignement Atlantiste'
+                        ],
+                        datasets: [{
+                            label: chartData.before.label,
+                            data: chartData.before.data,
+                            backgroundColor: chartData.before.backgroundColor,
+                            borderColor: chartData.before.borderColor,
+                            borderWidth: 2,
+                            pointBackgroundColor: chartData.before.borderColor
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    display: true
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 10,
+                                ticks: {
+                                    display: false // Hide numbers for cleaner conceptual look
+                                },
+                                pointLabels: {
+                                    font: {
+                                        size: 12,
+                                        family: "'Inter', sans-serif"
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + getQualitativeLabel(context.raw);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+        // --- HELPER FUNCTIONS ---
+        
+        function getQualitativeLabel(value) {
+            if (value <= 2) return "Faible";
+            if (value <= 5) return "Modéré";
+            if (value <= 8) return "Fort";
+            return "Dominant";
+        }
+
+        function updateChart(period) {
+            const newData = chartData[period];
+            app.chart.data.datasets[0].label = newData.label;
+            app.chart.data.datasets[0].data = newData.data;
+            app.chart.data.datasets[0].backgroundColor = newData.backgroundColor;
+            app.chart.data.datasets[0].borderColor = newData.borderColor;
+            app.chart.data.datasets[0].pointBackgroundColor = newData.borderColor;
+            app.chart.update();
+        }
+
+        function selectTerm(termKey) {
+            const data = termData[termKey];
+            const container = document.getElementById('term-content');
+            
+            // Update UI buttons
+            document.querySelectorAll('.term-btn').forEach(btn => {
+                btn.classList.remove('bg-stone-100', 'border-red-500', 'font-bold', 'text-stone-900');
+                btn.classList.add('border-transparent');
+                if (btn.dataset.term === termKey) {
+                    btn.classList.add('bg-stone-100', 'border-red-500', 'font-bold', 'text-stone-900');
+                    btn.classList.remove('border-transparent');
+                }
+            });
+
+            // Animate Content Update
+            container.style.opacity = '0';
+            setTimeout(() => {
+                container.innerHTML = `
+                    <h3 class="text-2xl font-bold text-stone-900 mb-2 font-serif">${data.title}</h3>
+                    <div class="bg-yellow-50 p-3 rounded mb-6 text-sm text-stone-600 border border-yellow-100">
+                        <strong>Définition:</strong> ${data.definition}
+                    </div>
+                    <div class="prose text-stone-700 leading-relaxed">
+                        <p class="text-lg">${data.analysis}</p>
+                    </div>
+                `;
+                container.style.opacity = '1';
+            }, 200);
+            
+            // Re-apply transition class
+            container.style.transition = 'opacity 0.3s ease-in-out';
+        }
+
+        // Initialize App on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+
+    </script>
+</body>
+</html>
