@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)https://dl.ouaisfi.eu/usba/1/404.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript" src="./404-cpcp_files/2-t7Z5UKEsqtUds1PTEyQwneLYyvCoTBrqAtet4UD_mPr8ZNHjf0dTzL5TsZUoypCyaj4zp8OpF8H5P6HN2jzS6M1ytNyUEItxbEIelk81joi6LoE0Ol9oJ-N6IuQX1rv5XliS6tB3qCFhdYKf8BZndlXmbpCe3maC8vSPj-bZwTMt0TSuYwmg-Q1Tytm98lqR6UcVO4iut7Icjo_ly_rJ2252E"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Hyperespace</title>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: system-ui, sans-serif;
+  color: #fff;
+}
+
+canvas {
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+}
+
+.ui {
+  position: absolute;
+  inset: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.header {
+  text-align: center;
+  opacity: 0.8;
+  mix-blend-mode: screen;
+}
+
+.header h1 {
+  font-size: clamp(2.5rem, 9vw, 4.5rem);
+  letter-spacing: 0.15em;
+}
+
+.header p {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  pointer-events: auto;
+  padding: 0.8rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.hint {
+  text-align: center;
+  font-size: 0.7rem;
+  opacity: 0.35;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="c" width="1280" height="665"></canvas>
+
+<div class="ui">
+  <div class="header">
+    <h1>404</h1>
+    <p>La réalité n’est plus stable</p>
+  </div>
+
+  <div class="footer">
+    <a href="https://dl.ouaisfi.eu/" class="button">⟵ Quitter l’hyperespace</a>
+  </div>
+
+  <div class="hint">
+    Double tap / P = basculer en mode psychédélique
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
+
+let w, h, cx, cy;
+let psy = false;
+let time = 0;
+
+function resize() {
+  w = canvas.width = innerWidth;
+  h = canvas.height = innerHeight;
+  cx = w / 2;
+  cy = h / 2;
+}
+addEventListener("resize", resize);
+resize();
+
+/* ===== STARS ===== */
+const stars = [];
+const MAX = Math.min(280, (w*h)/4500);
+
+class Star {
+  constructor(x, y) {
+    this.x = x ?? Math.random() * w;
+    this.y = y ?? Math.random() * h;
+    this.vx = (Math.random()-0.5)*1.2;
+    this.vy = (Math.random()-0.5)*1.2;
+    this.r = Math.random()*1.5+0.5;
+    this.h = Math.random()*360;
+  }
+
+  update() {
+    const dx = cx - this.x;
+    const dy = cy - this.y;
+    const d = Math.hypot(dx, dy) + 0.1;
+
+    const g = psy ? 0.035 : 0.015;
+    this.vx += (dx/d)*g;
+    this.vy += (dy/d)*g;
+
+    this.x += this.vx;
+    this.y += this.vy;
+
+    if (this.x<0||this.x>w) this.vx*=-1;
+    if (this.y<0||this.y>h) this.vy*=-1;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.fillStyle = `hsla(${this.h + time},90%,70%,0.9)`;
+    ctx.arc(this.x, this.y, this.r*(psy?1.4:1), 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+for(let i=0;i<MAX;i++) stars.push(new Star());
+
+/* ===== CONSTELLATIONS ===== */
+function drawLinks() {
+  for(let i=0;i<stars.length;i++) {
+    for(let j=i+1;j<stars.length;j++) {
+      const a = stars[i], b = stars[j];
+      const d = Math.hypot(a.x-b.x, a.y-b.y);
+      if(d < (psy?140:90)) {
+        ctx.strokeStyle = `hsla(${(a.h+b.h)/2+time},100%,70%,${psy?0.35:0.15})`;
+        ctx.lineWidth = psy ? 1.2 : 0.5;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+/* ===== INTERACTION ===== */
+canvas.addEventListener("pointerdown", e=>{
+  for(let i=0;i<25;i++) stars.push(new Star(e.clientX, e.clientY));
+});
+
+let tapTimer = null;
+canvas.addEventListener("pointerup", ()=>{
+  if(tapTimer) {
+    psy = !psy;
+    tapTimer = null;
+  } else {
+    tapTimer = setTimeout(()=>tapTimer=null, 300);
+  }
+});
+
+addEventListener("keydown", e=>{
+  if(e.key.toLowerCase()==="p") psy=!psy;
+});
+
+addEventListener("mousemove", e=>{
+  cx = e.clientX;
+  cy = e.clientY;
+});
+
+/* ===== LOOP ===== */
+function loop() {
+  time += psy ? 0.8 : 0.2;
+
+  ctx.fillStyle = psy
+    ? "rgba(0,0,0,0.18)"
+    : "rgba(0,0,0,0.3)";
+  ctx.fillRect(0,0,w,h);
+
+  if(psy){
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(Math.sin(time*0.01)*0.002);
+    ctx.translate(-cx, -cy);
+  }
+
+  drawLinks();
+
+  stars.forEach(s=>{
+    s.update();
+    s.draw();
+  });
+
+  if(psy) ctx.restore();
+
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+
+
+
+<vfv-hpwohkmiiyqi><template shadowrootmode="closed"><link rel="stylesheet" href="https://dl.ouaisfi.eu/cxIs-GhX2kUXUglWlC2H1x42FkT8xOgkfhs1YGiNWzHbmpID_a-B0m2whHL2OE1dDU5jj3jAVopdHhzBVafAggl5S5SEBNhNrLFY4byEDNBfsrf2h2xdXH5D-IpCnBAAH9lRy5g70kWTcGILPgMHmCWbY6BsKyXYsSyb94nzTghuPBM8FyQ7NZoPezIh0qEhH4V3FtrD5JDEwVAKnbVdy3lKtglAsEwycHoR54UX1qxWwSqQZ6S6kqQo4xdm8SgriCSRGTm4eb9pHJBSoz6t_T_LTCZKLUzrNA0INxWgcpA9-9jdPT-f68Ms2BhhVTPNRkWCgDXQOtG83bPm5IHH5ZHLTX_IrRQDh-h6stgjqT5Vcrxcgr6jbe4HhlFMUorRpiPScfMuGbHo4ugkSA"></template></vfv-hpwohkmiiyqi><style></style></body></html>
