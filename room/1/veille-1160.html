@@ -1,0 +1,504 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://yannkeep.github.io/NEQ13ZvcPSmO7EtMHzrxLj7aPPNvfu8h4gO6C2Oms2AuWYW5lE6uiwtJ6PWperk9OwJiLZbzUU13HkzLHVnUi3yh8iNNXEMS6se8OuX6hNX4e9AxFB7qRMN0esz0NLRP_HmWCFxnl7935Qk1kAcy_qjdMb7fz3JNmWURT3Yy-IIdFpR9ldW4WfpbpBR8YxBvDbLct5ECT0eq5tP5WaJP9FKgXTxGl7qgzGm1bCq2KpZSL2bSoCieZ6p2YfgOepjg3t28xX3ZcdcyyDON8z8G_9v6Z-uLQecJsKq-0SU7X6D-Bu3D1jnY5_u_MxhmKMYpum46Z0_2MMep78-7vN4Ab7saEoAqM9aXt--rj4iEFSvOtXMARYOocfJ3SbP9dPtl5InUOmdLUm4_3KH-xb9Lf1kw0K8JEHkMlbyXvDyj57vuGs3Bae2H-Yc42nM2EMtgy6mpZkOCv7gcSrfTBXbcf_TJ'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratégie d'Inclusion : CPCP & Profils Atypiques</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 600px; 
+            margin: 0 auto; 
+            height: 350px; 
+            max-height: 400px; 
+        }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .tab-active { border-bottom: 2px solid #0f766e; color: #0f766e; font-weight: 600; }
+        .tab-inactive { color: #64748b; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+    <!-- Chosen Palette: Teal & Slate (Calm, Professional, Civic-minded) -->
+    <!-- Application Structure Plan: 
+         1. Hero/Intro: Define the actors (User & CPCP).
+         2. Analysis Section: Who is CPCP? (Mission breakdown).
+         3. Diagnosis Section: Visualizing the gap between User constraints and Market demands.
+         4. Solution Section: Interactive "Partnership Generator" proposing specific no-code/civic projects.
+         5. Methodology: How to handle "Silence Radio" (Async protocols).
+    -->
+    <!-- Visualization & Content Choices:
+         - Radar Chart: To visually demonstrate the "Fit" between the user's specific constraints (medical/async) and the flexible nature of intellectual/civic work, contrasting with rigid corporate jobs.
+         - Interactive Cards: To break down CPCP's complex mission into digestible "Opportunity Zones".
+         - Dynamic Text Generator: To solve the "What do I propose?" problem by combining user skills (No-code) with CPCP needs.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-teal-700">Inclusion<span class="text-slate-700">Civique</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center" id="nav-container">
+                    <button onclick="switchTab('context')" class="nav-btn tab-active py-2 px-1 text-sm">Le Contexte (CPCP)</button>
+                    <button onclick="switchTab('diagnosis')" class="nav-btn tab-inactive py-2 px-1 text-sm">Diagnostic Profil</button>
+                    <button onclick="switchTab('solutions')" class="nav-btn tab-inactive py-2 px-1 text-sm">Pistes & Solutions</button>
+                    <button onclick="switchTab('partnership')" class="nav-btn tab-inactive py-2 px-1 text-sm">Générateur de Projet</button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Nav Placeholder -->
+        <div class="md:hidden flex justify-around bg-slate-100 py-2 border-t">
+             <button onclick="switchTab('context')" class="text-xs font-bold text-teal-700">Contexte</button>
+             <button onclick="switchTab('diagnosis')" class="text-xs text-slate-600">Diagnostic</button>
+             <button onclick="switchTab('solutions')" class="text-xs text-slate-600">Solutions</button>
+             <button onclick="switchTab('partnership')" class="text-xs text-slate-600">Projets</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full">
+
+        <!-- SECTION 1: CONTEXT (CPCP) -->
+        <div id="context-section" class="fade-in block">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Le CPCP : Analyse de l'Écosystème</h1>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    Le <strong>Centre Permanent pour la Citoyenneté et la Participation</strong> est un acteur clé de l'éducation permanente en Belgique.
+                    Pour un profil en quête de sens et de flexibilité, comprendre leur structure est la première étape vers la réinsertion.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100 card-hover">
+                    <div class="h-2 w-12 bg-teal-500 mb-4 rounded"></div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Citoyenneté & Études</h3>
+                    <p class="text-sm text-slate-600 mb-4">Production d'analyses, d'études et de réflexions sur les enjeux sociétaux (démocratie, numérique, social).</p>
+                    <div class="bg-teal-50 p-3 rounded text-xs text-teal-800">
+                        <strong>Opportunité :</strong> Travail intellectuel, rédactionnel, faisable en distanciel asynchrone.
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100 card-hover">
+                    <div class="h-2 w-12 bg-indigo-500 mb-4 rounded"></div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Formation & Animation</h3>
+                    <p class="text-sm text-slate-600 mb-4">Organisation de modules pour formateurs, enseignants et citoyens.</p>
+                    <div class="bg-indigo-50 p-3 rounded text-xs text-indigo-800">
+                        <strong>Opportunité :</strong> Conception de supports pédagogiques numériques (E-learning, PDF interactifs).
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100 card-hover">
+                    <div class="h-2 w-12 bg-amber-500 mb-4 rounded"></div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Action Culturelle</h3>
+                    <p class="text-sm text-slate-600 mb-4">Projets de terrain visant à recréer du lien social et de la participation.</p>
+                    <div class="bg-amber-50 p-3 rounded text-xs text-amber-800">
+                        <strong>Opportunité :</strong> Création d'outils numériques pour faciliter la participation à distance.
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-100 rounded-xl p-6 border-l-4 border-teal-600">
+                <h3 class="font-bold text-slate-800 text-lg mb-2">Pourquoi le CPCP pour vous ?</h3>
+                <p class="text-slate-700">
+                    Contrairement à une entreprise commerciale focalisée sur la productivité horaire, le secteur de l'<strong>Éducation Permanente</strong> valorise le <em>processus</em>, la <em>réflexion</em> et l'<em>inclusion</em>. Votre profil "Civic-low-tech" correspond à leur besoin de démocratiser le numérique : vous parlez le langage du citoyen, pas celui du développeur de la Silicon Valley.
+                </p>
+            </div>
+            
+            <div class="mt-8 text-center">
+                <button onclick="switchTab('diagnosis')" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+                    Analyser la compatibilité de votre profil
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 2: DIAGNOSIS (The Chart) -->
+        <div id="diagnosis-section" class="hidden fade-in">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Analyse de Compatibilité : Le Défi "Asynchrone"</h2>
+                <p class="text-slate-600">
+                    Visualisation de l'écart entre les exigences du marché classique et la réalité de vos conditions médicales, 
+                    mise en perspective avec le potentiel d'un partenariat associatif (CPCP).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <!-- Chart Container -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-slate-500 mt-4 italic">
+                        Le graphique montre que si le marché classique (Gris) exige une présence synchrone élevée, 
+                        l'approche "Projet/Mission" (Vert) maximise vos atouts (Analyse, Autonomie).
+                    </p>
+                </div>
+
+                <!-- Text Analysis -->
+                <div class="space-y-6">
+                    <div class="border-l-4 border-red-400 pl-4 py-1">
+                        <h4 class="font-bold text-slate-800">Le Frein Majeur : Synchronicité</h4>
+                        <p class="text-sm text-slate-600 mt-1">
+                            Le "silence radio" médical est incompatible avec le salariat classique (réunions Zoom, horaires fixes). 
+                            <span class="font-semibold text-red-600">Solution :</span> Basculer vers une logique de <strong>Livrables</strong> (Résultat) et non de <strong>Temps</strong>.
+                        </p>
+                    </div>
+                    <div class="border-l-4 border-teal-500 pl-4 py-1">
+                        <h4 class="font-bold text-slate-800">L'Atout "Civic-Low-Tech"</h4>
+                        <p class="text-sm text-slate-600 mt-1">
+                            Le CPCP a besoin d'outils simples pour ses membres. Un "No-codeur" de 46 ans comprend mieux les freins numériques des seniors ou précaires qu'un jeune ingénieur. 
+                            Votre "faiblesse" technique relative est une <strong>force pédagogique</strong>.
+                        </p>
+                    </div>
+                    <div class="border-l-4 border-amber-400 pl-4 py-1">
+                        <h4 class="font-bold text-slate-800">Le Statut BIM & Réinsertion</h4>
+                        <p class="text-sm text-slate-600 mt-1">
+                            Le statut BIM permet des dispositifs spécifiques (bénévolat défrayé, reprise progressive). 
+                            Le CPCP, étant subventionné, est souvent ouvert aux statuts "Article 60" ou volontariat expert.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: SOLUTIONS (Interactive List) -->
+        <div id="solutions-section" class="hidden fade-in">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6">Pistes Concrètes d'Intervention</h2>
+            <p class="text-slate-600 mb-8 max-w-3xl">
+                Comment transformer "maladie longue durée" en "valeur ajoutée" ? Voici trois rôles taillés sur mesure pour votre profil, compatibles avec le travail asynchrone.
+            </p>
+
+            <div class="space-y-4">
+                <!-- Piste 1 -->
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-100 transition" onclick="toggleAccordion('piste1')">
+                        <div class="flex items-center gap-3">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Rédaction / Analyse</span>
+                            <h3 class="font-bold text-slate-700">Le Veilleur Analyste (Asynchrone pur)</h3>
+                        </div>
+                        <span class="text-2xl text-slate-400 select-none">+</span>
+                    </div>
+                    <div id="piste1" class="hidden p-6 bg-white">
+                        <p class="text-slate-600 mb-4">
+                            <strong>Le concept :</strong> Le CPCP publie régulièrement des "Études et Analyses". Vous proposez de réaliser une revue de presse ou une analyse thématique (ex: "L'impact du numérique sur la précarité") à votre rythme.
+                        </p>
+                        <ul class="list-disc pl-5 text-sm text-slate-500 space-y-1">
+                            <li><strong>Livrable :</strong> Un article de 3 pages par mois.</li>
+                            <li><strong>Avantage Santé :</strong> Aucun horaire. Si vous êtes malade 3 jours, vous écrivez les 3 jours suivants. Seule la date limite compte.</li>
+                            <li><strong>Outil :</strong> Google Docs, Zotero.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Piste 2 -->
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-100 transition" onclick="toggleAccordion('piste2')">
+                        <div class="flex items-center gap-3">
+                            <span class="bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded">No-Code / Tech</span>
+                            <h3 class="font-bold text-slate-700">L'Architecte d'Outils Citoyens</h3>
+                        </div>
+                        <span class="text-2xl text-slate-400 select-none">+</span>
+                    </div>
+                    <div id="piste2" class="hidden p-6 bg-white">
+                        <p class="text-slate-600 mb-4">
+                            <strong>Le concept :</strong> Créer des petits outils numériques pour faciliter les animations du CPCP. Vous ne codez pas, vous "assemblez" (Airtable, Notion, Softr).
+                        </p>
+                        <ul class="list-disc pl-5 text-sm text-slate-500 space-y-1">
+                            <li><strong>Projet Exemple :</strong> Créer un annuaire interactif des initiatives citoyennes locales.</li>
+                            <li><strong>Avantage Santé :</strong> Développement par itération. Pas de serveur à gérer en urgence (c'est du SaaS).</li>
+                            <li><strong>Argument :</strong> "Je peux automatiser vos inscriptions aux formations sans que ça vous coûte cher."</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Piste 3 -->
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-100 transition" onclick="toggleAccordion('piste3')">
+                        <div class="flex items-center gap-3">
+                            <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">Témoin Expert</span>
+                            <h3 class="font-bold text-slate-700">Le Consultant "Expérience Usager"</h3>
+                        </div>
+                        <span class="text-2xl text-slate-400 select-none">+</span>
+                    </div>
+                    <div id="piste3" class="hidden p-6 bg-white">
+                        <p class="text-slate-600 mb-4">
+                            <strong>Le concept :</strong> Utiliser votre propre parcours (BIM, Maladie) comme expertise. Le CPCP travaille sur l'inclusion. Qui mieux que vous pour auditer leurs supports ?
+                        </p>
+                        <ul class="list-disc pl-5 text-sm text-slate-500 space-y-1">
+                            <li><strong>Mission :</strong> "Audit d'accessibilité cognitive" de leurs publications. Sont-elles lisibles pour un public fatigué ou précaire ?</li>
+                            <li><strong>Format :</strong> Rapport écrit ou vidéo asynchrone (Loom).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: PARTNERSHIP GENERATOR (Interactive Tool) -->
+        <div id="partnership-section" class="hidden fade-in">
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Générateur de Partenariat Innovant</h2>
+            <p class="text-slate-600 mb-8">
+                Ne demandez pas "avez-vous un emploi ?". Proposez "voici ce que je peux construire pour vous". 
+                Sélectionnez vos forces pour générer une proposition de valeur unique.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Inputs -->
+                <div class="md:col-span-4 space-y-4">
+                    <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                        <h3 class="font-bold text-slate-700 mb-4">Vos Atouts (Cochez)</h3>
+                        <label class="flex items-center space-x-3 mb-3 cursor-pointer">
+                            <input type="checkbox" id="skill-nocode" class="form-checkbox h-5 w-5 text-teal-600" checked>
+                            <span class="text-slate-700">Maitrise No-Code (Notion/Airtable)</span>
+                        </label>
+                        <label class="flex items-center space-x-3 mb-3 cursor-pointer">
+                            <input type="checkbox" id="skill-writing" class="form-checkbox h-5 w-5 text-teal-600">
+                            <span class="text-slate-700">Capacités Rédactionnelles</span>
+                        </label>
+                        <label class="flex items-center space-x-3 mb-3 cursor-pointer">
+                            <input type="checkbox" id="skill-lived" class="form-checkbox h-5 w-5 text-teal-600" checked>
+                            <span class="text-slate-700">Expérience de vie (Précarité/Santé)</span>
+                        </label>
+                        
+                        <div class="pt-4 border-t border-slate-100 mt-4">
+                            <h3 class="font-bold text-slate-700 mb-2">Contrainte Principale</h3>
+                            <div class="text-sm text-red-600 bg-red-50 p-2 rounded">
+                                ⚠ Silence Radio Imprévisible (Mode Asynchrone Strict)
+                            </div>
+                        </div>
+
+                        <button onclick="generatePitch()" class="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded transition">
+                            Générer ma Proposition
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Output -->
+                <div class="md:col-span-8">
+                    <div id="pitch-output" class="bg-slate-800 text-slate-100 p-8 rounded-lg shadow-lg h-full relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <span class="text-6xl font-bold">PROJET</span>
+                        </div>
+                        
+                        <h3 class="text-xl font-bold text-teal-400 mb-1" id="project-title">Titre du Projet...</h3>
+                        <p class="text-xs text-slate-400 uppercase tracking-widest mb-6">Proposition de Partenariat</p>
+                        
+                        <div class="space-y-4 text-slate-300 text-sm leading-relaxed" id="project-body">
+                            <p>Cliquez sur "Générer ma Proposition" pour voir une idée concrète de projet innovant à soumettre au CPCP.</p>
+                        </div>
+
+                        <div id="project-actions" class="mt-8 hidden">
+                            <div class="bg-slate-700 p-4 rounded border border-slate-600">
+                                <h4 class="text-white font-bold text-sm mb-2">Argument "Massue" pour le RDV :</h4>
+                                <p class="text-teal-200 italic text-sm" id="project-hook">"..."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-slate-500 text-sm">
+                Outil d'aide à la décision pour profil "Civic-Low-Tech". 
+                Basé sur l'analyse des missions du <a href="https://www.cpcp.be/" target="_blank" class="text-teal-600 hover:underline">CPCP.be</a>.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // State Management
+        let currentTab = 'context';
+
+        // Initialize Chart
+        document.addEventListener('DOMContentLoaded', function() {
+            renderChart();
+        });
+
+        // Navigation Logic
+        function switchTab(tabId) {
+            // Update UI State
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('tab-active', 'text-teal-700');
+                btn.classList.add('tab-inactive');
+            });
+            
+            // Find the button that corresponds to the tab (rough match)
+            const buttons = document.querySelectorAll(`button[onclick="switchTab('${tabId}')"]`);
+            buttons.forEach(btn => {
+                btn.classList.remove('tab-inactive');
+                btn.classList.add('tab-active', 'text-teal-700');
+            });
+
+            // Hide all sections
+            ['context', 'diagnosis', 'solutions', 'partnership'].forEach(id => {
+                const el = document.getElementById(id + '-section');
+                if(el) {
+                    el.classList.add('hidden');
+                    el.classList.remove('block');
+                }
+            });
+
+            // Show target section
+            const target = document.getElementById(tabId + '-section');
+            if(target) {
+                target.classList.remove('hidden');
+                target.classList.add('block');
+            }
+        }
+
+        // Accordion Logic
+        function toggleAccordion(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Chart Configuration (Radar Chart)
+        function renderChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            
+            const data = {
+                labels: [
+                    'Flexibilité Horaire', 
+                    'Travail Asynchrone', 
+                    'Impact Social', 
+                    'Adaptation Santé', 
+                    'Exigence Présentielle (Inverse)',
+                    'Autonomie'
+                ],
+                datasets: [
+                    {
+                        label: 'Marché du Travail Classique',
+                        data: [20, 10, 30, 10, 90, 40], // Rigid, synchronous, presential
+                        fill: true,
+                        backgroundColor: 'rgba(148, 163, 184, 0.2)',
+                        borderColor: 'rgb(148, 163, 184)',
+                        pointBackgroundColor: 'rgb(148, 163, 184)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(148, 163, 184)'
+                    },
+                    {
+                        label: 'Opportunité CPCP (Mode Projet)',
+                        data: [90, 95, 100, 90, 10, 95], // Flexible, high social impact, low presence
+                        fill: true,
+                        backgroundColor: 'rgba(13, 148, 136, 0.2)',
+                        borderColor: 'rgb(13, 148, 136)',
+                        pointBackgroundColor: 'rgb(13, 148, 136)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(13, 148, 136)'
+                    },
+                    {
+                        label: 'Votre Profil (Besoins)',
+                        data: [100, 100, 90, 100, 0, 80], // Needs max flexibility and async
+                        fill: false, // Don't fill, just show the outline match
+                        borderColor: 'rgb(251, 191, 36)', // Amber
+                        borderDash: [5, 5],
+                        pointBackgroundColor: 'rgb(251, 191, 36)',
+                        pointBorderColor: '#fff'
+                    }
+                ]
+            };
+
+            const config = {
+                type: 'radar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: { borderWidth: 3 }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { display: true },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false } // Hide numbers for cleaner look
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                },
+            };
+
+            new Chart(ctx, config);
+        }
+
+        // Pitch Generator Logic
+        const pitches = {
+            'nocode_lived': {
+                title: "Plateforme d'Entraide Citoyenne Numérique",
+                body: "Le Projet : Créer un portail de ressources 'No-Code' simple pour les citoyens en difficulté administrative. <br><br>Votre rôle : Construire la base de données (Airtable) et l'interface simple (Softr/Notion) qui recense les aides disponibles. C'est un travail technique léger mais à fort impact social, réalisable entièrement à votre rythme.",
+                hook: "Je ne suis pas développeur, mais je peux construire en 1 semaine un outil qui aiderait 500 citoyens, sans que je doive être présent au bureau."
+            },
+            'writing_lived': {
+                title: "Les Carnets de l'Invisible",
+                body: "Le Projet : Une série d'articles ou de témoignages analysés sur la fracture numérique et la maladie. <br><br>Votre rôle : Rédiger des analyses basées sur votre vécu et celui de votre communauté, offrant au CPCP un contenu unique sur l'inclusion réelle.",
+                hook: "Le CPCP parle d'inclusion. Je vis l'exclusion par la maladie. Laissez-moi écrire ce que personne d'autre ne voit."
+            },
+            'nocode_writing': {
+                title: "Observatoire de la Démocratie Digitale",
+                body: "Le Projet : Mettre en place un système de veille automatisé sur les enjeux démocratiques. <br><br>Votre rôle : Configurer des outils d'agrégation de contenu (Feedly/Make) et rédiger une synthèse mensuelle envoyée aux membres du CPCP.",
+                hook: "Je peux automatiser votre veille informationnelle et vous livrer une synthèse clé en main chaque mois, sans aucune réunion."
+            },
+            'all': {
+                title: "Le Labo d'Inclusion Asynchrone",
+                body: "Le Projet : Proposer au CPCP de devenir un 'Cas d'étude' vivant. Vous construisez des outils numériques pour leurs formations (No-code) tout en documentant (Rédaction) comment une organisation peut intégrer des profils médicaux complexes.<br><br>C'est un partenariat 'Win-Win-Win' : Outils pour eux, Réinsertion pour vous, Modèle pour la société.",
+                hook: "Ne m'embauchez pas pour mes heures, mais pour mes livrables. Je veux construire les outils numériques dont vos membres ont besoin."
+            },
+            'default': {
+                title: "Soutien Administratif Numérique",
+                body: "Le Projet : Proposer de nettoyer et organiser leurs bases de données ou leurs archives numériques à distance.<br><br>Un travail de l'ombre, sans stress, parfait pour des périodes de santé fluctuantes.",
+                hook: "Je peux mettre de l'ordre dans vos données à mon rythme, garantissant une base propre pour vos équipes terrain."
+            }
+        };
+
+        function generatePitch() {
+            const nocode = document.getElementById('skill-nocode').checked;
+            const writing = document.getElementById('skill-writing').checked;
+            const lived = document.getElementById('skill-lived').checked;
+
+            let key = 'default';
+            if (nocode && writing && lived) key = 'all';
+            else if (nocode && lived) key = 'nocode_lived';
+            else if (writing && lived) key = 'writing_lived';
+            else if (nocode && writing) key = 'nocode_writing';
+
+            const data = pitches[key] || pitches['default'];
+
+            // Update DOM with simple animation
+            const outputDiv = document.getElementById('pitch-output');
+            outputDiv.classList.remove('fade-in');
+            void outputDiv.offsetWidth; // trigger reflow
+            outputDiv.classList.add('fade-in');
+
+            document.getElementById('project-title').innerHTML = data.title;
+            document.getElementById('project-body').innerHTML = data.body;
+            document.getElementById('project-hook').innerHTML = '"' + data.hook + '"';
+            document.getElementById('project-actions').classList.remove('hidden');
+        }
+
+    </script>
+</body>
+</html>
