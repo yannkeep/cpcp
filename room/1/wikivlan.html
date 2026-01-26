@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Le Vlan² · Journal universel de petites annonces</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --page-bg: #f5f5f5;
+      --content-bg: #ffffff;
+      --border: #c7c7c7;
+      --border-soft: #e0e0e0;
+      --text: #202122;
+      --muted: #54595d;
+      --accent: #3366cc;
+      --accent-soft: #eef3ff;
+      --header-bg: #fafafa;
+      --sidebar-bg: #f8f9fa;
+      --highlight: #fff7d1;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      max-width: 100%;
+      min-height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--page-bg);
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      padding: 0 8px 24px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1140px;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* HEADER TOP (mélange journal + wiki) */
+
+    .top-header {
+      grid-column: 1 / -1;
+      background: var(--header-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .top-header {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .masthead-title {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 26px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .masthead-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 2px 0 0;
+    }
+
+    .masthead-badge {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 2px 6px;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      background: #fffce8;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .top-header-right {
+      font-size: 12px;
+      color: var(--muted);
+      border-left: 1px dashed var(--border-soft);
+      padding-left: 10px;
+    }
+
+    @media (max-width: 720px) {
+      .top-header-right {
+        border-left: none;
+        border-top: 1px dashed var(--border-soft);
+        padding-left: 0;
+        padding-top: 8px;
+      }
+    }
+
+    .top-header-right strong {
+      color: #000;
+    }
+
+    /* SIDEBAR (wiki-like) */
+
+    .sidebar {
+      align-self: flex-start;
+      background: var(--sidebar-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 8px 8px;
+      font-size: 13px;
+    }
+
+    .sidebar h2 {
+      font-size: 13px;
+      margin: 4px 0 4px;
+      border-bottom: 1px solid var(--border-soft);
+     	padding-bottom: 2px;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      margin: 4px 0;
+      padding-left: 0;
+    }
+
+    .sidebar-nav li {
+      margin: 2px 0;
+    }
+
+    .sidebar-nav button {
+      border: none;
+      background: none;
+      padding: 0;
+      font-size: 13px;
+      text-align: left;
+      color: var(--accent);
+      cursor: pointer;
+    }
+
+    .sidebar-nav button:hover {
+      text-decoration: underline;
+    }
+
+    .sidebar-section-title {
+      font-weight: 600;
+      margin-top: 4px;
+      color: #000;
+    }
+
+    .sidebar-note {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* CONTENU PRINCIPAL */
+
+    .content {
+      background: var(--content-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 12px 14px;
+    }
+
+    .content-header {
+      border-bottom: 1px solid var(--border-soft);
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+    }
+
+    .content-title {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 20px;
+      margin: 0 0 2px;
+    }
+
+    .content-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* BARRE D'OUTILS / RECHERCHE */
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.4fr);
+      gap: 6px;
+      margin: 8px 0 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 640px) {
+      .toolbar {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .toolbar label {
+      font-size: 11px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .toolbar input[type="search"],
+    .toolbar select {
+      width: 100%;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      padding: 4px 6px;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .toolbar input[type="search"]:focus,
+    .toolbar select:focus {
+      outline: 2px solid var(--accent-soft);
+      border-color: var(--accent);
+    }
+
+    .toolbar-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* RUBRIQUES / ANNONCES */
+
+    .section-heading {
+      margin: 10px 0 4px;
+      padding-top: 6px;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .section-heading h2 {
+      font-size: 16px;
+      margin: 0 0 1px;
+    }
+
+    .section-heading small {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .ads-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .ad-card {
+      border-radius: 2px;
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      padding: 6px 7px;
+      font-size: 13px;
+      position: relative;
+    }
+
+    .ad-card.highlighted {
+      background: var(--highlight);
+      border-color: #f3c566;
+    }
+
+    .ad-header {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .ad-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .ad-body {
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .ad-tags {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .ad-tags span {
+      margin-right: 4px;
+    }
+
+    .ad-ref {
+      position: absolute;
+      bottom: 3px;
+      right: 5px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- HEADER GLOBAL -->
+    <header class="top-header">
+      <div>
+        <h1 class="masthead-title">Le Vlan²</h1>
+        <p class="masthead-sub">
+          Journal universel de petites annonces locales, métaphysiques et tout le reste.  
+          Inspiré des grands hebdos papier, mis en page comme une encyclopédie qui aurait accepté de se détendre.
+        </p>
+        <div class="masthead-badge">
+          Édition fictive · Toutes rubriques confondues
+        </div>
+      </div>
+      <div class="top-header-right">
+        <p>
+          <strong>Comment ça marche ?</strong><br />
+          Choisis une rubrique, lis, rigole, médite, recycle.  
+          Tout est fictif, mais chaque annonce pourrait exister dans un coin de réalité.
+        </p>
+        <p style="margin-top:4px;">
+          Quatre grands blocs : <strong>Vivre</strong>, <strong>Travailler</strong>, <strong>Se débrouiller</strong>, <strong>Se poser des questions</strong>.  
+          Et un peu de bazar entre les lignes, comme dans tout bon journal d’annonces.
+        </p>
+      </div>
+    </header>
+
+    <!-- SIDEBAR STYLE WIKI -->
+    <aside class="sidebar">
+      <h2>Rubriques principales</h2>
+      <ul class="sidebar-nav">
+        <li><button data-category="all">Toutes les annonces</button></li>
+      </ul>
+      <div class="sidebar-section-title">Vivre</div>
+      <ul class="sidebar-nav">
+        <li><button data-category="immobilier">Immobilier & colocs</button></li>
+        <li><button data-category="rencontres">Rencontres & affinités</button></li>
+        <li><button data-category="quotidien">Vie quotidienne & voisinage</button></li>
+      </ul>
+      <div class="sidebar-section-title">Travailler</div>
+      <ul class="sidebar-nav">
+        <li><button data-category="emploi">Emploi & missions</button></li>
+        <li><button data-category="services">Services & coups de main</button></li>
+      </ul>
+      <div class="sidebar-section-title">Se débrouiller</div>
+      <ul class="sidebar-nav">
+        <li><button data-category="objets">Objets trouvés / perdus</button></li>
+        <li><button data-category="bricolage">Bricolage & récup</button></li>
+      </ul>
+      <div class="sidebar-section-title">Zones sombres & saugrenues</div>
+      <ul class="sidebar-nav">
+        <li><button data-category="existentielles">Petites annonces existentielles</button></li>
+        <li><button data-category="conspirations">Conspirations de palier</button></li>
+        <li><button data-category="metaphysique">Divers métaphysique & absurde</button></li>
+      </ul>
+
+      <p class="sidebar-note">
+        Les rubriques “sombres” restent inoffensives :  
+        elles parlent surtout de doutes, de quêtes de sens et de voisins un peu étranges.
+      </p>
+    </aside>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="content">
+      <div class="content-header">
+        <h2 class="content-title">Petites annonces · Sommaire de l’édition</h2>
+        <div class="content-meta">
+          Page fictive de type encyclopédique.  
+          Pour une mise en page papier, imagine le supplément central d’un journal local.
+        </div>
+      </div>
+
+      <!-- BARRE D'OUTILS -->
+      <section class="toolbar">
+        <div>
+          <label for="searchInput">Recherche plein texte</label>
+          <input id="searchInput" type="search" placeholder="Ex : vélo, colocation, angoisse du dimanche..." />
+        </div>
+        <div>
+          <label for="filterSelect">Filtrer par rubrique</label>
+          <select id="filterSelect">
+            <option value="all">Toutes les rubriques</option>
+            <option value="immobilier">Immobilier & colocs</option>
+            <option value="rencontres">Rencontres & affinités</option>
+            <option value="quotidien">Vie quotidienne & voisinage</option>
+            <option value="emploi">Emploi & missions</option>
+            <option value="services">Services & coups de main</option>
+            <option value="objets">Objets trouvés / perdus</option>
+            <option value="bricolage">Bricolage & récup</option>
+            <option value="existentielles">Petites annonces existentielles</option>
+            <option value="conspirations">Conspirations de palier</option>
+            <option value="metaphysique">Divers métaphysique & absurde</option>
+          </select>
+          <div class="toolbar-note">
+            Le tri agit sur l’affichage ci-dessous, sans recharger la page (comme un Vlan augmenté).
+          </div>
+        </div>
+      </section>
+
+      <!-- RUBRIQUE : IMMOBILIER -->
+      <section class="section" data-section-category="immobilier">
+        <div class="section-heading">
+          <h2>Immobilier & colocs</h2>
+          <small>Appartements, chambres, maisons, niches à idées.</small>
+        </div>
+        <div class="ads-grid">
+          <article class="ad-card" data-category="immobilier">
+            <div class="ad-header">Colocation lumineuse à Bruxelles, avec bibliothèque partagée</div>
+            <div class="ad-meta">Bruxelles · Réf. IM-001 · Particuliers</div>
+            <div class="ad-body">
+              Grand appartement 3 chambres, salon plein sud, bibliothèque commune (livres, fanzines, dossiers de veille).
+              Cherche 1 personne calme, ironique, non-fumeuse, tolérante au café filtre.
+            </div>
+            <div class="ad-tags">
+              <span>#coloc</span><span>#bruxelles</span><span>#bibliothèque</span>
+            </div>
+            <div class="ad-ref">IM-001</div>
+          </article>
+
+          <article class="ad-card" data-category="immobilier">
+            <div class="ad-header">Studio minuscule mais honnête avec vue sur chantier perpétuel</div>
+            <div class="ad-meta">Saint-Gilles · Réf. IM-002 · Agence fictive</div>
+            <div class="ad-body">
+              18 m², 4e sans ascenseur, bruit de travaux garanti jusqu’en 2042. Parfait pour personne
+              qui a besoin d’un alibi pour porter des boules Quies.
+            </div>
+            <div class="ad-tags">
+              <span>#studio</span><span>#bruit</span><span>#réalisme</span>
+            </div>
+            <div class="ad-ref">IM-002</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- RUBRIQUE : EMPLOI -->
+      <section class="section" data-section-category="emploi">
+        <div class="section-heading">
+          <h2>Emploi & missions</h2>
+          <small>De l’hyper-sérieux au plus improbable, mais légal.</small>
+        </div>
+        <div class="ads-grid">
+          <article class="ad-card highlighted" data-category="emploi">
+            <div class="ad-header">Cherche veilleur·se citoyen·ne à temps partiel (réalité & fiction)</div>
+            <div class="ad-meta">Bruxelles & en ligne · Réf. EM-101 · Association en devenir</div>
+            <div class="ad-body">
+              Mission : lire, relier, résumer, vulgariser. Aider le public à ne pas se perdre dans l’info.
+              Profil : curieux·se, patient·e, allergique aux certitudes définitives.
+            </div>
+            <div class="ad-tags">
+              <span>#éducation_populaire</span><span>#veille</span><span>#info</span>
+            </div>
+            <div class="ad-ref">EM-101</div>
+          </article>
+
+          <article class="ad-card" data-category="emploi">
+            <div class="ad-header">Offre : testeur·se officiel·le de bornes d’arcade politiques</div>
+            <div class="ad-meta">Bruxelles · Réf. EM-102 · Projet expérimental</div>
+            <div class="ad-body">
+              Tester des jeux analogiques et numériques expliquant la démocratie, les lobbys et la météo morale.
+              Facilité à perdre et à en rire vivement appréciée.
+            </div>
+            <div class="ad-tags">
+              <span>#jeu</span><span>#démocratie</span><span>#serious_game</span>
+            </div>
+            <div class="ad-ref">EM-102</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- RUBRIQUE : SERVICES -->
+      <section class="section" data-section-category="services">
+        <div class="section-heading">
+          <h2>Services & coups de main</h2>
+          <small>Du dépannage concret au soutien moral structuré.</small>
+        </div>
+        <div class="ads-grid">
+          <article class="ad-card" data-category="services">
+            <div class="ad-header">Accompagnement administratif pour humains saturés</div>
+            <div class="ad-meta">Région bruxelloise · Réf. SE-201</div>
+            <div class="ad-body">
+              Aide à comprendre des papiers, courriers d’instances, mails mystérieux.
+              Traduction “bureaucratie → langage humain”. Pas de miracle, mais du décodage.
+            </div>
+            <div class="ad-tags">
+              <span>#administratif</span><span>#decodeur</span>
+            </div>
+            <div class="ad-ref">SE-201</div>
+          </article>
+
+          <article class="ad-card" data-category="services">
+            <div class="ad-header">Cours de “pause” pour personnes qui ne savent plus se reposer</div>
+            <div class="ad-meta">En ligne · Réf. SE-202</div>
+            <div class="ad-body">
+              Programme en plusieurs séances : apprendre à fermer un onglet, dire “à demain”
+              à une notification, et survivre à un dimanche sans actualités en continu.
+            </div>
+            <div class="ad-tags">
+              <span>#slow</span><span>#pause</span><span>#hygiène_mentale</span>
+            </div>
+            <div class="ad-ref">SE-202</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- RUBRIQUE : RENCONTRES -->
+      <section class="section" data-section-category="rencontres">
+        <div class="section-heading">
+          <h2>Rencontres & affinités</h2>
+          <small>Sans promesse de grand amour, mais avec sincérité.</small>
+        </div>
+        <div class="ads-grid">
+          <article class="ad-card" data-category="rencontres">
+            <div class="ad-header">Cherche complicité pour refaire le monde autour d’un thé</div>
+            <div class="ad-meta">Bruxelles · Réf. RE-301</div>
+            <div class="ad-body">
+              Personne introvertie, 40+, cherche humains compatibles pour conversations
+              à base de “Et toi, tu comprends encore quelque chose à ce siècle ?”.
+            </div>
+            <div class="ad-tags">
+              <span>#discussion</span><span>#amitié</span><span>#société</span>
+            </div>
+            <div class="ad-ref">RE-301</div>
+          </article>
+
+          <article class="ad-card" data-category="rencontres">
+            <div class="ad-header">Groupe de balade nocturne sans obligation de parler</div>
+            <div class="ad-meta">Parcs bruxellois · Réf. RE-302</div>
+            <div class="ad-body">
+              Marcher, regarder les lumières, respirer. Parler si ça vient, sinon non.
+              Idéal pour insomniaques pacifiques et contemplatifs anonymes.
+            </div>
+            <div class="ad-tags">
+              <span>#balade</span><span>#insomnie</span><span>#silence</span>
+            </div>
+            <div class="ad-ref">RE-302</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- RUBRIQUE : QUOTIDIEN -->
+      <section class="section" data-section-category="quotidien">
+        <div class="section-heading">
+          <h2>Vie quotidienne & voisinage</h2>
+          <small>Chroniques de paliers, escaliers et poubelles partagées.</small>
+        </div>
+        <div class="ads-grid">
+          <article class="ad-card" data-category="quotidien">
+            <div class="ad-header">Appel aux voisins : pacte de non-agression sonore</div>
+            <div class="ad-meta">Immeuble anonyme · Réf. QO-401</div>
+            <div class="ad-body">
+              Propose charte informelle : pas d’aspirateur avant 9h, pas de perceuse après 20h,
+              et droit à un morceau de musique trop fort le vendredi (à tour de rôle).
+            </div>
+            <div class="ad-tags">
+              <span>#voisinage</span><span>#charte</span>
+            </div>
+            <div class="ad-ref">QO-401</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- RUBRIQUE : OBJETS -->
+      <section class="section" data-section-category="objets">
+        <div class="section-heading">
+          <h2>Objets trouvés / perdus</h2>
+          <small>De la clé USB anonyme au courage égaré un lundi matin.</small>
+        </div>
+        <div class="ads-grid">
+          <article class="ad-card" data-category="objets">
+            <div class="ad-header">Trouvé : carnet de notes rempli d’idées de romans inachevés</div>
+            <div class="ad-meta">Tram 81 · Réf. OB-501</div>
+            <div class="ad-body">
+              Couverture noire, pages remplies de débuts de scénarios brillants.
+              Se rendra uniquement au véritable propriétaire, capable de nommer au moins un personnage.
+            </div>
+            <div class="ad-tags">
+              <span>#carnet</span><span>#écriture</span>
+            </div>
+            <div class="ad-ref">OB-501</div>
+          </article>
+
+          <article class="ad-card" data-category="objets">
+            <div class="ad-header">Perdu : motivation pour ranger l’appartement</div>
+            <div class="ad-meta">Partout / nulle part · Réf. OB-502</div>
+            <div class="ad-body">
+              S’est évaporée un dimanche à 11h32. Récompense symbolique pour toute piste crédible.
+              Peut se présenter sous forme de playlist, podcast ou coup de main.
+            </div>
+            <div class="ad-tags">
+              <span>#motivation</span><span>#dimanche</span>
+            </div>
+            <div class="ad-ref">OB-502</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- RUBRIQUE : BRICOLAGE -->
+      <section class="section" data-section-category="bricolage">
+        <div class="section-heading">
+          <h2>Bricolage & récup</h2>
+          <small>Transformer le trop-plein en quelque chose d’à peu près vivant.</small>
+        </div>
+        <div class="ads-grid">
+          <article class="ad-card" data-category="bricolage">
+            <div class="ad-header">Donne : cartons pleins de câbles “ça peut servir”</div>
+            <div class="ad-meta">Cave collective · Réf. BR-601</div>
+            <div class="ad-body">
+              HDMI, USB, RJ45, chargeurs d’anciens téléphones, adaptateurs mystérieux.
+              Parfait pour artiste bricoleur·se ou archéologue du numérique.
+            </div>
+            <div class="ad-tags">
+              <span>#récup</span><span>#câbles</span>
+            </div>
+            <div class="ad-ref">BR-601</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- RUBRIQUE : EXISTENTIELLES -->
+      <section class="section" data-section-category="existentielles">
+        <div class="section-heading">
+          <h2>Petites annonces existentielles</h2>
+          <small>Les pages les plus sombres, mais sans drame : juste des questions sérieuses.</small>
+        </div>
+        <div class="ads-grid">
+          <article class="ad-card highlighted" data-category="existentielles">
+            <div class="ad-header">Vend illusions de contrôle, cause prise de conscience</div>
+            <div class="ad-meta">Intérieur nuit · Réf. EX-701</div>
+            <div class="ad-body">
+              Lot complet de “si je fais tout bien, ça ira”. Livré avec mode d’emploi périmé.
+              Échangerais volontiers contre quelques outils pour accepter l’incertitude.
+            </div>
+            <div class="ad-tags">
+              <span>#illusion</span><span>#controle</span><span>#transition</span>
+            </div>
+            <div class="ad-ref">EX-701</div>
+          </article>
+
+          <article class="ad-card" data-category="existentielles">
+            <div class="ad-header">Cherche mode d’emploi pour être adulte sans renoncer à tout</div>
+            <div class="ad-meta">Génération X / Y / Z · Réf. EX-702</div>
+            <div class="ad-body">
+              Préfère version open source, compatible avec crises écologique, sociale et numérique.
+              Documentation claire appréciée. Tolère les bugs mineurs.
+            </div>
+            <div class="ad-tags">
+              <span>#adulte</span><span>#manual</span>
+            </div>
+            <div class="ad-ref">EX-702</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- RUBRIQUE : CONSPIRATIONS DE PALIER -->
+      <section class="section" data-section-category="conspirations">
+        <div class="section-heading">
+          <h2>Conspirations de palier</h2>
+          <small>Hypothèses improbables, humour noir très léger, zéro violence réelle.</small>
+        </div>
+        <div class="ads-grid">
+          <article class="ad-card" data-category="conspirations">
+            <div class="ad-header">Recherche coauteurs pour théorie du “Comité des Boîtes aux lettres”</div>
+            <div class="ad-meta">Immeubles bruxellois · Réf. CO-801</div>
+            <div class="ad-body">
+              Hypothèse : les boîtes aux lettres sont un réseau d’information parallèle.
+              Cherche personnes prêtes à observer les avis d’assemblées de copropriété comme des documents d’archive.
+            </div>
+            <div class="ad-tags">
+              <span>#complot_de_palier</span><span>#copropriété</span>
+            </div>
+            <div class="ad-ref">CO-801</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- RUBRIQUE : MÉTAPHYSIQUE / ABSURDE -->
+      <section class="section" data-section-category="metaphysique">
+        <div class="section-heading">
+          <h2>Divers métaphysique & absurde</h2>
+          <small>Là où vont les annonces qui ne rentrent nulle part ailleurs.</small>
+        </div>
+        <div class="ads-grid">
+          <article class="ad-card" data-category="metaphysique">
+            <div class="ad-header">Loue coin de réalité alternative pour week-end prolongé</div>
+            <div class="ad-meta">Dimension parallèle non spécifiée · Réf. ME-901</div>
+            <div class="ad-body">
+              Conditions : pas de réseaux sociaux, pas de réunions Zoom, météo stable,
+              et obligation de se rappeler qu’on doit rentrer (même à contrecœur).
+            </div>
+            <div class="ad-tags">
+              <span>#réalité_alternative</span><span>#vacances</span>
+            </div>
+            <div class="ad-ref">ME-901</div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Filtrage par rubrique + recherche plein texte
+
+    const searchInput = document.getElementById("searchInput");
+    const filterSelect = document.getElementById("filterSelect");
+    const sidebarButtons = document.querySelectorAll(".sidebar-nav button");
+    const adCards = document.querySelectorAll(".ad-card");
+
+    function applyFilters() {
+      const query = (searchInput.value || "").toLowerCase();
+      const category = filterSelect.value;
+
+      adCards.forEach(card => {
+        const cardCategory = card.getAttribute("data-category");
+        const text = card.innerText.toLowerCase();
+
+        const matchCategory = category === "all" || cardCategory === category;
+        const matchSearch = query === "" || text.includes(query);
+
+        if (matchCategory && matchSearch) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    searchInput.addEventListener("input", applyFilters);
+    filterSelect.addEventListener("change", applyFilters);
+
+    // Clics dans la sidebar = change le select + filtre
+    sidebarButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const cat = btn.getAttribute("data-category");
+        filterSelect.value = cat;
+        applyFilters();
+        // Scroll vers le haut du contenu
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+
+    // Initialisation
+    applyFilters();
+  </script>
+</body>
+</html>
