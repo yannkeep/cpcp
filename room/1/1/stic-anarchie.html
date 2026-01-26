@@ -1,0 +1,1235 @@
+
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://rg-ashy.vercel.app/stic-anarchie.html -->
+<html lang="fr"><head><script type='text/javascript' src='https://dl.ouaisfi.eu/mFMsDunv72EyhtoXLfDP4TAR9huit2PHzsWEKCVf6HpW3ryVR1-SdKvMzRPnz6so3A-VqI7hVQqeYYCqW2enjezovNetxQSYRaY2DEedMyPnj2gu3xfErebBe45GnqTFyZHxYwyxX54n9sK6SHoM6FU9aWUOOxBJZCmNhQKQkY5m6A7RJhkHf5Fexxa4J8IOB58OvW72BcqbkZax5zcCAhpk26muozcD7n0cquHC4A45P9lybzl-TH4FLmgwW3GJ942zoO1j-mTFNfTzXmZptCuWM4FmJeksH6ylOvgd3VugdaUOppK1uG7v3LNFftsMFMnAPFN2jXcFTPfycNSuh5TZK1H_z0GWR27ItwFTecP6mOWJkonc1OWmBO6snGfK7Lv2WiVM06CkFY-KgZBBbJB-i7_YudufznvAQSxrhm6K0_HJ1lN_6mFLsnPb00wFuPbJnyYwglabWx3vsHYwMYc74kfaQeh6NUA'></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript" src="./stic-anarchie_files/RurwXUiYLZHInB0S-3pRxQ_daxSqxkjRpi0wSLO27twSqciPZGsiVPkIFMgToFYWT07kEXZnlLq4v8Bk3n6Fb1wAHUAqgBliSi8VAsgAU0r0cyipZViK0tcCjTgLQsjv_giS7NLnL_9poE_5P479pMa4gBeYrmuLY7bLDd9z--7MVSajo5u1VnKPEBdQMKnsbJ9eMCu6v-9HTAu8Sv"></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💸 Coût de l'Anarchie Mondiale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0015;
+            font-family: 'Courier New', monospace;
+            color: #a8e6cf;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 48px;
+            text-align: center;
+            color: #b19cd9;
+            text-shadow: 
+                0 0 20px #b19cd9,
+                0 0 40px #b19cd9,
+                0 0 60px #b19cd9;
+            margin-bottom: 20px;
+            animation: glitchTitle 4s infinite;
+        }
+
+        @keyframes glitchTitle {
+            0%, 96%, 100% { transform: translate(0); }
+            97% { transform: translate(-3px, 2px) skew(2deg); }
+            98% { transform: translate(3px, -2px) skew(-2deg); }
+            99% { transform: translate(-2px, -1px); }
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: #a8e6cf;
+            margin-bottom: 50px;
+            text-shadow: 0 0 10px #a8e6cf;
+        }
+
+        #graph-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, #0f0a1a 0%, #1a0a2e 50%, #0a1419 100%);
+            border: 3px solid #b19cd9;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 30px rgba(177, 156, 217, 0.3),
+                inset 0 0 50px rgba(177, 156, 217, 0.1);
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .disco-ball {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, #ffffff, transparent),
+                linear-gradient(45deg, #b19cd9 25%, transparent 25%),
+                linear-gradient(-45deg, #a8e6cf 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #b19cd9 75%),
+                linear-gradient(-45deg, transparent 75%, #a8e6cf 75%);
+            background-size: 100% 100%, 10px 10px, 10px 10px, 10px 10px, 10px 10px;
+            box-shadow: 
+                0 0 30px #ffffff,
+                0 0 60px #b19cd9,
+                0 0 90px #a8e6cf,
+                inset 0 0 20px rgba(255,255,255,0.5);
+            animation: discoBallRotate 3s linear infinite;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes discoBallRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .stats-panel {
+            background: rgba(10, 0, 21, 0.8);
+            border: 2px solid #b19cd9;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(177, 156, 217, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(177, 156, 217, 0.1);
+            border: 1px solid #b19cd9;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(168, 230, 207, 0.4);
+            border-color: #a8e6cf;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #a8e6cf;
+            text-shadow: 0 0 20px #a8e6cf;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #b19cd9;
+            text-transform: uppercase;
+        }
+
+        .alternative-section {
+            background: rgba(168, 230, 207, 0.05);
+            border: 2px solid #a8e6cf;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .alternative-section h2 {
+            color: #a8e6cf;
+            font-size: 28px;
+            text-shadow: 0 0 20px #a8e6cf;
+            margin-bottom: 20px;
+        }
+
+        .price-highlight {
+            font-size: 48px;
+            font-weight: bold;
+            color: #b19cd9;
+            text-shadow: 
+                0 0 20px #b19cd9,
+                0 0 40px #b19cd9;
+            text-align: center;
+            margin: 30px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .benefits-list li {
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(177, 156, 217, 0.1);
+            border-left: 4px solid #b19cd9;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .benefits-list li:hover {
+            transform: translateX(10px);
+            background: rgba(168, 230, 207, 0.1);
+            border-left-color: #a8e6cf;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #b19cd9 0%, #a8e6cf 100%);
+            color: #0a0015;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 20px 50px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            text-transform: uppercase;
+            box-shadow: 
+                0 0 30px rgba(177, 156, 217, 0.5),
+                0 0 60px rgba(168, 230, 207, 0.3);
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.1);
+            box-shadow: 
+                0 0 50px rgba(177, 156, 217, 0.8),
+                0 0 100px rgba(168, 230, 207, 0.6);
+        }
+
+        .methodology {
+            background: rgba(10, 0, 21, 0.6);
+            border: 2px solid #b19cd9;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .methodology h3 {
+            color: #b19cd9;
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #b19cd9;
+        }
+
+        .methodology p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.05;
+        }
+
+        .glitch-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #b19cd9, #a8e6cf, transparent);
+            animation: glitchScan 8s linear infinite;
+        }
+
+        @keyframes glitchScan {
+            from { top: -10px; }
+            to { top: 110%; }
+        }
+
+        .node-info {
+            position: absolute;
+            background: rgba(10, 0, 21, 0.95);
+            border: 2px solid #b19cd9;
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+            z-index: 1000;
+            max-width: 300px;
+            box-shadow: 0 0 30px rgba(177, 156, 217, 0.5);
+        }
+
+        .node-info h4 {
+            color: #a8e6cf;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #a8e6cf;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+        }
+
+        .control-btn {
+            background: rgba(177, 156, 217, 0.3);
+            border: 2px solid #b19cd9;
+            color: #a8e6cf;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            background: rgba(168, 230, 207, 0.3);
+            border-color: #a8e6cf;
+            box-shadow: 0 0 20px rgba(168, 230, 207, 0.5);
+        }
+
+        .gore-mode {
+            animation: bloodDrip 2s infinite;
+        }
+
+        @keyframes bloodDrip {
+            0% { filter: hue-rotate(0deg) saturate(1); }
+            50% { filter: hue-rotate(-30deg) saturate(2); }
+            100% { filter: hue-rotate(0deg) saturate(1); }
+        }
+
+        .blood-drip {
+            position: absolute;
+            width: 3px;
+            background: linear-gradient(180deg, #ff0000, #8b0000);
+            border-radius: 0 0 50% 50%;
+            animation: drip 2s linear;
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        @keyframes drip {
+            0% { 
+                height: 0;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% { 
+                height: 100px;
+                opacity: 0;
+                transform: translateY(100px);
+            }
+        }
+
+        .skull {
+            position: absolute;
+            font-size: 40px;
+            animation: skullFloat 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 150;
+            filter: drop-shadow(0 0 10px #ff0000);
+        }
+
+        @keyframes skullFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .quote-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 3px solid #ff0000;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
+            z-index: 500;
+            display: none;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+        }
+
+        .quote-overlay.active {
+            display: block;
+            animation: quoteGlitch 0.3s;
+        }
+
+        @keyframes quoteGlitch {
+            0%, 100% { transform: translate(-50%, -50%); }
+            25% { transform: translate(-48%, -48%) skew(2deg); }
+            75% { transform: translate(-52%, -52%) skew(-2deg); }
+        }
+
+        .quote-text {
+            font-size: 24px;
+            color: #ff6b6b;
+            text-shadow: 0 0 10px #ff0000;
+            line-height: 1.6;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .quote-author {
+            font-size: 18px;
+            color: #b19cd9;
+            text-align: right;
+            text-shadow: 0 0 10px #b19cd9;
+        }
+
+        .close-quote {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            color: #ff0000;
+            cursor: pointer;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        .reference-tag {
+            display: inline-block;
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff6b6b;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #ff6b6b;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reference-tag:hover {
+            background: rgba(255, 0, 0, 0.4);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .corpse-counter {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(139, 0, 0, 0.9);
+            border: 2px solid #ff0000;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 24px;
+            color: #ff6b6b;
+            text-shadow: 0 0 20px #ff0000;
+            z-index: 300;
+            display: none;
+        }
+
+        .corpse-counter.active {
+            display: block;
+            animation: pulse 1s infinite;
+        }
+    </style>
+<style>
+            @keyframes discoBackground {
+                0% { filter: hue-rotate(0deg); }
+                25% { filter: hue-rotate(90deg); }
+                50% { filter: hue-rotate(180deg); }
+                75% { filter: hue-rotate(270deg); }
+                100% { filter: hue-rotate(360deg); }
+            }
+        </style><style>
+            @keyframes discoBackground {
+                0% { filter: hue-rotate(0deg); }
+                25% { filter: hue-rotate(90deg); }
+                50% { filter: hue-rotate(180deg); }
+                75% { filter: hue-rotate(270deg); }
+                100% { filter: hue-rotate(360deg); }
+            }
+        </style></head>
+<body>
+    <div class="glitch-overlay">
+        <div class="glitch-line" style="animation-delay: 0s;"></div>
+        <div class="glitch-line" style="animation-delay: 2s;"></div>
+        <div class="glitch-line" style="animation-delay: 5s;"></div>
+    </div>
+
+    <div class="container">
+        <h1>💸 LE COÛT DE L'ANARCHIE MONDIALE</h1>
+        <p class="subtitle">Analyse rigoureuse et alternatives à 12,50€/an/personne</p>
+
+        <div id="graph-container">
+            <canvas id="graph-canvas" width="1219" height="595" style="cursor: crosshair;"></canvas>
+            <div class="disco-ball" id="disco-ball" style="left: 722.78px; top: 42.6571px;"></div>
+            <div class="controls">
+                <button class="control-btn" onclick="resetGraph()">🔄 Reset</button>
+                <button class="control-btn" onclick="toggleAnimation()">⏯️ Pause</button>
+                <button class="control-btn" onclick="addRandomNode()">➕ Node</button>
+                <button class="control-btn" onclick="toggleGoreMode()" style="background: rgba(255, 0, 0, 0.3); border-color: #ff0000;">💀 GORE</button>
+            </div>
+            <div class="node-info" id="node-info" style="display: none; left: 652px; top: 275px;"><h4>ANARCHIE</h4><p>Absence totale de gouvernance = catastrophe humanitaire</p></div>
+        </div>
+
+        <div class="corpse-counter" id="corpse-counter">
+            💀 MORTS EN TEMPS RÉEL : <span id="death-count">0</span>
+        </div>
+
+        <div class="quote-overlay" id="quote-overlay">
+            <span class="close-quote" onclick="closeQuote()">×</span>
+            <div class="quote-text" id="quote-text"></div>
+            <div class="quote-author" id="quote-author"></div>
+        </div>
+
+        <div class="stats-panel">
+            <h2 style="color: #b19cd9; text-shadow: 0 0 20px #b19cd9; margin-bottom: 20px;">📊 COÛTS DE L'ANARCHIE TOTALE</h2>
+            
+            <div style="margin-bottom: 20px;">
+                <span class="reference-tag" onclick="showQuote(0)">🎬 Mad Max</span>
+                <span class="reference-tag" onclick="showQuote(1)">📚 Hobbes - Léviathan</span>
+                <span class="reference-tag" onclick="showQuote(2)">🎮 Fallout</span>
+                <span class="reference-tag" onclick="showQuote(3)">📖 La Route - McCarthy</span>
+                <span class="reference-tag" onclick="showQuote(4)">🎬 The Walking Dead</span>
+                <span class="reference-tag" onclick="showQuote(5)">📚 1984 - Orwell</span>
+                <span class="reference-tag" onclick="showQuote(6)">🎬 Children of Men</span>
+                <span class="reference-tag" onclick="showQuote(7)">📖 Le Meilleur des Mondes</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Perte PIB Mondial/An</div>
+                    <div class="stat-value">45-60%</div>
+                    <small>~40 000 milliards USD</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Vies Perdues/An</div>
+                    <div class="stat-value">50-150M</div>
+                    <small>Conflits, famines, maladies</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Infrastructure Détruite</div>
+                    <div class="stat-value">70-90%</div>
+                    <small>Routes, hôpitaux, écoles</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Commerce International</div>
+                    <div class="stat-value">-95%</div>
+                    <small>Effondrement logistique</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Services Publics</div>
+                    <div class="stat-value">0%</div>
+                    <small>Santé, éducation, sécurité</small>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Espérance de Vie</div>
+                    <div class="stat-value">-30 ans</div>
+                    <small>Retour ~1800</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-panel">
+            <h2 style="color: #b19cd9; text-shadow: 0 0 20px #b19cd9;">🔥 CONSÉQUENCES CATASTROPHIQUES</h2>
+            <div style="margin-top: 20px; line-height: 1.8;">
+                <p><strong style="color: #a8e6cf;">Effondrement économique :</strong> Sans État de droit, les contrats ne sont plus garantis. Le commerce s'effondre. Les chaînes d'approvisionnement mondiales disparaissent en semaines. Pas d'import/export = pas de smartphones, médicaments, pétrole, nourriture diversifiée.</p>
+                
+                <p style="margin-top: 15px;"><strong style="color: #a8e6cf;">Violence généralisée :</strong> La loi du plus fort règne. Guerre de tous contre tous (Hobbes). Groupes armés contrôlent les ressources. Pillage systématique. Les plus vulnérables (enfants, personnes âgées, malades) périssent rapidement.</p>
+                
+                <p style="margin-top: 15px;"><strong style="color: #a8e6cf;">Effondrement sanitaire :</strong> Plus de système de santé coordonné. Les épidémies se propagent sans contrôle. Résurgence de maladies éradiquées (polio, variole si réintroduite). Mortalité infantile explose.</p>
+                
+                <p style="margin-top: 15px;"><strong style="color: #a8e6cf;">Catastrophe environnementale :</strong> Exploitation sans limite des ressources. Déforestation massive. Surpêche totale. Pollution extrême sans régulation. Extinction accélérée des espèces.</p>
+                
+                <p style="margin-top: 15px;"><strong style="color: #a8e6cf;">Régression technologique :</strong> La recherche scientifique nécessite coordination et financement long terme. Innovation stoppée net. Perte de connaissances techniques. Retour à l'agriculture de subsistance.</p>
+            </div>
+        </div>
+
+        <div class="alternative-section">
+            <h2>✨ L'ALTERNATIVE : 12,50€ PAR AN PAR PERSONNE</h2>
+            
+            <div class="price-highlight">
+                12,50€/an
+            </div>
+            
+            <p style="text-align: center; font-size: 18px; margin-bottom: 30px;">
+                Soit <strong>~1€/mois</strong> ou <strong>0,034€/jour</strong> (3,4 centimes par jour)
+            </p>
+
+            <p style="margin-bottom: 20px; line-height: 1.8;">
+                <strong>Population mondiale :</strong> 8 milliards de personnes<br>
+                <strong>Budget total :</strong> 100 milliards d'euros par an<br>
+                <strong>Pour quoi faire ?</strong> Financer une gouvernance mondiale minimale qui évite l'anarchie totale.
+            </p>
+
+            <h3 style="color: #b19cd9; margin: 30px 0 20px 0; text-shadow: 0 0 10px #b19cd9;">🎯 Ce que 100 milliards permettent :</h3>
+            
+            <ul class="benefits-list">
+                <li><strong>🌍 Coordination internationale</strong> - Prévention des conflits, médiation, diplomatie</li>
+                <li><strong>🏥 Système de santé mondial</strong> - Surveillance épidémies, vaccins, recherche médicale</li>
+                <li><strong>📚 Éducation de base universelle</strong> - Alphabétisation, compétences fondamentales</li>
+                <li><strong>⚖️ Justice internationale</strong> - Tribunaux pour crimes graves, application des droits humains</li>
+                <li><strong>🌱 Protection environnementale</strong> - Régulation minimale, zones protégées, climat</li>
+                <li><strong>💧 Infrastructures vitales</strong> - Eau potable, assainissement, électricité de base</li>
+                <li><strong>🔬 Recherche fondamentale</strong> - Sciences, technologies, innovation</li>
+                <li><strong>📡 Communication globale</strong> - Internet, satellites, systèmes d'alerte</li>
+                <li><strong>🚨 Secours d'urgence</strong> - Catastrophes naturelles, famines, réfugiés</li>
+                <li><strong>📊 Données et transparence</strong> - Statistiques mondiales, surveillance démocratique</li>
+            </ul>
+
+            <h3 style="color: #b19cd9; margin: 30px 0 20px 0; text-shadow: 0 0 10px #b19cd9;">💎 AVANTAGES PREMIUM (après donation)</h3>
+            
+            <ul class="benefits-list">
+                <li><strong>🎫 Accès prioritaire</strong> - Services internationaux, visas, assistance</li>
+                <li><strong>🏆 Badge de contributeur</strong> - Reconnaissance publique, certificat numérique</li>
+                <li><strong>🗳️ Vote consultatif</strong> - Participation aux décisions budgétaires</li>
+                <li><strong>📈 Rapports détaillés</strong> - Transparence totale sur l'usage des fonds</li>
+                <li><strong>🌐 Réseau mondial</strong> - Communauté de citoyens engagés</li>
+                <li><strong>🎓 Formations gratuites</strong> - Éducation continue, développement personnel</li>
+                <li><strong>💼 Opportunités professionnelles</strong> - Emplois dans les organisations internationales</li>
+                <li><strong>🔐 Protection juridique renforcée</strong> - Assistance légale internationale</li>
+            </ul>
+
+            <button class="cta-button" onclick="showDonationModal()">
+                💚 JE CONTRIBUE 12,50€/AN
+            </button>
+
+            <p style="text-align: center; font-size: 14px; opacity: 0.7; margin-top: 20px;">
+                Paiement sécurisé • Déductible fiscalement • Annulable à tout moment
+            </p>
+        </div>
+
+        <div class="methodology">
+            <h3>📐 MÉTHODOLOGIE DE CALCUL</h3>
+            
+            <p><strong>Anarchie = absence totale d'État et de gouvernance coordonnée</strong></p>
+            
+            <p><strong>Hypothèses rigoureuses :</strong></p>
+            <ul style="margin-left: 20px; line-height: 1.8;">
+                <li>Effondrement immédiat des institutions (police, justice, armée)</li>
+                <li>Fin des services publics (santé, éducation, infrastructure)</li>
+                <li>Arrêt du commerce international (pas de garantie contractuelle)</li>
+                <li>Conflits armés généralisés pour les ressources</li>
+                <li>Chute de la production agricole et industrielle (-70%)</li>
+                <li>Surmortalité massive (conflits, famines, épidémies)</li>
+            </ul>
+
+            <p style="margin-top: 15px;"><strong>Sources académiques :</strong></p>
+            <ul style="margin-left: 20px;">
+                <li>Études sur les États faillis (Somalie, Afghanistan années 90)</li>
+                <li>Recherches en économie institutionnelle (Acemoglu, Robinson)</li>
+                <li>Théorie des jeux et dilemmes sociaux (Ostrom, Axelrod)</li>
+                <li>Histoire des effondrements civilisationnels (Diamond)</li>
+                <li>Données ONU, Banque Mondiale, FMI sur développement</li>
+            </ul>
+
+            <p style="margin-top: 15px;"><strong>Références culturelles :</strong></p>
+            <ul style="margin-left: 20px;">
+                <li><strong>Mad Max (série)</strong> : Visualisation post-apocalyptique de l'anarchie</li>
+                <li><strong>Hobbes - Léviathan (1651)</strong> : Fondement philosophique sur la nécessité de l'État</li>
+                <li><strong>Fallout</strong> : Exploration ludique des conséquences de l'effondrement</li>
+                <li><strong>The Walking Dead</strong> : Étude de l'effondrement social et moral</li>
+                <li><strong>La Route - McCarthy</strong> : Prix Pulitzer, vision déchirante de la survie</li>
+                <li><strong>Children of Men</strong> : Effondrement civilisationnel par crise démographique</li>
+                <li><strong>Lord of the Flies</strong> : Microcosme de l'anarchie et de la violence</li>
+                <li><strong>The Last of Us</strong> : Brutalité post-pandémique et déshumanisation</li>
+            </ul>
+
+            <p style="margin-top: 15px;"><strong>Comparaison 12,50€/an :</strong></p>
+            <p>Budget ONU actuel : ~10 milliards USD/an (1,25€/personne). Notre proposition : ×10 pour gouvernance minimale effective. C'est moins que 2 cafés/an, infiniment moins que le coût de l'anarchie (perte de 5000€/personne/an en PIB seul).</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('graph-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('graph-container');
+        
+        let nodes = [];
+        let connections = [];
+        let animationRunning = true;
+        let mouseX = 0, mouseY = 0;
+        let selectedNode = null;
+        let goreMode = false;
+        let deathCount = 0;
+        let deathInterval = null;
+
+        // Citations cultes
+        const CULT_QUOTES = [
+            {
+                text: "Dans le désert nucléaire, seuls les plus forts survivent. Les faibles sont juste de la nourriture pour les corbeaux.",
+                author: "Mad Max - Fury Road (2015)",
+                ref: "Film post-apocalyptique montrant l'effondrement total de la civilisation"
+            },
+            {
+                text: "La vie de l'homme à l'état de nature est solitaire, misérable, dangereuse, animale et brève.",
+                author: "Thomas Hobbes - Léviathan (1651)",
+                ref: "Philosophie politique fondamentale sur la nécessité de l'État"
+            },
+            {
+                text: "War. War never changes. Quand les bombes sont tombées, la civilisation s'est effondrée en quelques jours.",
+                author: "Fallout (série de jeux vidéo)",
+                ref: "Exploration ludique des conséquences de l'anarchie post-nucléaire"
+            },
+            {
+                text: "Il n'y a pas de Dieu et nous sommes ses prophètes.",
+                author: "Cormac McCarthy - La Route (2006)",
+                ref: "Roman post-apocalyptique bouleversant, Prix Pulitzer"
+            },
+            {
+                text: "Les morts marchent, et les vivants ont peur de vivre.",
+                author: "The Walking Dead",
+                ref: "Série montrant l'effondrement social et moral post-apocalyptique"
+            },
+            {
+                text: "Si vous voulez garder un secret, vous devez aussi le cacher à vous-même.",
+                author: "George Orwell - 1984 (1949)",
+                ref: "Dystopie totalitaire, alternative à l'anarchie"
+            },
+            {
+                text: "Je ne peux pas me souvenir de la dernière fois où j'ai vu une femme enceinte.",
+                author: "Children of Men (2006)",
+                ref: "Film sur l'effondrement civilisationnel par infertilité"
+            },
+            {
+                text: "Le pire, ce n'est pas la mort. C'est de devenir un animal.",
+                author: "Aldous Huxley - Le Meilleur des Mondes (1932)",
+                ref: "Dystopie sur la déshumanisation"
+            },
+            {
+                text: "L'anarchie, c'est l'ordre sans le pouvoir.",
+                author: "Pierre-Joseph Proudhon (1840)",
+                ref: "Théoricien anarchiste - vision utopique contredite par l'histoire"
+            },
+            {
+                text: "Dans un monde sans loi, la survie devient le seul impératif moral.",
+                author: "The Last of Us",
+                ref: "Jeu vidéo montrant la brutalité post-pandémique"
+            }
+        ];
+
+        function showQuote(index) {
+            const quote = CULT_QUOTES[index];
+            document.getElementById('quote-text').textContent = `"${quote.text}"`;
+            document.getElementById('quote-author').innerHTML = `— ${quote.author}<br><small style="opacity: 0.7;">${quote.ref}</small>`;
+            document.getElementById('quote-overlay').classList.add('active');
+        }
+
+        function closeQuote() {
+            document.getElementById('quote-overlay').classList.remove('active');
+        }
+
+        // Mode GORE
+        function toggleGoreMode() {
+            goreMode = !goreMode;
+            
+            if (goreMode) {
+                document.body.classList.add('gore-mode');
+                document.getElementById('corpse-counter').classList.add('active');
+                startDeathCounter();
+                spawnSkulls();
+                startBloodDrips();
+                
+                // Changer les couleurs des nœuds catastrophiques
+                nodes.forEach((node, i) => {
+                    if (i < 8) { // Nœuds catastrophiques
+                        node.color = '#ff0000';
+                    }
+                });
+                
+                alert('⚠️ MODE GORE ACTIVÉ ⚠️\n\n' +
+                      'Attention : visualisation graphique des conséquences réelles.\n\n' +
+                      '💀 Compteur de morts en temps réel\n' +
+                      '🩸 Sang dégoulinant\n' +
+                      '☠️ Crânes flottants\n\n' +
+                      'Ceci est une représentation RÉALISTE de ce qui arrive\n' +
+                      'en l\'absence de gouvernance mondiale.\n\n' +
+                      'Sources : ONU, OMS, Croix-Rouge, études historiques\n' +
+                      'sur États faillis (Somalie, Rwanda, Syrie...)');
+            } else {
+                document.body.classList.remove('gore-mode');
+                document.getElementById('corpse-counter').classList.remove('active');
+                stopDeathCounter();
+                
+                // Restaurer couleurs originales
+                nodes.forEach((node, i) => {
+                    if (nodeData[i]) {
+                        node.color = nodeData[i].color;
+                    }
+                });
+                
+                // Retirer crânes et sang
+                document.querySelectorAll('.skull, .blood-drip').forEach(el => el.remove());
+            }
+        }
+
+        function startDeathCounter() {
+            // 150M morts/an = 4,75 morts/seconde
+            deathCount = 0;
+            deathInterval = setInterval(() => {
+                deathCount += Math.floor(Math.random() * 10) + 1;
+                document.getElementById('death-count').textContent = deathCount.toLocaleString();
+            }, 200);
+        }
+
+        function stopDeathCounter() {
+            if (deathInterval) {
+                clearInterval(deathInterval);
+                deathInterval = null;
+            }
+        }
+
+        function spawnSkulls() {
+            if (!goreMode) return;
+            
+            const skull = document.createElement('div');
+            skull.className = 'skull';
+            skull.textContent = '💀';
+            skull.style.left = Math.random() * window.innerWidth + 'px';
+            skull.style.top = Math.random() * window.innerHeight + 'px';
+            skull.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.body.appendChild(skull);
+            
+            setTimeout(() => skull.remove(), 5000);
+            
+            if (goreMode) {
+                setTimeout(() => spawnSkulls(), 1000 + Math.random() * 2000);
+            }
+        }
+
+        function startBloodDrips() {
+            if (!goreMode) return;
+            
+            const drip = document.createElement('div');
+            drip.className = 'blood-drip';
+            drip.style.left = Math.random() * window.innerWidth + 'px';
+            drip.style.top = '0px';
+            
+            document.body.appendChild(drip);
+            
+            setTimeout(() => drip.remove(), 2000);
+            
+            if (goreMode) {
+                setTimeout(() => startBloodDrips(), 300 + Math.random() * 500);
+            }
+        }
+
+        // Redimensionner le canvas
+        function resizeCanvas() {
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Données des nœuds
+        const nodeData = [
+            { label: "ANARCHIE", x: 0.5, y: 0.1, color: "#ff0000", size: 30, info: "Absence totale de gouvernance = catastrophe humanitaire" },
+            { label: "Conflits", x: 0.2, y: 0.3, color: "#ff6b6b", size: 20, info: "50-150M morts/an par violence directe" },
+            { label: "Famine", x: 0.8, y: 0.3, color: "#ff8c42", size: 20, info: "Production agricole -70%, distribution impossible" },
+            { label: "Maladies", x: 0.1, y: 0.5, color: "#ff4757", size: 18, info: "Épidémies incontrôlées, espérance de vie -30 ans" },
+            { label: "Effondrement PIB", x: 0.5, y: 0.4, color: "#b19cd9", size: 25, info: "Perte de 45-60% du PIB mondial" },
+            { label: "Commerce -95%", x: 0.9, y: 0.5, color: "#a8e6cf", size: 18, info: "Plus d'import/export, autarcie forcée" },
+            { label: "Infrastructure", x: 0.3, y: 0.6, color: "#b19cd9", size: 16, info: "70-90% détruite ou inutilisable" },
+            { label: "Éducation 0", x: 0.7, y: 0.6, color: "#a8e6cf", size: 16, info: "Fin de l'école, perte de connaissances" },
+            { label: "SOLUTION 12.50€", x: 0.5, y: 0.85, color: "#00ff00", size: 28, info: "Gouvernance minimale = évite la catastrophe" },
+            { label: "Coordination", x: 0.2, y: 0.75, color: "#a8e6cf", size: 15, info: "100Mds€ pour diplomatie et prévention conflits" },
+            { label: "Santé mondiale", x: 0.4, y: 0.75, color: "#b19cd9", size: 15, info: "Surveillance épidémies, vaccins" },
+            { label: "Justice", x: 0.6, y: 0.75, color: "#a8e6cf", size: 15, info: "Tribunaux internationaux, droits humains" },
+            { label: "Environnement", x: 0.8, y: 0.75, color: "#b19cd9", size: 15, info: "Régulation climat, biodiversité" }
+        ];
+
+        // Initialiser les nœuds
+        nodeData.forEach(data => {
+            nodes.push({
+                x: data.x * canvas.width,
+                y: data.y * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                label: data.label,
+                color: data.color,
+                size: data.size,
+                info: data.info,
+                targetX: data.x * canvas.width,
+                targetY: data.y * canvas.height
+            });
+        });
+
+        // Connexions
+        connections = [
+            [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
+            [1, 3], [2, 4], [3, 6], [4, 5], [5, 7], [6, 7],
+            [8, 9], [8, 10], [8, 11], [8, 12],
+            [4, 8], [5, 8]
+        ];
+
+        // Animation
+        function animate() {
+            if (!animationRunning) return;
+
+            ctx.fillStyle = 'rgba(10, 0, 21, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Dessiner connexions
+            connections.forEach(([i, j]) => {
+                const n1 = nodes[i];
+                const n2 = nodes[j];
+                
+                const gradient = ctx.createLinearGradient(n1.x, n1.y, n2.x, n2.y);
+                gradient.addColorStop(0, n1.color + '80');
+                gradient.addColorStop(1, n2.color + '80');
+                
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(n1.x, n1.y);
+                ctx.lineTo(n2.x, n2.y);
+                ctx.stroke();
+            });
+
+            // Mettre à jour et dessiner nœuds
+            nodes.forEach((node, i) => {
+                // Physique douce vers position cible
+                node.vx += (node.targetX - node.x) * 0.001;
+                node.vy += (node.targetY - node.y) * 0.001;
+                
+                // Friction
+                node.vx *= 0.95;
+                node.vy *= 0.95;
+                
+                // Répulsion entre nœuds
+                nodes.forEach((other, j) => {
+                    if (i === j) return;
+                    const dx = node.x - other.x;
+                    const dy = node.y - other.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 100 && dist > 0) {
+                        const force = (100 - dist) / 1000;
+                        node.vx += (dx / dist) * force;
+                        node.vy += (dy / dist) * force;
+                    }
+                });
+                
+                node.x += node.vx;
+                node.y += node.vy;
+                
+                // Bordures
+                if (node.x < node.size) { node.x = node.size; node.vx *= -0.5; }
+                if (node.x > canvas.width - node.size) { node.x = canvas.width - node.size; node.vx *= -0.5; }
+                if (node.y < node.size) { node.y = node.size; node.vy *= -0.5; }
+                if (node.y > canvas.height - node.size) { node.y = canvas.height - node.size; node.vy *= -0.5; }
+                
+                // Dessiner nœud
+                ctx.fillStyle = node.color;
+                ctx.shadowBlur = 30;
+                ctx.shadowColor = node.color;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                
+                // Label
+                ctx.fillStyle = '#ffffff';
+                ctx.font = `bold ${Math.max(10, node.size / 2)}px Courier New`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(node.label, node.x, node.y);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // Interaction souris
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+            
+            // Trouver nœud sous la souris
+            let hoveredNode = null;
+            nodes.forEach(node => {
+                const dx = mouseX - node.x;
+                const dy = mouseY - node.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < node.size) {
+                    hoveredNode = node;
+                    canvas.style.cursor = 'pointer';
+                }
+            });
+            
+            if (!hoveredNode) {
+                canvas.style.cursor = 'crosshair';
+                document.getElementById('node-info').style.display = 'none';
+            } else {
+                // Afficher info bulle
+                const info = document.getElementById('node-info');
+                info.style.display = 'block';
+                info.style.left = (e.clientX + 20) + 'px';
+                info.style.top = (e.clientY + 20) + 'px';
+                info.innerHTML = `<h4>${hoveredNode.label}</h4><p>${hoveredNode.info}</p>`;
+            }
+            
+            // Attirer les nœuds vers la souris
+            nodes.forEach(node => {
+                const dx = mouseX - node.x;
+                const dy = mouseY - node.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 200) {
+                    const force = (200 - dist) / 10000;
+                    node.vx += (dx / dist) * force;
+                    node.vy += (dy / dist) * force;
+                }
+            });
+        });
+
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            nodes.forEach(node => {
+                const dx = x - node.x;
+                const dy = y - node.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < node.size) {
+                    selectedNode = node;
+                    // Impulsion aléatoire
+                    node.vx += (Math.random() - 0.5) * 5;
+                    node.vy += (Math.random() - 0.5) * 5;
+                }
+            });
+        });
+
+        // Animer la boule disco
+        const discoBall = document.getElementById('disco-ball');
+        let discoBallAngle = 0;
+        function animateDiscoBall() {
+            discoBallAngle += 0.02;
+            const x = container.clientWidth / 2 + Math.cos(discoBallAngle) * 200;
+            const y = 80 + Math.sin(discoBallAngle * 2) * 40;
+            discoBall.style.left = x + 'px';
+            discoBall.style.top = y + 'px';
+            requestAnimationFrame(animateDiscoBall);
+        }
+        animateDiscoBall();
+
+        // Contrôles
+        function resetGraph() {
+            nodes.forEach((node, i) => {
+                node.x = nodeData[i].x * canvas.width;
+                node.y = nodeData[i].y * canvas.height;
+                node.vx = 0;
+                node.vy = 0;
+                node.targetX = node.x;
+                node.targetY = node.y;
+            });
+        }
+
+        function toggleAnimation() {
+            animationRunning = !animationRunning;
+            if (animationRunning) animate();
+        }
+
+        function addRandomNode() {
+            const randomLabels = [
+                "Réfugiés", "Pollution", "Cybercrime", "Trafics", "Corruption",
+                "Recherche", "Innovation", "Paix", "Prospérité", "Coopération"
+            ];
+            const label = randomLabels[Math.floor(Math.random() * randomLabels.length)];
+            const color = Math.random() > 0.5 ? "#b19cd9" : "#a8e6cf";
+            
+            nodes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                label: label,
+                color: color,
+                size: 12 + Math.random() * 8,
+                info: "Nœud ajouté dynamiquement",
+                targetX: Math.random() * canvas.width,
+                targetY: Math.random() * canvas.height
+            });
+            
+            // Ajouter connexion aléatoire
+            if (nodes.length > 1) {
+                const randomIndex = Math.floor(Math.random() * (nodes.length - 1));
+                connections.push([randomIndex, nodes.length - 1]);
+            }
+        }
+
+        function showDonationModal() {
+            alert(`💚 MERCI DE VOTRE ENGAGEMENT !\n\n` +
+                  `Vous êtes sur le point de contribuer à éviter une catastrophe mondiale.\n\n` +
+                  `12,50€/an = 0,034€/jour\n\n` +
+                  `Dans une vraie implémentation, vous seriez redirigé vers :\n` +
+                  `- Plateforme de paiement sécurisé\n` +
+                  `- Choix de devise (EUR/USD/autres)\n` +
+                  `- Options de paiement (carte, virement, crypto)\n` +
+                  `- Reçu fiscal automatique\n` +
+                  `- Dashboard personnel avec impact en temps réel\n\n` +
+                  `AVANTAGES IMMÉDIATS :\n` +
+                  `✓ Badge de contributeur vérifié\n` +
+                  `✓ Accès au réseau mondial\n` +
+                  `✓ Vote consultatif sur projets\n` +
+                  `✓ Rapports trimestriels détaillés\n` +
+                  `✓ Événements communautaires exclusifs`);
+        }
+
+        // Démarrer l'animation
+        animate();
+
+        // Glitch périodique
+        setInterval(() => {
+            if (Math.random() > 0.9) {
+                nodes.forEach(node => {
+                    node.vx += (Math.random() - 0.5) * 3;
+                    node.vy += (Math.random() - 0.5) * 3;
+                });
+            }
+        }, 2000);
+
+        // Easter egg : Konami code
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            if (konamiCode.length > konamiSequence.length) {
+                konamiCode.shift();
+            }
+            
+            if (JSON.stringify(konamiCode) === JSON.stringify(konamiSequence)) {
+                // Mode disco intense
+                document.body.style.animation = 'discoBackground 0.5s infinite';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 5000);
+                
+                alert('🎉 KONAMI CODE ACTIVÉ !\n\nMODE DISCO INTENSE !\n\n' +
+                      'Fun fact: Si tout le monde sur Terre donnait 12,50€/an,\n' +
+                      'on aurait le budget du programme spatial Apollo chaque année.\n' +
+                      'Imaginez ce qu\'on pourrait accomplir ensemble !');
+                
+                konamiCode = [];
+            }
+        });
+
+        // Ajouter le style pour disco background
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes discoBackground {
+                0% { filter: hue-rotate(0deg); }
+                25% { filter: hue-rotate(90deg); }
+                50% { filter: hue-rotate(180deg); }
+                75% { filter: hue-rotate(270deg); }
+                100% { filter: hue-rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Responsive updates
+        window.addEventListener('resize', () => {
+            nodes.forEach((node, i) => {
+                node.targetX = nodeData[i].x * canvas.width;
+                node.targetY = nodeData[i].y * canvas.height;
+            });
+        });
+
+        // Double-clic pour exploser un nœud
+        canvas.addEventListener('dblclick', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            nodes.forEach(node => {
+                const dx = x - node.x;
+                const dy = y - node.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < node.size) {
+                    // Explosion !
+                    nodes.forEach(otherNode => {
+                        const ddx = otherNode.x - node.x;
+                        const ddy = otherNode.y - node.y;
+                        const ddist = Math.sqrt(ddx * ddx + ddy * ddy);
+                        if (ddist > 0) {
+                            otherNode.vx += (ddx / ddist) * 10;
+                            otherNode.vy += (ddy / ddist) * 10;
+                        }
+                    });
+                }
+            });
+        });
+
+        // Touche Espace : chaos aléatoire
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                nodes.forEach(node => {
+                    node.vx = (Math.random() - 0.5) * 10;
+                    node.vy = (Math.random() - 0.5) * 10;
+                });
+            }
+            
+            // Touche G : Toggle Gore
+            if (e.key === 'g' || e.key === 'G') {
+                toggleGoreMode();
+            }
+            
+            // Touche Q : Citation aléatoire
+            if (e.key === 'q' || e.key === 'Q') {
+                showQuote(Math.floor(Math.random() * CULT_QUOTES.length));
+            }
+        });
+
+        console.log(`
+╔═══════════════════════════════════════════════════════════════╗
+║  💸 COÛT DE L'ANARCHIE - ANALYSE RIGOUREUSE                  ║
+╠═══════════════════════════════════════════════════════════════╣
+║                                                                ║
+║  Perte PIB mondial/an: 40 000 milliards USD                   ║
+║  Vies perdues/an: 50-150 millions                             ║
+║  Coût par personne/an: ~5000€                                 ║
+║                                                                ║
+║  SOLUTION: 12,50€/an/personne                                 ║
+║  = 0,034€/jour (3,4 centimes)                                 ║
+║  = Prix d'une baguette par trimestre                          ║
+║                                                                ║
+║  ROI: 40 000% (évite 5000€ de perte pour 12,50€)            ║
+║                                                                ║
+║  Commandes:                                                    ║
+║  - Clic: Sélectionner nœud                                    ║
+║  - Double-clic: Exploser nœud                                 ║
+║  - Espace: Chaos aléatoire                                    ║
+║  - G: Toggle mode GORE 💀                                     ║
+║  - Q: Citation culte aléatoire                                ║
+║  - ↑↑↓↓←→←→BA: Konami code                                   ║
+║                                                                ║
+║  Références cultes:                                            ║
+║  🎬 Mad Max, The Walking Dead, Children of Men                ║
+║  📚 Hobbes, Orwell, McCarthy, Huxley                          ║
+║  🎮 Fallout, The Last of Us                                   ║
+║                                                                ║
+╚═══════════════════════════════════════════════════════════════╝
+        `);
+    </script>
+
+</body>
+
+</html>
