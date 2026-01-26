@@ -1,0 +1,1296 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://dl.ouaisfi.eu/tsqDkG3df71Wr0fhY3rAcw2Vr8m478wnxZkqrjephJ8IkaERlImzd5a52BIYDHrh1TTPk1K4gPePDDv1jaaKKACHOE_XSQBkvXOS_nDDY7jV8Fu9Y15CBfZYlKvu_FBkfmb8u-R7nqvjnG9lzGfJxYZuNjzpq7_OwQbkmWZMrgHtPvayZGd6omqQPnLqGckRF1zKVVu6K-R2vdsE2B6APOd1ogJcNgRn7V4kEPHJrAece-f28IZ0kRQz4f9YN_UkZTpI9W1K2FjiYT_xtSQvjHtvvrO3nP9Q6XsYUHQS-Blg8sMYM_pP0e6PLSx7jR4X6eNsP5-FL0im7ZFVdMaI1PH536rxKh3vFGNyYf9AU0dHxAVqGoouujoR1jKv22B5pGO9vXVGL2ClNIUVa3p-s1W81q0gmUUfU-IWaa385-HKPF_Fhd4YiFfFGRc-7MvdXbuGxeTDTucfswSebAPIzIRYrMWPdGnYqIU9Lniz8O1Eqq4e'></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test de connaissances – Rapport sur le renseignement</title>
+  <style>
+    /* -----------------------------
+       Styles généraux (mobile first)
+       ----------------------------- */
+    :root {
+      --primary: #0a559e;
+      --primary-dark: #063a6b;
+      --bg: #f5f7fa;
+      --card-bg: #ffffff;
+      --text: #222222;
+      --muted: #6b7280;
+      --correct: #16a34a;
+      --wrong: #dc2626;
+      --border: #e5e7eb;
+      --radius-lg: 12px;
+      --shadow-soft: 0 8px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #e0f2fe 0, #f5f7fa 45%, #f5f7fa 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      padding: 1rem 1.25rem 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.9rem;
+      max-width: 40rem;
+      margin-inline: auto;
+      opacity: 0.9;
+    }
+
+    main {
+      flex: 1;
+      padding: 1.25rem 1rem 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .quiz-card {
+      width: 100%;
+      max-width: 760px;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 1rem 1rem 1.25rem;
+    }
+
+    @media (min-width: 600px) {
+      header {
+        padding: 1.5rem 2rem 2rem;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+      header p {
+        font-size: 1rem;
+      }
+      main {
+        padding: 2rem;
+      }
+      .quiz-card {
+        padding: 1.5rem 1.75rem 1.75rem;
+      }
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .quiz-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .quiz-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.6rem;
+      background: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .pill-strong {
+      border-color: rgba(37, 99, 235, 0.3);
+      background: rgba(59, 130, 246, 0.04);
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+
+    .question-text {
+      margin: 0 0 0.75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .question-section {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .answer-btn {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.9rem;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease,
+        transform 0.05s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      position: relative;
+    }
+
+    .answer-btn span.index {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--muted);
+      flex-shrink: 0;
+      width: 1.2rem;
+      text-align: center;
+    }
+
+    .answer-btn span.label {
+      flex: 1;
+    }
+
+    .answer-btn:hover {
+      background: #eff6ff;
+      border-color: rgba(37, 99, 235, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .answer-btn:disabled {
+      cursor: default;
+      transform: none;
+      opacity: 1;
+    }
+
+    .answer-btn.correct {
+      background: rgba(22, 163, 74, 0.08);
+      border-color: rgba(22, 163, 74, 0.7);
+    }
+
+    .answer-btn.correct::after {
+      content: "✔";
+      position: absolute;
+      right: 0.85rem;
+      font-size: 0.9rem;
+      color: var(--correct);
+    }
+
+    .answer-btn.wrong {
+      background: rgba(220, 38, 38, 0.06);
+      border-color: rgba(220, 38, 38, 0.7);
+    }
+
+    .answer-btn.wrong::after {
+      content: "✖";
+      position: absolute;
+      right: 0.85rem;
+      font-size: 0.9rem;
+      color: var(--wrong);
+    }
+
+    .feedback {
+      font-size: 0.85rem;
+      margin-top: 0.4rem;
+      min-height: 1.2rem;
+    }
+
+    .feedback.correct {
+      color: var(--correct);
+      font-weight: 600;
+    }
+
+    .feedback.wrong {
+      color: var(--wrong);
+      font-weight: 600;
+    }
+
+    .explanation {
+      margin-top: 0.35rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.9rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    button.nav-btn {
+      border-radius: 999px;
+      padding: 0.55rem 1.1rem;
+      border: none;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 500;
+      background: #e5e7eb;
+      color: #111827;
+      transition: background-color 0.15s ease, transform 0.05s ease;
+    }
+
+    button.nav-btn.primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    button.nav-btn.primary:disabled {
+      background: #9ca3af;
+      cursor: default;
+      transform: none;
+    }
+
+    button.nav-btn:not(:disabled):hover {
+      transform: translateY(-1px);
+      filter: brightness(0.97);
+    }
+
+    button.nav-btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .progress-text {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .results {
+      display: none;
+      text-align: center;
+    }
+
+    .results h2 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    .score-big {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0.25rem 0 0.75rem;
+    }
+
+    .score-details {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: center;
+      font-size: 0.75rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .tag-cloud span {
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid rgba(37, 99, 235, 0.3);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Test de connaissances – Renseignement</h1>
+  <p>
+    Questionnaire basé sur le rapport fourni. Chaque partie du cours est couverte&nbsp;:
+    militaire, civil, histoire, technologies, cadre légal et controverses.
+  </p>
+</header>
+
+<main>
+  <section class="quiz-card" aria-live="polite">
+    <!-- Vue quiz -->
+    <div id="quiz-view">
+      <div class="quiz-header">
+        <div class="quiz-title" id="question-counter">Question 1 / 1</div>
+        <div class="quiz-meta">
+          <div class="pill pill-strong" id="section-pill">Section&nbsp;: –</div>
+          <div class="pill">
+            Score&nbsp;<span id="score-pill">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="question-section" id="question-section"></p>
+        <p class="question-text" id="question-text"></p>
+      </div>
+
+      <div class="answers" id="answers-container">
+        <!-- Boutons de réponses injectés ici -->
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+      <div class="explanation" id="explanation"></div>
+
+      <div class="quiz-footer">
+        <div class="nav-buttons">
+          <button class="nav-btn" id="prev-btn" type="button">
+            ← Précédent
+          </button>
+          <button class="nav-btn primary" id="next-btn" type="button">
+            Suivant →
+          </button>
+        </div>
+        <div class="progress-text" id="progress-text"></div>
+      </div>
+    </div>
+
+    <!-- Vue résultats -->
+    <div id="results-view" class="results">
+      <h2>Résultats</h2>
+      <p class="score-big" id="final-score"></p>
+      <p class="score-details" id="final-details"></p>
+      <div class="tag-cloud" id="tag-cloud"></div>
+      <button class="nav-btn primary" id="restart-btn" type="button">
+        Recommencer le test
+      </button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Appli HTML/CSS/JS simple, mobile&nbsp;first. Tu peux modifier les questions directement dans le code.
+</footer>
+
+<script>
+  // ----------------------------
+  // Banque de questions
+  // ----------------------------
+  const questions = [
+    {
+      id: 1,
+      section: "Introduction",
+      question:
+        "Dans le rapport, que recouvre le terme « renseignement » au sens large ?",
+      answers: [
+        {
+          text:
+            "À la fois une information jugée précieuse pour orienter les décisions et l’activité consistant à produire de telles informations",
+          correct: true
+        },
+        {
+          text: "Uniquement l’espionnage clandestin mené à l’étranger",
+          correct: false
+        },
+        {
+          text:
+            "Toute information trouvée sur Internet sans vérification particulière",
+          correct: false
+        },
+        {
+          text:
+            "L’ensemble des opérations militaires visibles menées par les forces armées",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le rapport insiste sur le double sens : le renseignement est à la fois une information stratégique et l’activité de collecte/production qui la rend disponible."
+    },
+    {
+      id: 2,
+      section: "Renseignement militaire",
+      question:
+        "Quel est l’objectif fondamental du renseignement militaire tel qu’il est décrit dans le rapport ?",
+      answers: [
+        {
+          text:
+            "Réduire l’incertitude liée aux menaces et à l’environnement des forces armées pour soutenir la planification et la conduite des opérations",
+          correct: true
+        },
+        {
+          text: "Surveiller uniquement les alliés pour vérifier leur loyauté",
+          correct: false
+        },
+        {
+          text: "Remplacer la diplomatie dans les crises internationales",
+          correct: false
+        },
+        {
+          text:
+            "Produire des films et des documentaires sur les opérations militaires",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le cœur du renseignement militaire est de réduire l’incertitude pour permettre des décisions éclairées du niveau tactique au niveau stratégique."
+    },
+    {
+      id: 3,
+      section: "Renseignement militaire",
+      question:
+        "Le rapport cite un adage de Sun Tzu pour illustrer le rôle du renseignement militaire. Lequel ?",
+      answers: [
+        {
+          text:
+            "« Une armée sans agents secrets est un homme sans yeux ni oreilles »",
+          correct: true
+        },
+        {
+          text: "« La meilleure défense, c’est l’attaque »",
+          correct: false
+        },
+        {
+          text:
+            "« La guerre est la continuation de la politique par d’autres moyens »",
+          correct: false
+        },
+        {
+          text: "« Diviser pour mieux régner »",
+          correct: false
+        }
+      ],
+      explanation:
+        "L’image des « yeux et oreilles » souligne que le renseignement donne une perception du champ de bataille sans laquelle le commandement est aveugle."
+    },
+    {
+      id: 4,
+      section: "Renseignement militaire",
+      question:
+        "La surveillance et la reconnaissance sont deux composantes essentielles. Quelle différence le rapport fait-il entre les deux ?",
+      answers: [
+        {
+          text:
+            "La surveillance est un suivi continu d’une cible ou d’une zone, tandis que la reconnaissance est une mission ponctuelle répondant à une question précise",
+          correct: true
+        },
+        {
+          text:
+            "La surveillance est toujours illégale, la reconnaissance toujours légale",
+          correct: false
+        },
+        {
+          text:
+            "La reconnaissance est uniquement menée par des satellites, la surveillance uniquement par des drones",
+          correct: false
+        },
+        {
+          text:
+            "Il n’y a pas de différence, ce sont des synonymes dans le rapport",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le rapport distingue bien le suivi continu (surveillance) de la mission ciblée dans le temps (reconnaissance)."
+    },
+    {
+      id: 5,
+      section: "Renseignement militaire",
+      question:
+        "Parmi les éléments suivants, lequel n’est PAS cité comme une source de renseignement militaire moderne ?",
+      answers: [
+        {
+          text: "Les likes et commentaires sur les réseaux sociaux d’influenceurs",
+          correct: true
+        },
+        {
+          text:
+            "Le renseignement d’origine humaine (agents, éclaireurs, informateurs)",
+          correct: false
+        },
+        {
+          text:
+            "Le renseignement d’origine image (reconnaissance aérienne, imagerie satellite)",
+          correct: false
+        },
+        {
+          text:
+            "Le renseignement électromagnétique et cyber (interceptions radio, intrusions dans des réseaux ennemis)",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le rapport parle d’HUMINT, IMINT, SIGINT et cyber, pas des réseaux sociaux d’influenceurs comme source principale."
+    },
+    {
+      id: 6,
+      section: "Renseignement militaire",
+      question:
+        "Quel service français est chargé de centraliser le renseignement d’intérêt militaire pour l’état-major des armées ?",
+      answers: [
+        {
+          text: "La Direction du renseignement militaire (DRM)",
+          correct: true
+        },
+        {
+          text: "La Direction générale de la sécurité intérieure (DGSI)",
+          correct: false
+        },
+        {
+          text: "TRACFIN",
+          correct: false
+        },
+        {
+          text: "Le Conseil constitutionnel",
+          correct: false
+        }
+      ],
+      explanation:
+        "La DRM est explicitement citée dans le rapport comme service chargé du renseignement militaire français."
+    },
+    {
+      id: 7,
+      section: "Renseignement civil",
+      question:
+        "Le rapport définit le renseignement civil comme…",
+      answers: [
+        {
+          text:
+            "L’ensemble des activités de renseignement hors du domaine strictement militaire (intérieur, économique, technologique, numérique, etc.)",
+          correct: true
+        },
+        {
+          text:
+            "Uniquement les opérations de police de la circulation routière",
+          correct: false
+        },
+        {
+          text:
+            "Exclusivement les actions d’ONG et d’associations de défense des droits humains",
+          correct: false
+        },
+        {
+          text:
+            "Les activités de renseignement menées par des journalistes d’investigation",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le renseignement civil regroupe notamment l’intérieur, l’économique, la surveillance numérique et les missions de sécurité publique utilisant des méthodes de renseignement."
+    },
+    {
+      id: 8,
+      section: "Renseignement intérieur",
+      question:
+        "Selon le rapport, vers quelles priorités se sont déplacées les missions du renseignement intérieur dans les États occidentaux ?",
+      answers: [
+        {
+          text:
+            "Lutte antiterroriste, prévention de l’extrémisme violent, démantèlement des réseaux criminels organisés et contre-ingérence",
+          correct: true
+        },
+        {
+          text:
+            "Principalement l’espionnage économique des alliés européens",
+          correct: false
+        },
+        {
+          text:
+            "Uniquement la surveillance des partis politiques légaux",
+          correct: false
+        },
+        {
+          text: "La gestion des relations publiques de l’État",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le texte souligne cette évolution par rapport à la période de la guerre froide, où la lutte contre la subversion politique était centrale."
+    },
+    {
+      id: 9,
+      section: "Renseignement intérieur",
+      question:
+        "Quelle est la principale agence civile chargée du renseignement intérieur en France, selon le rapport ?",
+      answers: [
+        {
+          text: "La Direction générale de la sécurité intérieure (DGSI)",
+          correct: true
+        },
+        {
+          text: "La Direction générale de la sécurité extérieure (DGSE)",
+          correct: false
+        },
+        {
+          text: "La Direction du renseignement militaire (DRM)",
+          correct: false
+        },
+        {
+          text: "Le ministère de la Culture",
+          correct: false
+        }
+      ],
+      explanation:
+        "La DGSI, créée en 2014, succède à la DCRI et relève du ministère de l’Intérieur."
+    },
+    {
+      id: 10,
+      section: "Renseignement économique",
+      question:
+        "Quel est l’objectif principal du renseignement économique au niveau des États ?",
+      answers: [
+        {
+          text:
+            "Défendre les intérêts nationaux et la compétitivité (protection des secrets, veille sur les marchés, lutte contre l’espionnage industriel)",
+          correct: true
+        },
+        {
+          text:
+            "Déterminer le montant des impôts locaux pour les ménages",
+          correct: false
+        },
+        {
+          text:
+            "Rédiger des rapports annuels pour les actionnaires d’entreprises privées",
+          correct: false
+        },
+        {
+          text:
+            "Établir la liste des produits culturels autorisés à la télévision",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le rapport insiste sur la dimension de souveraineté économique et la notion de « guerre économique »."
+    },
+    {
+      id: 11,
+      section: "Renseignement économique",
+      question:
+        "Dans le secteur privé, comment le rapport qualifie-t-il les activités légales de collecte d’informations au profit des entreprises ?",
+      answers: [
+        {
+          text: "Intelligence économique",
+          correct: true
+        },
+        {
+          text: "Cybercriminalité",
+          correct: false
+        },
+        {
+          text: "Lobbying parlementaire",
+          correct: false
+        },
+        {
+          text: "Publicité ciblée",
+          correct: false
+        }
+      ],
+      explanation:
+        "L’intelligence économique recouvre la veille technologique, concurrentielle et réglementaire au bénéfice des entreprises."
+    },
+    {
+      id: 12,
+      section: "Surveillance numérique",
+      question:
+        "Quelle distinction le rapport fait-il entre surveillance de masse et surveillance ciblée ?",
+      answers: [
+        {
+          text:
+            "La surveillance de masse collecte de façon indiscriminée des métadonnées et du trafic, tandis que la surveillance ciblée vise des individus ou groupes précis après autorisation",
+          correct: true
+        },
+        {
+          text:
+            "La surveillance de masse est toujours légale, la surveillance ciblée toujours illégale",
+          correct: false
+        },
+        {
+          text:
+            "La surveillance ciblée ne concerne que les communications militaires, jamais les civils",
+          correct: false
+        },
+        {
+          text:
+            "Il n’y a pas de différence, c’est uniquement une question de vocabulaire politique",
+          correct: false
+        }
+      ],
+      explanation:
+        "Cette distinction est centrale dans le débat sur les libertés publiques et la proportionnalité des moyens."
+    },
+    {
+      id: 13,
+      section: "Surveillance numérique",
+      question:
+        "Quels programmes américains révélés par Edward Snowden sont cités comme exemples de surveillance numérique de grande ampleur ?",
+      answers: [
+        {
+          text: "PRISM et XKeyscore",
+          correct: true
+        },
+        {
+          text: "Schengen et Erasmus",
+          correct: false
+        },
+        {
+          text: "SWIFT et SEPA",
+          correct: false
+        },
+        {
+          text: "Spotify et Netflix",
+          correct: false
+        }
+      ],
+      explanation:
+        "PRISM permettait d’accéder aux données de grands acteurs du web, XKeyscore analysait massivement le trafic Internet."
+    },
+    {
+      id: 14,
+      section: "Surveillance numérique",
+      question:
+        "Quel est l’équivalent britannique de la NSA pour le renseignement technique et cyber, mentionné dans le rapport ?",
+      answers: [
+        {
+          text: "Le GCHQ (Government Communications Headquarters)",
+          correct: true
+        },
+        {
+          text: "Le MI5",
+          correct: false
+        },
+        {
+          text: "Le MI6",
+          correct: false
+        },
+        {
+          text: "La Court of Appeal",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le GCHQ est l’agence technique chargée du renseignement électromagnétique et cyber au Royaume-Uni."
+    },
+    {
+      id: 15,
+      section: "Surveillance numérique",
+      question:
+        "L’affaire Crypto AG, évoquée dans le rapport, illustre…",
+      answers: [
+        {
+          text:
+            "La vente pendant des décennies de machines de chiffrement truquées, permettant à la CIA et à la BND de lire des communications étrangères",
+          correct: true
+        },
+        {
+          text:
+            "Une simple erreur comptable dans un service de renseignement",
+          correct: false
+        },
+        {
+          text:
+            "L’arrêt total de la cryptanalyse par les services occidentaux",
+          correct: false
+        },
+        {
+          text:
+            "Une campagne de publicité pour des logiciels de sécurité gratuits",
+          correct: false
+        }
+      ],
+      explanation:
+        "Crypto AG montre comment des équipements compromis peuvent donner un avantage massif en matière de renseignement."
+    },
+    {
+      id: 16,
+      section: "Cadre légal",
+      question:
+        "Quelle instance française la loi de 2015 sur le renseignement a-t-elle chargée de contrôler les techniques intrusives (écoutes, balises, etc.) ?",
+      answers: [
+        {
+          text:
+            "La Commission nationale de contrôle des techniques de renseignement (CNCTR)",
+          correct: true
+        },
+        {
+          text: "Le Conseil économique, social et environnemental",
+          correct: false
+        },
+        {
+          text: "Le Conseil supérieur de l’audiovisuel",
+          correct: false
+        },
+        {
+          text: "Le Comité des fêtes de la commune",
+          correct: false
+        }
+      ],
+      explanation:
+        "La CNCTR doit être consultée avant la mise en œuvre de techniques intrusives et peut en contrôler la conformité."
+    },
+    {
+      id: 17,
+      section: "Cadre légal",
+      question:
+        "La loi française du 24 juillet 2015 relative au renseignement a notamment…",
+      answers: [
+        {
+          text:
+            "Défini des finalités légitimes précises justifiant les techniques de renseignement et encadré leur autorisation et leur durée",
+          correct: true
+        },
+        {
+          text:
+            "Supprimé toute forme de contrôle politique sur les services de renseignement",
+          correct: false
+        },
+        {
+          text:
+            "Interdit définitivement toute interception de communications",
+          correct: false
+        },
+        {
+          text:
+            "Transféré tous les pouvoirs de renseignement à l’Union européenne",
+          correct: false
+        }
+      ],
+      explanation:
+        "Elle vise à sortir d’un « no man’s land juridique » et à encadrer légalement écoutes, géolocalisation, IMSI-catchers, etc."
+    },
+    {
+      id: 18,
+      section: "Cadre légal international",
+      question:
+        "Quel changement majeur le USA Freedom Act de 2015 a-t-il apporté par rapport aux pratiques de la NSA révélées par Snowden ?",
+      answers: [
+        {
+          text:
+            "La fin de la collecte globale des métadonnées téléphoniques domestiques au profit de réquisitions plus ciblées",
+          correct: true
+        },
+        {
+          text:
+            "La suppression de tous les services de renseignement américains",
+          correct: false
+        },
+        {
+          text:
+            "L’interdiction totale de l’usage de l’informatique dans les enquêtes",
+          correct: false
+        },
+        {
+          text:
+            "Le transfert de toutes les données de la NSA vers les Nations unies",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le Freedom Act répond en partie aux critiques relatives à la collecte massive de données téléphoniques."
+    },
+    {
+      id: 19,
+      section: "Cadre légal international",
+      question:
+        "L’Investigatory Powers Act 2016 au Royaume-Uni, surnommé « Charte des fouineurs », est présenté comme…",
+      answers: [
+        {
+          text:
+            "Une loi encadrant et en partie étendant les capacités d’interception, avec des mécanismes de double validation pour les opérations les plus intrusives",
+          correct: true
+        },
+        {
+          text:
+            "Une loi abolissant définitivement toute forme de renseignement",
+          correct: false
+        },
+        {
+          text:
+            "Un simple règlement intérieur d’une entreprise privée de télécoms",
+          correct: false
+        },
+        {
+          text:
+            "Un traité secret entre la France et le Royaume-Uni sur le partage du renseignement militaire",
+          correct: false
+        }
+      ],
+      explanation:
+        "Cette loi illustre la volonté d’inscrire le renseignement « dans l’État de droit », tout en donnant de larges pouvoirs aux agences."
+    },
+    {
+      id: 20,
+      section: "Scandales et controverses",
+      question:
+        "Quel scandale historique implique l’usage de services de renseignement et de police par le président Nixon pour espionner ses opposants ?",
+      answers: [
+        {
+          text: "Le Watergate",
+          correct: true
+        },
+        {
+          text: "L’affaire Dreyfus",
+          correct: false
+        },
+        {
+          text: "L’affaire Crypto AG",
+          correct: false
+        },
+        {
+          text: "L’affaire Schnaebelé",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le Watergate a conduit à la démission de Nixon et à une remise en cause profonde des pratiques du FBI et de la CIA."
+    },
+    {
+      id: 21,
+      section: "Scandales et controverses",
+      question:
+        "Quel type d’outil est Pegasus, au cœur de polémiques récentes évoquées dans le rapport ?",
+      answers: [
+        {
+          text:
+            "Un logiciel espion utilisé pour surveiller des journalistes, opposants ou défenseurs des droits humains",
+          correct: true
+        },
+        {
+          text: "Un moteur de recherche public pour universitaires",
+          correct: false
+        },
+        {
+          text: "Un système de chiffrement open source",
+          correct: false
+        },
+        {
+          text: "Un programme de fidélité pour clients de téléphonie",
+          correct: false
+        }
+      ],
+      explanation:
+        "Pegasus symbolise le risque de détournement des capacités techniques de renseignement à des fins de répression politique."
+    },
+    {
+      id: 22,
+      section: "Fonctionnement des services",
+      question:
+        "Dans de nombreux États, comment sont généralement structurés les services de renseignement ?",
+      answers: [
+        {
+          text:
+            "En plusieurs services spécialisés (intérieur, extérieur, militaire, financier, etc.) formant une « communauté du renseignement »",
+          correct: true
+        },
+        {
+          text:
+            "En une seule super-agence mondiale pilotée par l’ONU",
+          correct: false
+        },
+        {
+          text:
+            "Uniquement en services municipaux rattachés aux mairies",
+          correct: false
+        },
+        {
+          text:
+            "En associations bénévoles sans lien avec l’État",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le rapport décrit cette pluralité comme un moyen de couvrir un large spectre de menaces, au prix de défis de coordination."
+    },
+    {
+      id: 23,
+      section: "Fonctionnement des services",
+      question:
+        "Aux États-Unis, quel principe de séparation est mentionné pour limiter les dérives sur le territoire national ?",
+      answers: [
+        {
+          text:
+            "La CIA n’a pas le droit d’opérer sur le sol national, ce rôle revenant au FBI",
+          correct: true
+        },
+        {
+          text:
+            "La CIA est autorisée à contrôler directement toutes les polices locales",
+          correct: false
+        },
+        {
+          text:
+            "Le FBI doit systématiquement demander l’autorisation à Interpol",
+          correct: false
+        },
+        {
+          text:
+            "Les services n’ont pas le droit d’échanger d’informations entre eux",
+          correct: false
+        }
+      ],
+      explanation:
+        "Même si, en pratique, des coopérations existent, ce principe vise à cloisonner renseignement extérieur et intérieur."
+    },
+    {
+      id: 24,
+      section: "Évolution contemporaine",
+      question:
+        "Selon le rapport, quel double mouvement caractérise l’époque contemporaine pour le renseignement ?",
+      answers: [
+        {
+          text:
+            "Une montée en puissance des moyens (face au terrorisme, aux cybermenaces, au retour de rivalités étatiques) et une exigence accrue de cadre juridique et de contrôle",
+          correct: true
+        },
+        {
+          text:
+            "Une disparition progressive des services secrets au profit de simples blogs citoyens",
+          correct: false
+        },
+        {
+          text:
+            "Une interdiction totale du recours au numérique par les agences",
+          correct: false
+        },
+        {
+          text:
+            "Une réduction drastique des budgets dans tous les pays",
+          correct: false
+        }
+      ],
+      explanation:
+        "Le rapport insiste à la fois sur l’augmentation des moyens et sur les controverses qui poussent à encadrer légalement ces pratiques."
+    }
+  ];
+
+  // ----------------------------
+  // Logique du quiz
+  // ----------------------------
+
+  function shuffle(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  let questionsShuffled = [];
+  let currentIndex = 0;
+  let score = 0;
+  let hasAnsweredCurrent = false;
+
+  const questionCounterEl = document.getElementById("question-counter");
+  const sectionPillEl = document.getElementById("section-pill");
+  const scorePillEl = document.getElementById("score-pill");
+  const questionSectionEl = document.getElementById("question-section");
+  const questionTextEl = document.getElementById("question-text");
+  const answersContainerEl = document.getElementById("answers-container");
+  const feedbackEl = document.getElementById("feedback");
+  const explanationEl = document.getElementById("explanation");
+  const prevBtn = document.getElementById("prev-btn");
+  const nextBtn = document.getElementById("next-btn");
+  const progressTextEl = document.getElementById("progress-text");
+
+  const quizViewEl = document.getElementById("quiz-view");
+  const resultsViewEl = document.getElementById("results-view");
+  const finalScoreEl = document.getElementById("final-score");
+  const finalDetailsEl = document.getElementById("final-details");
+  const tagCloudEl = document.getElementById("tag-cloud");
+  const restartBtn = document.getElementById("restart-btn");
+
+  function renderQuestion() {
+    const total = questionsShuffled.length;
+    const q = questionsShuffled[currentIndex];
+
+    questionCounterEl.textContent = `Question ${currentIndex + 1} / ${total}`;
+    sectionPillEl.textContent = `Section : ${q.section}`;
+    questionSectionEl.textContent = q.section;
+    questionTextEl.textContent = q.question;
+    feedbackEl.textContent = "";
+    feedbackEl.className = "feedback";
+    explanationEl.textContent = "";
+
+    answersContainerEl.innerHTML = "";
+    hasAnsweredCurrent = false;
+
+    // Mélange des réponses
+    const answersShuffled = shuffle(q.answers);
+    answersShuffled.forEach((answer, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "answer-btn";
+      btn.dataset.correct = answer.correct ? "true" : "false";
+
+      const idxSpan = document.createElement("span");
+      idxSpan.className = "index";
+      // lettres A, B, C, D...
+      idxSpan.textContent = String.fromCharCode(65 + idx);
+
+      const labelSpan = document.createElement("span");
+      labelSpan.className = "label";
+      labelSpan.textContent = answer.text;
+
+      btn.appendChild(idxSpan);
+      btn.appendChild(labelSpan);
+
+      btn.addEventListener("click", () => handleAnswerClick(btn, q));
+      answersContainerEl.appendChild(btn);
+    });
+
+    // Navigation
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.textContent =
+      currentIndex === total - 1 ? "Voir les résultats" : "Suivant →";
+
+    progressTextEl.textContent = `Progression : ${
+      currentIndex + 1
+    } / ${total}`;
+    scorePillEl.textContent = `${score}`;
+  }
+
+  function handleAnswerClick(selectedBtn, question) {
+    if (hasAnsweredCurrent) return;
+    hasAnsweredCurrent = true;
+
+    const isCorrect = selectedBtn.dataset.correct === "true";
+    const allButtons = answersContainerEl.querySelectorAll("button.answer-btn");
+
+    allButtons.forEach((btn) => {
+      btn.disabled = true;
+      const correct = btn.dataset.correct === "true";
+      if (correct) {
+        btn.classList.add("correct");
+      }
+    });
+
+    if (!isCorrect) {
+      selectedBtn.classList.add("wrong");
+      feedbackEl.textContent = "Raté. Relis bien la partie du rapport sur ce point.";
+      feedbackEl.classList.add("wrong");
+    } else {
+      score++;
+      feedbackEl.textContent = "Bonne réponse !";
+      feedbackEl.classList.add("correct");
+    }
+
+    explanationEl.textContent = question.explanation || "";
+    scorePillEl.textContent = `${score}`;
+  }
+
+  function showResults() {
+    const total = questionsShuffled.length;
+    quizViewEl.style.display = "none";
+    resultsViewEl.style.display = "block";
+
+    finalScoreEl.textContent = `${score} / ${total}`;
+    const ratio = score / total;
+
+    let message;
+    if (ratio === 1) {
+      message = "Parfait : tu maîtrises le rapport de bout en bout.";
+    } else if (ratio >= 0.8) {
+      message = "Très bon niveau : quelques détails à revoir pour être béton.";
+    } else if (ratio >= 0.5) {
+      message = "Niveau correct : relis calmement les parties où tu as hésité.";
+    } else {
+      message =
+        "C’est vraiment un test de révision : retourne au rapport, puis recommence.";
+    }
+
+    finalDetailsEl.textContent = message;
+
+    tagCloudEl.innerHTML = "";
+    const tags = [
+      "Militaire",
+      "Civil",
+      "Économie",
+      "Surveillance numérique",
+      "Cadre légal",
+      "Scandales",
+      "Histoire",
+      "Services"
+    ];
+    tags.forEach((t) => {
+      const span = document.createElement("span");
+      span.textContent = t;
+      tagCloudEl.appendChild(span);
+    });
+  }
+
+  function nextQuestion() {
+    const total = questionsShuffled.length;
+    if (currentIndex === total - 1) {
+      showResults();
+      return;
+    }
+    currentIndex++;
+    renderQuestion();
+  }
+
+  function prevQuestion() {
+    if (currentIndex === 0) return;
+    currentIndex--;
+    renderQuestion();
+  }
+
+  function restartQuiz() {
+    score = 0;
+    currentIndex = 0;
+    hasAnsweredCurrent = false;
+    questionsShuffled = shuffle(questions);
+    quizViewEl.style.display = "block";
+    resultsViewEl.style.display = "none";
+    renderQuestion();
+  }
+
+  // Initialisation
+  document.addEventListener("DOMContentLoaded", () => {
+    questionsShuffled = shuffle(questions);
+    renderQuestion();
+
+    nextBtn.addEventListener("click", nextQuestion);
+    prevBtn.addEventListener("click", prevQuestion);
+    restartBtn.addEventListener("click", restartQuiz);
+  });
+</script>
+</body>
+</html>
