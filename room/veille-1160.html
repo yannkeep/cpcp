@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Et si votre quartier devenait un terrain de jeu ?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0a0f;
+      --bg-card: #12121a;
+      --accent: #7c3aed;
+      --accent-glow: #a855f7;
+      --text: #e4e4e7;
+      --text-muted: #a1a1aa;
+      --border: rgba(124, 58, 237, 0.2);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+    }
+
+    /* Animated background */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow-orb {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .glow-orb:nth-child(1) { top: -200px; right: -200px; }
+    .glow-orb:nth-child(2) { bottom: -300px; left: -200px; animation-delay: -10s; }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, 30px) scale(1.1); }
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: linear-gradient(to bottom, var(--bg-dark), transparent);
+    }
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-glow), #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-glow);
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: rgba(124, 58, 237, 0.1);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: var(--accent-glow);
+      margin-bottom: 2rem;
+      animation: pulse-border 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-border {
+      0%, 100% { border-color: rgba(124, 58, 237, 0.2); }
+      50% { border-color: rgba(124, 58, 237, 0.5); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 1.1;
+      max-width: 900px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent-glow), #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+      color: white;
+      box-shadow: 0 0 30px rgba(124, 58, 237, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px rgba(124, 58, 237, 0.5);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(124, 58, 237, 0.1);
+      border-color: var(--accent);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+
+    /* Sections */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.85rem;
+      color: var(--accent-glow);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+    }
+
+    section h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 1.5rem;
+    }
+
+    section > p {
+      color: var(--text-muted);
+      max-width: 700px;
+      margin-bottom: 3rem;
+    }
+
+    /* Story Section */
+    .story-card {
+      background: linear-gradient(135deg, var(--bg-card), rgba(124, 58, 237, 0.05));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .story-card::before {
+      content: '"';
+      position: absolute;
+      top: -20px;
+      left: 20px;
+      font-size: 150px;
+      color: rgba(124, 58, 237, 0.1);
+      font-family: Georgia, serif;
+    }
+
+    .story-card p {
+      font-size: 1.15rem;
+      line-height: 1.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ARG Explanation */
+    .arg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .arg-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+
+    .arg-item:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      box-shadow: 0 10px 40px rgba(124, 58, 237, 0.15);
+    }
+
+    .arg-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .arg-item h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .arg-item p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Transposition */
+    .transpo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .transpo-item {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.5rem 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: all 0.3s;
+    }
+
+    .transpo-item:hover {
+      border-color: var(--accent);
+    }
+
+    .transpo-before {
+      color: var(--text-muted);
+      min-width: 200px;
+    }
+
+    .transpo-arrow {
+      color: var(--accent-glow);
+      font-size: 1.5rem;
+    }
+
+    .transpo-after {
+      color: var(--accent-glow);
+      font-weight: 500;
+    }
+
+    /* Quests */
+    .quest-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .quest-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .quest-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(124, 58, 237, 0.2);
+    }
+
+    .quest-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+    }
+
+    .quest-type {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      background: rgba(124, 58, 237, 0.15);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--accent-glow);
+      margin-bottom: 1rem;
+    }
+
+    .quest-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .quest-card > p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .quest-example {
+      background: rgba(0,0,0,0.3);
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      border-left: 3px solid var(--accent);
+    }
+
+    .quest-example strong {
+      color: var(--accent-glow);
+    }
+
+    /* Benefits */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .benefit-card {
+      padding: 2rem;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--bg-card), transparent);
+      border: 1px solid var(--border);
+    }
+
+    .benefit-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .benefit-card h3 span {
+      font-size: 1.5rem;
+    }
+
+    .benefit-card p {
+      color: var(--text-muted);
+    }
+
+    /* Ethics */
+    .ethics-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .ethics-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    .ethics-card h3 {
+      color: var(--accent-glow);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .ethics-card p {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* CTA Final */
+    .cta-section {
+      text-align: center;
+      padding: 8rem 2rem;
+      background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+    }
+
+    .cta-section h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-section p {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .transpo-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+      }
+      .transpo-before { min-width: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="glow-orb"></div>
+  <div class="glow-orb"></div>
+
+  <nav>
+    <div class="logo">✦ NYXO</div>
+    <ul class="nav-links">
+      <li><a href="#concept">Le concept</a></li>
+      <li><a href="#quetes">Les quêtes</a></li>
+      <li><a href="#benefices">Pourquoi participer</a></li>
+      <li><a href="#ethique">Nos engagements</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <span class="hero-badge">Jeu en Réalité Alternée</span>
+    <h1>Et si votre quartier devenait <span>un terrain de jeu</span> pour réinventer votre avenir ?</h1>
+    <p>Transformez votre participation citoyenne en une aventure collective. Explorez, collaborez, créez — et changez les choses pour de vrai.</p>
+    <div class="cta-group">
+      <a href="#concept" class="btn btn-primary">Découvrir le jeu</a>
+      <a href="#ethique" class="btn btn-secondary">Notre charte</a>
+    </div>
+    <div class="scroll-hint">
+      <span>Défiler pour explorer</span>
+      <span>↓</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-label">Point de départ</div>
+    <h2>Tout commence par un sentiment familier</h2>
+    <div class="story-card">
+      <p>Vous connaissez cette impression ? Celle de voir les rues de votre quartier sans vraiment les voir. De vouloir vous impliquer, changer les choses, mais de vous heurter à des démarches froides, des silos administratifs, un labyrinthe où personne ne semble se parler. Vous n'êtes pas seul·e. Et si cette impuissance pouvait se transformer en une force concrète — pour vous, et pour les autres ?</p>
+    </div>
+  </section>
+
+  <section id="concept">
+    <div class="section-label">Le concept</div>
+    <h2>Un jeu qui se joue dans le monde réel</h2>
+    <p>Un Jeu en Réalité Alternée (ARG) utilise votre environnement quotidien comme terrain de jeu. Pas d'écran, pas de manette — mais des enquêtes dans votre quartier, des collaborations avec d'autres personnes, et des actions qui produisent une valeur réelle.</p>
+    
+    <div class="arg-grid">
+      <div class="arg-item">
+        <div class="arg-icon">🗺️</div>
+        <h3>Votre quartier, votre terrain</h3>
+        <p>Les quêtes se déroulent là où vous vivez. Chaque rue, chaque lieu devient une opportunité de découverte.</p>
+      </div>
+      <div class="arg-item">
+        <div class="arg-icon">🤝</div>
+        <h3>Collectif par nature</h3>
+        <p>Impossible de tout faire seul·e. Le jeu tisse des liens entre habitants, associations et services publics.</p>
+      </div>
+      <div class="arg-item">
+        <div class="arg-icon">✨</div>
+        <h3>Impact réel</h3>
+        <p>Ce n'est pas du virtuel. Vos actions produisent des résultats concrets, utiles à toute la communauté.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Le réalisme magique</div>
+    <h2>Changer les mots pour changer le regard</h2>
+    <p>Le principe : les faits restent exacts, mais le vocabulaire les rend accessibles et inspirants. Rien n'est déformé, tout est transformé.</p>
+    
+    <div class="transpo-list">
+      <div class="transpo-item">
+        <span class="transpo-before">Un règlement communal dense</span>
+        <span class="transpo-arrow">→</span>
+        <span class="transpo-after">Un grimoire à déchiffrer collectivement</span>
+      </div>
+      <div class="transpo-item">
+        <span class="transpo-before">L'organigramme d'un service</span>
+        <span class="transpo-arrow">→</span>
+        <span class="transpo-after">Une constellation dont on comprend les forces</span>
+      </div>
+      <div class="transpo-item">
+        <span class="transpo-before">Une subvention</span>
+        <span class="transpo-arrow">→</span>
+        <span class="transpo-after">Une source d'énergie à capter</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="quetes">
+    <div class="section-label">Passer à l'action</div>
+    <h2>Trois types de quêtes</h2>
+    <p>Chaque quête est une porte d'entrée vers une compétence nouvelle et un impact tangible.</p>
+    
+    <div class="quest-cards">
+      <div class="quest-card">
+        <span class="quest-type">Exploration</span>
+        <h3>Comprendre le terrain</h3>
+        <p>Collecter et interpréter des informations sur votre environnement réel.</p>
+        <div class="quest-example">
+          <strong>Exemple :</strong> Décoder le budget participatif de votre commune pour cartographier où va l'argent.
+        </div>
+      </div>
+      <div class="quest-card">
+        <span class="quest-type">Interaction</span>
+        <h3>Créer des ponts</h3>
+        <p>Entrer en contact avec d'autres acteurs et initier des collaborations.</p>
+        <div class="quest-example">
+          <strong>Exemple :</strong> Réunir plusieurs associations locales autour d'un événement commun.
+        </div>
+      </div>
+      <div class="quest-card">
+        <span class="quest-type">Transformation</span>
+        <h3>Produire du concret</h3>
+        <p>Créer un résultat utile et réutilisable qui améliore la vie locale.</p>
+        <div class="quest-example">
+          <strong>Exemple :</strong> Prototyper une nouvelle signalétique pour un compost de quartier.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="benefices">
+    <div class="section-label">Ce que vous y gagnez</div>
+    <h2>Des bénéfices réels, pas des points virtuels</h2>
+    
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <h3><span>🧠</span> Compétences concrètes</h3>
+        <p>Analyser un budget, monter un projet, négocier entre acteurs — des savoir-faire précieux sur le plan personnel, civique et professionnel.</p>
+      </div>
+      <div class="benefit-card">
+        <h3><span>⚡</span> Pouvoir d'agir</h3>
+        <p>Passer du rôle de spectateur à celui d'acteur. Comprendre comment les choses fonctionnent — et comment les influencer positivement.</p>
+      </div>
+      <div class="benefit-card">
+        <h3><span>💪</span> Confiance en soi</h3>
+        <p>Voir ses actions produire des résultats tangibles. Chaque quête réussie prouve que votre contribution a de la valeur.</p>
+      </div>
+      <div class="benefit-card">
+        <h3><span>🌐</span> Réseau vivant</h3>
+        <p>Rencontrer des personnes qui partagent vos envies. Tisser des liens durables au-delà du jeu.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="ethique">
+    <div class="section-label">Nos engagements</div>
+    <h2>Un cadre bienveillant et sécurisé</h2>
+    <p>La confiance est le socle de l'expérience. Voici les principes qui guident chaque aspect du projet.</p>
+    
+    <div class="ethics-cards">
+      <div class="ethics-card">
+        <h3>Participation libre</h3>
+        <p>« Chacun·e participe s'iel le souhaite, à son rythme. Il est toujours possible d'observer, de faire une pause ou de se retirer. Ne pas jouer est un droit. »</p>
+      </div>
+      <div class="ethics-card">
+        <h3>Bienveillance active</h3>
+        <p>« Le dispositif n'exploite ni la vulnérabilité, ni la précarité. Aucune obligation de résultat, aucune pression à l'engagement. »</p>
+      </div>
+      <div class="ethics-card">
+        <h3>Inclusion totale</h3>
+        <p>« Le dispositif privilégie le low-tech et la médiation humaine. Aucune compétence numérique ou culturelle préalable n'est requise. »</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Et si la prochaine fois que vous marchiez dans votre rue, vous ne voyiez plus seulement des bâtiments ?</h2>
+    <p>Un terrain de jeu rempli de quêtes à accomplir. Une communauté à rejoindre. Un avenir à co-construire.</p>
+    <a href="#" class="btn btn-primary">Rejoindre l'aventure</a>
+  </section>
+
+  <footer>
+    <p>Le jeu se déploie depuis les lieux de lien que vous connaissez déjà : associations, centres communautaires, services de proximité. Une activité du quotidien peut devenir le point de départ d'une quête.</p>
+  </footer>
+</body>
+</html>
