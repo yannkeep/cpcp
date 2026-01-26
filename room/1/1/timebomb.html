@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secrétariat Social | SCP 329.02</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --bg-card-hover: #222230;
+            --accent-primary: #6366f1;
+            --accent-secondary: #818cf8;
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.3);
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-active: rgba(99, 102, 241, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.03) 0%, transparent 70%);
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.8);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .logo-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-text span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .current-datetime {
+            text-align: right;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .current-date {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .current-time {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.05em;
+        }
+
+        /* Main container */
+        main {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-active);
+            transform: translateY(-2px);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card.highlight {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.05));
+            border-color: var(--border-active);
+        }
+
+        .stat-card.highlight::before {
+            opacity: 1;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .stat-value.money {
+            color: var(--success);
+        }
+
+        .stat-value.money::before {
+            content: '€';
+            font-size: 1.25rem;
+            margin-right: 0.25rem;
+            opacity: 0.7;
+        }
+
+        .stat-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1000px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Timer Section */
+        .timer-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--success);
+        }
+
+        .status-badge.inactive {
+            background: rgba(100, 116, 139, 0.1);
+            border-color: rgba(100, 116, 139, 0.3);
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .status-badge.inactive .status-dot {
+            background: var(--text-muted);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Timer Display */
+        .timer-display {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .timer-ring {
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .timer-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .timer-ring-bg {
+            fill: none;
+            stroke: var(--bg-secondary);
+            stroke-width: 8;
+        }
+
+        .timer-ring-progress {
+            fill: none;
+            stroke: url(#timerGradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 785.4;
+            stroke-dashoffset: 785.4;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .timer-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .timer-time {
+            font-family: 'Space Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .timer-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+
+        /* Live Earnings */
+        .live-earnings {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.02));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .live-earnings-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .live-earnings-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--success);
+            text-shadow: 0 0 40px var(--success-glow);
+        }
+
+        .live-earnings-rate {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Timer Controls */
+        .timer-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            box-shadow: 0 4px 20px var(--success-glow);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--success-glow);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-active);
+        }
+
+        .btn-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Settings Card */
+        .settings-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+        }
+
+        .settings-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
+        .form-hint {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.375rem;
+        }
+
+        /* Barème Info */
+        .bareme-info {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.02));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .bareme-info-title {
+            font-size: 0.75rem;
+            color: var(--accent-secondary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .bareme-info-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .bareme-info-detail {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* History Card */
+        .history-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            flex: 1;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            margin: 0 -0.5rem;
+            padding: 0 0.5rem;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 3px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 3px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.875rem;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .history-item:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .history-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .history-item-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .history-item-duration {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .history-item-type {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            padding: 0.125rem 0.5rem;
+            background: var(--bg-card);
+            border-radius: 4px;
+        }
+
+        .history-item-earnings {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Weekly Summary */
+        .weekly-summary {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .weekly-summary h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .weekly-bars {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+            height: 120px;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .weekly-bar-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            height: 100%;
+        }
+
+        .weekly-bar-wrapper {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .weekly-bar {
+            width: 100%;
+            max-width: 40px;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 6px 6px 0 0;
+            min-height: 4px;
+            transition: height 0.5s ease;
+            position: relative;
+        }
+
+        .weekly-bar.today {
+            background: linear-gradient(180deg, var(--success), #059669);
+            box-shadow: 0 0 20px var(--success-glow);
+        }
+
+        .weekly-bar-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .weekly-bar-label.today {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .weekly-totals {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .weekly-total-item {
+            text-align: center;
+        }
+
+        .weekly-total-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .weekly-total-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-top: 0.25rem;
+        }
+
+        .weekly-total-value.highlight {
+            color: var(--success);
+        }
+
+        /* Type de travail */
+        .work-type-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .work-type-btn {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .work-type-btn:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .work-type-btn.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.1));
+            border-color: var(--accent-primary);
+            color: var(--accent-secondary);
+        }
+
+        .work-type-btn .rate {
+            display: block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            margin-top: 0.25rem;
+            opacity: 0.7;
+        }
+
+        /* Break indicator */
+        .break-indicator {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            color: var(--warning);
+        }
+
+        .break-indicator.active {
+            display: flex;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: var(--accent-secondary);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card, .timer-section, .settings-card, .history-card, .weekly-summary {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.15s; }
+        .stat-card:nth-child(3) { animation-delay: 0.2s; }
+        .stat-card:nth-child(4) { animation-delay: 0.25s; }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .timer-time {
+                font-size: 2.25rem;
+            }
+
+            .timer-ring {
+                width: 220px;
+                height: 220px;
+            }
+
+            .timer-controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="grain"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">4S</div>
+                <div class="logo-text">
+                    <h1>Secrétariat Social</h1>
+                    <span>SCP 329.02 • Secteur socio-culturel</span>
+                </div>
+            </div>
+            <div class="current-datetime">
+                <div class="current-date" id="currentDate"></div>
+                <div class="current-time" id="currentTime"></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card highlight">
+                <div class="stat-label">Session en cours</div>
+                <div class="stat-value money" id="sessionEarnings">0.00</div>
+                <div class="stat-subtitle" id="sessionDuration">00:00:00</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Aujourd'hui</div>
+                <div class="stat-value money" id="todayEarnings">0.00</div>
+                <div class="stat-subtitle" id="todayHours">0h 0min travaillées</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Cette semaine</div>
+                <div class="stat-value money" id="weekEarnings">0.00</div>
+                <div class="stat-subtitle" id="weekHours">0h / 38h légales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Ce mois</div>
+                <div class="stat-value money" id="monthEarnings">0.00</div>
+                <div class="stat-subtitle" id="monthHours">0h travaillées</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <!-- Timer Section -->
+            <div class="timer-section">
+                <div class="section-header">
+                    <h2 class="section-title">⏱️ Pointage</h2>
+                    <div class="status-badge inactive" id="statusBadge">
+                        <span class="status-dot"></span>
+                        <span id="statusText">En attente</span>
+                    </div>
+                </div>
+
+                <!-- Work Type Selector -->
+                <div class="work-type-selector">
+                    <button class="work-type-btn active" data-type="normal" data-rate="1">
+                        Normal
+                        <span class="rate">×1.00</span>
+                    </button>
+                    <button class="work-type-btn" data-type="samedi" data-rate="1.26">
+                        Samedi
+                        <span class="rate">×1.26</span>
+                    </button>
+                    <button class="work-type-btn" data-type="nuit" data-rate="1.35">
+                        Nuit
+                        <span class="rate">×1.35</span>
+                    </button>
+                    <button class="work-type-btn" data-type="dimanche" data-rate="1.56">
+                        Dim/Férié
+                        <span class="rate">×1.56</span>
+                    </button>
+                </div>
+
+                <div class="break-indicator" id="breakIndicator">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                    <span>En pause depuis <span id="breakDuration">00:00</span></span>
+                </div>
+
+                <div class="timer-display">
+                    <div class="timer-ring">
+                        <svg viewBox="0 0 280 280">
+                            <defs>
+                                <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#6366f1"/>
+                                    <stop offset="100%" stop-color="#10b981"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="timer-ring-bg" cx="140" cy="140" r="125"/>
+                            <circle class="timer-ring-progress" id="timerProgress" cx="140" cy="140" r="125"/>
+                        </svg>
+                        <div class="timer-center">
+                            <div class="timer-time" id="timerDisplay">00:00:00</div>
+                            <div class="timer-label">Temps de travail</div>
+                        </div>
+                    </div>
+
+                    <div class="live-earnings">
+                        <div class="live-earnings-label">💰 Gains en temps réel</div>
+                        <div class="live-earnings-value" id="liveEarnings">€ 0.00</div>
+                        <div class="live-earnings-rate" id="earningsRate">Taux: €0.00/heure</div>
+                    </div>
+
+                    <div class="timer-controls">
+                        <button class="btn btn-success" id="startBtn">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            Commencer
+                        </button>
+                        <button class="btn btn-secondary" id="pauseBtn" style="display: none;">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="6" y="4" width="4" height="16"></rect>
+                                <rect x="14" y="4" width="4" height="16"></rect>
+                            </svg>
+                            Pause
+                        </button>
+                        <button class="btn btn-danger" id="stopBtn" style="display: none;">
+                            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            </svg>
+                            Terminer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Settings -->
+                <div class="settings-card">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        Paramètres barémiques
+                    </h3>
+
+                    <div class="form-group">
+                        <label class="form-label">Échelon barémique</label>
+                        <select class="form-input form-select" id="echelon">
+                            <option value="1">Échelon 1 - Personnel d'exécution</option>
+                            <option value="2">Échelon 2 - Personnel qualifié</option>
+                            <option value="3" selected>Échelon 3 - Personnel spécialisé</option>
+                            <option value="4">Échelon 4 - Coordinateur</option>
+                            <option value="5">Échelon 5 - Responsable</option>
+                            <option value="6">Échelon 6 - Direction</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Ancienneté (années)</label>
+                        <input type="number" class="form-input" id="anciennete" value="3" min="0" max="31">
+                        <div class="form-hint">Influence le barème selon la grille SCP 329.02</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Régime horaire</label>
+                        <select class="form-input form-select" id="regime">
+                            <option value="38" selected>Temps plein (38h/semaine)</option>
+                            <option value="30.4">4/5 temps (30.4h/semaine)</option>
+                            <option value="19">Mi-temps (19h/semaine)</option>
+                            <option value="custom">Personnalisé</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="customRegimeGroup" style="display: none;">
+                        <label class="form-label">Heures/semaine personnalisées</label>
+                        <input type="number" class="form-input" id="customRegime" value="38" min="1" max="48" step="0.5">
+                    </div>
+
+                    <div class="bareme-info">
+                        <div class="bareme-info-title">💶 Taux horaire calculé</div>
+                        <div class="bareme-info-value" id="hourlyRate">€ 18.45</div>
+                        <div class="bareme-info-detail" id="baremeDetail">Échelon 3 • 3 ans • Index février 2026</div>
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div class="history-card">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Historique du jour
+                    </h3>
+                    <div class="history-list" id="historyList">
+                        <div class="history-empty">Aucune session enregistrée</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Summary -->
+        <div class="weekly-summary">
+            <h3>📊 Résumé hebdomadaire</h3>
+            <div class="weekly-bars" id="weeklyBars">
+                <!-- Generated by JS -->
+            </div>
+            <div class="weekly-totals">
+                <div class="weekly-total-item">
+                    <div class="weekly-total-label">Heures prestées</div>
+                    <div class="weekly-total-value" id="weeklyHoursTotal">0h 0min</div>
+                </div>
+                <div class="weekly-total-item">
+                    <div class="weekly-total-label">Objectif légal</div>
+                    <div class="weekly-total-value" id="weeklyTarget">38h 0min</div>
+                </div>
+                <div class="weekly-total-item">
+                    <div class="weekly-total-label">Gains estimés</div>
+                    <div class="weekly-total-value highlight" id="weeklyEarningsTotal">€ 0.00</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Application conforme à la <strong>SCP 329.02</strong> • Barèmes indexés février 2026 (+2%)</p>
+        <p>Développé pour le secteur socio-culturel • <a href="https://www.fonds-4s.org" target="_blank">Fonds 4S</a></p>
+    </footer>
+
+    <script>
+        // ===== BARÈMES SCP 329.02 (Indexés février 2026 - +2%) =====
+        const BAREMES_329_02 = {
+            // Salaires mensuels bruts par échelon et ancienneté (index février 2026)
+            // Source: Grille barémique SCP 329.02 Communauté française
+            1: { // Échelon 1 - Personnel d'exécution
+                0: 2180.50, 1: 2220.75, 2: 2261.00, 3: 2301.25, 4: 2341.50,
+                5: 2381.75, 6: 2422.00, 7: 2462.25, 8: 2502.50, 9: 2542.75,
+                10: 2583.00, 15: 2783.50, 20: 2984.00, 25: 3184.50, 31: 3385.00
+            },
+            2: { // Échelon 2 - Personnel qualifié
+                0: 2380.25, 1: 2430.50, 2: 2480.75, 3: 2531.00, 4: 2581.25,
+                5: 2631.50, 6: 2681.75, 7: 2732.00, 8: 2782.25, 9: 2832.50,
+                10: 2882.75, 15: 3133.50, 20: 3384.25, 25: 3635.00, 31: 3885.75
+            },
+            3: { // Échelon 3 - Personnel spécialisé
+                0: 2650.00, 1: 2715.50, 2: 2781.00, 3: 2846.50, 4: 2912.00,
+                5: 2977.50, 6: 3043.00, 7: 3108.50, 8: 3174.00, 9: 3239.50,
+                10: 3305.00, 15: 3632.50, 20: 3960.00, 25: 4287.50, 31: 4615.00
+            },
+            4: { // Échelon 4 - Coordinateur
+                0: 2980.75, 1: 3061.25, 2: 3141.75, 3: 3222.25, 4: 3302.75,
+                5: 3383.25, 6: 3463.75, 7: 3544.25, 8: 3624.75, 9: 3705.25,
+                10: 3785.75, 15: 4187.50, 20: 4589.25, 25: 4991.00, 31: 5392.75
+            },
+            5: { // Échelon 5 - Responsable
+                0: 3450.50, 1: 3551.25, 2: 3652.00, 3: 3752.75, 4: 3853.50,
+                5: 3954.25, 6: 4055.00, 7: 4155.75, 8: 4256.50, 9: 4357.25,
+                10: 4458.00, 15: 4960.00, 20: 5462.00, 25: 5964.00, 31: 6466.00
+            },
+            6: { // Échelon 6 - Direction
+                0: 4120.00, 1: 4245.50, 2: 4371.00, 3: 4496.50, 4: 4622.00,
+                5: 4747.50, 6: 4873.00, 7: 4998.50, 8: 5124.00, 9: 5249.50,
+                10: 5375.00, 15: 6002.50, 20: 6630.00, 25: 7257.50, 31: 7885.00
+            }
+        };
+
+        // Sursalaires SCP 329.02 (Région wallonne - CRI, EFT, OISP)
+        const SURSALAIRES = {
+            normal: 1.00,
+            samedi: 1.26,   // +26%
+            nuit: 1.35,     // +35%
+            dimanche: 1.56  // +56%
+        };
+
+        // ===== STATE =====
+        let state = {
+            isRunning: false,
+            isPaused: false,
+            startTime: null,
+            pauseStart: null,
+            totalPausedTime: 0,
+            elapsedSeconds: 0,
+            workType: 'normal',
+            currentRate: 1.0,
+            hourlyRate: 0,
+            todaySessions: [],
+            weekData: {
+                lun: 0, mar: 0, mer: 0, jeu: 0, ven: 0, sam: 0, dim: 0
+            }
+        };
+
+        let timerInterval = null;
+        let clockInterval = null;
+
+        // ===== DOM ELEMENTS =====
+        const elements = {
+            currentDate: document.getElementById('currentDate'),
+            currentTime: document.getElementById('currentTime'),
+            timerDisplay: document.getElementById('timerDisplay'),
+            timerProgress: document.getElementById('timerProgress'),
+            liveEarnings: document.getElementById('liveEarnings'),
+            earningsRate: document.getElementById('earningsRate'),
+            sessionEarnings: document.getElementById('sessionEarnings'),
+            sessionDuration: document.getElementById('sessionDuration'),
+            todayEarnings: document.getElementById('todayEarnings'),
+            todayHours: document.getElementById('todayHours'),
+            weekEarnings: document.getElementById('weekEarnings'),
+            weekHours: document.getElementById('weekHours'),
+            monthEarnings: document.getElementById('monthEarnings'),
+            monthHours: document.getElementById('monthHours'),
+            statusBadge: document.getElementById('statusBadge'),
+            statusText: document.getElementById('statusText'),
+            startBtn: document.getElementById('startBtn'),
+            pauseBtn: document.getElementById('pauseBtn'),
+            stopBtn: document.getElementById('stopBtn'),
+            breakIndicator: document.getElementById('breakIndicator'),
+            breakDuration: document.getElementById('breakDuration'),
+            historyList: document.getElementById('historyList'),
+            echelon: document.getElementById('echelon'),
+            anciennete: document.getElementById('anciennete'),
+            regime: document.getElementById('regime'),
+            customRegimeGroup: document.getElementById('customRegimeGroup'),
+            customRegime: document.getElementById('customRegime'),
+            hourlyRate: document.getElementById('hourlyRate'),
+            baremeDetail: document.getElementById('baremeDetail'),
+            weeklyBars: document.getElementById('weeklyBars'),
+            weeklyHoursTotal: document.getElementById('weeklyHoursTotal'),
+            weeklyTarget: document.getElementById('weeklyTarget'),
+            weeklyEarningsTotal: document.getElementById('weeklyEarningsTotal')
+        };
+
+        // ===== UTILITY FUNCTIONS =====
+        function formatTime(seconds) {
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function formatHoursMinutes(seconds) {
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            return `${hrs}h ${mins}min`;
+        }
+
+        function formatMoney(amount) {
+            return amount.toFixed(2);
+        }
+
+        function getAncienneteKey(years) {
+            // Find the closest ancienneté bracket
+            const brackets = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 31];
+            let closest = 0;
+            for (const bracket of brackets) {
+                if (years >= bracket) closest = bracket;
+                else break;
+            }
+            return closest;
+        }
+
+        function calculateHourlyRate() {
+            const echelon = parseInt(elements.echelon.value);
+            const anciennete = parseInt(elements.anciennete.value);
+            const regime = elements.regime.value === 'custom' 
+                ? parseFloat(elements.customRegime.value) 
+                : parseFloat(elements.regime.value);
+
+            const ancienneteKey = getAncienneteKey(anciennete);
+            const monthlySalary = BAREMES_329_02[echelon][ancienneteKey] || BAREMES_329_02[echelon][0];
+            
+            // Calcul du taux horaire: salaire mensuel / (régime * 52 / 12)
+            const monthlyHours = (regime * 52) / 12;
+            state.hourlyRate = monthlySalary / monthlyHours;
+
+            elements.hourlyRate.textContent = `€ ${state.hourlyRate.toFixed(2)}`;
+            elements.baremeDetail.textContent = `Échelon ${echelon} • ${anciennete} ans • Index février 2026`;
+            
+            updateEarningsRate();
+            return state.hourlyRate;
+        }
+
+        function updateEarningsRate() {
+            const effectiveRate = state.hourlyRate * state.currentRate;
+            elements.earningsRate.textContent = `Taux: €${effectiveRate.toFixed(2)}/heure ${state.currentRate > 1 ? `(×${state.currentRate})` : ''}`;
+        }
+
+        function calculateEarnings(seconds) {
+            const hours = seconds / 3600;
+            return hours * state.hourlyRate * state.currentRate;
+        }
+
+        // ===== CLOCK =====
+        function updateClock() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            elements.currentDate.textContent = now.toLocaleDateString('fr-BE', options);
+            elements.currentTime.textContent = now.toLocaleTimeString('fr-BE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        // ===== TIMER FUNCTIONS =====
+        function startTimer() {
+            if (state.isPaused) {
+                // Resume from pause
+                state.totalPausedTime += Date.now() - state.pauseStart;
+                state.isPaused = false;
+                state.pauseStart = null;
+            } else {
+                // Fresh start
+                state.startTime = Date.now();
+                state.totalPausedTime = 0;
+                state.elapsedSeconds = 0;
+            }
+            
+            state.isRunning = true;
+            
+            timerInterval = setInterval(updateTimer, 100);
+            
+            updateUI();
+        }
+
+        function pauseTimer() {
+            state.isPaused = true;
+            state.pauseStart = Date.now();
+            clearInterval(timerInterval);
+            
+            updateUI();
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            
+            // Save session
+            const session = {
+                date: new Date(),
+                duration: state.elapsedSeconds,
+                type: state.workType,
+                rate: state.currentRate,
+                earnings: calculateEarnings(state.elapsedSeconds)
+            };
+            
+            state.todaySessions.push(session);
+            updateTodayFromSessions();
+            
+            // Update week data
+            const dayKey = getDayKey(new Date());
+            state.weekData[dayKey] = (state.weekData[dayKey] || 0) + state.elapsedSeconds;
+            
+            // Reset timer state
+            state.isRunning = false;
+            state.isPaused = false;
+            state.startTime = null;
+            state.pauseStart = null;
+            state.totalPausedTime = 0;
+            state.elapsedSeconds = 0;
+            
+            updateUI();
+            updateHistory();
+            updateWeeklyChart();
+            saveToLocalStorage();
+        }
+
+        function updateTimer() {
+            if (!state.isRunning || state.isPaused) return;
+            
+            const now = Date.now();
+            const elapsed = now - state.startTime - state.totalPausedTime;
+            state.elapsedSeconds = Math.floor(elapsed / 1000);
+            
+            // Update displays
+            elements.timerDisplay.textContent = formatTime(state.elapsedSeconds);
+            elements.sessionDuration.textContent = formatTime(state.elapsedSeconds);
+            
+            const earnings = calculateEarnings(state.elapsedSeconds);
+            elements.liveEarnings.textContent = `€ ${formatMoney(earnings)}`;
+            elements.sessionEarnings.textContent = formatMoney(earnings);
+            
+            // Update progress ring (8h = full circle)
+            const maxSeconds = 8 * 3600;
+            const progress = Math.min(state.elapsedSeconds / maxSeconds, 1);
+            const circumference = 2 * Math.PI * 125;
+            elements.timerProgress.style.strokeDashoffset = circumference * (1 - progress);
+            
+            // Update today totals
+            updateTodayTotals();
+        }
+
+        function updateTodayTotals() {
+            const sessionsTotal = state.todaySessions.reduce((sum, s) => sum + s.duration, 0);
+            const currentSession = state.isRunning ? state.elapsedSeconds : 0;
+            const totalSeconds = sessionsTotal + currentSession;
+            
+            const sessionsEarnings = state.todaySessions.reduce((sum, s) => sum + s.earnings, 0);
+            const currentEarnings = state.isRunning ? calculateEarnings(state.elapsedSeconds) : 0;
+            const totalEarnings = sessionsEarnings + currentEarnings;
+            
+            elements.todayHours.textContent = `${formatHoursMinutes(totalSeconds)} travaillées`;
+            elements.todayEarnings.textContent = formatMoney(totalEarnings);
+        }
+
+        function updateTodayFromSessions() {
+            const sessionsTotal = state.todaySessions.reduce((sum, s) => sum + s.duration, 0);
+            const sessionsEarnings = state.todaySessions.reduce((sum, s) => sum + s.earnings, 0);
+            
+            elements.todayHours.textContent = `${formatHoursMinutes(sessionsTotal)} travaillées`;
+            elements.todayEarnings.textContent = formatMoney(sessionsEarnings);
+        }
+
+        // ===== UI UPDATE =====
+        function updateUI() {
+            if (state.isRunning && !state.isPaused) {
+                elements.statusBadge.classList.remove('inactive');
+                elements.statusText.textContent = 'En cours';
+                elements.startBtn.style.display = 'none';
+                elements.pauseBtn.style.display = 'flex';
+                elements.stopBtn.style.display = 'flex';
+                elements.breakIndicator.classList.remove('active');
+            } else if (state.isPaused) {
+                elements.statusBadge.classList.add('inactive');
+                elements.statusText.textContent = 'En pause';
+                elements.startBtn.innerHTML = `
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    Reprendre`;
+                elements.startBtn.style.display = 'flex';
+                elements.pauseBtn.style.display = 'none';
+                elements.stopBtn.style.display = 'flex';
+                elements.breakIndicator.classList.add('active');
+                updateBreakDuration();
+            } else {
+                elements.statusBadge.classList.add('inactive');
+                elements.statusText.textContent = 'En attente';
+                elements.startBtn.innerHTML = `
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    Commencer`;
+                elements.startBtn.style.display = 'flex';
+                elements.pauseBtn.style.display = 'none';
+                elements.stopBtn.style.display = 'none';
+                elements.breakIndicator.classList.remove('active');
+                
+                // Reset displays
+                elements.timerDisplay.textContent = '00:00:00';
+                elements.liveEarnings.textContent = '€ 0.00';
+                elements.sessionEarnings.textContent = '0.00';
+                elements.sessionDuration.textContent = '00:00:00';
+                elements.timerProgress.style.strokeDashoffset = 785.4;
+            }
+        }
+
+        function updateBreakDuration() {
+            if (state.isPaused && state.pauseStart) {
+                const breakSeconds = Math.floor((Date.now() - state.pauseStart) / 1000);
+                const mins = Math.floor(breakSeconds / 60);
+                const secs = breakSeconds % 60;
+                elements.breakDuration.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+        }
+
+        // ===== HISTORY =====
+        function updateHistory() {
+            if (state.todaySessions.length === 0) {
+                elements.historyList.innerHTML = '<div class="history-empty">Aucune session enregistrée</div>';
+                return;
+            }
+            
+            const typeLabels = {
+                normal: 'Normal',
+                samedi: 'Samedi',
+                nuit: 'Nuit',
+                dimanche: 'Dim/Férié'
+            };
+            
+            elements.historyList.innerHTML = state.todaySessions.map((session, index) => `
+                <div class="history-item">
+                    <div class="history-item-info">
+                        <span class="history-item-date">Session ${index + 1} • ${session.date.toLocaleTimeString('fr-BE', { hour: '2-digit', minute: '2-digit' })}</span>
+                        <span class="history-item-duration">${formatHoursMinutes(session.duration)}</span>
+                        <span class="history-item-type">${typeLabels[session.type]} ×${session.rate}</span>
+                    </div>
+                    <span class="history-item-earnings">€ ${formatMoney(session.earnings)}</span>
+                </div>
+            `).reverse().join('');
+        }
+
+        // ===== WEEKLY CHART =====
+        function getDayKey(date) {
+            const days = ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'];
+            return days[date.getDay()];
+        }
+
+        function updateWeeklyChart() {
+            const dayLabels = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+            const dayKeys = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'];
+            const todayKey = getDayKey(new Date());
+            
+            const maxHours = 10 * 3600; // 10h max for visual
+            
+            let totalSeconds = 0;
+            let totalEarnings = 0;
+            
+            elements.weeklyBars.innerHTML = dayKeys.map((key, i) => {
+                const seconds = state.weekData[key] || 0;
+                totalSeconds += seconds;
+                totalEarnings += calculateEarnings(seconds);
+                
+                const height = Math.min((seconds / maxHours) * 100, 100);
+                const isToday = key === todayKey;
+                
+                return `
+                    <div class="weekly-bar-container">
+                        <div class="weekly-bar-wrapper">
+                            <div class="weekly-bar ${isToday ? 'today' : ''}" style="height: ${height}%"></div>
+                        </div>
+                        <span class="weekly-bar-label ${isToday ? 'today' : ''}">${dayLabels[i]}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            const regime = elements.regime.value === 'custom' 
+                ? parseFloat(elements.customRegime.value) 
+                : parseFloat(elements.regime.value);
+            
+            elements.weeklyHoursTotal.textContent = formatHoursMinutes(totalSeconds);
+            elements.weeklyTarget.textContent = `${regime}h 0min`;
+            elements.weeklyEarningsTotal.textContent = `€ ${formatMoney(totalEarnings)}`;
+            
+            // Update week stats
+            elements.weekEarnings.textContent = formatMoney(totalEarnings);
+            elements.weekHours.textContent = `${formatHoursMinutes(totalSeconds)} / ${regime}h légales`;
+        }
+
+        // ===== LOCAL STORAGE =====
+        function saveToLocalStorage() {
+            const data = {
+                todaySessions: state.todaySessions,
+                weekData: state.weekData,
+                settings: {
+                    echelon: elements.echelon.value,
+                    anciennete: elements.anciennete.value,
+                    regime: elements.regime.value,
+                    customRegime: elements.customRegime.value
+                },
+                lastSaveDate: new Date().toDateString()
+            };
+            localStorage.setItem('secretariat_social_329', JSON.stringify(data));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('secretariat_social_329');
+            if (!saved) return;
+            
+            try {
+                const data = JSON.parse(saved);
+                const today = new Date().toDateString();
+                
+                // Load settings
+                if (data.settings) {
+                    elements.echelon.value = data.settings.echelon || '3';
+                    elements.anciennete.value = data.settings.anciennete || '3';
+                    elements.regime.value = data.settings.regime || '38';
+                    elements.customRegime.value = data.settings.customRegime || '38';
+                    
+                    if (data.settings.regime === 'custom') {
+                        elements.customRegimeGroup.style.display = 'block';
+                    }
+                }
+                
+                // Load week data
+                if (data.weekData) {
+                    state.weekData = data.weekData;
+                }
+                
+                // Only load today's sessions if same day
+                if (data.lastSaveDate === today && data.todaySessions) {
+                    state.todaySessions = data.todaySessions.map(s => ({
+                        ...s,
+                        date: new Date(s.date)
+                    }));
+                }
+                
+                // Check if it's a new week (Monday)
+                const now = new Date();
+                if (now.getDay() === 1) { // Monday
+                    const lastSave = data.lastSaveDate ? new Date(data.lastSaveDate) : null;
+                    if (lastSave && lastSave.getDay() !== 1) {
+                        // Reset week data on Monday
+                        state.weekData = { lun: 0, mar: 0, mer: 0, jeu: 0, ven: 0, sam: 0, dim: 0 };
+                    }
+                }
+                
+            } catch (e) {
+                console.error('Error loading saved data:', e);
+            }
+        }
+
+        // ===== EVENT LISTENERS =====
+        function setupEventListeners() {
+            elements.startBtn.addEventListener('click', startTimer);
+            elements.pauseBtn.addEventListener('click', pauseTimer);
+            elements.stopBtn.addEventListener('click', stopTimer);
+            
+            // Work type buttons
+            document.querySelectorAll('.work-type-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.work-type-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.workType = btn.dataset.type;
+                    state.currentRate = parseFloat(btn.dataset.rate);
+                    updateEarningsRate();
+                });
+            });
+            
+            // Settings changes
+            elements.echelon.addEventListener('change', () => {
+                calculateHourlyRate();
+                saveToLocalStorage();
+            });
+            
+            elements.anciennete.addEventListener('change', () => {
+                calculateHourlyRate();
+                saveToLocalStorage();
+            });
+            
+            elements.regime.addEventListener('change', () => {
+                elements.customRegimeGroup.style.display = 
+                    elements.regime.value === 'custom' ? 'block' : 'none';
+                calculateHourlyRate();
+                updateWeeklyChart();
+                saveToLocalStorage();
+            });
+            
+            elements.customRegime.addEventListener('change', () => {
+                calculateHourlyRate();
+                updateWeeklyChart();
+                saveToLocalStorage();
+            });
+        }
+
+        // ===== INITIALIZATION =====
+        function init() {
+            loadFromLocalStorage();
+            calculateHourlyRate();
+            updateClock();
+            updateHistory();
+            updateWeeklyChart();
+            updateTodayFromSessions();
+            
+            clockInterval = setInterval(updateClock, 1000);
+            
+            // Update break duration every second when paused
+            setInterval(() => {
+                if (state.isPaused) {
+                    updateBreakDuration();
+                }
+            }, 1000);
+            
+            setupEventListeners();
+            
+            // Calculate month estimate (based on week projected)
+            const regime = parseFloat(elements.regime.value) || 38;
+            const monthlyHours = (regime * 52) / 12;
+            const monthlyEarnings = monthlyHours * state.hourlyRate;
+            elements.monthEarnings.textContent = formatMoney(monthlyEarnings);
+            elements.monthHours.textContent = `~${Math.round(monthlyHours)}h estimées`;
+        }
+
+        // Start the app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
