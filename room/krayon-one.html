@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>KARYON One · Simu smartphone pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-body: #020617;
+      --bg-screen: #020617;
+      --fg: #e5e7eb;
+      --soft: #9ca3af;
+      --accent: #3b82f6;
+      --accent-soft: #1d4ed8;
+      --danger: #ef4444;
+      --border: #111827;
+      --card: #020617;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 0 0, #111827, #020617 65%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* CHÂSSIS SMARTPHONE */
+
+    .phone-shell {
+      width: min(390px, 100vw - 24px);
+      height: min(800px, 100vh - 24px);
+      border-radius: 32px;
+      background: linear-gradient(145deg, #020617, #111827);
+      border: 1px solid #1f2937;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.85),
+        0 30px 80px rgba(0,0,0,0.9);
+      padding: 8px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .phone-frame-inner {
+      flex: 1;
+      border-radius: 28px;
+      background: #000;
+      padding: 8px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .phone-punch {
+      position: absolute;
+      right: 34%;
+      top: 10px;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #020617, #000);
+      border: 1px solid #020617;
+      box-shadow: 0 0 0 2px #000;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      flex: 1;
+      border-radius: 24px;
+      background: var(--bg-screen);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid #020617;
+    }
+
+    .side-button {
+      position: absolute;
+      right: -3px;
+      top: 140px;
+      width: 3px;
+      height: 60px;
+      border-radius: 999px;
+      background: #111827;
+    }
+
+    .side-button.left {
+      left: -3px;
+      right: auto;
+      top: 170px;
+      height: 50px;
+    }
+
+    /* ECRANS */
+
+    .boot-screen,
+    .home-screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .boot-screen {
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 0%, #020617, #000);
+      animation: bootFade 4s ease-in-out forwards;
+    }
+
+    .boot-logo {
+      font-size: 24px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .boot-logo span {
+      color: var(--accent);
+    }
+
+    .boot-tag {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 16px;
+    }
+
+    .boot-progress {
+      width: 160px;
+      height: 4px;
+      border-radius: 999px;
+      background: #020617;
+      border: 1px solid #0f172a;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .boot-progress-inner {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #22c55e, #eab308, #f97316, #ef4444);
+      animation: loadBar 3s linear forwards;
+    }
+
+    .boot-status {
+      font-size: 11px;
+      color: var(--soft);
+      text-align: center;
+      max-width: 260px;
+    }
+
+    .boot-status small {
+      display: block;
+      font-size: 9px;
+      opacity: .7;
+      margin-top: 4px;
+    }
+
+    @keyframes bootFade {
+      0%   { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    @keyframes loadBar {
+      from { width: 0%; }
+      to   { width: 96%; }
+    }
+
+    /* HOME */
+
+    .home-screen {
+      opacity: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 0 0, rgba(59,130,246,0.16), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(15,23,42,0.7), #020617 80%);
+      transition: opacity .6s ease-out;
+    }
+
+    .home-screen.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .status-bar {
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      font-size: 11px;
+      color: var(--soft);
+      background: linear-gradient(to right, #020617f2, #020617c0, #020617f2);
+      border-bottom: 1px solid #020617;
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-brand {
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--soft);
+    }
+
+    .status-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-time {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .signal-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 1px;
+    }
+
+    .signal-bars span {
+      width: 2px;
+      border-radius: 999px;
+      background: var(--soft);
+    }
+
+    .signal-bars span:nth-child(1) { height: 4px; opacity: .35; }
+    .signal-bars span:nth-child(2) { height: 6px; opacity: .5; }
+    .signal-bars span:nth-child(3) { height: 8px; opacity: .7; }
+    .signal-bars span:nth-child(4) { height: 10px; opacity: 1; }
+
+    .battery {
+      width: 16px;
+      height: 8px;
+      border-radius: 3px;
+      border: 1px solid #4b5563;
+      position: relative;
+    }
+
+    .battery::after {
+      content: "";
+      position: absolute;
+      right: -3px;
+      top: 1px;
+      width: 2px;
+      height: 4px;
+      border-radius: 1px;
+      background: #4b5563;
+    }
+
+    .battery-fill {
+      position: absolute;
+      inset: 1px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #22c55e, #a3e635);
+      width: 72%;
+    }
+
+    /* ZONE HAUTE : INFOS / PROFIL */
+
+    .top-info {
+      padding: 8px 12px 4px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .top-user {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .top-user-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .top-user-role {
+      font-size: 11px;
+      color: var(--soft);
+    }
+
+    .top-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: rgba(15,23,42,0.9);
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      cursor: pointer;
+    }
+
+    .top-badge span {
+      color: var(--accent);
+    }
+
+    /* APPS GRILLE */
+
+    .app-section {
+      padding: 4px 12px 4px;
+    }
+
+    .app-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--soft);
+      margin-bottom: 4px;
+    }
+
+    .app-title-row strong {
+      color: var(--fg);
+      font-size: 12px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .app-icon {
+      text-align: center;
+      font-size: 10px;
+      color: var(--soft);
+      cursor: pointer;
+    }
+
+    .app-bubble {
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 2px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(15,23,42,0.9);
+      font-size: 17px;
+      border: 1px solid #020617;
+    }
+
+    .app-mail   .app-bubble { background: linear-gradient(135deg, #f97316, #7c2d12); }
+    .app-agenda .app-bubble { background: linear-gradient(135deg, #22c55e, #064e3b); }
+    .app-docs   .app-bubble { background: linear-gradient(135deg, #eab308, #854d0e); }
+    .app-terminal .app-bubble { background: linear-gradient(135deg, #0f172a, #020617); }
+    .app-browser .app-bubble { background: linear-gradient(135deg, #38bdf8, #0e7490); }
+    .app-notes    .app-bubble { background: linear-gradient(135deg, #facc15, #92400e); }
+    .app-devtools .app-bubble { background: linear-gradient(135deg, #4b5563, #020617); }
+    .app-settings .app-bubble { background: linear-gradient(135deg, #9ca3af, #020617); }
+
+    .app-label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* CENTRE : NOTIFS / FEED */
+
+    .content-wrapper {
+      flex: 1;
+      padding: 4px 10px 6px;
+      overflow: hidden;
+    }
+
+    .content-tabs {
+      display: flex;
+      gap: 6px;
+      border-bottom: 1px solid #0f172a;
+      padding-bottom: 3px;
+    }
+
+    .content-tab {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      color: var(--soft);
+    }
+
+    .content-tab.active {
+      border-color: var(--accent);
+      color: var(--fg);
+      background: rgba(15,23,42,0.9);
+      font-weight: 500;
+    }
+
+    .content-scroll {
+      position: relative;
+      margin-top: 4px;
+      height: calc(100% - 26px);
+      overflow: hidden;
+    }
+
+    .content-inner {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      padding-right: 4px;
+      font-size: 12px;
+    }
+
+    .card {
+      border-radius: 13px;
+      padding: 7px 9px;
+      margin-bottom: 6px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid #0f172a;
+      cursor: pointer;
+      transition: transform .1s ease-out, box-shadow .1s ease-out, border-color .1s ease-out;
+    }
+
+    .card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.8);
+      border-color: var(--accent);
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .card-meta {
+      font-size: 10px;
+      color: var(--soft);
+      display: flex;
+      justify-content: space-between;
+      margin-top: 3px;
+    }
+
+    .badge {
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    /* DOCK BAS */
+
+    .dock {
+      height: 50px;
+      padding: 3px 16px 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dock-inner {
+      flex: 1;
+      border-radius: 18px;
+      padding: 5px 10px;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid #020617;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .dock-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #020617;
+      border: 1px solid #111827;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .dock-icon-main {
+      background: radial-gradient(circle at 30% 0, var(--accent), var(--accent-soft));
+      border-color: var(--accent);
+    }
+
+    /* MODALE GENERALE */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-backdrop.visible {
+      display: flex;
+    }
+
+    .modal {
+      width: min(360px, 100%);
+      max-height: min(520px, 100%);
+      background: #020617;
+      border-radius: 18px;
+      border: 1px solid #1f2937;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+    }
+
+    .modal-header {
+      padding: 8px 12px;
+      border-bottom: 1px solid #111827;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-weight: 600;
+    }
+
+    .modal-sub {
+      font-size: 10px;
+      color: var(--soft);
+    }
+
+    .modal-close {
+      border: none;
+      background: transparent;
+      color: var(--soft);
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 8px 12px 10px;
+      overflow-y: auto;
+    }
+
+    .modal-body p {
+      margin: 4px 0;
+      color: var(--soft);
+    }
+
+    .modal-body code {
+      font-size: 11px;
+      background: #020617;
+      padding: 1px 3px;
+      border-radius: 4px;
+      border: 1px solid #1f2937;
+    }
+
+    .modal-body a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-style: dotted;
+    }
+
+    .modal-footer {
+      padding: 7px 12px;
+      border-top: 1px solid #111827;
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: var(--fg);
+      font-size: 11px;
+      padding: 4px 9px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn.primary {
+      border-color: var(--accent);
+      background: radial-gradient(circle at 20% 0, #bfdbfe, #3b82f6);
+      color: #020617;
+      font-weight: 600;
+    }
+
+    .btn.danger {
+      border-color: var(--danger);
+      color: #fecaca;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    /* MODE DEVELOPPEUR */
+
+    .dev-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 0;
+      background: #020617;
+      border-top: 1px solid #111827;
+      box-shadow: 0 -16px 40px rgba(0,0,0,0.9);
+      transition: height .25s ease-out;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+    }
+
+    .dev-panel.visible {
+      height: 46%;
+    }
+
+    .dev-header {
+      padding: 4px 8px;
+      font-size: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #020617;
+      border-bottom: 1px solid #111827;
+    }
+
+    .dev-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .dev-tab {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 10px;
+      color: var(--soft);
+    }
+
+    .dev-tab.active {
+      border-color: var(--accent);
+      color: var(--fg);
+      background: #020617;
+    }
+
+    .dev-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 4px 6px;
+      font-size: 10px;
+    }
+
+    .dev-log {
+      flex: 1;
+      overflow-y: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      padding-right: 2px;
+    }
+
+    .dev-log-line {
+      margin: 1px 0;
+      color: #9ca3af;
+    }
+
+    .dev-log-line span.tag {
+      color: var(--accent);
+    }
+
+    .dev-actions {
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .dev-actions-left,
+    .dev-actions-right {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .inspect-highlight {
+      outline: 2px dashed #22c55e;
+      outline-offset: 1px;
+    }
+
+    .dev-pill-on {
+      color: #4ade80;
+    }
+
+    .dev-pill-off {
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+<div class="phone-shell">
+  <div class="side-button"></div>
+  <div class="side-button left"></div>
+  <div class="phone-frame-inner">
+    <div class="phone-punch"></div>
+    <div class="phone-screen">
+
+      <!-- ECRAN BOOT -->
+      <div class="boot-screen" id="bootScreen">
+        <div class="boot-logo">KARYON <span>ONE</span></div>
+        <div class="boot-tag">secure · smart · boringly professional</div>
+        <div class="boot-progress">
+          <div class="boot-progress-inner"></div>
+        </div>
+        <div class="boot-status" id="bootStatus">
+          Initialisation du noyau…
+          <small>Chargement des protocoles de politesse sociale et du masque professionnel par défaut.</small>
+        </div>
+      </div>
+
+      <!-- ECRAN HOME -->
+      <div class="home-screen" id="homeScreen">
+        <div class="status-bar">
+          <div class="status-left">
+            <div class="status-brand">KARYON</div>
+          </div>
+          <div class="status-right">
+            <div class="status-time" id="statusTime">06:42</div>
+            <div class="signal-bars">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="battery">
+              <div class="battery-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="top-info">
+          <div class="top-user">
+            <div class="top-user-name">Utilisateur·rice</div>
+            <div class="top-user-role">Mode “tout va très bien, merci”</div>
+          </div>
+          <button class="top-badge" id="devBadge">
+            <span>Dev</span> tools : OFF
+          </button>
+        </div>
+
+        <div class="app-section">
+          <div class="app-title-row">
+            <strong>Outils principaux</strong>
+            <span style="font-size:10px;color:var(--soft);">Long press = geek mode</span>
+          </div>
+          <div class="app-grid">
+            <div class="app-icon app-mail" data-app="mail">
+              <div class="app-bubble">✉</div>
+              <div class="app-label">Mail</div>
+            </div>
+            <div class="app-icon app-agenda" data-app="agenda">
+              <div class="app-bubble">📅</div>
+              <div class="app-label">Agenda</div>
+            </div>
+            <div class="app-icon app-docs" data-app="docs">
+              <div class="app-bubble">📄</div>
+              <div class="app-label">Docs</div>
+            </div>
+            <div class="app-icon app-terminal" data-app="terminal">
+              <div class="app-bubble">⌨</div>
+              <div class="app-label">Terminal</div>
+            </div>
+            <div class="app-icon app-browser" data-app="browser">
+              <div class="app-bubble">🌐</div>
+              <div class="app-label">Navigateur</div>
+            </div>
+            <div class="app-icon app-notes" data-app="notes">
+              <div class="app-bubble">📝</div>
+              <div class="app-label">Notes</div>
+            </div>
+            <div class="app-icon app-devtools" data-app="devtools">
+              <div class="app-bubble">{} </div>
+              <div class="app-label">Dev mode</div>
+            </div>
+            <div class="app-icon app-settings" data-app="settings">
+              <div class="app-bubble">⚙</div>
+              <div class="app-label">Réglages</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-wrapper">
+          <div class="content-tabs">
+            <div class="content-tab active" data-tab="feed">Fil d’info</div>
+            <div class="content-tab" data-tab="notif">Notifications</div>
+            <div class="content-tab" data-tab="system">Système</div>
+          </div>
+
+          <div class="content-scroll">
+            <div class="content-inner" id="tab-feed">
+              <div class="card" data-card="news-guerre">
+                <div class="card-title">Guerres hybrides : l’information comme terrain de jeu</div>
+                <p>
+                  Rapport du matin : chaque scroll est un choix stratégique, chaque silence aussi.
+                  Tu peux faire semblant d’avoir tout lu, c’est prévu dans le protocole.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">Veille</span>
+                  <span>il y a 3 min</span>
+                </div>
+              </div>
+              <div class="card" data-card="news-prod">
+                <div class="card-title">Productivité : rester sérieux en mimant le geek</div>
+                <p>
+                  Astuce : laisse ce téléphone sur la table, mode développeur ouvert.
+                  De loin, tout le monde pensera que tu audites Internet.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">Soft power</span>
+                  <span>il y a 12 min</span>
+                </div>
+              </div>
+              <div class="card" data-card="news-veille">
+                <div class="card-title">Veille stratégique discrète</div>
+                <p>
+                  Personne n’a besoin de savoir que ton “terminal” est une simple page HTML
+                  qui simule un smartphone. Tant que tu maîtrises la narration, tu maîtrises l’image.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">Image pro</span>
+                  <span>il y a 26 min</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-inner" id="tab-notif" style="display:none;">
+              <div class="card" data-card="notif-mail">
+                <div class="card-title">3 mails non lus</div>
+                <p>
+                  Deux newsletters, une vraie info. Statistiquement, tu ouvriras la newsletter d’abord.
+                  C’est humain, pas un bug.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">Mail</span>
+                  <span>08:12</span>
+                </div>
+              </div>
+              <div class="card" data-card="notif-agenda">
+                <div class="card-title">Réunion “point informel”</div>
+                <p>
+                  Titre officiel : “point informel sur les enjeux”. Traduction :
+                  on parle du réel, mais surtout pas trop fort.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">Agenda</span>
+                  <span>Aujourd’hui</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="content-inner" id="tab-system" style="display:none;">
+              <div class="card" data-card="sys-profil">
+                <div class="card-title">Profil système</div>
+                <p>
+                  KARYON One · Simu smartphone<br>
+                  Mode : <strong>utilisateur·rice avancé·e</strong><br>
+                  Dev tools : activables depuis les réglages ou l’icône <code>{}</code>.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">Système</span>
+                  <span>v0.1 · HTML only</span>
+                </div>
+              </div>
+              <div class="card" data-card="sys-tip">
+                <div class="card-title">Tip social</div>
+                <p>
+                  Quand quelqu’un regarde ton écran : ouvre le mode développeur,
+                  scrolle les logs, souffle un peu, et dis juste “oui, c’est très instable”.
+                </p>
+                <div class="card-meta">
+                  <span class="badge">Social hack</span>
+                  <span>∞</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DOCK -->
+        <div class="dock">
+          <div class="dock-inner">
+            <div class="dock-icon" data-dock="phone">☎</div>
+            <div class="dock-icon" data-dock="msg">✉</div>
+            <div class="dock-icon dock-icon-main" data-dock="home">◎</div>
+            <div class="dock-icon" data-dock="search">⌕</div>
+            <div class="dock-icon" data-dock="dev">{} </div>
+          </div>
+        </div>
+
+        <!-- PANNEAU DEV -->
+        <div class="dev-panel" id="devPanel">
+          <div class="dev-header">
+            <div>
+              <span style="font-weight:600;">Mode développeur</span>
+              <span style="font-size:9px;color:var(--soft);"> · KARYON One virtual device</span>
+            </div>
+            <div class="dev-tabs">
+              <button class="dev-tab active" data-devtab="console">Console</button>
+              <button class="dev-tab" data-devtab="network">Réseau</button>
+              <button class="dev-tab" data-devtab="system">Système</button>
+            </div>
+          </div>
+          <div class="dev-body">
+            <div class="dev-log" id="devLogConsole"></div>
+            <div class="dev-log" id="devLogNetwork" style="display:none;"></div>
+            <div class="dev-log" id="devLogSystem" style="display:none;"></div>
+
+            <div class="dev-actions">
+              <div class="dev-actions-left">
+                <button class="btn" id="btnClearLog">Effacer logs</button>
+                <button class="btn" id="btnFakeRequest">Simuler requête</button>
+                <button class="btn" id="btnInspectToggle">
+                  Inspecteur : <span id="inspectState" class="dev-pill-off">OFF</span>
+                </button>
+              </div>
+              <div class="dev-actions-right">
+                <button class="btn" id="btnCopyConfig">Copier config</button>
+                <button class="btn danger" id="btnCloseDev">Fermer dev</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /phone-screen -->
+    </div> <!-- /frame-inner -->
+  </div> <!-- /phone-shell -->
+
+  <!-- MODALE GENERALE -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="modalTitle">Fenêtre d’information</div>
+          <div class="modal-sub" id="modalSub">KARYON One · Simu pro</div>
+        </div>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <p>
+          Ceci est un smartphone 100 % HTML/CSS/JS, sans vraie connexion réseau,
+          mais parfaitement suffisamment sérieux pour faire semblant.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" id="modalSecondary">Fermer</button>
+        <button class="btn primary" id="modalPrimary">Afficher quelque chose de technique</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  // ---- util ----
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+  // ---- BOOT ----
+  const bootScreen = $('#bootScreen');
+  const homeScreen = $('#homeScreen');
+  const bootStatus = $('#bootStatus');
+  const statusTime = $('#statusTime');
+
+  function updateTime() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    statusTime.textContent = `${h}:${m}`;
+  }
+  updateTime();
+  setInterval(updateTime, 30_000);
+
+  setTimeout(() => {
+    bootStatus.textContent = "Chargement des profils et préférences sociales…";
+  }, 1000);
+
+  setTimeout(() => {
+    bootStatus.textContent = "Instrumentation silencieuse du mode développeur…";
+  }, 2200);
+
+  setTimeout(() => {
+    homeScreen.classList.add('visible');
+  }, 3600);
+
+  // ---- TABS CONTENU ----
+  const contentTabs = $$('.content-tab');
+  const tabFeed = $('#tab-feed');
+  const tabNotif = $('#tab-notif');
+  const tabSystem = $('#tab-system');
+
+  contentTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      contentTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const name = tab.dataset.tab;
+      tabFeed.style.display = name === 'feed' ? 'block' : 'none';
+      tabNotif.style.display = name === 'notif' ? 'block' : 'none';
+      tabSystem.style.display = name === 'system' ? 'block' : 'none';
+      logConsole('ui', `Switch onglet contenu -> ${name}`);
+    });
+  });
+
+  // ---- MODALE ----
+  const modalBackdrop = $('#modalBackdrop');
+  const modalTitle = $('#modalTitle');
+  const modalSub = $('#modalSub');
+  const modalBody = $('#modalBody');
+  const modalClose = $('#modalClose');
+  const modalSecondary = $('#modalSecondary');
+  const modalPrimary = $('#modalPrimary');
+
+  function openModal(opts = {}) {
+    modalTitle.textContent = opts.title || 'Fenêtre d’information';
+    modalSub.textContent = opts.sub || 'KARYON One · Simu pro';
+    modalBody.innerHTML = opts.html || `
+      <p>
+        Ceci est un panneau fictif qui se contente de t’aider à paraître très occupé·e.
+        Technique bonus : froncer légèrement les sourcils en scrolant.
+      </p>`;
+    modalBackdrop.classList.add('visible');
+  }
+
+  function closeModal() {
+    modalBackdrop.classList.remove('visible');
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modalSecondary.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', (e) => {
+    if (e.target === modalBackdrop) closeModal();
+  });
+
+  modalPrimary.addEventListener('click', () => {
+    const ua = navigator.userAgent;
+    const lang = navigator.language || 'n/a';
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    modalBody.innerHTML = `
+      <p><strong>Infos techniques (pour frimer) :</strong></p>
+      <p><code>navigator.userAgent</code> : ${ua}</p>
+      <p><code>navigator.language</code> : ${lang}</p>
+      <p><code>viewport</code> : ${width} x ${height}</p>
+      <p style="margin-top:6px;">
+        Tu peux ponctuer en disant : « C’est surtout la couche front qui me dérange. »
+      </p>
+    `;
+  });
+
+  // ---- APPS ----
+  const devBadge = $('#devBadge');
+
+  $$('.app-icon').forEach(app => {
+    app.addEventListener('click', () => {
+      const type = app.dataset.app;
+      handleAppOpen(type, false);
+    });
+
+    // long press = mode "geek"
+    let pressTimer;
+    app.addEventListener('mousedown', () => {
+      pressTimer = setTimeout(() => {
+        handleAppOpen(app.dataset.app, true);
+      }, 550);
+    });
+    ['mouseup','mouseleave','touchend'].forEach(ev => {
+      app.addEventListener(ev, () => clearTimeout(pressTimer));
+    });
+  });
+
+  function handleAppOpen(type, geekMode) {
+    let title = '';
+    let sub = '';
+    let html = '';
+    switch (type) {
+      case 'mail':
+        title = geekMode ? 'Mail · headers & métadonnées' : 'Boîte mail professionnelle';
+        sub = 'Inbox · 3 non lus';
+        html = geekMode
+          ? `<p><strong>Mode geek :</strong> tu peux prétendre que tu vérifies les headers SPF/DKIM.</p>
+             <p><code>Received-SPF: pass</code> &middot; <code>Authentication-Results: dkim=pass</code></p>`
+          : `<p>Trois mails t’attendent : un réellement important, deux pour la forme.</p>`;
+        break;
+      case 'agenda':
+        title = 'Agenda';
+        sub = 'Synchronisé sur tous tes devices (en théorie)';
+        html = `<p>Matin : faire semblant de comprendre le contexte.</p>
+                <p>Après-midi : refaire le même point, mais avec d’autres personnes.</p>`;
+        break;
+      case 'docs':
+        title = geekMode ? 'Docs · structure d’arborescence' : 'Documents';
+        sub = 'Dossiers, notes, canevas';
+        html = geekMode
+          ? `<p><strong>Mode geek :</strong> explique calmement que « tout est versionné ».</p>
+             <p><code>/projets/2025/jeux-veille/</code></p>
+             <p><code>/projets/2025/karyon-one/</code></p>`
+          : `<p>Un dossier “important” qui contient surtout des brouillons et des intentions.</p>`;
+        break;
+      case 'terminal':
+        title = 'Terminal';
+        sub = 'Simulation console';
+        html = `<p><code>$</code> Tu peux écrire mentalement : <code>ssh prod</code> sans rien faire de plus.</p>
+                <p>Visuellement, ça suffit pour être pris au sérieux par 80&nbsp;% des gens.</p>`;
+        break;
+      case 'browser':
+        title = 'Navigateur';
+        sub = 'Onglets : 37 · productivité : variable';
+        html = `<p>Astuce : garde toujours une page documentation ou stackoverflow ouverte.</p>`;
+        break;
+      case 'notes':
+        title = 'Notes';
+        sub = 'Capture de signaux faibles & idées nocturnes';
+        html = `<p>Tu peux noter ici : “A approfondir quand j’aurai le temps” en sachant très bien que ce temps n’existe pas.</p>`;
+        break;
+      case 'devtools':
+        toggleDevPanel(true);
+        title = 'Mode développeur';
+        sub = 'Déjà ouvert en bas de l’écran';
+        html = `<p>Le panneau en bas est là pour ça : logs, pseudo-réseau, pseudo-système.</p>`;
+        break;
+      case 'settings':
+        title = 'Réglages';
+        sub = 'Là où on active le mode développeur';
+        html = `<p>
+          Bouton central : <strong>Activer le mode développeur</strong>.<br>
+          En vrai : il se contente d’ouvrir le panneau en bas et de journaliser tout ce que tu cliques.
+        </p>`;
+        break;
+    }
+
+    openModal({ title, sub, html });
+    logConsole('app', `Ouverture app : ${type}${geekMode ? ' (long press·geek)' : ''}`);
+  }
+
+  // ---- DOCK ----
+  $$('.dock-icon').forEach(icon => {
+    icon.addEventListener('click', () => {
+      const type = icon.dataset.dock;
+      if (type === 'home') {
+        logConsole('ui', 'Retour écran principal');
+        // rien à faire (on est déjà sur home)
+      } else if (type === 'dev') {
+        toggleDevPanel();
+      } else {
+        handleDockAction(type);
+      }
+    });
+  });
+
+  function handleDockAction(type) {
+    if (type === 'phone') {
+      openModal({
+        title: 'Téléphone',
+        sub: 'Mode “je rappellerai plus tard”',
+        html: `<p>Tu peux répondre mentalement, c’est suffisant dans 60&nbsp;% des cas.</p>`
+      });
+      logConsole('dock', 'Dock téléphone ouvert');
+    } else if (type === 'msg') {
+      openModal({
+        title: 'Messagerie',
+        sub: 'Notifications silencieuses',
+        html: `<p>La plupart des messages commenceront par “Quand tu as le temps…”.</p>`
+      });
+      logConsole('dock', 'Dock messages ouvert');
+    } else if (type === 'search') {
+      openModal({
+        title: 'Recherche',
+        sub: 'Pseudo-puissance totémique',
+        html: `<p>
+          Tape rien. Regarde l’écran avec intensité. Dis : « Attends, je vérifie un truc. »<br>
+          Effet immédiat : +3 en crédibilité temporaire.
+        </p>`
+      });
+      logConsole('dock', 'Dock recherche ouvert');
+    }
+  }
+
+  // ---- CARTES CONTENU ----
+  $$('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.card;
+      openCardModal(id);
+      logConsole('feed', `Ouverture carte : ${id}`);
+    });
+  });
+
+  function openCardModal(id) {
+    switch (id) {
+      case 'news-guerre':
+        openModal({
+          title: 'Guerres hybrides',
+          sub: 'L’information comme champ de bataille discret',
+          html: `<p>
+            Les conflits ne se jouent plus seulement sur les territoires physiques, mais aussi
+            dans les timelines, les fils d’actus, les notifications et les moteurs de recherche.
+          </p>
+          <p>
+            Tu n’as pas besoin d’être expert : juste capable de poser la bonne question au bon moment.
+          </p>`
+        });
+        break;
+      case 'news-prod':
+        openModal({
+          title: 'Productivité mise en scène',
+          sub: 'Maîtriser l’interface pour maîtriser la perception',
+          html: `<p>
+            Entre deux clics, tu peux glisser des phrases comme :
+            <br><code>« Je check les logs, ça me paraît bizarre. »</code>
+          </p>
+          <p>
+            Ce téléphone est ton costume : il donne des signaux de sérieux
+            pendant que tu fais réellement autre chose dans ta tête.
+          </p>`
+        });
+        break;
+      case 'news-veille':
+        openModal({
+          title: 'Veille stratégique discrète',
+          sub: 'Rester informé·e sans en faire une performance',
+          html: `<p>
+            Tu peux utiliser ce faux smartphone comme tableau de bord symbolique :
+            quelques cartes, quelques onglets, un mode développeur qui log tout.
+          </p>`
+        });
+        break;
+      case 'notif-mail':
+        openModal({
+          title: 'Mails',
+          sub: 'Triage mental',
+          html: `<p>Tu peux classer les mails en trois catégories : nécessaires, urgents, et “peut attendre”.</p>`
+        });
+        break;
+      case 'notif-agenda':
+        openModal({
+          title: 'Réunions',
+          sub: 'Traduction simultanée jargon → réalité',
+          html: `<p>
+            Tu peux noter dans tes notes ce que la réunion veut vraiment dire,
+            pas seulement ce qui est dit à voix haute.
+          </p>`
+        });
+        break;
+      case 'sys-profil':
+        openModal({
+          title: 'Profil système',
+          sub: 'Configuration simulée',
+          html: `<p>
+            <code>Device: KARYON One (virtual)</code><br>
+            <code>OS: HTML/JS/CSS</code><br>
+            <code>DevTools: disponible</code>
+          </p>`
+        });
+        break;
+      case 'sys-tip':
+        openModal({
+          title: 'Tip social',
+          sub: 'Petit théâtre du sérieux',
+          html: `<p>
+            Tu peux toujours dire : « Le problème, c’est l’interface entre l’humain et le système. »
+            Ça marche dans 90&nbsp;% des discussions.
+          </p>`
+        });
+        break;
+    }
+  }
+
+  // ---- MODE DEVELOPPEUR ----
+  const devPanel = $('#devPanel');
+  const devTabs = $$('.dev-tab');
+  const devLogConsole = $('#devLogConsole');
+  const devLogNetwork = $('#devLogNetwork');
+  const devLogSystem = $('#devLogSystem');
+  const btnClearLog = $('#btnClearLog');
+  const btnFakeRequest = $('#btnFakeRequest');
+  const btnInspectToggle = $('#btnInspectToggle');
+  const inspectState = $('#inspectState');
+  const btnCopyConfig = $('#btnCopyConfig');
+  const btnCloseDev = $('#btnCloseDev');
+
+  let devEnabled = false;
+  let inspectMode = false;
+
+  function toggleDevPanel(forceOn) {
+    devEnabled = forceOn === true ? true : !devEnabled;
+    devPanel.classList.toggle('visible', devEnabled);
+    devBadge.textContent = `Dev tools : ${devEnabled ? 'ON' : 'OFF'}`;
+    devBadge.innerHTML = `<span>Dev</span> tools : ${devEnabled ? 'ON' : 'OFF'}`;
+    logConsole('dev', `Mode développeur ${devEnabled ? 'activé' : 'désactivé'}`);
+  }
+
+  devBadge.addEventListener('click', () => toggleDevPanel());
+  $('#btnCloseDev').addEventListener('click', () => toggleDevPanel(false));
+
+  devTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const name = tab.dataset.devtab;
+      devTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      devLogConsole.style.display = name === 'console' ? 'block' : 'none';
+      devLogNetwork.style.display = name === 'network' ? 'block' : 'none';
+      devLogSystem.style.display = name === 'system' ? 'block' : 'none';
+      logConsole('dev', `Onglet dev -> ${name}`);
+    });
+  });
+
+  function logTo(el, tag, msg) {
+    const line = document.createElement('div');
+    line.className = 'dev-log-line';
+    const now = new Date();
+    const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+    line.innerHTML = `<span style="color:#6b7280;">[${time}]</span> <span class="tag">[${tag}]</span> ${msg}`;
+    el.appendChild(line);
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function logConsole(tag, msg) {
+    if (!devEnabled) return;
+    logTo(devLogConsole, tag, msg);
+  }
+
+  function logNetwork(msg) {
+    if (!devEnabled) return;
+    logTo(devLogNetwork, 'NET', msg);
+  }
+
+  function logSystem(msg) {
+    if (!devEnabled) return;
+    logTo(devLogSystem, 'SYS', msg);
+  }
+
+  btnClearLog.addEventListener('click', () => {
+    devLogConsole.innerHTML = '';
+    devLogNetwork.innerHTML = '';
+    devLogSystem.innerHTML = '';
+  });
+
+  btnFakeRequest.addEventListener('click', () => {
+    logNetwork('GET /api/veille/signaux-faibles 200 OK (simulé)');
+  });
+
+  btnCopyConfig.addEventListener('click', () => {
+    const txt = `Device: KARYON One (virtual)
+OS: HTML/JS
+DevTools: enabled=${devEnabled}
+Inspect: ${inspectMode}`;
+    navigator.clipboard?.writeText(txt).catch(() => {});
+    logSystem('Configuration copiée dans le presse-papier (si autorisé).');
+  });
+
+  // Inspecteur
+  btnInspectToggle.addEventListener('click', () => {
+    inspectMode = !inspectMode;
+    inspectState.textContent = inspectMode ? 'ON' : 'OFF';
+    inspectState.className = inspectMode ? 'dev-pill-on' : 'dev-pill-off';
+    logConsole('dev', `Inspecteur ${inspectMode ? 'activé' : 'désactivé'}`);
+  });
+
+  // Surligner les éléments cliquables lorsqu’on clique dessus en mode inspect
+  const clickableSelectors = [
+    '.app-icon',
+    '.card',
+    '.dock-icon',
+    '.top-badge',
+    '.content-tab'
+  ];
+
+  document.addEventListener('click', (e) => {
+    if (!inspectMode) return;
+    const target = clickableSelectors
+      .map(sel => e.target.closest(sel))
+      .find(Boolean);
+    if (target) {
+      e.preventDefault();
+      e.stopPropagation();
+      target.classList.add('inspect-highlight');
+      setTimeout(() => target.classList.remove('inspect-highlight'), 400);
+      const label = target.dataset.app || target.dataset.card || target.dataset.dock || target.dataset.tab || 'élément';
+      logConsole('inspect', `Click sur ${label}`);
+    }
+  }, true);
+</script>
+</html>
