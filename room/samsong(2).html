@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Samsong • Boot & News</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --fg: #e5e7eb;
+      --soft: #9ca3af;
+      --accent: #38bdf8;
+      --accent2: #f97316;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 0 0, #0f172a, #020617 55%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* CADRE SMARTPHONE */
+
+    .phone-shell {
+      width: min(380px, 100vw - 24px);
+      height: min(780px, 100vh - 24px);
+      border-radius: 32px;
+      background: linear-gradient(145deg, #020617, #111827);
+      border: 2px solid #111827;
+      box-shadow:
+        0 0 0 6px rgba(0,0,0,0.8),
+        0 30px 60px rgba(0,0,0,0.9);
+      padding: 10px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .phone-notch {
+      width: 90px;
+      height: 16px;
+      border-radius: 0 0 999px 999px;
+      background: #020617;
+      margin: 0 auto 8px;
+      position: relative;
+    }
+
+    .phone-notch::before {
+      content: "";
+      position: absolute;
+      left: 14px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #0ea5e9, #020617);
+    }
+
+    .phone-notch::after {
+      content: "";
+      position: absolute;
+      right: 16px;
+      top: 6px;
+      width: 26px;
+      height: 4px;
+      border-radius: 999px;
+      background: #111827;
+    }
+
+    .phone-screen {
+      flex: 1;
+      border-radius: 24px;
+      background: #020617;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid #111827;
+    }
+
+    /* ECRAN BOOT */
+
+    .boot-screen,
+    .home-screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .boot-screen {
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 0%, #020617, #000);
+      color: #f9fafb;
+      animation: bootFade 4s ease-in-out forwards;
+    }
+
+    .boot-logo {
+      font-size: 26px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .boot-logo span {
+      color: var(--accent);
+    }
+
+    .boot-tagline {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--soft);
+      margin-bottom: 16px;
+    }
+
+    .boot-spinner {
+      width: 70px;
+      height: 70px;
+      border-radius: 999px;
+      border: 3px solid #1f2937;
+      border-top-color: var(--accent);
+      animation: spin 1.2s linear infinite;
+      margin-bottom: 12px;
+    }
+
+    .boot-status {
+      font-size: 11px;
+      color: var(--soft);
+      text-align: center;
+    }
+
+    .boot-status small {
+      display: block;
+      font-size: 9px;
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    @keyframes bootFade {
+      0%   { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* HOME & STATUT BAR */
+
+    .home-screen {
+      background: radial-gradient(circle at 0 0, rgba(56,189,248,0.05), transparent 60%), #020617;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease-out;
+    }
+
+    .home-screen.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .status-bar {
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      font-size: 11px;
+      color: var(--soft);
+      background: linear-gradient(to right, #020617, #020617aa, #020617);
+      border-bottom: 1px solid #0f172a;
+    }
+
+    .status-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34,197,94,0.7);
+    }
+
+    .status-bar-center {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--soft);
+    }
+
+    .status-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .signal-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 1px;
+    }
+
+    .signal-bars span {
+      width: 2px;
+      border-radius: 999px;
+      background: var(--soft);
+    }
+
+    .signal-bars span:nth-child(1) { height: 5px; opacity: .4; }
+    .signal-bars span:nth-child(2) { height: 7px; opacity: .5; }
+    .signal-bars span:nth-child(3) { height: 9px; opacity: .7; }
+    .signal-bars span:nth-child(4) { height: 11px; opacity: 1; }
+
+    .battery {
+      width: 18px;
+      height: 9px;
+      border-radius: 3px;
+      border: 1px solid #4b5563;
+      position: relative;
+      margin-left: 2px;
+    }
+
+    .battery::after {
+      content: "";
+      position: absolute;
+      right: -3px;
+      top: 2px;
+      width: 2px;
+      height: 5px;
+      border-radius: 1px;
+      background: #4b5563;
+    }
+
+    .battery-fill {
+      position: absolute;
+      inset: 1px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #22c55e, #a3e635);
+      width: 70%;
+    }
+
+    /* HEADER ACTUS */
+
+    .news-header {
+      padding: 10px 12px 6px;
+      border-bottom: 1px solid #0f172a;
+    }
+
+    .news-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .news-subtitle {
+      font-size: 11px;
+      color: var(--soft);
+    }
+
+    .news-subtitle span {
+      color: var(--accent);
+    }
+
+    /* FLUX ACTUS */
+
+    .news-feed-wrapper {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      padding: 0 2px 4px;
+    }
+
+    .news-feed {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      padding: 4px 10px 60px;
+      scroll-behavior: smooth;
+    }
+
+    .news-card {
+      border-radius: 14px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      background: radial-gradient(circle at 0 0, rgba(56,189,248,0.15), transparent 55%), #020617;
+      border: 1px solid #0f172a;
+      font-size: 12px;
+      cursor: pointer;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, border-color 0.12s ease-out;
+    }
+
+    .news-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px rgba(0,0,0,0.7);
+      border-color: var(--accent);
+    }
+
+    .news-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--soft);
+      margin-top: 4px;
+    }
+
+    .news-tag {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    /* DOCK */
+
+    .dock {
+      height: 52px;
+      padding: 4px 18px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to top, #020617, transparent);
+    }
+
+    .dock-inner {
+      flex: 1;
+      border-radius: 18px;
+      padding: 6px 10px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid #0f172a;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .dock-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      background: radial-gradient(circle at 30% 0, var(--accent), #020617);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      box-shadow: 0 0 12px rgba(56,189,248,0.5);
+    }
+
+    .dock-icon:nth-child(2) {
+      background: radial-gradient(circle at 30% 0, #22c55e, #020617);
+      box-shadow: 0 0 12px rgba(34,197,94,0.5);
+    }
+
+    .dock-icon:nth-child(3) {
+      background: radial-gradient(circle at 30% 0, #f97316, #020617);
+      box-shadow: 0 0 12px rgba(249,115,22,0.5);
+    }
+
+    .dock-icon:nth-child(4) {
+      background: radial-gradient(circle at 30% 0, #a855f7, #020617);
+      box-shadow: 0 0 12px rgba(168,85,247,0.5);
+      font-size: 10px;
+    }
+
+    /* MODALE */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.78);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .modal-backdrop.visible {
+      display: flex;
+    }
+
+    .modal {
+      width: min(360px, 100%);
+      max-height: min(520px, 100%);
+      background: #020617;
+      border-radius: 18px;
+      border: 1px solid #1f2937;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 8px 12px;
+      border-bottom: 1px solid #111827;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .modal-header-title {
+      font-weight: 600;
+    }
+
+    .modal-header small {
+      font-size: 10px;
+      color: var(--soft);
+    }
+
+    .modal-close {
+      border: none;
+      background: transparent;
+      color: var(--soft);
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 8px 12px 10px;
+      font-size: 12px;
+      overflow-y: auto;
+    }
+
+    .modal-image {
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 8px;
+      border: 1px solid #111827;
+    }
+
+    .modal-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .modal-body p {
+      margin: 4px 0;
+      color: var(--soft);
+      line-height: 1.4;
+    }
+
+    .modal-body a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-style: dotted;
+    }
+
+    .modal-footer {
+      padding: 8px 12px;
+      border-top: 1px solid #111827;
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: var(--fg);
+      font-size: 11px;
+      padding: 5px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn.primary {
+      border-color: var(--accent);
+      background: radial-gradient(circle at 20% 0, #e0f2fe, #0ea5e9);
+      color: #02131f;
+      font-weight: 600;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+  </style>
+</head>
+<body>
+
+<div class="phone-shell">
+  <div class="phone-notch"></div>
+  <div class="phone-screen">
+    <!-- ECRAN BOOT -->
+    <div class="boot-screen" id="bootScreen">
+      <div class="boot-logo">SAMS<span>ONG</span></div>
+      <div class="boot-tagline">life in low definition</div>
+      <div class="boot-spinner"></div>
+      <div class="boot-status" id="bootStatus">
+        Initialisation du système…
+        <small>Chargement des notifications, de la météo pourrie et de l’anxiété quotidienne.</small>
+      </div>
+    </div>
+
+    <!-- HOME / NEWS -->
+    <div class="home-screen" id="homeScreen">
+      <div class="status-bar">
+        <div class="status-bar-left">
+          <div class="status-dot"></div>
+          <span id="statusTime">06:42</span>
+        </div>
+        <div class="status-bar-center">SAMSONG • ACTUS</div>
+        <div class="status-bar-right">
+          <div class="signal-bars">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="battery">
+            <div class="battery-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="news-header">
+        <div class="news-title">Matin gris sur le monde réel</div>
+        <div class="news-subtitle">
+          Tu te réveilles, tu scrolles. <span>Encore une journée à survivre aux flux.</span>
+        </div>
+      </div>
+
+      <div class="news-feed-wrapper">
+        <div class="news-feed" id="newsFeed">
+          <!-- Quelques fausses actus -->
+          <div class="news-card" data-headline="Coup de théâtre géopolitique local">
+            <strong>Bruxelles : la météo mentale repasse en mode bruine permanente</strong>
+            <p>
+              Selon des sources bien informées, 87 % des habitants auraient consulté les actus
+              avant même leur première gorgée de café. Les 13 % restants dorment encore.
+            </p>
+            <div class="news-meta">
+              <span class="news-tag">Société</span>
+              <span>il y a 3 min</span>
+            </div>
+          </div>
+
+          <div class="news-card" data-headline="Nouvelle appli de survie informationnelle">
+            <strong>Une appli promet de filtrer toutes les mauvaises nouvelles</strong>
+            <p>
+              Dans les faits, elle se contente de ralentir le flux en faisant défiler les actus
+              un peu plus lentement. Les experts parlent d’un progrès symbolique.
+            </p>
+            <div class="news-meta">
+              <span class="news-tag">Tech & Veille</span>
+              <span>il y a 7 min</span>
+            </div>
+          </div>
+
+          <div class="news-card" data-headline="Crise systémique, saison 12">
+            <strong>La trilogie des crises se transforme en série sans fin</strong>
+            <p>
+              Economie, climat, politique, infox : le crossover est désormais permanent.
+              Personne n’a encore trouvé le bouton pause.
+            </p>
+            <div class="news-meta">
+              <span class="news-tag">Crises</span>
+              <span>il y a 15 min</span>
+            </div>
+          </div>
+
+          <div class="news-card" data-headline="Le café, dernier rempart">
+            <strong>Les baristas déclarés infrastructure critique de la démocratie</strong>
+            <p>
+              Sans café, plus personne n’aurait l’énergie de faire semblant de suivre l’actualité.
+              Des négociations sont en cours pour les intégrer aux plans d’urgence nationaux.
+            </p>
+            <div class="news-meta">
+              <span class="news-tag">Lifestyle</span>
+              <span>il y a 23 min</span>
+            </div>
+          </div>
+
+          <div class="news-card" data-headline="Breaking : tu es encore là">
+            <strong>Malgré tout, tu continues de scroller</strong>
+            <p>
+              Le système te remercie pour ta loyauté. En échange, il t’offre une modale surprise
+              contenant une image, un texte inutile et un lien random.
+            </p>
+            <div class="news-meta">
+              <span class="news-tag">Meta</span>
+              <span>il y a 42 min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dock">
+        <div class="dock-inner">
+          <div class="dock-icon">☎</div>
+          <div class="dock-icon">✉</div>
+          <div class="dock-icon">📰</div>
+          <div class="dock-icon">★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-header-title" id="modalTitle">Breaking du matin</div>
+        <small>Fausse alerte haute importance</small>
+      </div>
+      <button class="modal-close" id="modalClose" aria-label="Fermer">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-image">
+        <!-- Image aléatoire -->
+        <img id="modalImage" src="https://picsum.photos/400/250?blur=2" alt="Image pseudo d'illustration" />
+      </div>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vitae nulla facilisis,
+        blandit risus a, interdum est. Fusce in scelerisque justo. Integer eget nibh ac lacus
+        ultricies bibendum.
+      </p>
+      <p>
+        Aliquam quis dui sodales, vehicula leo non, sagittis nunc. Vivamus consectetur arcu risus,
+        vel tristique augue porta ut. Sed lacinia justo id sem elementum, non posuere nibh gravida.
+      </p>
+      <p>
+        Pour une raison obscure, ton pouce s’apprête déjà à cliquer ici :
+        <a href="#" target="_blank" rel="noopener noreferrer" id="modalLink">lien entièrement random</a>.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" id="modalLater">Voir plus tard</button>
+      <button class="btn primary" id="modalOk">OK, j’ai compris</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- Boot + passage à l'écran d'accueil ---
+  const bootScreen = document.getElementById('bootScreen');
+  const homeScreen = document.getElementById('homeScreen');
+  const bootStatus = document.getElementById('bootStatus');
+  const statusTime = document.getElementById('statusTime');
+
+  function updateTime() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    statusTime.textContent = h + ':' + m;
+  }
+  updateTime();
+  setInterval(updateTime, 30_000);
+
+  setTimeout(() => {
+    bootStatus.textContent = "Synchronisation des flux d'actualité…";
+  }, 1200);
+
+  setTimeout(() => {
+    bootStatus.textContent = "Insertion de pub mentale… (ratée, heureusement)";
+  }, 2300);
+
+  // Au bout de 3,5 s on met l'écran d'accueil visible
+  setTimeout(() => {
+    homeScreen.classList.add('visible');
+  }, 3500);
+
+  // --- Auto-scroll du flux d'actus ---
+  const newsFeed = document.getElementById('newsFeed');
+  let autoScrollInterval = null;
+
+  function startAutoScroll() {
+    if (!newsFeed) return;
+    let direction = 1;
+    autoScrollInterval = setInterval(() => {
+      if (!homeScreen.classList.contains('visible')) return;
+      newsFeed.scrollTop += 0.5 * direction;
+      // Si on arrive en bas, on remonte doucement
+      if (newsFeed.scrollTop + newsFeed.clientHeight >= newsFeed.scrollHeight - 4) {
+        direction = -1;
+      }
+      if (newsFeed.scrollTop <= 0) {
+        direction = 1;
+      }
+    }, 16); // ~60 FPS ultra lent
+  }
+
+  // Lancement de l'auto-scroll un peu après le boot
+  setTimeout(startAutoScroll, 3800);
+
+  // Stop auto-scroll quand l'utilisateur scroll (optionnel)
+  newsFeed.addEventListener('wheel', () => {
+    if (autoScrollInterval) {
+      clearInterval(autoScrollInterval);
+      autoScrollInterval = null;
+    }
+  });
+
+  // --- Modale : image + lorem + lien random ---
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalClose = document.getElementById('modalClose');
+  const modalLater = document.getElementById('modalLater');
+  const modalOk = document.getElementById('modalOk');
+  const modalImage = document.getElementById('modalImage');
+  const modalLink = document.getElementById('modalLink');
+  const modalTitle = document.getElementById('modalTitle');
+
+  const randomLinks = [
+    'https://en.wikipedia.org/wiki/Information_overload',
+    'https://alternativeto.net/',
+    'https://ouaisfi.eu/',
+    'https://www.youtube.com/results?search_query=media+literacy',
+    'https://fr.wikipedia.org/wiki/Intelligence_%C3%A9conomique'
+  ];
+
+  function pickRandomLink() {
+    const i = Math.floor(Math.random() * randomLinks.length);
+    return randomLinks[i];
+  }
+
+  function openModal(headlineText) {
+    // Titre basé sur l'actu cliquée (si disponible)
+    if (headlineText) {
+      modalTitle.textContent = headlineText;
+    } else {
+      modalTitle.textContent = "Notification à moitié importante";
+    }
+
+    // Image pseudo-random
+    const seed = Math.floor(Math.random() * 1000);
+    modalImage.src = 'https://picsum.photos/400/250?blur=2&random=' + seed;
+
+    // Lien random
+    const link = pickRandomLink();
+    modalLink.href = link;
+
+    modalBackdrop.classList.add('visible');
+  }
+
+  function closeModal() {
+    modalBackdrop.classList.remove('visible');
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modalLater.addEventListener('click', closeModal);
+  modalOk.addEventListener('click', closeModal);
+
+  modalBackdrop.addEventListener('click', (e) => {
+    if (e.target === modalBackdrop) {
+      closeModal();
+    }
+  });
+
+  // Ouvrir la modale automatiquement quelques secondes après l'arrivée sur les actus
+  setTimeout(() => {
+    openModal("Flash info : ton pouce a cliqué tout seul");
+  }, 8000);
+
+  // …et aussi quand on clique sur une carte d’actus
+  document.querySelectorAll('.news-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.dataset.headline || card.querySelector('strong')?.textContent;
+      openModal(title);
+    });
+  });
+</script>
+</body>
+</html>
