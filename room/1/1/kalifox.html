@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAPPORT CONFIDENTIEL : L'Affaire Deborsu-OuaisFieu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: "Bureaucratic Neutral" -->
+    <!-- Background: #fdfbf7 (Warm Paper) -->
+    <!-- Text: #1f2937 (Ink Black) -->
+    <!-- Accent: #b91c1c (Redacted Red) -->
+    <!-- Secondary: #d1d5db (File Folder Grey) -->
+
+    <!-- Application Structure Plan: 
+         Structure: Investigative Dashboard / "Leaked File" aesthetic.
+         1. Hero Section: "Top Secret" stamp, immediate hook about the leak source.
+         2. Executive Summary: The core shocking statistic (Pie Chart).
+         3. The "Deborsu Index": Analysis of fraud types (Bar Chart) with interactive category filtering.
+         4. Regional Heatmap (Simulated): Breakdown of "fraud" by Belgian region (Comparison Chart).
+         5. "The Blacklist": Interactive card grid showing specific "crimes" (humorous) with search/filter.
+         6. Interactive Conclusion: A "Self-Audit" tool where the user checks if they are a fraudster.
+         Why: The satirical nature demands a serious "investigative" presentation to heighten the humor. 
+         The dashboard approach allows users to digest the "absurd" data points (like "stealing a pen") as if they were serious financial crimes.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Goal: Show the scale of the problem. Method: Donut Chart (Chart.js). Interaction: Tooltip details. Justification: Immediate visual impact of the "99.9%" stat.
+         2. Goal: Categorize types of "social fraud". Method: Horizontal Bar Chart. Interaction: Click bars to see examples. Justification: Compares absurd categories clearly.
+         3. Goal: Regional comparison. Method: Grouped Bar Chart. Interaction: Toggle data sets. Justification: Plays on Belgian regional tropes.
+         4. Goal: Explore specific offenses. Method: JS-filtered Grid of Cards. Interaction: Search and Category buttons. Justification: Allows user to browse the "evidence".
+         CONFIRMATION: NO SVG graphics used (except text/css shapes). NO Mermaid JS used.
+    -->
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #fdfbf7;
+            color: #1f2937;
+        }
+        h1, h2, h3, .stamp {
+            font-family: 'Special Elite', cursive;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .paper-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+        }
+        .stamp-box {
+            border: 3px solid #b91c1c;
+            color: #b91c1c;
+            transform: rotate(-2deg);
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: bold;
+            opacity: 0.9;
+        }
+        .highlight-marker {
+            background-color: #fef08a; /* Yellow highlighter */
+            padding: 0 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-[#fdfbf7] border-b border-gray-300 paper-shadow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold tracking-tighter text-gray-800">LEAKS<span class="text-red-700">.BE</span></span>
+                </div>
+                <div class="hidden sm:flex items-center space-x-8">
+                    <button onclick="scrollToSection('summary')" class="text-gray-600 hover:text-red-700 font-medium">Synthèse</button>
+                    <button onclick="scrollToSection('types')" class="text-gray-600 hover:text-red-700 font-medium">Typologie</button>
+                    <button onclick="scrollToSection('evidence')" class="text-gray-600 hover:text-red-700 font-medium">Preuves</button>
+                    <button onclick="scrollToSection('audit')" class="bg-red-700 text-white px-4 py-2 rounded shadow hover:bg-red-800 transition">S'auto-dénoncer</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8 space-y-12 max-w-6xl">
+
+        <!-- Hero Section -->
+        <section class="text-center space-y-6 py-10 border-b-2 border-dashed border-gray-300">
+            <div class="stamp-box text-3xl md:text-5xl mb-4">CONFIDENTIEL</div>
+            <h1 class="text-4xl md:text-6xl font-black text-gray-900 leading-tight">
+                L'AFFAIRE <span class="bg-black text-white px-2">DEBORSU</span> - OUAISFIEU
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto italic font-serif">
+                "Le rapport que l'État ne voulait pas que vous lisiez."
+            </p>
+            <div class="bg-white p-6 rounded-lg paper-shadow max-w-4xl mx-auto text-left relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-red-100 text-red-800 text-xs px-2 py-1 font-bold">SOURCE: GITHUB LEAK #2026-B</div>
+                <p class="text-gray-800 leading-relaxed text-lg">
+                    <strong class="text-red-700">INTRODUCTION DU DOSSIER :</strong> Une fuite de données massive, analysée conjointement par des experts anonymes et le lanceur d'alerte "OuaisFieu", met en lumière une réalité terrifiante : la notion de "fraude sociale" s'étendrait désormais à 99.9% de la population belge. Ce tableau de bord interactif vous permet d'explorer les données censurées.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 1: The Scale (Summary) -->
+        <section id="summary" class="grid md:grid-cols-2 gap-8 items-center">
+            <div class="space-y-4">
+                <h2 class="text-3xl font-bold border-l-4 border-red-700 pl-4">I. L'AMPLEUR DU DÉSASTRE</h2>
+                <p class="text-gray-700 text-lg">
+                    Les données préliminaires sont sans appel. En redéfinissant la fraude pour inclure les <span class="highlight-marker">petits arrangements du quotidien</span>, l'enquête révèle que l'honnêteté absolue est une anomalie statistique.
+                </p>
+                <div class="bg-gray-100 p-4 rounded border-l-4 border-gray-500">
+                    <p class="font-bold text-sm text-gray-500 uppercase">Note de l'analyste</p>
+                    <p class="italic">"Si on compte le fait de recharger son téléphone au travail comme un vol d'électricité, nous sommes tous perdus." - Inspecteur C.D.</p>
+                </div>
+                <!-- Interactive Stat Blocks -->
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div class="bg-white p-4 text-center paper-shadow rounded">
+                        <div class="text-4xl font-bold text-red-700">11.6 M</div>
+                        <div class="text-sm text-gray-500">Suspects Identifiés</div>
+                    </div>
+                    <div class="bg-white p-4 text-center paper-shadow rounded">
+                        <div class="text-4xl font-bold text-gray-800">€ 0.50</div>
+                        <div class="text-sm text-gray-500">Coût moyen par fraude</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-xl paper-shadow">
+                <h3 class="text-center font-bold text-gray-600 mb-4">RÉPARTITION DE LA POPULATION BELGE</h3>
+                <div class="chart-container">
+                    <canvas id="populationChart"></canvas>
+                </div>
+                <p class="text-center text-xs text-gray-400 mt-2">Source: Institut Belge de la Statistique Improbables (IBSI)</p>
+            </div>
+        </section>
+
+        <!-- Section 2: Typology (Bar Chart) -->
+        <section id="types" class="bg-white p-8 rounded-xl paper-shadow">
+            <div class="mb-6">
+                <h2 class="text-3xl font-bold border-l-4 border-red-700 pl-4 mb-2">II. TYPOLOGIE DES INFRACTIONS</h2>
+                <p class="text-gray-600">
+                    Quels sont les "crimes" commis par le citoyen lambda ? Ce graphique classe les infractions par fréquence de signalement. <span class="text-red-600 font-bold">Passez votre souris sur les barres pour voir les détails confidentiels.</span>
+                </p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="w-full md:w-3/4">
+                    <div class="chart-container h-96">
+                        <canvas id="fraudTypeChart"></canvas>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/4 flex flex-col justify-center space-y-4 bg-gray-50 p-4 rounded border border-gray-200">
+                    <h4 class="font-bold text-lg text-gray-800 border-b pb-2">Derniers Signalements</h4>
+                    <ul id="ticker-list" class="text-sm space-y-3 text-gray-600 font-mono h-64 overflow-hidden relative">
+                        <!-- JS will populate this -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Evidence (Interactive Grid) -->
+        <section id="evidence">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-6">
+                <div class="max-w-2xl">
+                    <h2 class="text-3xl font-bold border-l-4 border-red-700 pl-4 mb-2">III. LE FICHIER DES PREUVES</h2>
+                    <p class="text-gray-600">
+                        Explorez la base de données des infractions mineures désormais classées comme "Crime d'État". Utilisez les filtres pour trier par catégorie.
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-2">
+                    <button onclick="filterEvidence('all')" class="px-3 py-1 bg-gray-800 text-white text-sm rounded hover:bg-gray-700 transition">Tout</button>
+                    <button onclick="filterEvidence('Bureau')" class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded hover:bg-blue-200 transition">Bureau</button>
+                    <button onclick="filterEvidence('Social')" class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded hover:bg-green-200 transition">Social</button>
+                    <button onclick="filterEvidence('Transport')" class="px-3 py-1 bg-yellow-100 text-yellow-800 text-sm rounded hover:bg-yellow-200 transition">Transport</button>
+                </div>
+            </div>
+
+            <div id="evidence-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- JS will populate cards here -->
+            </div>
+        </section>
+
+        <!-- Section 4: Self Audit (Interactive) -->
+        <section id="audit" class="bg-gray-900 text-gray-100 p-8 rounded-xl paper-shadow relative overflow-hidden">
+            <div class="absolute top-0 right-0 opacity-10 pointer-events-none">
+                <svg width="400" height="400" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 10 H 90 V 90 H 10 L 10 10" stroke="white" stroke-width="2" fill="none"/>
+                    <path d="M10 10 L 90 90" stroke="white" stroke-width="1"/>
+                    <path d="M90 10 L 10 90" stroke="white" stroke-width="1"/>
+                </svg>
+            </div>
+
+            <div class="relative z-10 text-center space-y-6 max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold text-red-500">IV. ÊTES-VOUS UN FRAUDEUR ?</h2>
+                <p class="text-gray-300">
+                    L'algorithme prédictif du rapport Deborsu peut déterminer votre culpabilité en une seule question.
+                </p>
+                
+                <div id="quiz-container" class="bg-gray-800 p-6 rounded-lg border border-gray-700 mt-8">
+                    <p class="text-xl mb-6 font-bold">"Avez-vous déjà emprunté un stylo à un collègue sans avoir l'intention ferme et définitive de le rendre dans les 24 heures ?"</p>
+                    <div class="flex justify-center space-x-6">
+                        <button onclick="handleQuiz(true)" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded font-bold shadow-lg transform transition hover:scale-105">OUI, j'avoue</button>
+                        <button onclick="handleQuiz(false)" class="px-6 py-3 bg-gray-600 hover:bg-gray-500 text-white rounded font-bold shadow-lg transform transition hover:scale-105">NON, jamais</button>
+                    </div>
+                </div>
+
+                <div id="quiz-result" class="hidden bg-white text-gray-900 p-6 rounded-lg border-4 border-red-600 transform transition-all duration-500">
+                    <div class="text-5xl mb-2">🚨</div>
+                    <h3 class="text-2xl font-black text-red-700 mb-2">RÉSULTAT : COUPABLE</h3>
+                    <p id="quiz-message" class="text-lg font-medium"></p>
+                    <p class="mt-4 text-xs text-gray-500">Dossier transmis au Parquet (Fictif).</p>
+                    <button onclick="resetQuiz()" class="mt-4 text-red-600 underline text-sm">Refaire le test</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-8 border-t border-gray-700">
+        <div class="container mx-auto px-4 text-center">
+            <p class="font-mono text-sm mb-2">DOCUMENT CLASSÉ CONFIDENTIEL // NIVEAU D'ACCÈS 0</p>
+            <p class="text-xs opacity-50">
+                Ceci est une page satirique basée sur un contexte humoristique belge (Deborsu/OuaisFieu). 
+                Aucune donnée réelle n'est présentée ici. Les "fraudes" mentionnées sont fictives et humoristiques.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Script Logic -->
+    <script>
+        // --- DATA STORAGE ---
+
+        // Fraud Categories Data
+        const fraudTypes = [
+            { label: 'Vol de Fournitures (Stylos/Agrafes)', value: 85, color: '#ef4444' }, // Red-500
+            { label: 'Netflix Partagé (Hors Foyer)', value: 72, color: '#f97316' }, // Orange-500
+            { label: 'Oubli Carte Fidélité (Mensonge)', value: 65, color: '#eab308' }, // Yellow-500
+            { label: 'Pipi Piscine Communale', value: 45, color: '#3b82f6' }, // Blue-500
+            { label: 'Resquille File d\'Attente', value: 30, color: '#6366f1' }, // Indigo-500
+        ];
+
+        // "Evidence" Cards Data
+        const evidenceData = [
+            { id: 1, title: "L'Affaire du Bic 4 Couleurs", category: "Bureau", severity: "Haute", desc: "Le sujet a été vu empochant un Bic 4 couleurs appartenant à la comptabilité." },
+            { id: 2, title: "Le Scandale du Tupperware", category: "Bureau", severity: "Moyenne", desc: "Utilisation du micro-ondes commun pour réchauffer du poisson. Considéré comme terrorisme olfactif." },
+            { id: 3, title: "La Fraude au 'Bonjour'", category: "Social", severity: "Critique", desc: "Le sujet est monté dans le bus sans saluer le chauffeur. Récidiviste notoire." },
+            { id: 4, title: "Contrebande de Ketchup", category: "Social", severity: "Faible", desc: "A pris 4 sachets de sauce au Quick mais n'en a utilisé que 2." },
+            { id: 5, title: "Occupation de la Bande d'Arrêt", category: "Transport", severity: "Extrême", desc: "A roulé 50m sur la bande d'arrêt d'urgence pour sortir plus vite du Ring de Bruxelles." },
+            { id: 6, title: "Faux Départ", category: "Social", severity: "Moyenne", desc: "A dit 'Allez, j'y vais' mais est resté encore 45 minutes à discuter sur le pas de la porte." },
+        ];
+
+        // Ticker Messages
+        const tickerMessages = [
+            "ALERTE: Michel J. a pris deux biscuits à la réunion.",
+            "FLASH: Martine a imprimé un billet d'avion sur l'imprimante du bureau.",
+            "URGENT: Kevin n'a pas trié ses déchets PMC correctement.",
+            "SCOOP: Le chien de Mme Michu n'est pas réellement un chien d'assistance.",
+            "CHOC: Personne n'a lu les conditions générales d'utilisation."
+        ];
+
+        // --- CHART INITIALIZATION ---
+
+        function initCharts() {
+            // 1. Population Pie Chart
+            const ctxPop = document.getElementById('populationChart').getContext('2d');
+            new Chart(ctxPop, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Honnêtes Citoyens', 'Fraudeurs du Quotidien'],
+                    datasets: [{
+                        data: [0.1, 99.9],
+                        backgroundColor: ['#d1d5db', '#b91c1c'], // Grey vs Red
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 2. Fraud Types Bar Chart
+            const ctxType = document.getElementById('fraudTypeChart').getContext('2d');
+            new Chart(ctxType, {
+                type: 'bar',
+                data: {
+                    labels: fraudTypes.map(d => d.label),
+                    datasets: [{
+                        label: '% de la population coupable',
+                        data: fraudTypes.map(d => d.value),
+                        backgroundColor: fraudTypes.map(d => d.color),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal bar chart
+                    responsive: true,
+                    maintainAspectRatio: false, // Fits the container
+                    scales: {
+                        x: { beginAtZero: true, max: 100 }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // --- INTERACTION LOGIC ---
+
+        // Populate Ticker
+        function startTicker() {
+            const list = document.getElementById('ticker-list');
+            tickerMessages.forEach(msg => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="text-red-600 font-bold">>></span> ${msg}`;
+                list.appendChild(li);
+            });
+        }
+
+        // Populate Evidence Grid
+        function renderEvidence(filter) {
+            const grid = document.getElementById('evidence-grid');
+            grid.innerHTML = ''; // Clear
+
+            const filteredData = filter === 'all' 
+                ? evidenceData 
+                : evidenceData.filter(item => item.category === filter);
+
+            filteredData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-lg paper-shadow border-t-4 hover:shadow-lg transition cursor-pointer transform hover:-translate-y-1";
+                
+                // Color code border based on severity
+                if(item.severity === 'Critique' || item.severity === 'Extrême') card.classList.add('border-red-600');
+                else if(item.severity === 'Haute') card.classList.add('border-orange-500');
+                else card.classList.add('border-yellow-400');
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider text-gray-400">${item.category}</span>
+                        <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded font-mono">Dossier #${item.id}00${item.id}</span>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">${item.title}</h3>
+                    <p class="text-sm text-gray-600 mb-4">${item.desc}</p>
+                    <div class="flex items-center text-xs font-bold">
+                        <span class="mr-2">Gravité:</span>
+                        <span class="${item.severity === 'Extrême' ? 'text-red-600 animate-pulse' : 'text-gray-700'}">${item.severity}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterEvidence(category) {
+            renderEvidence(category);
+        }
+
+        // Quiz Logic
+        function handleQuiz(admitted) {
+            const container = document.getElementById('quiz-container');
+            const result = document.getElementById('quiz-result');
+            const message = document.getElementById('quiz-message');
+
+            container.classList.add('hidden');
+            result.classList.remove('hidden');
+
+            if (admitted) {
+                message.innerText = "L'honnêteté est le premier pas vers la prison. Merci de votre coopération.";
+            } else {
+                message.innerText = "Mensonge flagrant ! L'analyse de vos micro-expressions indique une culpabilité à 100%.";
+            }
+        }
+
+        function resetQuiz() {
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            startTicker();
+            renderEvidence('all');
+        });
+
+    </script>
+</body>
+</html>
