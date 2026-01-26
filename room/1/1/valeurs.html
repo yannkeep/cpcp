@@ -1,0 +1,475 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head><script type='text/javascript' src='https://dl.ouaisfi.eu/IP99opgyOfu2zvy80Fmyp2CQEzXEHDTcYbhqnn4kRgJuzAyxGXwEgT0BBMrmBqxTjY9C9QAebzMGf0UCXnaVogOBmRJ03QRH9gGLfjBdrW7wYWqgSxzhf2sxwZUbmZoU0V6H7u8A5_UqWoZyz5Nq0b6ygSn56yX75VVRAe3EfhR6e5cIt-bbPlmCdGdvVEm8INhkXCr19qjwpr0H8iu75nYIGpHVY1MKUJh_ZLNOexMvgVw34Z2-juUpZipfJy0pAfr0kVVJmhqEBRDeEMoKdzXeRzAZA7920yoPSyuA6WtyQL0FzUjKnHPK_ja_4Nx_c30VvRlZG8-Pt67Lnshok45p-O0lB1o6oKYgB5MCv3LT9YwxxxtSrYLfcajRrohH-urIyBt7jF1lql_HlUjYb1KxfAUeMkizNL6YZAXZw6LKRauDguPhL7TzAKitxzGVDe_SfymWAOanuyMtXWmcPMfBOVQ'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boussole de Valeurs</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        // Icons as SVG components
+        const Compass = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2L8 8l-6 4 6 4 4 6 4-6 6-4-6-4z" />
+            </svg>
+        );
+
+        const Download = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+        );
+
+        const ChevronRight = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+        );
+
+        const Check = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+        );
+
+        const X = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        );
+
+        const CATEGORIES = {
+            "Morales et Éthiques": {
+                color: "bg-purple-500",
+                values: ["Générosité", "Justice", "Honnêteté", "Intégrité", "Respect", "Compassion", "Bienveillance", "Courage", "Loyauté", "Tolérance", "Responsabilité"]
+            },
+            "Sociales": {
+                color: "bg-blue-500",
+                values: ["Altruisme", "Solidarité", "Coopération", "Fraternité", "Respect des autres", "Égalité", "Équité", "Hospitalité"]
+            },
+            "Personnelles": {
+                color: "bg-green-500",
+                values: ["Liberté", "Authenticité", "Indépendance", "Persévérance", "Humilité", "Dignité", "Créativité"]
+            },
+            "Réalisation": {
+                color: "bg-orange-500",
+                values: ["Succès", "Excellence", "Compétition", "Ambition", "Discipline", "Travail acharné"]
+            },
+            "Spirituelles": {
+                color: "bg-indigo-500",
+                values: ["Sagesse", "Épanouissement personnel", "Sens de la vie", "Transcendance", "Paix intérieure"]
+            },
+            "Environnementales": {
+                color: "bg-emerald-500",
+                values: ["Respect de la nature", "Durabilité", "Protection de l'environnement", "Harmonie avec la nature", "Simplicité volontaire"]
+            },
+            "Esthétiques": {
+                color: "bg-pink-500",
+                values: ["Beauté", "Harmonie", "Créativité artistique"]
+            },
+            "Politiques": {
+                color: "bg-red-500",
+                values: ["Liberté d'expression", "Démocratie", "Droits de l'homme", "Justice sociale"]
+            }
+        };
+
+        const VALUES_DEFINITIONS = {
+            "Altruisme": "Agir de manière désintéressée pour le bien-être d'autrui",
+            "Ambition": "Avoir des objectifs élevés et travailler dur pour les atteindre",
+            "Authenticité": "Être sincère et fidèle à soi-même, sans masque ni artifice",
+            "Beauté": "Apprécier et chercher la beauté dans les arts, la nature ou les objets",
+            "Bienveillance": "Agir dans l'intérêt des autres avec gentillesse et altruisme",
+            "Compassion": "Être sensible aux souffrances d'autrui et vouloir les soulager",
+            "Compétition": "Désir de surpasser les autres ou de se mesurer à des standards élevés",
+            "Coopération": "Travailler ensemble pour atteindre un but commun",
+            "Courage": "Affronter la peur ou le danger pour défendre ses convictions",
+            "Créativité artistique": "Valoriser l'innovation et l'expression dans les arts",
+            "Créativité": "Apprécier et promouvoir l'innovation et l'expression personnelle",
+            "Dignité": "Maintenir un comportement respectueux de soi-même et des autres",
+            "Discipline": "La capacité à maintenir un effort constant et à suivre des règles pour atteindre ses buts",
+            "Droits de l'homme": "Protection des libertés et des droits fondamentaux",
+            "Durabilité": "Agir de manière à préserver les ressources pour les générations futures",
+            "Démocratie": "Valoriser le gouvernement du peuple par le peuple",
+            "Excellence": "Recherche de la qualité et du meilleur dans toutes ses actions",
+            "Fraternité": "Sentiment d'amitié et de solidarité entre les membres d'une communauté",
+            "Générosité": "Donner aux autres sans attendre de retour",
+            "Harmonie avec la nature": "Vivre en accord avec les cycles et les équilibres naturels",
+            "Harmonie": "Rechercher l'équilibre et la cohérence visuelle ou sonore",
+            "Honnêteté": "Dire la vérité et agir en toute transparence",
+            "Hospitalité": "Accueillir les autres avec générosité et gentillesse",
+            "Humilité": "Reconnaître ses limites et ses imperfections, ne pas se surestimer",
+            "Indépendance": "L'autonomie dans la prise de décision et le comportement",
+            "Intégrité": "Agir en cohérence avec ses principes moraux, même quand personne ne regarde",
+            "Justice sociale": "Lutte contre les inégalités et les injustices au sein de la société",
+            "Justice": "Le respect de l'équité et de l'égalité des droits",
+            "Liberté d'expression": "Le droit de s'exprimer sans censure ni répression",
+            "Liberté": "L'indépendance de penser, de s'exprimer, et d'agir sans contraintes indues",
+            "Loyauté": "Fidélité envers une personne, un groupe ou des principes",
+            "Paix intérieure": "Un état de calme et d'équilibre mental",
+            "Persévérance": "Continuer à poursuivre ses objectifs malgré les obstacles",
+            "Protection de l'environnement": "Valoriser la protection de l'écosystème et des ressources naturelles",
+            "Respect de la nature": "Avoir une attitude respectueuse envers l'environnement et les autres espèces",
+            "Respect des autres": "Valoriser et respecter les autres, leurs opinions et leurs droits",
+            "Respect": "Estimer autrui et ses droits, traiter les autres avec dignité",
+            "Responsabilité": "Assumer ses actions et leurs conséquences",
+            "Sagesse": "La recherche de la connaissance, de la compréhension profonde et de la clarté mentale",
+            "Sens de la vie": "Trouver un but ou une direction dans la vie",
+            "Simplicité volontaire": "Privilégier un mode de vie simple et frugal, en consommant moins",
+            "Solidarité": "Soutenir les autres et collaborer pour atteindre des objectifs communs",
+            "Succès": "Atteindre ses objectifs personnels et professionnels",
+            "Tolérance": "Accepter les différences et la diversité des opinions et des modes de vie",
+            "Transcendance": "Chercher à aller au-delà des préoccupations matérielles pour atteindre une réalité supérieure",
+            "Travail acharné": "Apprécier et valoriser l'effort et l'engagement dans son travail",
+            "Égalité": "Assurer une répartition équitable des ressources et des opportunités",
+            "Épanouissement personnel": "Chercher à réaliser son plein potentiel et à s'améliorer",
+            "Équité": "Traiter chacun selon ses besoins et ses mérites"
+        };
+
+        function ValuesCompass() {
+            const [view, setView] = useState('categories');
+            const [selectedCategory, setSelectedCategory] = useState(null);
+            const [selectedValues, setSelectedValues] = useState([]);
+
+            const toggleValue = (value) => {
+                if (selectedValues.includes(value)) {
+                    setSelectedValues(selectedValues.filter(v => v !== value));
+                } else if (selectedValues.length < 10) {
+                    setSelectedValues([...selectedValues, value]);
+                }
+            };
+
+            const exportToMarkdown = () => {
+                let md = `---\ncssclasses: []\n---\n# Mes Valeurs Personnelles\n\n`;
+                md += `> Sélectionnées le ${new Date().toLocaleDateString('fr-FR')}\n\n`;
+                
+                const valuesByCategory = {};
+                Object.entries(CATEGORIES).forEach(([cat, data]) => {
+                    const vals = selectedValues.filter(v => data.values.includes(v));
+                    if (vals.length > 0) {
+                        valuesByCategory[cat] = vals;
+                    }
+                });
+
+                Object.entries(valuesByCategory).forEach(([cat, vals]) => {
+                    md += `## ${cat}\n\n`;
+                    vals.forEach(v => {
+                        const def = VALUES_DEFINITIONS[v];
+                        md += `### [[${v}]]\n`;
+                        if (def) md += `> ${def}\n\n`;
+                        else md += `\n`;
+                    });
+                });
+
+                const blob = new Blob([md], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'mes-valeurs.md';
+                a.click();
+            };
+
+            const RadarChart = () => {
+                const categoryScores = useMemo(() => {
+                    return Object.entries(CATEGORIES).map(([name, data]) => {
+                        const count = selectedValues.filter(v => data.values.includes(v)).length;
+                        const percentage = (count / data.values.length) * 100;
+                        return { name, percentage, count, color: data.color };
+                    });
+                }, [selectedValues]);
+
+                const angleStep = (2 * Math.PI) / categoryScores.length;
+                const centerX = 200;
+                const centerY = 200;
+                const maxRadius = 100;
+
+                const points = categoryScores.map((cat, i) => {
+                    const angle = i * angleStep - Math.PI / 2;
+                    const radius = (cat.percentage / 100) * maxRadius;
+                    const x = centerX + radius * Math.cos(angle);
+                    const y = centerY + radius * Math.sin(angle);
+                    return { x, y, ...cat };
+                });
+
+                const pathData = points.map((p, i) => 
+                    `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`
+                ).join(' ') + ' Z';
+
+                return (
+                    <svg viewBox="0 0 400 400" className="w-full h-auto max-w-lg mx-auto">
+                        {[25, 50, 75, 100].map(percent => {
+                            const r = (percent / 100) * maxRadius;
+                            return (
+                                <circle
+                                    key={percent}
+                                    cx={centerX}
+                                    cy={centerY}
+                                    r={r}
+                                    fill="none"
+                                    stroke="#e5e7eb"
+                                    strokeWidth="1"
+                                />
+                            );
+                        })}
+
+                        {categoryScores.map((cat, i) => {
+                            const angle = i * angleStep - Math.PI / 2;
+                            const x = centerX + maxRadius * Math.cos(angle);
+                            const y = centerY + maxRadius * Math.sin(angle);
+                            return (
+                                <line
+                                    key={i}
+                                    x1={centerX}
+                                    y1={centerY}
+                                    x2={x}
+                                    y2={y}
+                                    stroke="#e5e7eb"
+                                    strokeWidth="1"
+                                />
+                            );
+                        })}
+
+                        <path
+                            d={pathData}
+                            fill="rgba(139, 92, 246, 0.3)"
+                            stroke="#8b5cf6"
+                            strokeWidth="2"
+                        />
+
+                        {points.map((p, i) => {
+                            const angle = i * angleStep - Math.PI / 2;
+                            const labelRadius = maxRadius + 50;
+                            const labelX = centerX + labelRadius * Math.cos(angle);
+                            const labelY = centerY + labelRadius * Math.sin(angle);
+                            
+                            let textAnchor = "middle";
+                            if (Math.abs(Math.cos(angle)) > 0.5) {
+                                textAnchor = Math.cos(angle) > 0 ? "start" : "end";
+                            }
+                            
+                            return (
+                                <g key={i}>
+                                    <circle cx={p.x} cy={p.y} r="4" fill="#8b5cf6" />
+                                    <text
+                                        x={labelX}
+                                        y={labelY}
+                                        textAnchor={textAnchor}
+                                        className="text-xs fill-gray-700 font-medium"
+                                        dominantBaseline="middle"
+                                    >
+                                        {p.name}
+                                    </text>
+                                </g>
+                            );
+                        })}
+                    </svg>
+                );
+            };
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-4 sm:p-6">
+                    <div className="max-w-4xl mx-auto">
+                        <header className="text-center mb-6 sm:mb-8">
+                            <div className="flex items-center justify-center gap-3 mb-2">
+                                <Compass className="w-8 h-8 sm:w-10 sm:h-10 text-purple-600" />
+                                <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Boussole de Valeurs</h1>
+                            </div>
+                            <p className="text-sm sm:text-base text-gray-600">Découvrez et sélectionnez vos valeurs personnelles</p>
+                        </header>
+
+                        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6">
+                            <div className="flex flex-wrap gap-2 mb-6">
+                                <button
+                                    onClick={() => setView('categories')}
+                                    className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg transition text-sm sm:text-base ${
+                                        view === 'categories'
+                                            ? 'bg-purple-600 text-white'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    Catégories
+                                </button>
+                                <button
+                                    onClick={() => setView('selected')}
+                                    className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg transition text-sm sm:text-base ${
+                                        view === 'selected'
+                                            ? 'bg-purple-600 text-white'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    <span className="hidden sm:inline">Mes Valeurs</span>
+                                    <span className="sm:hidden">Sélection</span> ({selectedValues.length}/10)
+                                </button>
+                                <button
+                                    onClick={() => setView('compass')}
+                                    className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg transition text-sm sm:text-base ${
+                                        view === 'compass'
+                                            ? 'bg-purple-600 text-white'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    Visualisation
+                                </button>
+                            </div>
+
+                            {view === 'categories' && !selectedCategory && (
+                                <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+                                    {Object.entries(CATEGORIES).map(([name, data]) => {
+                                        const count = selectedValues.filter(v => data.values.includes(v)).length;
+                                        return (
+                                            <button
+                                                key={name}
+                                                onClick={() => setSelectedCategory(name)}
+                                                className="p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-purple-400 transition text-left group"
+                                            >
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-2 sm:gap-3">
+                                                        <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${data.color}`} />
+                                                        <span className="font-semibold text-sm sm:text-base text-gray-800">{name}</span>
+                                                    </div>
+                                                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-purple-600" />
+                                                </div>
+                                                <p className="text-xs sm:text-sm text-gray-600 mt-2">
+                                                    {data.values.length} valeurs · {count} sélectionnée{count > 1 ? 's' : ''}
+                                                </p>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
+
+                            {view === 'categories' && selectedCategory && (
+                                <div>
+                                    <button
+                                        onClick={() => setSelectedCategory(null)}
+                                        className="mb-4 text-sm sm:text-base text-purple-600 hover:text-purple-700 font-medium"
+                                    >
+                                        ← Retour aux catégories
+                                    </button>
+                                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">{selectedCategory}</h2>
+                                    <div className="grid sm:grid-cols-2 gap-3">
+                                        {CATEGORIES[selectedCategory].values.map(value => {
+                                            const isSelected = selectedValues.includes(value);
+                                            const isFull = selectedValues.length >= 10 && !isSelected;
+                                            return (
+                                                <button
+                                                    key={value}
+                                                    onClick={() => !isFull && toggleValue(value)}
+                                                    disabled={isFull}
+                                                    className={`p-3 sm:p-4 rounded-lg border-2 transition text-left ${
+                                                        isSelected
+                                                            ? 'border-purple-600 bg-purple-50'
+                                                            : isFull
+                                                            ? 'border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed'
+                                                            : 'border-gray-200 hover:border-purple-400'
+                                                    }`}
+                                                >
+                                                    <div className="flex items-start justify-between">
+                                                        <div className="flex-1">
+                                                            <div className="font-semibold text-sm sm:text-base text-gray-800">{value}</div>
+                                                            {VALUES_DEFINITIONS[value] && (
+                                                                <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                                                                    {VALUES_DEFINITIONS[value]}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                        {isSelected && <Check className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 ml-2 flex-shrink-0" />}
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+
+                            {view === 'selected' && (
+                                <div>
+                                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Mes Valeurs Sélectionnées</h2>
+                                    {selectedValues.length === 0 ? (
+                                        <p className="text-sm sm:text-base text-gray-600 text-center py-8">
+                                            Aucune valeur sélectionnée. Explorez les catégories pour commencer !
+                                        </p>
+                                    ) : (
+                                        <div className="space-y-3">
+                                            {selectedValues.map(value => (
+                                                <div
+                                                    key={value}
+                                                    className="p-3 sm:p-4 rounded-lg border-2 border-purple-200 bg-purple-50 flex items-start justify-between"
+                                                >
+                                                    <div className="flex-1">
+                                                        <div className="font-semibold text-sm sm:text-base text-gray-800">{value}</div>
+                                                        {VALUES_DEFINITIONS[value] && (
+                                                            <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                                                                {VALUES_DEFINITIONS[value]}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                    <button
+                                                        onClick={() => toggleValue(value)}
+                                                        className="text-gray-400 hover:text-red-600 ml-2 flex-shrink-0"
+                                                    >
+                                                        <X className="w-4 h-4 sm:w-5 sm:h-5" />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {selectedValues.length > 0 && (
+                                        <button
+                                            onClick={exportToMarkdown}
+                                            className="mt-6 w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition flex items-center justify-center gap-2 text-sm sm:text-base"
+                                        >
+                                            <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                                            Exporter pour Obsidian
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+
+                            {view === 'compass' && (
+                                <div>
+                                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 text-center">
+                                        Votre Boussole de Valeurs
+                                    </h2>
+                                    {selectedValues.length === 0 ? (
+                                        <p className="text-sm sm:text-base text-gray-600 text-center py-8">
+                                            Sélectionnez des valeurs pour voir votre boussole personnalisée.
+                                        </p>
+                                    ) : (
+                                        <>
+                                            <RadarChart />
+                                            <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+                                                {Object.entries(CATEGORIES).map(([name, data]) => {
+                                                    const count = selectedValues.filter(v => data.values.includes(v)).length;
+                                                    return (
+                                                        <div key={name} className="flex items-center gap-2">
+                                                            <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${data.color} flex-shrink-0`} />
+                                                            <span className="text-xs sm:text-sm text-gray-700">
+                                                                {name}: {count}
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<ValuesCompass />, document.getElementById('root'));
+    </script>
+</body>
+</html>
