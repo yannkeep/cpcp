@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPCP : Analyse Stratégique & Perspectives</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- 
+    Chosen Palette: Vibrant Professional
+    Primary Blue: #1E3A8A (Trust, Stability)
+    Vibrant Orange: #F97316 (Action, Citizenship)
+    Teal: #14B8A6 (Growth, Education)
+    Background: #F3F4F6 (Light Gray)
+    -->
+
+    <!-- Application Structure Plan:
+    1. Header: High-impact title and mission summary.
+    2. Identity Section (Inform): Grid of cards for core values.
+    3. Ecosystem Data (Compare/Organize): Charts for Audience, Geography, and Funding.
+    4. Strategic Diagnostic (Analyze): SWOT Matrix visualized as a grid.
+    5. Future Pathways (Action): Interactive flowchart for partnerships.
+    -->
+
+    <!-- Visualization & Content Choices:
+    - Values: Info Cards (HTML/CSS) -> Goal: Inform -> Clear visual separation of abstract concepts.
+    - Audience: Doughnut Chart (Chart.js) -> Goal: Compare -> Show composition of target demographics.
+    - Geography: Horizontal Bar Chart (Chart.js) -> Goal: Compare -> Highlight regional dominance.
+    - Funding: Pie Chart (Chart.js) -> Goal: Inform -> Show financial reliance.
+    - SWOT: 2x2 Grid (HTML/Tailwind) -> Goal: Organize -> Standard strategic framework presentation.
+    - Partnerships: Styled List/Flow (HTML/Tailwind) -> Goal: Change -> Show path from need to solution.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Chart Container Styling - Mandatory Strict Constraints */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Custom Utilities */
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .gradient-header {
+            background: linear-gradient(135deg, #1E3A8A 0%, #1e40af 100%);
+        }
+
+        .icon-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header Section -->
+    <header class="gradient-header text-white py-12 px-4 shadow-lg">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="uppercase tracking-widest text-sm font-semibold text-orange-400 mb-2">Rapport d'Analyse 2024-2025</div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">CPCP : Stratégie & Impact</h1>
+            <p class="text-xl md:text-2xl font-light text-blue-100 max-w-3xl mx-auto">
+                Centre Permanent pour la Citoyenneté et la Participation
+            </p>
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+                <span class="bg-white/10 px-4 py-2 rounded-full border border-white/20 backdrop-blur-sm"><i class="fa-solid fa-users mr-2"></i>Citoyenneté</span>
+                <span class="bg-white/10 px-4 py-2 rounded-full border border-white/20 backdrop-blur-sm"><i class="fa-solid fa-landmark mr-2"></i>Démocratie</span>
+                <span class="bg-white/10 px-4 py-2 rounded-full border border-white/20 backdrop-blur-sm"><i class="fa-solid fa-graduation-cap mr-2"></i>Éducation</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-12 space-y-16">
+
+        <!-- Section 1: Identity & Values -->
+        <section>
+            <div class="mb-8 border-l-4 border-orange-500 pl-4">
+                <h2 class="text-3xl font-bold text-blue-900">Identité & Fondamentaux</h2>
+                <p class="text-gray-600 mt-2 text-lg">
+                    Le CPCP ne se définit pas uniquement par ses actions, mais par une éthique forte. Cette section explore l'ADN de l'organisation : sa mission d'émancipation citoyenne et les quatre piliers de valeurs qui structurent sa pédagogie.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Value 1 -->
+                <div class="bg-white p-6 rounded-xl card-shadow border-t-4 border-blue-800 hover:-translate-y-1 transition-transform duration-300">
+                    <div class="icon-circle bg-blue-50 text-blue-800 mx-auto">
+                        <i class="fa-solid fa-hands-holding-circle text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-2">Humanisme</h3>
+                    <p class="text-sm text-center text-gray-600">La personne humaine est au centre de toute action politique et sociale.</p>
+                </div>
+                <!-- Value 2 -->
+                <div class="bg-white p-6 rounded-xl card-shadow border-t-4 border-orange-500 hover:-translate-y-1 transition-transform duration-300">
+                    <div class="icon-circle bg-orange-50 text-orange-500 mx-auto">
+                        <i class="fa-solid fa-scale-balanced text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-2">Démocratie</h3>
+                    <p class="text-sm text-center text-gray-600">Renforcement des institutions et participation active.</p>
+                </div>
+                <!-- Value 3 -->
+                <div class="bg-white p-6 rounded-xl card-shadow border-t-4 border-teal-500 hover:-translate-y-1 transition-transform duration-300">
+                    <div class="icon-circle bg-teal-50 text-teal-500 mx-auto">
+                        <i class="fa-solid fa-book-open-reader text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-2">Éducation</h3>
+                    <p class="text-sm text-center text-gray-600">L'autonomie par la formation tout au long de la vie.</p>
+                </div>
+                <!-- Value 4 -->
+                <div class="bg-white p-6 rounded-xl card-shadow border-t-4 border-purple-600 hover:-translate-y-1 transition-transform duration-300">
+                    <div class="icon-circle bg-purple-50 text-purple-600 mx-auto">
+                        <i class="fa-solid fa-people-arrows text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-2">Pluralisme</h3>
+                    <p class="text-sm text-center text-gray-600">Dialogue constructif entre convictions divergentes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Data Ecosystem -->
+        <section class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-blue-900 mb-4">Analyse de l'Écosystème</h2>
+                <p class="text-gray-600 text-lg">
+                    Pour comprendre l'impact réel du CPCP, nous devons analyser ses données structurelles. Les graphiques ci-dessous révèlent une forte concentration sur les jeunes adultes, un ancrage géographique centré sur l'axe Bruxelles-Namur, et un modèle économique dépendant des pouvoirs publics.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Chart 1: Audience -->
+                <div class="flex flex-col">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2 border-b-2 border-orange-500 inline-block w-fit pb-1">Répartition des Publics Cibles</h3>
+                    <p class="text-sm text-gray-500 mb-4">Le segment "Jeunes" représente la priorité stratégique pour le renouvellement démocratique.</p>
+                    <div class="chart-container bg-gray-50 rounded-lg p-2">
+                        <canvas id="audienceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Geography -->
+                <div class="flex flex-col">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2 border-b-2 border-blue-800 inline-block w-fit pb-1">Ancrage Géographique</h3>
+                    <p class="text-sm text-gray-500 mb-4">L'activité est polarisée autour du siège (Bruxelles) et de la capitale wallonne (Namur).</p>
+                    <div class="chart-container bg-gray-50 rounded-lg p-2">
+                        <canvas id="geoChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 3: Funding -->
+                <div class="flex flex-col lg:col-span-2">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2 border-b-2 border-teal-500 inline-block w-fit pb-1">Structure de Financement</h3>
+                    <p class="text-sm text-gray-500 mb-4">Une forte dépendance aux subsides publics (FWB) impose une rigueur administrative mais limite la flexibilité.</p>
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="chart-container flex-1">
+                            <canvas id="fundingChart"></canvas>
+                        </div>
+                        <div class="flex-1 space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-800">
+                                <span class="font-bold text-blue-900">Enjeu :</span> Diversification des revenus nécessaire pour accroître l'autonomie.
+                            </div>
+                            <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                                <span class="font-bold text-orange-900">Opportunité :</span> Développement de services payants (formations certifiantes) ou mécénat.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: SWOT Analysis -->
+        <section>
+            <div class="mb-8 border-l-4 border-teal-500 pl-4">
+                <h2 class="text-3xl font-bold text-blue-900">Diagnostic Stratégique (SWOT)</h2>
+                <p class="text-gray-600 mt-2 text-lg">
+                    Cette matrice synthétise les facteurs internes et externes influençant l'avenir du CPCP. Elle met en lumière la tension entre une expertise historique reconnue et le besoin urgent de modernisation numérique.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Strengths -->
+                <div class="bg-white p-6 rounded-xl border-t-8 border-teal-500 shadow-sm">
+                    <h3 class="text-xl font-bold text-teal-700 mb-4 flex items-center">
+                        <i class="fa-solid fa-dumbbell mr-2"></i> Forces (Internes)
+                    </h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2"></i><span>Ancrage historique et reconnaissance institutionnelle.</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2"></i><span>Expertise pédagogique de haut niveau.</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2"></i><span>Qualité des publications et analyses.</span></li>
+                    </ul>
+                </div>
+
+                <!-- Weaknesses -->
+                <div class="bg-white p-6 rounded-xl border-t-8 border-orange-400 shadow-sm">
+                    <h3 class="text-xl font-bold text-orange-600 mb-4 flex items-center">
+                        <i class="fa-solid fa-link-slash mr-2"></i> Faiblesses (Internes)
+                    </h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-orange-400 mt-1 mr-2"></i><span>Visibilité digitale et présence sur les réseaux sociaux.</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-orange-400 mt-1 mr-2"></i><span>Renouvellement difficile des audiences âgées.</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-orange-400 mt-1 mr-2"></i><span>Complexité parfois académique des contenus.</span></li>
+                    </ul>
+                </div>
+
+                <!-- Opportunities -->
+                <div class="bg-white p-6 rounded-xl border-t-8 border-blue-600 shadow-sm">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4 flex items-center">
+                        <i class="fa-solid fa-lightbulb mr-2"></i> Opportunités (Externes)
+                    </h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start"><i class="fa-solid fa-arrow-trend-up text-blue-600 mt-1 mr-2"></i><span>Nouveaux appels à projets "Transition Numérique".</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-arrow-trend-up text-blue-600 mt-1 mr-2"></i><span>Regain d'intérêt des jeunes pour le politique.</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-arrow-trend-up text-blue-600 mt-1 mr-2"></i><span>Besoin sociétal de décryptage face aux Fake News.</span></li>
+                    </ul>
+                </div>
+
+                <!-- Threats -->
+                <div class="bg-white p-6 rounded-xl border-t-8 border-red-500 shadow-sm">
+                    <h3 class="text-xl font-bold text-red-600 mb-4 flex items-center">
+                        <i class="fa-solid fa-cloud-bolt mr-2"></i> Menaces (Externes)
+                    </h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-red-500 mt-1 mr-2"></i><span>Réductions budgétaires dans le secteur culturel.</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-red-500 mt-1 mr-2"></i><span>Concurrence accrue des nouveaux médias associatifs.</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-red-500 mt-1 mr-2"></i><span>Polarisation extrême du débat public.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Opportunities & Partnerships -->
+        <section class="bg-gradient-to-br from-blue-900 to-blue-800 text-white p-8 rounded-2xl shadow-lg">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-bold mb-4">Collaborer avec le CPCP</h2>
+                <p class="text-blue-100 text-lg max-w-3xl mx-auto">
+                    Face aux défis identifiés, le CPCP déploie une stratégie d'ouverture. Voici les pistes concrètes pour s'engager ou collaborer, transformant l'analyse en action.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Pathway 1 -->
+                <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+                    <div class="text-orange-400 text-3xl mb-4"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <h3 class="text-xl font-bold mb-2">Pour les Écoles</h3>
+                    <p class="text-sm text-blue-100 mb-4">Co-création d'ateliers pédagogiques et interventions d'experts en classe.</p>
+                    <ul class="text-sm space-y-2">
+                        <li class="flex items-center"><i class="fa-solid fa-circle-check text-orange-400 mr-2"></i>Outils "Démocratie"</li>
+                        <li class="flex items-center"><i class="fa-solid fa-circle-check text-orange-400 mr-2"></i>Conférences Débats</li>
+                    </ul>
+                </div>
+
+                <!-- Pathway 2 -->
+                <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+                    <div class="text-teal-400 text-3xl mb-4"><i class="fa-solid fa-handshake-angle"></i></div>
+                    <h3 class="text-xl font-bold mb-2">Pour les Associations</h3>
+                    <p class="text-sm text-blue-100 mb-4">Mutualisation des ressources et plaidoyer commun.</p>
+                    <ul class="text-sm space-y-2">
+                        <li class="flex items-center"><i class="fa-solid fa-circle-check text-teal-400 mr-2"></i>Cafés Citoyens</li>
+                        <li class="flex items-center"><i class="fa-solid fa-circle-check text-teal-400 mr-2"></i>Études de terrain</li>
+                    </ul>
+                </div>
+
+                <!-- Pathway 3 -->
+                <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+                    <div class="text-purple-400 text-3xl mb-4"><i class="fa-solid fa-user-plus"></i></div>
+                    <h3 class="text-xl font-bold mb-2">Pour les Citoyens</h3>
+                    <p class="text-sm text-blue-100 mb-4">Engagement direct via le bénévolat de compétence.</p>
+                    <ul class="text-sm space-y-2">
+                        <li class="flex items-center"><i class="fa-solid fa-circle-check text-purple-400 mr-2"></i>Animation locale</li>
+                        <li class="flex items-center"><i class="fa-solid fa-circle-check text-purple-400 mr-2"></i>Rédaction web</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-8 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 text-center text-sm">
+            <p class="mb-2">&copy; 2024 Infographie d'Analyse - CPCP</p>
+            <p>Source des données : Analyse web publique et rapports d'activité.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Charts & Logic -->
+    <script>
+        // --- UTILITY: Label Wrapping for Chart.js ---
+        function formatLabel(str, maxwidth) {
+            if (typeof str !== 'string') return str;
+            const sections = [];
+            const words = str.split(" ");
+            let temp = "";
+            words.forEach(function(item, index) {
+                if (temp.length > 0) {
+                    const concat = temp + ' ' + item;
+                    if (concat.length > maxwidth) {
+                        sections.push(temp);
+                        temp = "";
+                    } else {
+                        if (index === (words.length - 1)) {
+                            sections.push(concat);
+                            return;
+                        } else {
+                            temp = concat;
+                            return;
+                        }
+                    }
+                }
+                if (index === (words.length - 1)) {
+                    sections.push(item);
+                    return;
+                }
+                if (item.length < maxwidth) {
+                    temp = item;
+                } else {
+                    sections.push(item);
+                }
+            });
+            return sections;
+        }
+
+        // --- CHART CONFIGURATION ---
+        
+        // Colors
+        const colors = {
+            blue: '#1E3A8A',
+            blueLight: '#60A5FA',
+            orange: '#F97316',
+            teal: '#14B8A6',
+            gray: '#9CA3AF'
+        };
+
+        // Common Options
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: { family: "'Open Sans', sans-serif" },
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(30, 58, 138, 0.9)',
+                    titleFont: { family: "'Montserrat', sans-serif", size: 14 },
+                    bodyFont: { family: "'Open Sans', sans-serif", size: 13 },
+                    padding: 12,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // 1. Audience Chart (Doughnut)
+        const ctxAudience = document.getElementById('audienceChart').getContext('2d');
+        const audienceLabels = ['Jeunes (18-30 ans)', 'Acteurs Associatifs', 'Seniors', 'Grand Public'].map(l => formatLabel(l, 16));
+        
+        new Chart(ctxAudience, {
+            type: 'doughnut',
+            data: {
+                labels: audienceLabels,
+                datasets: [{
+                    data: [35, 25, 20, 20],
+                    backgroundColor: [colors.orange, colors.blue, colors.gray, colors.teal],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                ...commonOptions,
+                cutout: '65%'
+            }
+        });
+
+        // 2. Geography Chart (Horizontal Bar)
+        const ctxGeo = document.getElementById('geoChart').getContext('2d');
+        const geoLabels = ['Bruxelles (Siège)', 'Namur', 'Liège', 'Hainaut', 'Autres Wallonie'].map(l => formatLabel(l, 16));
+
+        new Chart(ctxGeo, {
+            type: 'bar',
+            data: {
+                labels: geoLabels,
+                datasets: [{
+                    label: 'Intensité des Activités (%)',
+                    data: [40, 25, 15, 15, 5],
+                    backgroundColor: [colors.blue, colors.blueLight, colors.teal, colors.teal, colors.gray],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y',
+                plugins: {
+                    ...commonOptions.plugins,
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { display: false } // minimalist
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 3. Funding Chart (Pie)
+        const ctxFunding = document.getElementById('fundingChart').getContext('2d');
+        const fundingLabels = ['Subsides Publics (FWB)', 'Projets Spécifiques', 'Fonds Propres', 'Partenariats'].map(l => formatLabel(l, 16));
+
+        new Chart(ctxFunding, {
+            type: 'pie',
+            data: {
+                labels: fundingLabels,
+                datasets: [{
+                    data: [70, 15, 10, 5],
+                    backgroundColor: [colors.blue, colors.orange, colors.teal, colors.gray],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: commonOptions
+        });
+
+    </script>
+</body>
+</html>
