@@ -1,1512 +1,576 @@
-
 <!DOCTYPE html>
-<!-- saved from url=(0047)https://rg-ashy.vercel.app/index-detective.html -->
-<html lang="fr"><head><script type='text/javascript' src='https://dl.ouaisfi.eu/bvj5aHnJknSa_wYsAn-7Lu7xgE3gqxTUI9nifLcy9byP8QKZJ4erL029eVygQk-dzI8KovoAg4nX8Bh6lOZD8yXzoq5Lc4zpk23nTTUWMncdbOi3D5ZdEciiIBjNguYgYG_WAOwd4I6tiwIWn1BFDSYGE1SK7LOW8Kp0_Is_PX4GkuQj4ND_qty7WRYDjzsHCpsB89lzhyojsyg3jCM3_ElFRpwJaOpBSLL1d6GbPJ_xVtAni1fKqvJmpnlhCyg69msHoBdMQGIOedpFEmQHOHjwRXr0Gg1lH57MsyljQ-a7WsTxiZ9vm9hCnFGPRajg7Gp-ZNL45WHcsliZWMxNYJKXwSd07vOpg-mrQdoANyeJ5QJS8glV9m_VKuP8hh5QHmIxRScMOngYhfEgnCwgVt2KPNMKBBX1Z9YgFa8jO28DRcdmPdMUVRSOu2mdbj7uTxAUsgHK-L21iiLFGryJJF-iw88BA797'></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript" src="./veilleux_files/YVKYRjC-gklf3KrkN7C66IBL07ZMPb4VBiAA4Wa7ZJ6Qo24I8Za_Dvpre2CgjY5uDzNnenWOGz3ozlis0upm4fkKVBlDqLB4EyKVTvLpQC8AQqNN9RQUQvWfdYI8UVMUkURBltACfO2tBk47VZyaOevIudT2x3m4IRtfkVyrYghv39DcT1Jcc_D13XgAnUMIiZuDl1wkxpIZGHBY7g-cLLh"></script>
-  
-  <title>Agence MILOU – Détective privé</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root {
-      --bg: #020617;
-      --bg-soft: #020617;
-      --card: #020617;
-      --accent: #22c55e;
-      --accent2: #38bdf8;
-      --accent3: #f97316;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --border: rgba(148, 163, 184, 0.5);
-      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --radius-xl: 18px;
-      --shadow-soft: 0 22px 48px rgba(0, 0, 0, 0.95);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      min-height: 100vh;
-      font-family: var(--font-main);
-      background:
-        radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.35), transparent 55%),
-        radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.3), transparent 55%),
-        #020617;
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image: linear-gradient(
-        rgba(15, 23, 42, 0.22) 1px,
-        transparent 1px
-      );
-      background-size: 100% 2px;
-      mix-blend-mode: soft-light;
-      opacity: 0.7;
-      z-index: 1;
-    }
-
-    a { color: inherit; }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(14px);
-      background:
-        radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.26), transparent 60%),
-        rgba(3, 7, 18, 0.96);
-      border-bottom: 1px solid rgba(30, 64, 175, 0.8);
-      padding: 8px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95);
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .logo {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      background:
-        conic-gradient(from 180deg, #22c55e, #0ea5e9, #22c55e);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #22c55e;
-      position: relative;
-      box-shadow:
-        0 0 0 2px #020617,
-        0 0 28px rgba(34, 197, 94, 0.9);
-    }
-
-    .logo::before {
-      content: "";
-      position: absolute;
-      inset: 4px;
-      border-radius: inherit;
-      background: radial-gradient(circle at 30% 20%, #020617, #020617);
-    }
-
-    .logo span {
-      position: relative;
-      letter-spacing: 0.08em;
-    }
-
-    .org-name {
-      font-size: 0.98rem;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    .org-sub {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-family: var(--font-mono);
-    }
-
-    .header-right {
-      text-align: right;
-      font-size: 0.74rem;
-      color: var(--muted);
-    }
-
-    .tagline {
-      font-family: var(--font-mono);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #e5e7eb;
-    }
-
-    .header-right .hint {
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-
-    /* Layout global */
-    .layout {
-      flex: 1;
-      display: grid;
-      grid-template-columns: minmax(0, 230px) minmax(0, 1.9fr) minmax(0, 1.2fr);
-      gap: 10px;
-      padding: 12px;
-      position: relative;
-      z-index: 2;
-    }
-
-    @media (max-width: 980px) {
-      .layout {
-        grid-template-columns: 230px minmax(0, 1fr);
-        grid-template-rows: auto auto;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .layout {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-      }
-    }
-
-    /* Sidebar */
-    .sidebar {
-      background: rgba(3, 7, 18, 0.98);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      padding: 10px 9px 11px;
-      font-size: 0.8rem;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .nav-title {
-      font-size: 0.74rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--muted);
-      margin-bottom: 4px;
-      font-family: var(--font-mono);
-    }
-
-    .nav-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 6px;
-    }
-
-    .nav-btn {
-      width: 100%;
-      text-align: left;
-      border-radius: 999px;
-      border: 1px solid rgba(51, 65, 85, 0.95);
-      background: rgba(15, 23, 42, 0.98);
-      color: var(--muted);
-      padding: 5px 9px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      font-size: 0.8rem;
-      transition: background 0.16s, color 0.16s, border-color 0.16s,
-                  transform 0.16s, box-shadow 0.16s;
-    }
-
-    .nav-btn span.key {
-      font-size: 0.7rem;
-      padding: 1px 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(75, 85, 99, 0.9);
-      font-family: var(--font-mono);
-    }
-
-    .nav-btn:hover {
-      background: rgba(15, 23, 42, 1);
-      color: var(--text);
-      border-color: rgba(56, 189, 248, 0.9);
-      transform: translateY(-1px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.95);
-    }
-
-    .nav-btn.active {
-      background:
-        radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.24), transparent 60%);
-      border-color: rgba(34, 197, 94, 0.9);
-      color: var(--text);
-    }
-
-    .sidebar-footer {
-      margin-top: 6px;
-      padding-top: 5px;
-      border-top: 1px solid rgba(51, 65, 85, 0.9);
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    /* Main panel */
-    .main-panel {
-      background:
-        radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.2), transparent 55%),
-        radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.18), transparent 55%),
-        var(--bg-soft);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      padding: 12px 12px 14px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .main-panel::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      pointer-events: none;
-      background-image: repeating-linear-gradient(
-        135deg,
-        rgba(15, 23, 42, 0.25),
-        rgba(15, 23, 42, 0.25) 1px,
-        transparent 1px,
-        transparent 4px
-      );
-      opacity: 0.5;
-      mix-blend-mode: soft-light;
-    }
-
-    .main-inner {
-      position: relative;
-      z-index: 2;
-    }
-
-    .panel-title {
-      font-size: 1rem;
-      margin-bottom: 3px;
-    }
-
-    .panel-sub {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
-      gap: 8px;
-    }
-
-    @media (max-width: 900px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: rgba(3, 7, 18, 0.98);
-      border-radius: 14px;
-      border: 1px solid rgba(51, 65, 85, 0.98);
-      padding: 8px 9px 9px;
-      font-size: 0.8rem;
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.9);
-    }
-
-    .card h3 {
-      font-size: 0.9rem;
-      margin-bottom: 4px;
-    }
-
-    .card p {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-bottom: 4px;
-    }
-
-    .pill {
-      border-radius: 999px;
-      border: 1px solid rgba(75, 85, 99, 0.95);
-      padding: 2px 7px;
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-family: var(--font-mono);
-    }
-
-    .pill.alert {
-      border-color: rgba(239, 68, 68, 0.9);
-      color: #fecaca;
-    }
-
-    .news-list {
-      list-style: none;
-      margin-top: 4px;
-    }
-
-    .news-item {
-      margin-bottom: 5px;
-    }
-
-    .news-item strong {
-      display: block;
-      font-size: 0.82rem;
-    }
-
-    .news-meta {
-      font-size: 0.7rem;
-      color: var(--muted);
-      font-family: var(--font-mono);
-    }
-
-    .quick-links {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .quick-link {
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.98);
-      padding: 6px 7px;
-      font-size: 0.75rem;
-      background: #020617;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      text-align: left;
-      transition: border-color 0.16s, box-shadow 0.16s, transform 0.16s;
-    }
-
-    .quick-link span.label {
-      font-weight: 500;
-    }
-
-    .quick-link span.meta {
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-
-    .quick-link:hover {
-      border-color: rgba(56, 189, 248, 0.9);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.95);
-      transform: translateY(-1px);
-    }
-
-    /* Section Dossiers / PDF */
-    .doc-list {
-      list-style: none;
-      margin-top: 4px;
-      font-size: 0.78rem;
-    }
-
-    .doc-item {
-      margin-bottom: 5px;
-      padding-bottom: 4px;
-      border-bottom: 1px dashed rgba(55, 65, 81, 0.9);
-    }
-
-    .doc-item:last-child {
-      border-bottom: none;
-    }
-
-    .doc-title-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .doc-buttons {
-      display: flex;
-      gap: 4px;
-    }
-
-    .btn-xs {
-      border-radius: 999px;
-      border: 1px solid rgba(56, 189, 248, 0.9);
-      background: rgba(15, 23, 42, 0.98);
-      color: #e0f2fe;
-      font-size: 0.7rem;
-      padding: 2px 7px;
-      cursor: pointer;
-      font-family: var(--font-mono);
-      transition: background 0.16s, box-shadow 0.16s, transform 0.16s;
-    }
-
-    .btn-xs:hover {
-      background: rgba(15, 23, 42, 1);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.95);
-      transform: translateY(-1px);
-    }
-
-    .doc-meta {
-      font-size: 0.7rem;
-      color: var(--muted);
-      font-family: var(--font-mono);
-      margin-top: 2px;
-    }
-
-    /* Right panel : console & outils */
-    .side-panel {
-      background: rgba(3, 7, 18, 0.98);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-soft);
-      padding: 10px 9px 11px;
-      font-size: 0.8rem;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .side-panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(
-        120deg,
-        rgba(56, 189, 248, 0.22),
-        transparent 45%,
-        rgba(34, 197, 94, 0.14),
-        transparent 70%
-      );
-      mix-blend-mode: soft-light;
-      opacity: 0.6;
-      pointer-events: none;
-    }
-
-    .side-inner {
-      position: relative;
-      z-index: 2;
-    }
-
-    .side-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .side-header h2 {
-      font-size: 0.9rem;
-    }
-
-    .badge-soft {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      padding: 2px 7px;
-      font-size: 0.7rem;
-      color: var(--muted);
-      font-family: var(--font-mono);
-    }
-
-    .console {
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.98);
-      background: #020617;
-      padding: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .console-output {
-      background: #020617;
-      border-radius: 6px;
-      border: 1px solid rgba(31, 41, 55, 0.98);
-      padding: 4px 5px;
-      height: 140px;
-      overflow-y: auto;
-      color: #e5e7eb;
-    }
-
-    .console-line {
-      margin-bottom: 2px;
-    }
-
-    .console-prefix {
-      color: #22c55e;
-      margin-right: 4px;
-    }
-
-    .console-input-row {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 4px;
-    }
-
-    .console-input-row span {
-      color: #22c55e;
-    }
-
-    .console-input-row input {
-      flex: 1;
-      border-radius: 4px;
-      border: 1px solid rgba(55, 65, 81, 0.98);
-      background: #020617;
-      color: #e5e7eb;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 3px 5px;
-      outline: none;
-    }
-
-    .console-input-row input::placeholder {
-      color: #64748b;
-    }
-
-    .notes-area {
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.98);
-      background: #020617;
-      padding: 6px;
-      margin-top: 4px;
-    }
-
-    .notes-area label {
-      font-size: 0.76rem;
-      color: var(--muted);
-      display: block;
-      margin-bottom: 3px;
-    }
-
-    .notes-area textarea {
-      width: 100%;
-      min-height: 80px;
-      border-radius: 8px;
-      border: 1px solid rgba(31, 41, 55, 0.98);
-      background: #020617;
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      padding: 5px 7px;
-      resize: vertical;
-      outline: none;
-    }
-
-    .btn-small {
-      margin-top: 5px;
-      border-radius: 999px;
-      border: 1px solid rgba(56, 189, 248, 0.9);
-      background: rgba(15, 23, 42, 0.98);
-      color: #e0f2fe;
-      font-size: 0.74rem;
-      padding: 4px 8px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-family: var(--font-mono);
-      transition: background 0.16s, box-shadow 0.16s, transform 0.16s;
-    }
-
-    .btn-small:hover {
-      background: rgba(15, 23, 42, 1);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.95);
-      transform: translateY(-1px);
-    }
-
-    .embed-card {
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.98);
-      background: #020617;
-      padding: 6px;
-      margin-top: 6px;
-      font-size: 0.78rem;
-    }
-
-    .embed-card h3 {
-      font-size: 0.82rem;
-      margin-bottom: 4px;
-    }
-
-    .hint {
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    iframe {
-      border: none;
-      border-radius: 8px;
-    }
-
-    .penguin-box {
-      border-radius: 10px;
-      border: 1px dashed rgba(148, 163, 184, 0.7);
-      padding: 4px;
-      text-align: center;
-      margin-top: 4px;
-    }
-
-    .penguin-box img {
-      max-width: 100%;
-      border-radius: 8px;
-    }
-
-    footer {
-      padding: 6px 12px 8px;
-      font-size: 0.72rem;
-      color: var(--muted);
-      border-top: 1px solid rgba(30, 64, 175, 0.7);
-      background: rgba(3, 7, 18, 0.98);
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 2;
-    }
-
-    @media (max-width: 760px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      footer {
-        flex-direction: column;
-      }
-    }
-
-    /* Sections main */
-    .section-root { display: none; }
-    .section-root.active { display: block; }
-
-    /* Annuaire / intranet */
-    .directory-list {
-      list-style: none;
-      margin-top: 6px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 6px;
-    }
-
-    .directory-card {
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.98);
-      background: #020617;
-      padding: 6px 7px;
-      font-size: 0.78rem;
-    }
-
-    .directory-card strong {
-      display: block;
-      margin-bottom: 2px;
-    }
-
-    .directory-role {
-      font-size: 0.75rem;
-      color: #a5b4fc;
-    }
-
-    .directory-meta {
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    .directory-filter {
-      margin-top: 4px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 0.74rem;
-    }
-
-    .directory-filter input,
-    .directory-filter select {
-      border-radius: 999px;
-      border: 1px solid rgba(55, 65, 81, 0.98);
-      background: #020617;
-      color: var(--text);
-      padding: 3px 7px;
-      font-size: 0.75rem;
-      outline: none;
-    }
-
-    .task-list {
-      list-style: none;
-      font-size: 0.78rem;
-      margin-top: 4px;
-    }
-
-    .task-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 3px;
-    }
-
-    .task-item input {
-      width: 14px;
-      height: 14px;
-    }
-
-    .tasks {
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.98);
-      background: #020617;
-      padding: 6px;
-      margin-top: 6px;
-    }
-
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.9);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
-    }
-
-    .modal-overlay.visible {
-      display: flex;
-    }
-
-    .modal {
-      width: min(960px, 96vw);
-      height: min(560px, 92vh);
-      background: #020617;
-      border-radius: 16px;
-      border: 1px solid rgba(148, 163, 184, 0.8);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .modal-header {
-      padding: 8px 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(55, 65, 81, 0.98);
-      font-size: 0.85rem;
-    }
-
-    .modal-header h3 {
-      font-size: 0.9rem;
-    }
-
-    .modal-header button {
-      border-radius: 999px;
-      border: 1px solid rgba(248, 113, 113, 0.9);
-      background: rgba(127, 29, 29, 0.95);
-      color: #fee2e2;
-      font-size: 0.76rem;
-      padding: 3px 8px;
-      cursor: pointer;
-      font-family: var(--font-mono);
-    }
-
-    .modal-body {
-      flex: 1;
-      display: grid;
-      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr);
-      gap: 6px;
-      padding: 6px;
-    }
-
-    @media (max-width: 860px) {
-      .modal-body {
-        grid-template-columns: 1fr;
-        grid-template-rows: minmax(0, 1.3fr) minmax(0, 1fr);
-      }
-    }
-
-    .modal-pdf {
-      background: #020617;
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.98);
-      overflow: hidden;
-    }
-
-    .modal-side {
-      background: #020617;
-      border-radius: 10px;
-      border: 1px solid rgba(55, 65, 81, 0.98);
-      padding: 6px;
-      font-size: 0.78rem;
-    }
-
-    .modal-side h4 {
-      font-size: 0.82rem;
-      margin-bottom: 3px;
-    }
-
-    .modal-side p {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-
-    .modal-side iframe {
-      width: 100%;
-      height: 120px;
-    }
-
-  </style>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEAK: Rapport Deborsu-OuaisFieu - Analyse de la Fraude Sociale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: "Energetic & Playful" (High Contrast for 'Alert' feel) -->
+    <!-- Primary Blue: #2563EB (Authority) -->
+    <!-- Alert Red: #DC2626 (Violation) -->
+    <!-- Warning Yellow: #FBBF24 (Highlight) -->
+    <!-- Dark Background: #111827 (Deep State) -->
+    <!-- Light Background: #F3F4F6 (Paper) -->
+
+    <!-- Application Structure Plan:
+         Theme: "Modern Leaked Dashboard". A clean, high-tech, yet slightly bureaucratic aesthetic.
+         1. Header: "Confidential" branding, navigation.
+         2. Hero: The "Leak" Context - setting the satirical tone.
+         3. Section 1 (Overview): The 99.9% Stat (Donut Chart) + KPIs. Goal: Inform.
+         4. Section 2 (The Offenses): Breakdown of absurd crimes (Bar Chart). Goal: Compare.
+         5. Section 3 (Temporal Analysis): Productivity vs. "Fraud" over a workday (Line Chart). Goal: Change.
+         6. Section 4 (Regional Analysis): Flanders vs Wallonia vs Brussels habits (Stacked Bar). Goal: Compare.
+         7. Section 5 (The Evidence): Interactive Card Grid of specific infractions. Goal: Organize.
+         8. Section 6 (Audit): Interactive Quiz. Goal: Engagement.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Global Fraud Rate -> Inform -> Donut Chart -> High impact visual of the majority.
+         2. Top Infractions -> Compare -> Horizontal Bar Chart -> Readable labels for long crime names (Label wrapping applied).
+         3. Daily "Crime" Timeline -> Change -> Line Chart -> Shows trends over the workday (coffee breaks).
+         4. Regional Distribution -> Compare -> Stacked Bar -> Compares 3 regions across crime categories.
+         5. Evidence List -> Organize -> HTML Grid + JS Filter -> visual browsing of text content.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
+        }
+        .font-mono {
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        /* Chart Container Styling - Mandatory Strictness */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px; /* Constrained width for readability */
+            height: 400px;    /* Default height */
+            max-height: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        .stamp {
+            border: 4px solid #DC2626;
+            color: #DC2626;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            transform: rotate(-3deg);
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.8;
+            mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='); /* Simple noise mask concept, or just CSS borders */
+        }
+
+        .paper-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-top: 4px solid #2563EB;
+        }
+
+        .highlight-marker {
+            background: linear-gradient(120deg, #FBBF24 0%, #FBBF24 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 88%;
+        }
+    </style>
 </head>
-<body>
-<header>
-  <div class="header-left">
-    <div class="logo"><span>MI</span></div>
-    <div>
-      <div class="org-name">AGENCE MILOU</div>
-      <div class="org-sub">Détective privé · renseignement discret &amp; légal</div>
-    </div>
-  </div>
-  <div class="header-right">
-    <div class="tagline">“Follow the facts, not the noise.”</div>
-    <div class="hint">Vitrine + intranet + console d’opérations dans un seul fichier HTML.</div>
-  </div>
-</header>
+<body class="antialiased selection:bg-yellow-200 selection:text-black">
 
-<div class="layout">
-  <!-- Sidebar navigation -->
-  <aside class="sidebar">
-    <div>
-      <div class="nav-title">Surface</div>
-      <ul class="nav-list">
-        <li><button class="nav-btn active" data-section="public">Vitrine agence <span class="key">1</span></button></li>
-        <li><button class="nav-btn" data-section="console">Console d’opérations <span class="key">2</span></button></li>
-        <li><button class="nav-btn" data-section="intranet">Intranet &amp; équipe <span class="key">3</span></button></li>
-        <li><button class="nav-btn" data-section="dossiers">Dossiers &amp; annexes PDF <span class="key">4</span></button></li>
-        <li><button class="nav-btn" data-section="pause">Outils / Pause pingouins <span class="key">5</span></button></li>
-      </ul>
-    </div>
-    <div class="sidebar-footer">
-      💡 Tout est statique : tu peux renommer l’agence, les contacts, les docs PDF et les liens
-      YouTube/Spotify directement dans ce fichier.
-    </div>
-  </aside>
-
-  <!-- Main panel -->
-  <main class="main-panel">
-    <div class="main-inner">
-      <!-- Section vitrine -->
-      <section id="section-public" class="section-root active">
-        <h1 class="panel-title">Vitrine publique – Agence MILOU</h1>
-        <p class="panel-sub">
-          Cette surface décrit ton offre officielle de détective privé, tout en restant directement
-          connectée à tes outils internes (console, intranet, dossiers).
-        </p>
-
-        <div class="grid-2">
-          <article class="card">
-            <h3>Qui tu es (version publique)</h3>
-            <p>
-              L’Agence MILOU accompagne particuliers, avocats et structures dans
-              la <strong>recherche d’information fiable</strong> : vérifications, recoupements,
-              reconstitutions de chronologie, documentation de situations complexes.
-            </p>
-            <div class="pill-row">
-              <span class="pill">filatures numériques</span>
-              <span class="pill">analyse de traces</span>
-              <span class="pill">veille &amp; OSINT</span>
-              <span class="pill">pré-contentieux</span>
-            </div>
-            <p>
-              Tout ce qui n’est pas public ou légal ne t’intéresse pas. Tu travailles avec une
-              <strong>éthique claire</strong> : pas d’arnaques, pas de harcèlement, pas d’abus d’outils.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3>Ce que tu proposes</h3>
-            <ul class="news-list">
-              <li class="news-item">
-                <strong>Vérification de situations</strong>
-                <div class="news-meta">Prévention de litiges, recoupement d’éléments, dossiers structurés.</div>
-              </li>
-              <li class="news-item">
-                <strong>Analyse de preuves numériques</strong>
-                <div class="news-meta">Messages, captures, logs, réseaux sociaux, OSINT.</div>
-              </li>
-              <li class="news-item">
-                <strong>Sur-mesure</strong>
-                <div class="news-meta">
-                  Quand ce n’est pas dans la liste, on discute. L’objectif : rester légal, clair, documenté.
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-gray-900 text-white shadow-lg border-b-4 border-red-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">🇧🇪</span>
+                    <span class="font-mono text-xl font-bold tracking-tighter">LEAKS<span class="text-red-500">.BE</span></span>
                 </div>
-              </li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="grid-2" style="margin-top:8px;">
-          <article class="card">
-            <h3>Contact &amp; modalités</h3>
-            <p>
-              Tu peux adapter ce bloc pour coller à ta réalité (adresse mail, téléphone, ville, etc.).
-            </p>
-            <ul class="news-list">
-              <li class="news-item">
-                <strong>Email</strong>
-                <div class="news-meta">contact@agence-milou.fr</div>
-              </li>
-              <li class="news-item">
-                <strong>Téléphone</strong>
-                <div class="news-meta">+33 (0)6 00 00 00 00</div>
-              </li>
-              <li class="news-item">
-                <strong>Zone de travail</strong>
-                <div class="news-meta">France (et en ligne), selon le cadre légal.</div>
-              </li>
-            </ul>
-          </article>
-
-          <article class="card">
-            <h3>Ce que le client ne voit pas… mais toi oui</h3>
-            <p>
-              Grâce au même fichier HTML, tu as :
-            </p>
-            <ul>
-              <li>une <strong>console d’opérations</strong> (commande <code>help</code> pour voir les options),</li>
-              <li>un <strong>intranet</strong> (contacts, procédures, tâches),</li>
-              <li>une <strong>section dossiers/PDF</strong> avec modales,</li>
-              <li>un espace <strong>pause / pingouins / musique</strong>.</li>
-            </ul>
-            <p class="hint">
-              Tu peux utiliser cette structure telle quelle pour commencer,
-              et la resserrer ensuite autour de ton vrai métier.
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <!-- Section console (en texte, la vraie console est à droite) -->
-      <section id="section-console" class="section-root">
-        <h1 class="panel-title">Console d’opérations – vue générale</h1>
-        <p class="panel-sub">
-          La vraie console se trouve dans la colonne de droite. Ici, tu peux noter
-          ce que signifient les commandes, et comment tu organises ton travail.
-        </p>
-        <article class="card">
-          <h3>Commandes de la console (fictives, mais utiles pour toi)</h3>
-          <ul>
-            <li><code>help</code> – affiche la liste des commandes disponibles.</li>
-            <li><code>clients</code> – rappelle la façon dont tu gères tes clients.</li>
-            <li><code>cases</code> – rappelle ta méthode pour traiter un dossier.</li>
-            <li><code>docs</code> – renvoie vers la liste des annexes/PDF.</li>
-            <li><code>pingouin</code> – affiche la section pingouin (pause visuelle).</li>
-            <li><code>spotify</code> – affiche l’embed Spotify.</li>
-            <li><code>youtube</code> – affiche l’embed YouTube.</li>
-            <li><code>clear</code> – efface la console.</li>
-          </ul>
-          <p class="hint">
-            Tu peux adapter les réponses dans le script JS (en bas du fichier)
-            pour correspondre à ta façon de travailler.
-          </p>
-        </article>
-      </section>
-
-      <!-- Section intranet -->
-      <section id="section-intranet" class="section-root">
-        <h1 class="panel-title">Intranet – équipe &amp; procédures</h1>
-        <p class="panel-sub">
-          Cette section te sert d’espace interne pour organiser tes contacts, ton équipe
-          (même si tu es solo) et quelques tâches / routines.
-        </p>
-
-        <div class="grid-2">
-          <article class="card">
-            <h3>Annuaire interne</h3>
-            <div class="directory-filter">
-              <input type="text" id="directorySearch" placeholder="Nom, rôle, domaine…">
-              <select id="directoryDept">
-                <option value="all">Tous</option>
-                <option value="Enquêtes">Enquêtes</option>
-                <option value="Juridique">Juridique</option>
-                <option value="Tech">Tech</option>
-                <option value="Partenaires">Partenaires</option>
-              </select>
+                <div class="hidden md:flex space-x-8 text-sm font-medium">
+                    <a href="#overview" class="hover:text-yellow-400 transition">VUE D'ENSEMBLE</a>
+                    <a href="#trends" class="hover:text-yellow-400 transition">TENDANCES</a>
+                    <a href="#regions" class="hover:text-yellow-400 transition">REGIONS</a>
+                    <a href="#audit" class="px-4 py-2 bg-red-600 rounded hover:bg-red-700 transition">AUTO-AUDIT</a>
+                </div>
             </div>
-            <ul class="directory-list" id="directoryList"><li class="directory-card"><strong>Toi</strong><div class="directory-role">Détective privé / analyste principal – Enquêtes</div><div class="directory-meta">contact@agence-milou.fr</div></li><li class="directory-card"><strong>Contact avocat</strong><div class="directory-role">Référent juridique (civil / pénal) – Juridique</div><div class="directory-meta">avocat@exemple.fr</div></li><li class="directory-card"><strong>Tech confiance</strong><div class="directory-role">Admin systèmes / sécurité – Tech</div><div class="directory-meta">tech@exemple.fr</div></li><li class="directory-card"><strong>Graphiste</strong><div class="directory-role">Maquettage de dossiers – Partenaires</div><div class="directory-meta">graphiste@exemple.fr</div></li></ul>
-          </article>
-
-          <article class="card">
-            <h3>Routines &amp; tâches du jour</h3>
-            <div class="tasks">
-              <h4 style="font-size:0.85rem;margin-bottom:3px;">Checklist</h4>
-              <ul class="task-list" id="taskList"><li class="task-item"><input type="checkbox"><span>Vérifier les mails entrants / demandes de clients</span></li><li class="task-item"><input type="checkbox"><span>Mettre à jour le journal de bord des dossiers actifs</span></li><li class="task-item"><input type="checkbox"><span>Faire 15 min de veille OSINT / jurisprudence</span></li><li class="task-item"><input type="checkbox"><span>Faire une pause pingouins + musique</span></li></ul>
-              <p class="hint">
-                Tu peux modifier la constante <code>tasks</code> dans le script
-                pour adapter cette checklist à ta réalité (veille, RDV, rédactions).
-              </p>
-            </div>
-          </article>
         </div>
-      </section>
+    </nav>
 
-      <!-- Section dossiers / PDF -->
-      <section id="section-dossiers" class="section-root">
-        <h1 class="panel-title">Dossiers &amp; annexes PDF</h1>
-        <p class="panel-sub">
-          Ici tu peux référencer tes dossiers, annexes, modèles. Les PDF sont ouverts
-          dans une <strong>modale</strong> avec à droite des embeds YouTube / Spotify / pingouins
-          pour garder le cerveau oxygéné pendant la lecture.
-        </p>
-        <article class="card">
-          <h3>Dossiers référencés</h3>
-          <ul class="doc-list" id="docList"><li class="doc-item"><div class="doc-title-row"><span>Dossier Dystopie – contexte &amp; risques (PDF)</span><div class="doc-buttons"><button type="button" class="btn-xs">Modale</button><button type="button" class="btn-xs">Nouvel onglet</button></div></div><div class="doc-meta">dystopie.pdf</div><div>Annexe sur les risques systémiques (surveillance, climat, autoritarisme). Sert de toile de fond à certains dossiers.</div></li><li class="doc-item"><div class="doc-title-row"><span>Plaidoyer JP – réflexion de référence (PDF)</span><div class="doc-buttons"><button type="button" class="btn-xs">Modale</button><button type="button" class="btn-xs">Nouvel onglet</button></div></div><div class="doc-meta">plaidoyer-jp.pdf</div><div>Texte de fond. Peut servir à cadrer une démarche, un rapport, une prise de position.</div></li><li class="doc-item"><div class="doc-title-row"><span>Pression – note analytique (PDF)</span><div class="doc-buttons"><button type="button" class="btn-xs">Modale</button><button type="button" class="btn-xs">Nouvel onglet</button></div></div><div class="doc-meta">pression (1).pdf</div><div>Analyse des pressions (sociales, institutionnelles, économiques) autour de certaines affaires.</div></li></ul>
-          <p class="hint">
-            Pour ajouter / enlever un dossier, modifie la constante <code>documents</code> dans le script,
-            et adapte le nom de fichier PDF.
-          </p>
-        </article>
-      </section>
-
-      <!-- Section pause / pingouins -->
-      <section id="section-pause" class="section-root">
-        <h1 class="panel-title">Outils &amp; zone de pause contrôlée</h1>
-        <p class="panel-sub">
-          Même un détective a besoin de pauses. Cette section regroupe tes embeds :
-          pingouins, YouTube, Spotify. Tu peux les déclencher aussi via la console (commande
-          <code>pingouin</code>, <code>youtube</code>, <code>spotify</code>).
-        </p>
-        <div class="grid-2">
-          <article class="card">
-            <h3>Pingouins (anti-burnout)</h3>
-            <p>
-              Un peu d’écologie mentale. Tu peux remplacer ce GIF / image par n’importe quel visuel local
-              (par exemple <code>pingouin.png</code>) ou un autre lien.
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-gray-200 py-12 md:py-20 relative overflow-hidden">
+        <div class="absolute top-10 right-10 opacity-10 text-9xl select-none pointer-events-none">⚠️</div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="stamp mb-6 text-xl md:text-3xl">CONFIDENTIEL</div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+                L'AFFAIRE <span class="highlight-marker">TOUS FRAUDEURS</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8 font-light">
+                Le rapport Deborsu-OuaisFieu révèle la vérité : en redéfinissant la fraude pour inclure les "petits arrangements", la Belgique entière est hors-la-loi.
             </p>
-            <div class="penguin-box" id="penguinBox">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Pingouin qui marche">
-              <p class="hint">
-                Astuce : ne pas ouvrir ça pendant un rendez-vous client, sauf si tu veux briser la glace.
-              </p>
+            <div class="inline-flex items-center bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full font-mono text-sm font-bold border border-yellow-300">
+                <span class="animate-pulse mr-2">●</span> SOURCE: GITHUB LEAK #2026-B
             </div>
-          </article>
-          <article class="card">
-            <h3>Flux audio / vidéo</h3>
-            <p>
-              Tu peux changer les liens YouTube / Spotify ci-dessous par ceux que tu utilises pour te
-              concentrer (ou te détendre).
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <!-- SECTION 1: GLOBAL OVERVIEW (Inform) -->
+        <section id="overview" class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="order-2 lg:order-1">
+                <div class="paper-card p-6 md:p-8">
+                    <h3 class="text-gray-500 font-bold uppercase tracking-wide text-sm mb-2">Taux de Criminalité Réel</h3>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">L'Anomalie Statistique</h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Selon les nouveaux critères (vol de stylo, retard de 2 minutes, non-tri du carton), l'innocence est statistiquement impossible. Ce graphique représente la proportion de citoyens belges coupables d'au moins une "micro-fraude" quotidienne.
+                    </p>
+                    
+                    <!-- Chart Container -->
+                    <div class="chart-container h-80">
+                        <canvas id="overviewChart"></canvas>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-center space-x-8 text-center">
+                        <div>
+                            <div class="text-3xl font-bold text-red-600">11.6M</div>
+                            <div class="text-xs text-gray-500 uppercase font-bold">Suspects</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-blue-600">€0.50</div>
+                            <div class="text-xs text-gray-500 uppercase font-bold">Coût Moyen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="order-1 lg:order-2 space-y-6">
+                <h2 class="text-4xl font-bold text-gray-900">Une Nation de <br><span class="text-red-600">Criminels Ordinaires</span></h2>
+                <p class="text-lg text-gray-600">
+                    L'analyse des métadonnées prouve que le respect absolu des règles est une fiction. Les données suivantes exposent la réalité brutale de nos bureaux, de nos routes et de nos foyers.
+                </p>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="flex items-center p-4 bg-white border-l-4 border-yellow-500 shadow-sm rounded-r">
+                        <span class="text-2xl mr-4">👮</span>
+                        <div>
+                            <h4 class="font-bold text-gray-900">Le Saviez-vous ?</h4>
+                            <p class="text-sm text-gray-600">Recharger son téléphone au travail est techniquement un vol d'électricité.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center p-4 bg-white border-l-4 border-red-500 shadow-sm rounded-r">
+                        <span class="text-2xl mr-4">☕</span>
+                        <div>
+                            <h4 class="font-bold text-gray-900">Risque Critique</h4>
+                            <p class="text-sm text-gray-600">La pause café de 10h15 coûte 3 milliards d'euros par an à l'État.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: TOP OFFENSES (Compare) -->
+        <section id="offenses" class="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+            <div class="max-w-3xl mx-auto text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Typologie des Micro-Crimes</h2>
+                <p class="text-gray-600">
+                    Quels sont les délits les plus fréquents ? Le rapport classe les infractions par taux de pénétration dans la population active. Notez la prévalence inquiétante du vol de fournitures de bureau.
+                </p>
+            </div>
+
+            <!-- Chart Container -->
+            <div class="chart-container w-full h-96">
+                <canvas id="offenseChart"></canvas>
+            </div>
+        </section>
+
+        <!-- SECTION 3: TEMPORAL TRENDS (Change) -->
+        <section id="trends" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="md:col-span-1 bg-gray-900 text-white p-8 rounded-xl shadow-lg flex flex-col justify-center">
+                <h2 class="text-3xl font-bold mb-4 text-yellow-400">Le Rythme du Crime</h2>
+                <p class="text-gray-300 mb-6">
+                    L'analyse temporelle révèle que la "fraude à la productivité" n'est pas constante. Elle suit un cycle biologique précis, avec des pics corrélés aux besoins en caféine et à la digestion post-déjeuner.
+                </p>
+                <div class="bg-gray-800 p-4 rounded border border-gray-700">
+                    <span class="text-xs font-mono text-gray-400">NOTE D'ANALYSTE:</span>
+                    <p class="text-sm italic mt-2">"La chute de productivité de 15h00, dite 'le Coma Carbo', est le moment où le plus de shopping en ligne est effectué."</p>
+                </div>
+            </div>
+            
+            <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                <div class="mb-4 flex justify-between items-center">
+                    <h3 class="font-bold text-gray-800">Productivité Réelle vs Fraude Temporelle (24h)</h3>
+                    <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded font-bold">LIVE DATA</span>
+                </div>
+                <!-- Chart Container -->
+                <div class="chart-container">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: REGIONAL BREAKDOWN (Compare) -->
+        <section id="regions" class="space-y-8">
+            <div class="text-center">
+                <span class="font-mono text-blue-600 font-bold tracking-widest uppercase">Analyse Géographique</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-2">Le Fédéralisme de la Fraude</h2>
+                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">
+                    Chaque région possède sa spécialité culturelle en matière d'infraction. La Flandre excelle dans l'optimisation fiscale du jardinage, tandis que Bruxelles domine le championnat du stationnement créatif.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 md:p-10 rounded-xl shadow-lg border border-gray-200">
+                <!-- Chart Container -->
+                <div class="chart-container">
+                    <canvas id="regionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: EVIDENCE GRID (Organize) -->
+        <section id="evidence" class="bg-gray-50 border-t border-gray-200 pt-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 px-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900">Le Casier Judiciaire</h2>
+                    <p class="text-gray-600 mt-2">Exemples concrets extraits des dossiers confidentiels.</p>
+                </div>
+                <div class="mt-4 md:mt-0 space-x-2">
+                    <button onclick="filterGrid('all')" class="px-4 py-2 bg-gray-800 text-white rounded shadow text-sm hover:bg-gray-700 font-medium">Tout</button>
+                    <button onclick="filterGrid('Bureau')" class="px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded shadow text-sm hover:bg-gray-50 font-medium">Bureau</button>
+                    <button onclick="filterGrid('Transport')" class="px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded shadow text-sm hover:bg-gray-50 font-medium">Transport</button>
+                </div>
+            </div>
+
+            <div id="evidence-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- JS will populate this -->
+            </div>
+        </section>
+
+        <!-- SECTION 6: INTERACTIVE AUDIT (Engagement) -->
+        <section id="audit" class="relative bg-red-700 text-white rounded-2xl overflow-hidden shadow-2xl p-8 md:p-16 text-center">
+            <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDQwTDQwIDBIMjBMMCAyME00MCA0MFYyMEwwIDQwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIvPjwvZz48L3N2Zz4=')]"></div>
+            
+            <div class="relative z-10 max-w-2xl mx-auto space-y-8">
+                <h2 class="text-4xl font-extrabold tracking-tight">Outil d'Auto-Dénonciation</h2>
+                <p class="text-red-100 text-lg">
+                    L'IA du gouvernement peut déterminer votre niveau de culpabilité avec une seule question calibrée psychologiquement.
+                </p>
+
+                <div id="quiz-block" class="bg-white text-gray-900 rounded-lg p-8 shadow-xl">
+                    <h3 class="text-xl font-bold mb-6">
+                        "Avez-vous déjà utilisé la toilette du bureau pour éviter une tâche difficile pendant plus de 7 minutes ?"
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="showResult(true)" class="py-4 bg-red-100 hover:bg-red-200 text-red-800 font-bold rounded-lg border-2 border-red-200 transition">
+                            OUI (Coupable)
+                        </button>
+                        <button onclick="showResult(false)" class="py-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg border-2 border-gray-200 transition">
+                            NON (Menteur)
+                        </button>
+                    </div>
+                </div>
+
+                <div id="result-block" class="hidden bg-gray-900 text-white rounded-lg p-8 shadow-xl border-4 border-yellow-400">
+                    <div class="text-6xl mb-4">🚨</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-2">VERDICT : FRAUDEUR</h3>
+                    <p id="result-text" class="text-gray-300 mb-4"></p>
+                    <button onclick="resetQuiz()" class="text-sm text-gray-400 underline hover:text-white">Recommencer l'interrogatoire</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-500 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="font-mono text-sm mb-4">CONFIDENTIEL // NE PAS DIFFUSER</p>
+            <p class="text-xs max-w-lg mx-auto leading-relaxed">
+                Ce tableau de bord est une œuvre satirique basée sur le concept "Deborsu-OuaisFieu". Les données présentées sont fictives et destinées à l'humour. Aucun citoyen n'a été réellement arrêté pour vol de stylo durant la création de cette page.
             </p>
-            <div style="margin-bottom:6px;">
-              <div style="font-size:0.78rem;margin-bottom:2px;">YouTube – ambiance enquête / lofi :</div>
-              <iframe id="ytFrame" width="100%" height="150" src="https://www.youtube.com/embed/aium57_Ib5c?si=JZhceK3Fmb3TV9lr" title="YouTube lofi" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+            <div class="mt-8 text-2xl opacity-50 space-x-4">
+                <span>📂</span><span>🇧🇪</span><span>🔒</span>
             </div>
-            <div>
-              <div style="font-size:0.78rem;margin-bottom:2px;">Spotify – playlist de travail :</div>
-              <iframe id="spotifyFrame" style="border-radius:8px" src="https://open.spotify.com/embed/playlist/6gOcC0JrhINybsxyZxZ9SL?utm_source=generator" width="100%" height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-            </div>
-          </article>
         </div>
-      </section>
-    </div>
-  </main>
+    </footer>
 
-  <!-- Right column : console + notes + embeds -->
-  <aside class="side-panel">
-    <div class="side-inner">
-      <div class="side-header">
-        <h2>Console d’opérations</h2>
-        <span class="badge-soft">LOCAL NODE ONLY</span>
-      </div>
-      <p class="hint">
-        Console fictive, mais utile pour structurer tes routines. Rien n’est envoyé nulle part :
-        tout se passe dans ce fichier et ton navigateur.
-      </p>
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- UTILITY: Label Splitting for Chart.js (Requirement > 16 chars) ---
+        function formatLabel(str, maxwidth) {
+            if (typeof str !== 'string' || str.length <= maxwidth) return str;
+            const sections = [];
+            const words = str.split(' ');
+            let temp = '';
+            words.forEach(function(item, index) {
+                if (temp.length > 0) {
+                    const concat = temp + ' ' + item;
+                    if (concat.length > maxwidth) {
+                        sections.push(temp);
+                        temp = item;
+                    } else {
+                        temp = concat;
+                    }
+                } else {
+                    temp = item;
+                }
+                if (index === words.length - 1) {
+                    sections.push(temp);
+                }
+            });
+            return sections;
+        }
 
-      <div class="console">
-        <div class="console-output" id="consoleOutput"><div class="console-line"><span class="console-prefix">#</span><span> Console initialisée. Tape 'help' pour commencer.</span></div></div>
-        <form class="console-input-row" id="consoleForm">
-          <span>&gt;</span>
-          <input id="consoleInput" type="text" autocomplete="off" placeholder="Tape une commande (help, clients, cases, docs, pingouin…)">
-        </form>
-      </div>
+        // --- SHARED CONFIG: Tooltip for Multiline Labels (Requirement) ---
+        const commonTooltipOptions = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
 
-      <div class="notes-area">
-        <label for="notesText">Bloc-notes privé (non synchronisé)</label>
-        <textarea id="notesText" placeholder="Synthèse d’un dossier, idées, choses à vérifier…"></textarea>
-        <button class="btn-small" id="btnClearNotes">🧹 Effacer les notes</button>
-      </div>
+        // --- DATA SETS ---
 
-      <div class="embed-card">
-        <h3>Raccourcis console &amp; embeds</h3>
-        <p class="hint">
-          Quelques commandes utiles :
-          <br><code>help</code> · <code>clients</code> · <code>cases</code> · <code>docs</code> · <code>pingouin</code> · <code>spotify</code> · <code>youtube</code> · <code>clear</code>
-        </p>
-      </div>
-    </div>
-  </aside>
-</div>
+        // 1. Overview Chart Data
+        const overviewData = {
+            labels: ['Citoyens "Purs"', 'Fraudeurs du Quotidien'],
+            data: [0.1, 99.9],
+            colors: ['#E5E7EB', '#DC2626'] // Grey vs Red
+        };
 
-<footer>
-  <span>
-    AGENCE MILOU – Détective privé. Site vitrine + intranet + console d’opérations dans un seul HTML statique.
-  </span>
-  <span>
-    Pour adapter : ouvre ce fichier, remplace les textes, contacts, noms de PDF, et les liens YouTube/Spotify.
-  </span>
-</footer>
+        // 2. Offenses Data (Long labels to test wrapping)
+        const offenseLabelsRaw = [
+            "Vol de Fournitures (Stylos, Agrafes, Papier A4)",
+            "Utilisation abusive du Smartphone aux toilettes",
+            "Non-respect des règles de tri sélectif (Carton/PMC)",
+            "Consommation de nourriture odorante en Open Space",
+            "Faux problème technique pour éviter une réunion Teams"
+        ];
+        const offenseValues = [88, 76, 62, 45, 34];
+        
+        // Process labels
+        const offenseLabelsProcessed = offenseLabelsRaw.map(l => formatLabel(l, 16));
 
-<!-- Modal PDF -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-header">
-      <h3 id="modalTitle">Dossier</h3>
-      <button type="button" id="modalCloseBtn">Fermer (Esc)</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-pdf">
-        <embed id="modalPdfEmbed" src="" type="application/pdf" width="100%" height="100%">
-      </div>
-      <div class="modal-side">
-        <h4>Ambiance &amp; notes</h4>
-        <p id="modalDesc">Commentaires sur le dossier, ambiance audio/vidéo pour le traiter, etc.</p>
-        <div style="margin-bottom:6px;">
-          <div style="font-size:0.76rem;margin-bottom:2px;">YouTube :</div>
-          <iframe width="100%" height="110" src="./veilleux_files/jfKfPfyJRdk(1).html" title="YouTube lofi" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
-        </div>
-        <div>
-          <div style="font-size:0.76rem;margin-bottom:2px;">Spotify :</div>
-          <iframe style="border-radius:8px" src="./veilleux_files/37i9dQZF1DX4sWSpwq3LiO(1).html" width="100%" height="110" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+        // 3. Trends Data (Line Chart)
+        const timeLabels = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
+        const productivityData = [20, 80, 40, 75, 10, 5, 60, 20, 55, 10]; // Dips at coffee/lunch/3pm
+        const fraudData = [5, 10, 90, 15, 80, 95, 20, 85, 25, 100]; // Spikes opposite to productivity
 
-<script>
-  // ===================== Données fictives =====================
-  const staff = [
-    { nom: "Toi", role: "Détective privé / analyste principal", dept: "Enquêtes", contact: "contact@agence-milou.fr" },
-    { nom: "Contact avocat", role: "Référent juridique (civil / pénal)", dept: "Juridique", contact: "avocat@exemple.fr" },
-    { nom: "Tech confiance", role: "Admin systèmes / sécurité", dept: "Tech", contact: "tech@exemple.fr" },
-    { nom: "Graphiste", role: "Maquettage de dossiers", dept: "Partenaires", contact: "graphiste@exemple.fr" }
-  ];
+        // 4. Regional Data (Stacked)
+        const regions = ['Flandre', 'Wallonie', 'Bruxelles'];
+        // Categories: Fiscal (Garden), Traffic (Parking), Social (Noise)
+        const regionalData = {
+            fiscal: [80, 40, 20],
+            traffic: [30, 50, 90],
+            social: [40, 85, 60]
+        };
 
-  const documents = [
-    {
-      id: "dystopie",
-      titre: "Dossier Dystopie – contexte & risques",
-      fichier: "pdfs/dystopie.pdf",
-      type: "PDF",
-      description: "Annexe sur les risques systémiques (surveillance, climat, autoritarisme). Sert de toile de fond à certains dossiers."
-    },
-    {
-      id: "plaidoyer",
-      titre: "Plaidoyer JP – réflexion de référence",
-      fichier: "pdfs/manuel-plaidoyer-jp.pdf",
-      type: "PDF",
-      description: "Texte de fond. Peut servir à cadrer une démarche, un rapport, une prise de position."
-    },
-    {
-      id: "pression",
-      titre: "Pression – note analytique",
-      fichier: "pdfs/pression.pdf",
-      type: "PDF",
-      description: "Analyse des pressions (sociales, institutionnelles, économiques) autour de certaines affaires."
-    }
-  ];
+        // 5. Evidence Data
+        const evidenceItems = [
+            { id: 1, type: "Bureau", title: "L'Affaire du Bic 4 Couleurs", desc: "Le suspect a empoché un stylo communal. Valeur: 1.20€." },
+            { id: 2, type: "Transport", title: "Fraude au Clignotant", desc: "Changement de file sans signalisation sur le Ring. Classique." },
+            { id: 3, type: "Bureau", title: "Impression Personnelle", desc: "Impression de 40 pages de coloriage pour enfants sur l'imprimante RH." },
+            { id: 4, type: "Transport", title: "Resquille Escalator", desc: "A marché sur la gauche alors qu'il voulait rester immobile." },
+            { id: 5, type: "Bureau", title: "Vol de Lait", desc: "A fini la bouteille de lait commune sans la remplacer. Peine capitale demandée." },
+            { id: 6, type: "Transport", title: "Parking Trottoir", desc: "A déclaré 'J'en ai pour deux minutes' en se garant sur un passage piéton." }
+        ];
 
-  const tasks = [
-    { label: "Vérifier les mails entrants / demandes de clients", done: false },
-    { label: "Mettre à jour le journal de bord des dossiers actifs", done: false },
-    { label: "Faire 15 min de veille OSINT / jurisprudence", done: false },
-    { label: "Faire une pause pingouins + musique", done: false }
-  ];
+        // --- CHART INITIALIZATION ---
 
-  const NOTES_KEY = "agence_milou_notes_v1";
+        window.onload = function() {
+            // Chart 1: Overview Donut
+            const ctxOverview = document.getElementById('overviewChart').getContext('2d');
+            new Chart(ctxOverview, {
+                type: 'doughnut',
+                data: {
+                    labels: overviewData.labels,
+                    datasets: [{
+                        data: overviewData.data,
+                        backgroundColor: overviewData.colors,
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: 'Montserrat' } } },
+                        tooltip: commonTooltipOptions
+                    },
+                    cutout: '70%'
+                }
+            });
 
-  // ===================== Navigation =====================
-  const navBtns = document.querySelectorAll(".nav-btn");
-  const sections = document.querySelectorAll(".section-root");
+            // Chart 2: Offenses Horizontal Bar
+            const ctxOffense = document.getElementById('offenseChart').getContext('2d');
+            new Chart(ctxOffense, {
+                type: 'bar',
+                data: {
+                    labels: offenseLabelsProcessed,
+                    datasets: [{
+                        label: '% de la population',
+                        data: offenseValues,
+                        backgroundColor: '#2563EB',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { beginAtZero: true, max: 100, grid: { color: '#E5E7EB' } },
+                        y: { grid: { display: false }, ticks: { font: { size: 11, family: 'Montserrat' } } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: commonTooltipOptions
+                    }
+                }
+            });
 
-  function showSection(sectionKey) {
-    sections.forEach(sec => {
-      sec.classList.toggle("active", sec.id === "section-" + sectionKey);
-    });
-    navBtns.forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.section === sectionKey);
-    });
-  }
+            // Chart 3: Trends Line
+            const ctxTrend = document.getElementById('trendChart').getContext('2d');
+            new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: timeLabels,
+                    datasets: [
+                        {
+                            label: 'Productivité Réelle',
+                            data: productivityData,
+                            borderColor: '#10B981', // Green
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Activité Suspecte (Facebook/Pause)',
+                            data: fraudData,
+                            borderColor: '#DC2626', // Red
+                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, title: { display: true, text: 'Niveau (%)' } }
+                    },
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: commonTooltipOptions
+                    }
+                }
+            });
 
-  navBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const key = btn.dataset.section;
-      showSection(key);
-    });
-  });
+            // Chart 4: Regions Stacked Bar
+            const ctxRegion = document.getElementById('regionChart').getContext('2d');
+            new Chart(ctxRegion, {
+                type: 'bar',
+                data: {
+                    labels: regions,
+                    datasets: [
+                        { label: 'Fraude Jardinage/Fiscal', data: regionalData.fiscal, backgroundColor: '#FBBF24' }, // Yellow
+                        { label: 'Infractions Routières', data: regionalData.traffic, backgroundColor: '#6B7280' }, // Grey
+                        { label: 'Nuisances Sonores', data: regionalData.social, backgroundColor: '#2563EB' } // Blue
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: commonTooltipOptions
+                    }
+                }
+            });
 
-  // ===================== Annuaire =====================
-  function renderDirectory(filterText = "", dept = "all") {
-    const list = document.getElementById("directoryList");
-    list.innerHTML = "";
-    const q = (filterText || "").toLowerCase();
+            // Init Evidence Grid
+            renderGrid(evidenceItems);
+        };
 
-    staff.forEach(person => {
-      if (dept !== "all" && person.dept !== dept) return;
-      const full = (person.nom + " " + person.role + " " + person.dept).toLowerCase();
-      if (q && !full.includes(q)) return;
+        // --- INTERACTIVITY ---
 
-      const li = document.createElement("li");
-      li.className = "directory-card";
-      const name = document.createElement("strong");
-      name.textContent = person.nom;
-      const role = document.createElement("div");
-      role.className = "directory-role";
-      role.textContent = person.role + " – " + person.dept;
-      const meta = document.createElement("div");
-      meta.className = "directory-meta";
-      meta.textContent = person.contact;
-      li.appendChild(name);
-      li.appendChild(role);
-      li.appendChild(meta);
-      list.appendChild(li);
-    });
+        // Evidence Grid Logic
+        function renderGrid(items) {
+            const container = document.getElementById('evidence-grid');
+            container.innerHTML = '';
+            items.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'bg-white p-6 rounded shadow-sm border border-gray-100 hover:shadow-md transition';
+                el.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider ${item.type === 'Bureau' ? 'text-blue-600 bg-blue-50' : 'text-orange-600 bg-orange-50'} px-2 py-1 rounded">
+                            ${item.type}
+                        </span>
+                        <span class="text-gray-300 text-xs">#${item.id}</span>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">${item.title}</h3>
+                    <p class="text-sm text-gray-600">${item.desc}</p>
+                `;
+                container.appendChild(el);
+            });
+        }
 
-    if (!list.children.length) {
-      const li = document.createElement("li");
-      li.className = "directory-card";
-      li.textContent = "Aucun contact ne correspond à ce filtre. Modifie la liste 'staff' dans le script.";
-      list.appendChild(li);
-    }
-  }
+        function filterGrid(type) {
+            if (type === 'all') {
+                renderGrid(evidenceItems);
+            } else {
+                const filtered = evidenceItems.filter(i => i.type === type);
+                renderGrid(filtered);
+            }
+        }
 
-  // ===================== Tâches =====================
-  function renderTasks() {
-    const list = document.getElementById("taskList");
-    list.innerHTML = "";
-    tasks.forEach((task, idx) => {
-      const li = document.createElement("li");
-      li.className = "task-item";
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.checked = task.done;
-      checkbox.addEventListener("change", () => {
-        tasks[idx].done = checkbox.checked;
-      });
-      const span = document.createElement("span");
-      span.textContent = task.label;
-      li.appendChild(checkbox);
-      li.appendChild(span);
-      list.appendChild(li);
-    });
-  }
+        // Quiz Logic
+        function showResult(admitted) {
+            const quizBlock = document.getElementById('quiz-block');
+            const resultBlock = document.getElementById('result-block');
+            const text = document.getElementById('result-text');
+            
+            quizBlock.classList.add('hidden');
+            resultBlock.classList.remove('hidden');
 
-  // ===================== Dossiers / PDF =====================
-  function renderDocuments() {
-    const list = document.getElementById("docList");
-    list.innerHTML = "";
-    documents.forEach(doc => {
-      const li = document.createElement("li");
-      li.className = "doc-item";
+            if (admitted) {
+                text.innerText = "L'honnêteté est louable, mais l'infraction est avérée. Votre dossier est transmis au service compétent.";
+            } else {
+                text.innerText = "Votre déni est statistiquement improbable. L'algorithme a détecté un mensonge. Aggravation de la peine de +50%.";
+            }
+        }
 
-      const titleRow = document.createElement("div");
-      titleRow.className = "doc-title-row";
+        function resetQuiz() {
+            document.getElementById('quiz-block').classList.remove('hidden');
+            document.getElementById('result-block').classList.add('hidden');
+        }
 
-      const title = document.createElement("span");
-      title.textContent = doc.titre + " (" + doc.type + ")";
-
-      const btns = document.createElement("div");
-      btns.className = "doc-buttons";
-
-      const btnModal = document.createElement("button");
-      btnModal.type = "button";
-      btnModal.className = "btn-xs";
-      btnModal.textContent = "Modale";
-      btnModal.addEventListener("click", () => openModal(doc.id));
-
-      const btnNewTab = document.createElement("button");
-      btnNewTab.type = "button";
-      btnNewTab.className = "btn-xs";
-      btnNewTab.textContent = "Nouvel onglet";
-      btnNewTab.addEventListener("click", () => {
-        window.open(doc.fichier, "_blank");
-      });
-
-      btns.appendChild(btnModal);
-      btns.appendChild(btnNewTab);
-
-      titleRow.appendChild(title);
-      titleRow.appendChild(btns);
-
-      const meta = document.createElement("div");
-      meta.className = "doc-meta";
-      meta.textContent = doc.fichier;
-
-      const desc = document.createElement("div");
-      desc.textContent = doc.description;
-
-      li.appendChild(titleRow);
-      li.appendChild(meta);
-      li.appendChild(desc);
-
-      list.appendChild(li);
-    });
-  }
-
-  // ===================== Modal PDF =====================
-  const modalOverlay = document.getElementById("modalOverlay");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalPdfEmbed = document.getElementById("modalPdfEmbed");
-  const modalDesc = document.getElementById("modalDesc");
-  const modalCloseBtn = document.getElementById("modalCloseBtn");
-
-  function openModal(docId) {
-    const doc = documents.find(d => d.id === docId);
-    if (!doc) return;
-    modalTitle.textContent = doc.titre;
-    modalPdfEmbed.src = doc.fichier;
-    modalDesc.textContent = doc.description;
-    modalOverlay.classList.add("visible");
-  }
-
-  function closeModal() {
-    modalOverlay.classList.remove("visible");
-    modalPdfEmbed.src = "";
-  }
-
-  modalCloseBtn.addEventListener("click", closeModal);
-  modalOverlay.addEventListener("click", (e) => {
-    if (e.target === modalOverlay) closeModal();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modalOverlay.classList.contains("visible")) {
-      closeModal();
-    }
-  });
-
-  // ===================== Notes (localStorage) =====================
-  function loadNotes() {
-    try {
-      const val = localStorage.getItem(NOTES_KEY);
-      if (val !== null) {
-        document.getElementById("notesText").value = val;
-      }
-    } catch (e) {
-      // localStorage peut être désactivé, ce n'est pas grave
-    }
-  }
-
-  function saveNotesDebounced() {
-    if (saveNotesDebounced._t) clearTimeout(saveNotesDebounced._t);
-    saveNotesDebounced._t = setTimeout(() => {
-      try {
-        const val = document.getElementById("notesText").value || "";
-        localStorage.setItem(NOTES_KEY, val);
-      } catch (e) {}
-    }, 400);
-  }
-
-  document.getElementById("notesText").addEventListener("input", saveNotesDebounced);
-  document.getElementById("btnClearNotes").addEventListener("click", () => {
-    document.getElementById("notesText").value = "";
-    saveNotesDebounced();
-  });
-
-  // ===================== Console =====================
-  const consoleOutput = document.getElementById("consoleOutput");
-  const consoleForm = document.getElementById("consoleForm");
-  const consoleInput = document.getElementById("consoleInput");
-  const penguinBox = document.getElementById("penguinBox");
-
-  function logConsole(line, type = "out") {
-    const div = document.createElement("div");
-    div.className = "console-line";
-    const prefix = document.createElement("span");
-    prefix.className = "console-prefix";
-    prefix.textContent = type === "in" ? ">" : "#";
-    const text = document.createElement("span");
-    text.textContent = " " + line;
-    div.appendChild(prefix);
-    div.appendChild(text);
-    consoleOutput.appendChild(div);
-    consoleOutput.scrollTop = consoleOutput.scrollHeight;
-  }
-
-  function handleCommand(cmdRaw) {
-    const cmd = (cmdRaw || "").trim();
-    if (!cmd) return;
-    const lower = cmd.toLowerCase();
-
-    if (lower === "help") {
-      logConsole("Commandes : help, clients, cases, docs, pingouin, spotify, youtube, clear", "out");
-      return;
-    }
-    if (lower === "clear") {
-      consoleOutput.innerHTML = "";
-      return;
-    }
-    if (lower === "clients") {
-      logConsole("Rappel : ne jamais promettre de résultat, seulement des moyens et une méthode. Toujours cadrer le cadre légal.", "out");
-      return;
-    }
-    if (lower === "cases") {
-      logConsole("Méthode dossier : écoute → cadrage → plan de collecte → validation → rapport structuré.", "out");
-      return;
-    }
-    if (lower === "docs") {
-      showSection("dossiers");
-      logConsole("Ouverture de la section 'Dossiers & annexes PDF'.", "out");
-      return;
-    }
-    if (lower === "pingouin") {
-      showSection("pause");
-      penguinBox.scrollIntoView({ behavior: "smooth", block: "center" });
-      logConsole("Pause pingouin déclenchée.", "out");
-      return;
-    }
-    if (lower === "spotify") {
-      showSection("pause");
-      document.getElementById("spotifyFrame").scrollIntoView({ behavior: "smooth", block: "center" });
-      logConsole("Section Spotify affichée.", "out");
-      return;
-    }
-    if (lower === "youtube") {
-      showSection("pause");
-      document.getElementById("ytFrame").scrollIntoView({ behavior: "smooth", block: "center" });
-      logConsole("Section YouTube affichée.", "out");
-      return;
-    }
-
-    logConsole("Commande inconnue. Tape 'help' pour la liste des commandes.", "out");
-  }
-
-  consoleForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const value = consoleInput.value;
-    consoleInput.value = "";
-    logConsole(value, "in");
-    handleCommand(value);
-  });
-
-  // ===================== Filtres annuaire =====================
-  const directorySearch = document.getElementById("directorySearch");
-  const directoryDept = document.getElementById("directoryDept");
-
-  directorySearch.addEventListener("input", () => {
-    renderDirectory(directorySearch.value, directoryDept.value);
-  });
-  directoryDept.addEventListener("change", () => {
-    renderDirectory(directorySearch.value, directoryDept.value);
-  });
-
-  // ===================== Init =====================
-  document.addEventListener("DOMContentLoaded", () => {
-    renderDirectory();
-    renderTasks();
-    renderDocuments();
-    loadNotes();
-    logConsole("Console initialisée. Tape 'help' pour commencer.", "out");
-  });
-</script>
+    </script>
 </body>
 </html>
