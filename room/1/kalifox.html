@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>KaliFox – Faux Firefox de chez Kali (HTML/CSS/JS)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Police sobre -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg2: #020617;
+      --toolbar: #020617;
+      --tab-bar: #020617;
+      --fg: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #0ea5e9;
+      --accent-soft: rgba(14,165,233,0.18);
+      --accent-2: #22c55e;
+      --danger: #f97373;
+      --border: #1f2937;
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #020617 0, #000 70%),
+        #020617;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 0.8rem;
+    }
+
+    .window {
+      width: 100%;
+      max-width: 1200px;
+      height: calc(100vh - 1.6rem);
+      max-height: 980px;
+      background:
+        radial-gradient(circle at top left, rgba(14,165,233,0.18), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(56,189,248,0.16), transparent 60%),
+        #020617;
+      border-radius: 12px;
+      border: 1px solid #020617;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.9),
+        0 38px 100px rgba(0,0,0,0.95);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Barre de titre style Firefox/Kali */
+
+    .titlebar {
+      height: 32px;
+      background: linear-gradient(to right, #020617, #020617);
+      display: flex;
+      align-items: center;
+      padding: 0 0.5rem;
+      gap: 0.45rem;
+      border-bottom: 1px solid #020617;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 0.25rem;
+      margin-right: 0.35rem;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      border: 1px solid #020617;
+      box-shadow: 0 0 0 1px rgba(15,23,42,1);
+    }
+    .dot.close { background: #f97373; }
+    .dot.min   { background: #facc15; }
+    .dot.max   { background: #4ade80; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .brand-logo {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background:
+        radial-gradient(circle at 30% 20%, #22c55e, transparent 55%),
+        radial-gradient(circle at 70% 80%, #0ea5e9, transparent 55%),
+        #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,1),
+        0 0 14px rgba(14,165,233,0.8);
+      font-size: 0.8rem;
+    }
+
+    .brand span strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Barre d’onglets */
+
+    .tabbar {
+      height: 34px;
+      background: #020617;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 0.5rem;
+      gap: 0.4rem;
+      border-bottom: 1px solid #020617;
+    }
+
+    .tab {
+      height: 26px;
+      border-radius: 7px 7px 0 0;
+      padding: 0 0.7rem;
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-bottom: none;
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .tab.active {
+      background: radial-gradient(circle at top, rgba(14,165,233,0.3), rgba(15,23,42,1));
+      border-color: var(--border);
+      color: var(--fg);
+      box-shadow:
+        0 -1px 0 #020617,
+        0 0 18px rgba(14,165,233,0.7);
+    }
+
+    .tab-title {
+      max-width: 110px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tab-close {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .tab-plus {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      border: 1px dashed #334155;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    /* Barre d’outils */
+
+    .toolbar {
+      background: #020617;
+      border-top: 1px solid #020617;
+      border-bottom: 1px solid #020617;
+      padding: 0.3rem 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .btn-icon {
+      width: 26px;
+      height: 26px;
+      min-width: 26px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top, rgba(15,23,42,1), #020617);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .btn-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(14,165,233,0.5);
+    }
+
+    .address-shell {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .shield {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(34,197,94,0.7);
+      background: radial-gradient(circle at top, rgba(34,197,94,0.2), #020617);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #bbf7d0;
+      font-size: 0.9rem;
+    }
+
+    #addressBar {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: var(--fg);
+      font-size: 0.86rem;
+      padding: 0.32rem 0.7rem;
+      outline: none;
+    }
+
+    #addressBar::placeholder {
+      color: #64748b;
+    }
+
+    #addressBar:focus {
+      border-color: var(--accent);
+      box-shadow:
+        0 0 0 1px rgba(14,165,233,0.6),
+        0 0 20px rgba(14,165,233,0.3);
+    }
+
+    .btn-go {
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background: linear-gradient(135deg, rgba(14,165,233,0.4), #020617);
+      color: #e0f2fe;
+      font-size: 0.8rem;
+      padding: 0.32rem 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Zone de contenu */
+
+    .content {
+      flex: 1;
+      background: #020617;
+      border-top: 1px solid #020617;
+      position: relative;
+    }
+
+    #webview {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #020617;
+    }
+
+    .statusbar {
+      height: 22px;
+      background: #020617;
+      border-top: 1px solid #020617;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0.5rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .status-led {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    .status-right {
+      opacity: 0.8;
+    }
+
+    .status-right span {
+      color: var(--accent);
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 0;
+      }
+      .window {
+        border-radius: 0;
+        height: 100vh;
+        max-height: none;
+      }
+      .toolbar {
+        flex-wrap: wrap;
+      }
+      .address-shell {
+        order: 2;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="window">
+  <!-- Barre de titre -->
+  <div class="titlebar">
+    <div class="window-controls">
+      <div class="dot close"></div>
+      <div class="dot min"></div>
+      <div class="dot max"></div>
+    </div>
+    <div class="brand">
+      <div class="brand-logo">🦊</div>
+      <span><strong>KaliFox</strong> · faux Firefox dans ton Firefox</span>
+    </div>
+  </div>
+
+  <!-- Barre d’onglets -->
+  <div class="tabbar">
+    <div class="tab active" data-tab="0">
+      <span class="tab-title" id="tabTitle-0">Nouvel onglet</span>
+      <span class="tab-close" data-close="0">×</span>
+    </div>
+    <div class="tab-plus" id="btnNewTab">+</div>
+  </div>
+
+  <!-- Barre d’outils -->
+  <div class="toolbar">
+    <button class="btn-icon" id="btnBack" title="Précédent">←</button>
+    <button class="btn-icon" id="btnForward" title="Suivant">→</button>
+    <button class="btn-icon" id="btnReload" title="Recharger">↻</button>
+    <button class="btn-icon" id="btnHome" title="Accueil">⌂</button>
+
+    <div class="address-shell">
+      <div class="shield" title="Ce n’est PAS un vrai sandbox ni un VPN.">
+        ⚡
+      </div>
+      <input
+        id="addressBar"
+        type="text"
+        spellcheck="false"
+        placeholder="Tape une URL (https://...) ou quelques mots-clés – Entrée pour valider"
+      />
+      <button class="btn-go" id="btnGo" type="button">Aller</button>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div class="content">
+    <iframe
+      id="webview"
+      src="about:blank"
+      sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
+  </div>
+
+  <!-- Barre de statut -->
+  <div class="statusbar">
+    <div class="status-left">
+      <span class="status-led" id="statusLed"></span>
+      <span id="statusText">Prêt.</span>
+    </div>
+    <div class="status-right">
+      KaliFox n’ajoute <span>aucune sécurité magique</span> : c’est juste une surcouche visuelle.
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- Petit "moteur" de navigateur maison ---
+
+  const addressBar = document.getElementById("addressBar");
+  const webview = document.getElementById("webview");
+  const btnGo = document.getElementById("btnGo");
+  const btnBack = document.getElementById("btnBack");
+  const btnForward = document.getElementById("btnForward");
+  const btnReload = document.getElementById("btnReload");
+  const btnHome = document.getElementById("btnHome");
+  const btnNewTab = document.getElementById("btnNewTab");
+  const statusText = document.getElementById("statusText");
+  const statusLed = document.getElementById("statusLed");
+
+  const tabbar = document.querySelector(".tabbar");
+
+  // Historique par onglet : { history: [], index: 0 }
+  const tabs = [
+    {
+      id: 0,
+      titleEl: document.getElementById("tabTitle-0"),
+      history: [],
+      index: -1
+    }
+  ];
+  let activeTabId = 0;
+  let nextTabId = 1;
+
+  // URL d’accueil (modifie si tu veux)
+  const HOME_URL = "https://duckduckgo.com/?kae=d&k7=1000&k1=-1";
+
+  // --- Utilitaires ---
+
+  function setStatus(text, loading = false) {
+    statusText.textContent = text;
+    if (loading) {
+      statusLed.style.background = "#facc15";
+      statusLed.style.boxShadow = "0 0 8px #facc15";
+    } else {
+      statusLed.style.background = "#22c55e";
+      statusLed.style.boxShadow = "0 0 8px #22c55e";
+    }
+  }
+
+  function getActiveTab() {
+    return tabs.find(t => t.id === activeTabId);
+  }
+
+  function normalizeInput(input) {
+    const value = (input || "").trim();
+    if (!value) return "";
+
+    // Si ça ressemble à une URL sans protocole, on préfixe
+    const hasProtocol = /^https?:\/\//i.test(value);
+    const looksLikeDomain = /\./.test(value) && !/\s/.test(value);
+
+    if (hasProtocol) return value;
+    if (looksLikeDomain) return "https://" + value;
+
+    // Sinon, on fait une recherche DuckDuckGo
+    const q = encodeURIComponent(value);
+    return "https://duckduckgo.com/?q=" + q;
+  }
+
+  function loadUrl(raw) {
+    const url = normalizeInput(raw);
+    if (!url) return;
+
+    const tab = getActiveTab();
+    // Met à jour historique
+    // Si on avait été en arrière dans l'historique, on coupe le futur
+    if (tab.index < tab.history.length - 1) {
+      tab.history = tab.history.slice(0, tab.index + 1);
+    }
+    tab.history.push(url);
+    tab.index = tab.history.length - 1;
+
+    addressBar.value = url;
+    webview.src = url;
+    updateTabTitle("Chargement…");
+    updateNavButtons();
+    setStatus("Chargement de " + url + "…", true);
+  }
+
+  function updateNavButtons() {
+    const tab = getActiveTab();
+    const canBack = tab.index > 0;
+    const canForward = tab.index < tab.history.length - 1;
+
+    btnBack.style.opacity = canBack ? "1" : "0.3";
+    btnBack.style.pointerEvents = canBack ? "auto" : "none";
+
+    btnForward.style.opacity = canForward ? "1" : "0.3";
+    btnForward.style.pointerEvents = canForward ? "auto" : "none";
+  }
+
+  function updateTabTitle(title) {
+    const tab = getActiveTab();
+    if (!tab) return;
+    const label = title || "Nouvel onglet";
+    tab.titleEl.textContent = label;
+  }
+
+  function navigateBack() {
+    const tab = getActiveTab();
+    if (tab.index <= 0) return;
+    tab.index -= 1;
+    const url = tab.history[tab.index];
+    addressBar.value = url;
+    webview.src = url;
+    updateNavButtons();
+    setStatus("Retour : " + url, true);
+  }
+
+  function navigateForward() {
+    const tab = getActiveTab();
+    if (tab.index >= tab.history.length - 1) return;
+    tab.index += 1;
+    const url = tab.history[tab.index];
+    addressBar.value = url;
+    webview.src = url;
+    updateNavButtons();
+    setStatus("Suivant : " + url, true);
+  }
+
+  function reloadPage() {
+    const tab = getActiveTab();
+    if (tab.index < 0) return;
+    const url = tab.history[tab.index];
+    webview.src = url;
+    setStatus("Rechargement…", true);
+  }
+
+  function goHome() {
+    loadUrl(HOME_URL);
+  }
+
+  // --- Gestion des onglets ---
+
+  function setActiveTab(tabId) {
+    activeTabId = tabId;
+    document.querySelectorAll(".tab").forEach(t => {
+      t.classList.toggle("active", Number(t.dataset.tab) === tabId);
+    });
+
+    const tab = getActiveTab();
+    if (tab.history[tab.index]) {
+      const url = tab.history[tab.index];
+      addressBar.value = url;
+      webview.src = url;
+      updateTabTitle(tab.titleEl.textContent || "Onglet");
+      setStatus("Onglet actif : " + (url || "vide"), false);
+    } else {
+      addressBar.value = "";
+      webview.src = "about:blank";
+      updateTabTitle("Nouvel onglet");
+      setStatus("Nouvel onglet", false);
+    }
+    updateNavButtons();
+  }
+
+  function createTab() {
+    const id = nextTabId++;
+
+    // DOM
+    const tabEl = document.createElement("div");
+    tabEl.className = "tab";
+    tabEl.dataset.tab = String(id);
+
+    const titleEl = document.createElement("span");
+    titleEl.className = "tab-title";
+    titleEl.id = "tabTitle-" + id;
+    titleEl.textContent = "Nouvel onglet";
+
+    const closeEl = document.createElement("span");
+    closeEl.className = "tab-close";
+    closeEl.dataset.close = String(id);
+    closeEl.textContent = "×";
+
+    tabEl.appendChild(titleEl);
+    tabEl.appendChild(closeEl);
+
+    // insérer avant le +
+    tabbar.insertBefore(tabEl, btnNewTab);
+
+    // logique
+    tabs.push({
+      id,
+      titleEl,
+      history: [],
+      index: -1
+    });
+
+    // listeners
+    tabEl.addEventListener("click", (e) => {
+      if (e.target.dataset.close === String(id)) return; // le close gère lui-même
+      setActiveTab(id);
+    });
+    closeEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeTab(id);
+    });
+
+    setActiveTab(id);
+  }
+
+  function closeTab(id) {
+    if (tabs.length === 1) {
+      // On évite de supprimer le dernier : on le réinitialise
+      const tab = getActiveTab();
+      tab.history = [];
+      tab.index = -1;
+      addressBar.value = "";
+      webview.src = "about:blank";
+      updateTabTitle("Nouvel onglet");
+      setStatus("Onglet réinitialisé.", false);
+      updateNavButtons();
+      return;
+    }
+
+    const index = tabs.findIndex(t => t.id === id);
+    if (index === -1) return;
+    tabs.splice(index, 1);
+
+    const tabEl = document.querySelector(`.tab[data-tab="${id}"]`);
+    if (tabEl) tabEl.remove();
+
+    if (activeTabId === id) {
+      // Activer celui d’à côté
+      const newActive = tabs[Math.max(0, index - 1)] || tabs[0];
+      setActiveTab(newActive.id);
+    } else {
+      // Rien de spécial
+      updateNavButtons();
+    }
+  }
+
+  // --- Événements UI ---
+
+  btnGo.addEventListener("click", () => {
+    loadUrl(addressBar.value);
+  });
+
+  addressBar.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      loadUrl(addressBar.value);
+    }
+  });
+
+  btnBack.addEventListener("click", navigateBack);
+  btnForward.addEventListener("click", navigateForward);
+  btnReload.addEventListener("click", reloadPage);
+  btnHome.addEventListener("click", goHome);
+
+  btnNewTab.addEventListener("click", createTab);
+
+  // Clic sur l’onglet existant
+  document.querySelector('.tab[data-tab="0"]').addEventListener("click", (e) => {
+    if (e.target.dataset.close === "0") return;
+    setActiveTab(0);
+  });
+  document.querySelector('.tab-close[data-close="0"]').addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeTab(0);
+  });
+
+  // --- Gestion de fin de chargement iframe ---
+  webview.addEventListener("load", () => {
+    const tab = getActiveTab();
+    setStatus("Chargement terminé.", false);
+
+    // On essaye de récupérer le titre du document dans l’onglet (si même origine)
+    try {
+      const doc = webview.contentDocument || webview.contentWindow.document;
+      const t = doc.title || "";
+      if (t) {
+        const shortTitle = t.length > 40 ? t.slice(0, 40) + "…" : t;
+        tab.titleEl.textContent = shortTitle;
+      }
+    } catch (err) {
+      // Cross-origin : on n’accède pas au titre
+      if (tab.history[tab.index]) {
+        const url = tab.history[tab.index];
+        const host = new URL(url).hostname.replace("www.", "");
+        tab.titleEl.textContent = host;
+      }
+    }
+  });
+
+  // --- Init ---
+  setStatus("Prêt. Clique sur ⌂ pour aller à la page d’accueil, ou tape une URL / des mots-clés.", false);
+  updateNavButtons();
+</script>
+</body>
+</html>
