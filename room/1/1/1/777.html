@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>ALERTE - CHMOD 777 | Erreur 404</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    :root {
+      --bg-main: #02030a;
+      --bg-alt: #050713;
+      --red-alert: #ff0044;
+      --red-soft: #ff4b6e;
+      --terminal-green: #00ff88;
+      --terminal-glow: #00ff8880;
+      --amber: #ffb400;
+      --white-soft: #f5f5f5;
+      --border-neon: #ff00ff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Share Tech Mono', monospace;
+      background: radial-gradient(circle at top, #111633 0, #02030a 50%);
+      color: var(--white-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Scanlines + glitch overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px
+      );
+      background-size: 100% 3px;
+      mix-blend-mode: soft-light;
+      opacity: 0.6;
+      animation: scan 8s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 1000px;
+      background: linear-gradient(145deg, rgba(255,0,68,0.12), rgba(0,255,136,0.08));
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow:
+        0 0 40px rgba(0,0,0,0.9),
+        0 0 30px rgba(255,0,68,0.4);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wrapper::before {
+      content: "";
+      position: absolute;
+      width: 250%;
+      height: 250%;
+      background: conic-gradient(
+        from 45deg,
+        rgba(255,0,68,0.15),
+        rgba(0,255,136,0.05),
+        rgba(255,0,68,0.15)
+      );
+      top: -75%;
+      left: -75%;
+      z-index: -2;
+      animation: rotateGlow 20s linear infinite;
+      filter: blur(40px);
+      opacity: 0.5;
+    }
+
+    @keyframes rotateGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .wrapper::after {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: 1.4rem;
+      background: radial-gradient(circle at top left, #141628 0, #03040d 45%, #000 100%);
+      z-index: -1;
+    }
+
+    /* HEADER ALERT */
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge-404 {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--amber);
+    }
+
+    .badge-404 span {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,180,0,0.6);
+      background: radial-gradient(circle, rgba(255,180,0,0.16) 0, transparent 65%);
+    }
+
+    .alert-line {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .icon-warning {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid var(--red-alert);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--red-alert);
+      box-shadow:
+        0 0 20px rgba(255,0,68,0.8),
+        0 0 40px rgba(255,0,68,0.4);
+      animation: pulse 1.4s infinite;
+    }
+
+    .icon-warning span {
+      font-size: 1.8rem;
+      transform: translateY(-2px);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow:
+          0 0 10px rgba(255,0,68,0.4),
+          0 0 25px rgba(255,0,68,0.2);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow:
+          0 0 25px rgba(255,0,68,1),
+          0 0 55px rgba(255,0,68,0.6);
+        transform: scale(1.05);
+      }
+    }
+
+    .titles {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .main-title {
+      font-size: clamp(1.9rem, 4.2vw, 2.5rem);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--red-soft);
+      position: relative;
+      text-shadow:
+        0 0 5px rgba(255,0,68,0.8),
+        0 0 15px rgba(255,0,68,0.5);
+      animation: glitch 2.5s infinite;
+    }
+
+    .sub-title {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.65);
+    }
+
+    @keyframes glitch {
+      0% {
+        text-shadow:
+          1px 0 var(--red-alert),
+          -1px 0 var(--terminal-green);
+      }
+      20% {
+        text-shadow:
+          2px -1px var(--red-alert),
+          -2px 1px var(--terminal-green);
+      }
+      40% {
+        text-shadow:
+          -1px 1px var(--red-alert),
+          1px -1px var(--terminal-green);
+      }
+      60% {
+        text-shadow:
+          0 0 var(--red-alert),
+          0 0 var(--terminal-green);
+      }
+      80% {
+        text-shadow:
+          -2px -1px var(--red-alert),
+          2px 2px var(--terminal-green);
+      }
+      100% {
+        text-shadow:
+          1px 0 var(--red-alert),
+          -1px 0 var(--terminal-green);
+      }
+    }
+
+    /* LAYOUT BODY */
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 800px) {
+      .content-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .wrapper {
+        padding: 1.2rem;
+      }
+    }
+
+    /* Left: Explanation */
+
+    .explain-block {
+      background: radial-gradient(circle at top left, rgba(255,0,68,0.08), rgba(0,0,0,0.6));
+      border-radius: 1.1rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 1rem 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .explain-block::before {
+      content: "RISK ANALYSIS";
+      position: absolute;
+      top: 0.6rem;
+      right: 1rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      color: rgba(255,255,255,0.26);
+    }
+
+    .section-title {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--terminal-green);
+      margin-bottom: 0.7rem;
+    }
+
+    .text-muted {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.6;
+      margin-bottom: 0.6rem;
+    }
+
+    .list {
+      list-style: none;
+      margin: 0.2rem 0 0.6rem;
+      padding-left: 0.2rem;
+    }
+
+    .list li {
+      position: relative;
+      padding-left: 1.1rem;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .list li::before {
+      content: ">";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--amber);
+    }
+
+    .code-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.6);
+      background: radial-gradient(circle at top left, rgba(0,255,136,0.2), rgba(0,0,0,0.9));
+      box-shadow: 0 0 16px rgba(0,255,136,0.35);
+      font-size: 0.9rem;
+      margin: 0.2rem 0 0.7rem;
+      color: var(--terminal-green);
+    }
+
+    .code-badge code {
+      font-family: inherit;
+      background: rgba(0,0,0,0.6);
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0,255,136,0.5);
+    }
+
+    .risk-meter {
+      margin-top: 0.6rem;
+    }
+
+    .risk-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 0.25rem;
+    }
+
+    .risk-bar {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #00ff88 0%, #ffb400 40%, #ff0044 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .risk-bar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(0,0,0,0),
+        rgba(0,0,0,0) 6px,
+        rgba(0,0,0,0.45) 6px,
+        rgba(0,0,0,0.45) 12px
+      );
+      animation: moveStripes 1.2s linear infinite;
+      mix-blend-mode: soft-light;
+    }
+
+    @keyframes moveStripes {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-20px); }
+    }
+
+    .hint {
+      margin-top: 0.45rem;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      border-left: 2px solid rgba(255,255,255,0.2);
+      padding-left: 0.6rem;
+    }
+
+    /* Right: Fake ransomware / terminal */
+
+    .terminal-block {
+      background: radial-gradient(circle at top right, rgba(0,255,136,0.12), rgba(0,0,0,0.85));
+      border-radius: 1.1rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .term-dots {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .dot.red    { background: #ff4b6e; }
+    .dot.amber  { background: #ffb400; }
+    .dot.green  { background: #00ff88; }
+
+    .term-body {
+      font-size: 0.78rem;
+      line-height: 1.45;
+      color: var(--terminal-green);
+      max-height: 220px;
+      overflow: hidden;
+      position: relative;
+      padding-top: 0.25rem;
+    }
+
+    .term-line {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .term-line.warn {
+      color: var(--amber);
+    }
+
+    .term-line.error {
+      color: var(--red-soft);
+    }
+
+    .term-line strong {
+      color: var(--red-soft);
+    }
+
+    .term-body::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 40px;
+      background: linear-gradient(to top, #02030a 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      background: var(--terminal-green);
+      margin-left: 4px;
+      animation: blink 0.9s steps(1) infinite;
+      height: 12px;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    .progress-wrap {
+      margin-top: 0.4rem;
+      font-size: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .progress-bar {
+      margin-top: 0.25rem;
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: #050713;
+      overflow: hidden;
+      border: 1px solid rgba(0,255,136,0.4);
+    }
+
+    .progress-bar-inner {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00ff88, #ffb400, #ff0044);
+      box-shadow: 0 0 12px rgba(255,0,68,0.7);
+      transition: width 0.2s linear;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 140px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 0.6rem 1rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      background: rgba(0,0,0,0.7);
+      color: rgba(255,255,255,0.86);
+      cursor: pointer;
+      transition: 0.2s transform, 0.2s box-shadow, 0.2s background, 0.2s border-color;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .btn.primary {
+      background: radial-gradient(circle at top, rgba(0,255,136,0.35), rgba(0,0,0,0.7));
+      border-color: rgba(0,255,136,0.7);
+      color: #e8fff4;
+      box-shadow: 0 0 18px rgba(0,255,136,0.6);
+    }
+
+    .btn.danger {
+      background: radial-gradient(circle at top, rgba(255,0,68,0.3), rgba(0,0,0,0.7));
+      border-color: rgba(255,0,68,0.7);
+      color: #ffe8ee;
+      box-shadow: 0 0 18px rgba(255,0,68,0.6);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow:
+        0 0 18px rgba(255,255,255,0.3),
+        0 0 35px rgba(255,0,68,0.4);
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: none;
+    }
+
+    .btn span.icon {
+      font-size: 1rem;
+    }
+
+    /* FOOTNOTE 404 */
+
+    .footnote {
+      margin-top: 1.1rem;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.55);
+      text-align: right;
+    }
+
+    .footnote strong {
+      color: var(--red-soft);
+    }
+
+    /* MODALE GAME OVER */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.35s opacity, 0.35s visibility;
+      z-index: 50;
+    }
+
+    .modal-backdrop.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      width: min(92vw, 460px);
+      background: radial-gradient(circle at top, rgba(255,0,68,0.4), #05020a 40%);
+      border-radius: 1.5rem;
+      border: 1px solid var(--border-neon);
+      box-shadow:
+        0 0 30px rgba(255,0,255,0.7),
+        0 0 60px rgba(255,0,68,0.6);
+      padding: 1.6rem 1.4rem 1.3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(
+        from 0deg,
+        rgba(255,0,255,0.25),
+        rgba(0,255,136,0.15),
+        rgba(255,0,255,0.25)
+      );
+      filter: blur(40px);
+      opacity: 0.6;
+      z-index: -2;
+    }
+
+    .modal::after {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: 1.3rem;
+      background: radial-gradient(circle at top, #140414, #02000c 65%);
+      z-index: -1;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .modal-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 2px solid var(--red-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--red-soft);
+      font-size: 1.6rem;
+      box-shadow:
+        0 0 18px rgba(255,0,68,0.9),
+        0 0 45px rgba(255,0,68,0.6);
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--white-soft);
+    }
+
+    .modal-sub {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-body-text {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.6;
+      margin-bottom: 0.9rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      justify-content: flex-end;
+    }
+
+    .modal-actions .btn {
+      min-width: 150px;
+    }
+
+    .modal-hint {
+      margin-top: 0.7rem;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.55);
+      text-align: right;
+      font-style: italic;
+    }
+
+    /* Small screens */
+    @media (max-width: 480px) {
+      .main-title {
+        letter-spacing: 0.16em;
+      }
+      .header {
+        gap: 0.6rem;
+      }
+      .alert-line {
+        align-items: flex-start;
+      }
+      .icon-warning {
+        width: 40px;
+        height: 40px;
+      }
+      .icon-warning span {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="badge-404">
+        <span>ERREUR 404</span>
+        <span>SURVEILLANCE ACTIVE</span>
+      </div>
+      <div class="alert-line">
+        <div class="icon-warning" aria-hidden="true">
+          <span>!</span>
+        </div>
+        <div class="titles">
+          <h1 class="main-title">ALERTE – CHMOD 777</h1>
+          <p class="sub-title">
+            Tu viens d’ouvrir une porte avec toutes les clés, pour tout le monde, sur une page qui n’existe même pas.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-grid">
+      <!-- EXPLANATION -->
+      <section class="explain-block" aria-label="Explication du risque chmod 777">
+        <h2 class="section-title">Pourquoi <code>chmod 777</code> est une si mauvaise idée</h2>
+        <p class="text-muted">
+          Sous Linux/Unix, chaque fichier ou dossier a des droits pour :
+        </p>
+        <ul class="list">
+          <li><strong>l’utilisateur</strong> (owner)</li>
+          <li><strong>le groupe</strong></li>
+          <li><strong>le reste du monde</strong> (others)</li>
+        </ul>
+
+        <p class="text-muted">
+          Chaque chiffre de <code>777</code> est une somme :
+        </p>
+        <ul class="list">
+          <li><strong>4</strong> = lecture (<code>r</code>)</li>
+          <li><strong>2</strong> = écriture (<code>w</code>)</li>
+          <li><strong>1</strong> = exécution (<code>x</code>)</li>
+        </ul>
+
+        <div class="code-badge">
+          <span>Tu as tapé :</span>
+          <code>chmod -R 777 ./site</code>
+        </div>
+
+        <p class="text-muted">
+          Résultat : <strong>tout le monde</strong> peut lire, modifier et exécuter <em>tout</em> dans ton dossier.
+          Sur un serveur exposé au web, cela revient à coller un post-it “FAITES-VOUS PLAISIR” sur le cadenas.
+        </p>
+
+        <ul class="list">
+          <li>Un script malveillant peut être uploadé & exécuté.</li>
+          <li>Un visiteur ou un bot peut altérer tes fichiers, tes logs, tes sauvegardes.</li>
+          <li>Un attaquant peut injecter du code dans ton site pour piéger tes propres visiteurs.</li>
+        </ul>
+
+        <p class="text-muted">
+          Les alternatives saines : ajuster finement les droits (<code>755</code>, <code>750</code>, <code>644</code>, etc.) et utiliser
+          les bons propriétaires (<code>chown</code>, <code>chgrp</code>).
+        </p>
+
+        <div class="risk-meter">
+          <div class="risk-label">NIVEAU DE RISQUE ESTIMÉ</div>
+          <div class="risk-bar"></div>
+          <p class="hint">
+            Si la première chose qu’on te conseille est “mets ton site en <code>777</code> et ça va marcher”,
+            pose-toi sérieusement des questions… et change de tuto.
+          </p>
+        </div>
+      </section>
+
+      <!-- TERMINAL / FAKE RANSOMWARE -->
+      <section class="terminal-block" aria-label="Simulateur d'alerte sécurité">
+        <div class="terminal-header">
+          <div class="term-dots">
+            <span class="dot red"></span>
+            <span class="dot amber"></span>
+            <span class="dot green"></span>
+          </div>
+          <div>root@server:/var/www/html</div>
+        </div>
+
+        <div class="term-body" id="terminal">
+          <!-- Lignes générées en JS -->
+          <div class="term-line">[SYSTEM] Initialisation du module de surveillance des permissions...</div>
+        </div>
+
+        <div class="progress-wrap">
+          <span>Simulation de chiffrement...</span>
+          <span id="progress-label">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-bar-inner" id="progress-bar-inner"></div>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" id="btn-trigger">
+            <span class="icon">⮞</span>
+            Tenter une récupération
+          </button>
+          <button class="btn danger" id="btn-giveup">
+            <span class="icon">✖</span>
+            Abandonner (perdre la partie)
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <p class="footnote">
+      <strong>Note :</strong> cette page 404 est un exercice de sensibilisation. Si tu vois un jour ce genre d’alerte en vrai, débranche, respire… et appelle quelqu’un qui sait ce qu’il fait.
+    </p>
+  </div>
+
+  <!-- MODAL GAME OVER -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <div class="modal-icon">☠</div>
+        <div>
+          <div class="modal-title" id="modal-title">PARTIE TERMINÉE</div>
+        </div>
+      </div>
+      <p class="modal-sub">
+        L’alerte <strong>CHMOD 777</strong> a été déclenchée. Le système considère que tu as perdu ce round.
+      </p>
+      <p class="modal-body-text">
+        Dans ce jeu comme dans l’administration système, chaque mauvais choix se paie tôt ou tard.  
+        Tu viens de réaliser pourquoi donner tous les droits à tout le monde, tout le temps, n’est pas une stratégie d’avenir.
+        <br><br>
+        Pour continuer, tu dois <strong>reprendre la partie à l’étape précédente</strong> : reviens sur la page d’avant,
+        revois ta configuration, et retente un chemin plus propre.
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn primary" id="btn-back">
+          ⮜ Revenir à l’étape précédente
+        </button>
+        <button class="btn danger" id="btn-reload">
+          ⟳ Recharger le niveau
+        </button>
+      </div>
+
+      <p class="modal-hint">
+        Pro-tip : dans la vraie vie, on ne tape <code>chmod 777</code> qu’en comprenant exactement pourquoi…
+        et surtout, sur quoi.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Texte du "ransomware" simulé
+    const lines = [
+      "[ALERTE] Droits sur /var/www/html détectés : 777 (rwxrwxrwx).",
+      "[SCAN] Tous les utilisateurs peuvent modifier et exécuter ces fichiers.",
+      "[WARN] Détection d’un pattern à haut risque : chmod -R 777 ./site",
+      "[INFO] Initialisation d’un module de chiffrement fictif...",
+      "[SIMULATION] Scan des fichiers publics…",
+      "[SIMULATION] Injection possible de scripts malveillants détectée.",
+      "[WARN] Un bot pourrait déposer un webshell accessible depuis Internet.",
+      "[WARN] Tes logs, sauvegardes et configs deviennent jouets pour inconnus.",
+      "[ERROR] Niveau de paranoïa recommandé : 11/10.",
+      "[HINT] Solution : revoir la stratégie de permissions, pas rajouter du 7 partout."
+    ];
+
+    const terminal = document.getElementById('terminal');
+    const progressInner = document.getElementById('progress-bar-inner');
+    const progressLabel = document.getElementById('progress-label');
+    const modal = document.getElementById('modal');
+
+    let currentLine = 0;
+    let encryptionProgress = 0;
+    let intervalLines;
+    let intervalProgress;
+    let modalShown = false;
+
+    function addLine() {
+      if (currentLine >= lines.length) {
+        clearInterval(intervalLines);
+        return;
+      }
+      const lineText = lines[currentLine];
+
+      const div = document.createElement('div');
+      div.className = "term-line";
+      if (lineText.startsWith("[WARN]")) {
+        div.classList.add("warn");
+      } else if (lineText.startsWith("[ERROR]")) {
+        div.classList.add("error");
+      }
+
+      div.textContent = lineText;
+      terminal.appendChild(div);
+      terminal.scrollTop = terminal.scrollHeight;
+
+      currentLine++;
+    }
+
+    function startLines() {
+      intervalLines = setInterval(addLine, 800);
+    }
+
+    function startProgress() {
+      intervalProgress = setInterval(() => {
+        if (encryptionProgress >= 100) {
+          encryptionProgress = 100;
+          clearInterval(intervalProgress);
+          if (!modalShown) {
+            showModal();
+          }
+        } else {
+          encryptionProgress += Math.floor(Math.random() * 8) + 3;
+          if (encryptionProgress > 100) encryptionProgress = 100;
+        }
+        progressInner.style.width = encryptionProgress + "%";
+        progressLabel.textContent = encryptionProgress + "%";
+      }, 500);
+    }
+
+    function showModal() {
+      modalShown = true;
+      modal.classList.add('show');
+    }
+
+    // Boutons / actions
+
+    document.getElementById('btn-trigger').addEventListener('click', () => {
+      // L’user croit "tenter une récupération" → game over
+      showModal();
+    });
+
+    document.getElementById('btn-giveup').addEventListener('click', () => {
+      // Abandon explicite → game over aussi
+      showModal();
+    });
+
+    document.getElementById('btn-back').addEventListener('click', () => {
+      // Revenir à l’étape précédente (jeu)
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        // Fallback : recharger
+        window.location.href = "/";
+      }
+    });
+
+    document.getElementById('btn-reload').addEventListener('click', () => {
+      window.location.reload();
+    });
+
+    // Ajout d’un curseur clignotant à la dernière ligne
+    function addCursor() {
+      const cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      const lastLine = terminal.lastElementChild;
+      if (lastLine) {
+        lastLine.appendChild(cursor);
+      }
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      startLines();
+      startProgress();
+
+      // Ajout périodique d'un curseur sur la dernière ligne
+      setInterval(() => {
+        const oldCursor = terminal.querySelector('.cursor');
+        if (oldCursor) oldCursor.remove();
+        addCursor();
+      }, 700);
+    });
+  </script>
+</body>
+</html>
