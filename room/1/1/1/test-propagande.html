@@ -1,484 +1,2551 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
+<!-- saved from url=(0073)file:///C:/Users/yanni/Downloads/humint-manuel-web%20(1)%20(1)%20(1).html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE NEXUS // GitHub x StackOverflow</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <title>Manuel HUMINT - Renseignement Humain</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;800&family=Inter:wght@300;400;600;800&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         :root {
-            --bg-deep: #050505;
-            --accent: #00f2ff;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --text: #eaeaea;
+            --text-dim: #a0a0a0;
+            --border: #2a2a3e;
         }
 
         body {
-            background-color: var(--bg-deep);
-            color: #e5e7eb;
-            font-family: 'Inter', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        .mono { font-family: 'JetBrains Mono', monospace; }
+        .header {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            padding: 1.5rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
 
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            color: var(--text);
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .menu-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--highlight);
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 85%;
+            max-width: 350px;
+            height: 100vh;
+            background: var(--secondary);
+            transition: left 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            background: var(--accent);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .close-sidebar {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            float: right;
+        }
+
+        .nav-section {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-section h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            padding: 0.8rem 1rem;
+            margin: 0.3rem 0;
+            background: var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--accent);
+            border-left-color: var(--highlight);
+            transform: translateX(5px);
+        }
+
+        .nav-item-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .nav-item-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 0.2rem;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 998;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: var(--secondary);
             border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        .glass-card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+        .card h2 {
+            color: var(--highlight);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
         }
 
-        .repo-item.active {
-            border-left: 4px solid var(--accent);
-            background: rgba(0, 242, 255, 0.05);
+        .card h3 {
+            color: var(--text);
+            font-size: 1.1rem;
+            margin: 1.5rem 0 0.8rem 0;
         }
 
-        /* Barre de défilement personnalisée */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        .card h4 {
+            color: var(--text);
+            font-size: 1rem;
+            margin: 1rem 0 0.5rem 0;
+            font-weight: 600;
+        }
 
-        /* Graphique de contribution */
-        .grid-cell { width: 12px; height: 12px; border-radius: 2px; }
-        .lvl-0 { background: #161b22; }
-        .lvl-1 { background: #0e4429; }
-        .lvl-2 { background: #006d32; }
-        .lvl-3 { background: #26a641; }
-        .lvl-4 { background: #39d353; }
+        .card p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
 
-        #markdown-content h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-        #markdown-content h2 { font-size: 1.8rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
-        #markdown-content p { margin-bottom: 1rem; line-height: 1.6; opacity: 0.9; }
-        #markdown-content code { background: rgba(255,255,255,0.1); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'JetBrains Mono'; font-size: 0.9em; }
-        #markdown-content pre { background: #0d1117; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border: 1px solid var(--border); overflow-x: auto; }
-        
-        .vote-btn { cursor: pointer; transition: color 0.2s; }
-        .vote-btn:hover { color: var(--accent); }
+        .card ul, .card ol {
+            margin: 1rem 0 1rem 1.5rem;
+            color: var(--text);
+        }
 
-        .tag {
-            background: rgba(0, 242, 255, 0.1);
-            color: var(--accent);
-            padding: 2px 8px;
+        .card li {
+            margin-bottom: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: var(--accent);
+            color: var(--text);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 0.2rem;
+            font-weight: 500;
+        }
+
+        .highlight-box {
+            background: var(--accent);
+            border-left: 4px solid var(--highlight);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+        }
+
+        .warning-box {
+            background: rgba(233, 69, 96, 0.1);
+            border-left: 4px solid var(--highlight);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .info-card {
+            background: var(--primary);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .info-card-title {
+            font-weight: 600;
+            color: var(--highlight);
+            margin-bottom: 0.5rem;
+        }
+
+        .search-box {
+            position: sticky;
+            top: 80px;
+            background: var(--secondary);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            z-index: 50;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--highlight);
+        }
+
+        .breadcrumb {
+            padding: 0.8rem 1rem;
+            background: var(--secondary);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .breadcrumb span {
+            color: var(--highlight);
+        }
+
+        strong {
+            color: var(--highlight);
+            font-weight: 600;
+        }
+
+        code {
+            background: var(--primary);
+            padding: 0.2rem 0.5rem;
             border-radius: 4px;
-            font-size: 12px;
-            border: 1px solid rgba(0, 242, 255, 0.2);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
         }
 
-        .shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
+        /* Highlight search terms */
+        mark {
+            background: var(--highlight);
+            color: var(--text);
+            padding: 0 2px;
+            border-radius: 2px;
         }
 
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+        @media (min-width: 1024px) {
+            .menu-toggle {
+                display: none;
+            }
+
+            .sidebar {
+                left: 0;
+                width: 320px;
+            }
+
+            .container {
+                margin-left: 320px;
+            }
+
+            .overlay {
+                display: none;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .progress-bar {
+            display: block;
+            padding: 0.5rem;
+            background: var(--primary);
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .progress-fill {
+            display: block;
+            height: 4px;
+            background: var(--highlight);
+            border-radius: 2px;
+            margin-top: 0.3rem;
         }
     </style>
 </head>
-<body class="antialiased">
+<body>
+    <div class="header">
+        <h1>📚 Manuel HUMINT</h1>
+        <p>Renseignement Humain - Guide Complet</p>
+    </div>
 
-    <!-- Navigation Supérieure -->
-    <nav class="sticky top-0 z-50 glass-card m-4 p-4 flex items-center justify-between border-none rounded-2xl bg-black/60">
-        <div class="flex items-center gap-6">
-            <div class="flex items-center gap-2 text-xl font-black tracking-tighter text-white">
-                <i data-lucide="terminal" class="text-cyan-400"></i>
-                THE_NEXUS<span class="text-cyan-400">.io</span>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+    <button class="scroll-top" id="scrollTop">↑</button>
+    <div class="overlay" id="overlay"></div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-sidebar" id="closeSidebar">✕</button>
+            <h2>Navigation</h2>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem;">17 chapitres • Manuel complet</p>
+        </div>
+
+        <div class="nav-section">
+            <h3>Introduction</h3>
+            <div class="nav-item" data-section="intro">
+                <div class="nav-item-title">1. Introduction à l'HUMINT</div>
+                <div class="nav-item-subtitle">Définition et importance stratégique</div>
             </div>
-            <div class="relative group">
-                <input type="text" placeholder="Rechercher des dépôts ou questions..." class="bg-white/5 border border-white/10 rounded-lg px-10 py-2 w-96 focus:outline-none focus:border-cyan-400 transition-all text-sm">
-                <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 opacity-40"></i>
-                <div class="absolute right-3 top-2.5 flex gap-1">
-                    <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-[10px] mono">CMD</kbd>
-                    <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-[10px] mono">K</kbd>
-                </div>
+            <div class="nav-item" data-section="fondamentaux">
+                <div class="nav-item-title">2. Fondamentaux</div>
+                <div class="nav-item-subtitle">Principes cardinaux et compétences</div>
             </div>
         </div>
-        
-        <div class="flex items-center gap-4">
-            <button class="flex items-center gap-2 hover:text-cyan-400 transition-colors">
-                <i data-lucide="bell" class="w-5 h-5"></i>
-            </button>
-            <button class="flex items-center gap-2 hover:text-cyan-400 transition-colors">
-                <i data-lucide="plus-circle" class="w-5 h-5"></i>
-            </button>
-            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 border border-white/20"></div>
+
+        <div class="nav-section">
+            <h3>Opérations</h3>
+            <div class="nav-item" data-section="cycle">
+                <div class="nav-item-title">3. Cycle du Renseignement</div>
+                <div class="nav-item-subtitle">Les 5 phases opérationnelles</div>
+            </div>
+            <div class="nav-item" data-section="sources">
+                <div class="nav-item-title">4. Sources Humaines</div>
+                <div class="nav-item-subtitle">Typologie et classification</div>
+            </div>
+            <div class="nav-item" data-section="recrutement">
+                <div class="nav-item-title">5. Techniques de Recrutement</div>
+                <div class="nav-item-subtitle">Modèle MICE et processus</div>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <h3>Techniques</h3>
+            <div class="nav-item" data-section="approche">
+                <div class="nav-item-title">6. Approche et Contact</div>
+                <div class="nav-item-subtitle">Couverture et méthodes</div>
+            </div>
+            <div class="nav-item" data-section="interrogatoire">
+                <div class="nav-item-title">7. Interrogatoire</div>
+                <div class="nav-item-subtitle">Techniques d'entretien avancées</div>
+            </div>
+            <div class="nav-item" data-section="protection">
+                <div class="nav-item-title">8. Protection des Sources</div>
+                <div class="nav-item-subtitle">OPSEC et gestion</div>
+            </div>
+            <div class="nav-item" data-section="elicitation">
+                <div class="nav-item-title">9. Élicitation</div>
+                <div class="nav-item-subtitle">Collecte passive d'informations</div>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <h3>Analyse &amp; Sécurité</h3>
+            <div class="nav-item" data-section="analyse">
+                <div class="nav-item-title">10. Analyse de l'Information</div>
+                <div class="nav-item-subtitle">Évaluation et fiabilité</div>
+            </div>
+            <div class="nav-item active" data-section="contre-espionnage">
+                <div class="nav-item-title">11. Contre-Espionnage</div>
+                <div class="nav-item-subtitle">Sécurité opérationnelle</div>
+            </div>
+            <div class="nav-item" data-section="ethique">
+                <div class="nav-item-title">12. Aspects Éthiques</div>
+                <div class="nav-item-subtitle">Cadre légal et dilemmes</div>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <h3>Pratique</h3>
+            <div class="nav-item" data-section="cas">
+                <div class="nav-item-title">13. Études de Cas</div>
+                <div class="nav-item-subtitle">Scénarios pratiques</div>
+            </div>
+            <div class="nav-item" data-section="technologies">
+                <div class="nav-item-title">14. Technologies Modernes</div>
+                <div class="nav-item-subtitle">Outils et innovations</div>
+            </div>
+            <div class="nav-item" data-section="contextes">
+                <div class="nav-item-title">15. Différents Contextes</div>
+                <div class="nav-item-subtitle">Applications variées</div>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <h3>Formation &amp; Futur</h3>
+            <div class="nav-item" data-section="formation">
+                <div class="nav-item-title">16. Formation</div>
+                <div class="nav-item-subtitle">Développement des officiers</div>
+            </div>
+            <div class="nav-item" data-section="futur">
+                <div class="nav-item-title">17. Futur de l'HUMINT</div>
+                <div class="nav-item-subtitle">Défis et adaptations</div>
+            </div>
         </div>
     </nav>
 
-    <div class="grid grid-cols-12 gap-6 p-4 h-[calc(100vh-120px)]">
-        
-        <!-- Barre latérale : Dépôts -->
-        <aside class="col-span-3 flex flex-col gap-4 overflow-y-auto pr-2">
-            <div class="flex items-center justify-between px-2">
-                <h3 class="font-bold text-sm text-gray-400 uppercase tracking-widest">Dépôts</h3>
-                <i data-lucide="layers" class="w-4 h-4 opacity-50"></i>
-            </div>
+    <main class="container">
+        <!-- Barre de recherche supprimée -->
+
+        <!-- Section 1: Introduction -->
+        <section class="section" id="intro">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Introduction</span></div>
             
-            <div id="repo-list" class="space-y-2">
-                <!-- Chargement dynamique -->
-            </div>
-
-            <div class="mt-8 px-2">
-                <h3 class="font-bold text-sm text-gray-400 uppercase tracking-widest mb-4">Questions Tendances</h3>
-                <div id="sidebar-questions" class="space-y-4">
-                    <!-- Chargement dynamique -->
-                </div>
-            </div>
-        </aside>
-
-        <!-- Zone de contenu principale -->
-        <main class="col-span-6 glass-card overflow-y-auto p-8 relative">
-            <div id="main-view-header" class="mb-8 flex justify-between items-start">
-                <!-- En-tête dynamique -->
-            </div>
-            
-            <div id="view-content" class="animate-in fade-in duration-500">
-                <!-- Markdown ou Question View -->
-            </div>
-        </main>
-
-        <!-- Panneau de droite : Stats & Savoir -->
-        <aside class="col-span-3 space-y-6">
-            <!-- Statistiques Utilisateur -->
-            <div class="glass-card p-6">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="w-16 h-16 rounded-2xl bg-gray-800 flex items-center justify-center border border-white/10">
-                        <i data-lucide="user" class="w-8 h-8 text-cyan-400"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold">Admin_Core</h2>
-                        <p class="text-sm opacity-50">Grand Maître StackOverflow</p>
-                    </div>
-                </div>
+            <div class="card">
+                <h2>1. Introduction à l'HUMINT</h2>
                 
-                <div class="grid grid-cols-2 gap-4 text-center">
-                    <div class="bg-white/5 rounded-xl p-3 border border-white/5">
-                        <div class="text-xs opacity-50 uppercase font-bold">Réputation</div>
-                        <div class="text-xl font-black text-cyan-400">12,842</div>
+                <h3>1.1 Définition</h3>
+                <p>L'<strong>HUMINT (Human Intelligence)</strong> désigne la collecte d'informations par des sources humaines à travers des contacts interpersonnels. C'est l'une des disciplines les plus anciennes et fondamentales du renseignement.</p>
+                
+                <div class="highlight-box">
+                    <strong>Distinction des disciplines :</strong>
+                    <ul>
+                        <li><strong>HUMINT</strong> - Renseignement humain</li>
+                        <li><strong>SIGINT</strong> - Renseignement électromagnétique</li>
+                        <li><strong>IMINT</strong> - Renseignement d'origine image</li>
+                        <li><strong>OSINT</strong> - Renseignement de sources ouvertes</li>
+                    </ul>
+                </div>
+
+                <h3>1.2 Importance Stratégique</h3>
+                <p>L'HUMINT reste irremplaçable pour :</p>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">🧠 Intentions</div>
+                        <p>Accéder aux motivations humaines réelles</p>
                     </div>
-                    <div class="bg-white/5 rounded-xl p-3 border border-white/5">
-                        <div class="text-xs opacity-50 uppercase font-bold">Dépôts</div>
-                        <div class="text-xl font-black">42</div>
+                    <div class="info-card">
+                        <div class="info-card-title">📋 Non-documenté</div>
+                        <p>Obtenir des informations non écrites</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🌍 Culture</div>
+                        <p>Comprendre les dynamiques sociales</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🔒 Pénétration</div>
+                        <p>Infiltrer des organisations fermées</p>
                     </div>
                 </div>
 
-                <!-- Contributions -->
-                <div class="mt-6">
-                    <div class="flex justify-between text-xs mb-2 opacity-50 font-bold">
-                        <span>CONTRIBUTIONS (2025)</span>
-                        <span class="text-green-500">Intense</span>
+                <h3>1.3 Acteurs de l'HUMINT</h3>
+                <p><span class="badge">Services étatiques</span> CIA, MI6, DGSE, Mossad, FSB</p>
+                <p><span class="badge">Renseignement militaire</span> DRM, DIA, unités spécialisées</p>
+                <p><span class="badge">Renseignement économique</span> Protection des intérêts économiques</p>
+                <p><span class="badge">Sécurité intérieure</span> Contre-espionnage, antiterrorisme</p>
+                <p><span class="badge">Secteur privé</span> Intelligence d'entreprise, due diligence</p>
+            </div>
+        </section>
+
+        <!-- Section 2: Fondamentaux -->
+        <section class="section" id="fondamentaux">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Fondamentaux</span></div>
+            
+            <div class="card">
+                <h2>2. Fondamentaux du Renseignement Humain</h2>
+                
+                <h3>2.1 Principes Cardinaux</h3>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">🔐 Confidentialité</div>
+                        <p>Protection absolue de l'identité des sources et des méthodes. Toute compromission peut entraîner la mort d'agents sur le terrain.</p>
                     </div>
-                    <div id="contribution-graph" class="grid grid-cols-12 gap-1">
-                        <!-- Généré par JS -->
+                    <div class="info-card">
+                        <div class="info-card-title">🗂️ Compartimentage</div>
+                        <p>Principe du "besoin d'en connaître" (need-to-know). Limite la diffusion aux seules personnes nécessaires.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">✓ Vérifiabilité</div>
+                        <p>Toute information doit être corroborée par des sources multiples et évaluée rigoureusement.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">⏳ Patience</div>
+                        <p>L'établissement de relations de confiance prend des mois ou des années.</p>
+                    </div>
+                </div>
+
+                <h3>2.2 Qualités de l'Officier HUMINT</h3>
+                <ul>
+                    <li><strong>Intelligence émotionnelle</strong> - Capacité à lire et influencer les émotions</li>
+                    <li><strong>Adaptabilité culturelle</strong> - Compréhension profonde des contextes culturels</li>
+                    <li><strong>Discrétion absolue</strong> - Capacité à maintenir une couverture</li>
+                    <li><strong>Résistance au stress</strong> - Gestion de situations à haut risque</li>
+                    <li><strong>Mémoire exceptionnelle</strong> - Mémorisation de détails sans prise de notes</li>
+                    <li><strong>Patience stratégique</strong> - Acceptation des délais nécessaires</li>
+                    <li><strong>Jugement moral</strong> - Navigation dans les zones grises éthiques</li>
+                </ul>
+
+                <h3>2.3 Compétences Techniques</h3>
+                <div class="highlight-box">
+                    <ul>
+                        <li>Langues étrangères (minimum 2-3 langues opérationnelles)</li>
+                        <li>Techniques de surveillance et contre-surveillance</li>
+                        <li>Communications sécurisées</li>
+                        <li>Établissement et maintien de couverture</li>
+                        <li>Gestion financière et logistique clandestine</li>
+                        <li>Premiers secours et survie</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Cycle du Renseignement -->
+        <section class="section" id="cycle">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Cycle du Renseignement</span></div>
+            
+            <div class="card">
+                <h2>3. Le Cycle du Renseignement</h2>
+                
+                <div class="highlight-box">
+                    <strong>Les 5 phases du cycle :</strong>
+                    <div class="progress-bar">
+                        Phase 1 : Direction et Planification
+                        <span class="progress-fill" style="width: 20%"></span>
+                    </div>
+                    <div class="progress-bar">
+                        Phase 2 : Collecte
+                        <span class="progress-fill" style="width: 40%"></span>
+                    </div>
+                    <div class="progress-bar">
+                        Phase 3 : Traitement
+                        <span class="progress-fill" style="width: 60%"></span>
+                    </div>
+                    <div class="progress-bar">
+                        Phase 4 : Analyse et Production
+                        <span class="progress-fill" style="width: 80%"></span>
+                    </div>
+                    <div class="progress-bar">
+                        Phase 5 : Diffusion
+                        <span class="progress-fill" style="width: 100%"></span>
+                    </div>
+                </div>
+
+                <h3>3.1 Phase 1 : Direction et Planification</h3>
+                <p><strong>Définition des besoins</strong> : Les décideurs politiques ou militaires formulent des questions prioritaires (PIR - Priority Intelligence Requirements).</p>
+                
+                <p><strong>Exemples de PIR :</strong></p>
+                <ul>
+                    <li>Quelles sont les intentions du pays X concernant le développement d'armes nucléaires ?</li>
+                    <li>Qui sont les leaders émergents du mouvement terroriste Y ?</li>
+                    <li>Quelles technologies sensibles l'entreprise Z cherche-t-elle à acquérir ?</li>
+                </ul>
+
+                <h3>3.2 Phase 2 : Collecte</h3>
+                <p><strong>Méthodes de collecte HUMINT :</strong></p>
+                <ul>
+                    <li>Recrutement d'agents en place (agents having access)</li>
+                    <li>Infiltration d'organisations cibles</li>
+                    <li>Débriefing de transfuges et dissidents</li>
+                    <li>Entretiens avec voyageurs et experts</li>
+                    <li>Élicitation lors de contacts apparemment innocents</li>
+                </ul>
+
+                <h3>3.3 Phase 3 : Traitement</h3>
+                <ul>
+                    <li>Transcription et traduction des rapports</li>
+                    <li>Catalogage et indexation</li>
+                    <li>Vérification de l'authenticité</li>
+                    <li>Normalisation du format</li>
+                </ul>
+
+                <h3>3.4 Phase 4 : Analyse et Production</h3>
+                <p>L'analyste fusionne l'HUMINT avec d'autres sources pour :</p>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">📊 Tendances</div>
+                        <p>Identifier les patterns émergents</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🔍 Lacunes</div>
+                        <p>Combler les trous informationnels</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🎯 Intentions</div>
+                        <p>Évaluer les motivations réelles</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">📄 Rapports</div>
+                        <p>Produire des documents exploitables</p>
+                    </div>
+                </div>
+
+                <h3>3.5 Phase 5 : Diffusion</h3>
+                <p>Distribution sélective selon :</p>
+                <ul>
+                    <li>Le niveau de classification</li>
+                    <li>Le besoin d'en connaître</li>
+                    <li>La protection des sources</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 4: Sources Humaines -->
+        <section class="section" id="sources">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Sources Humaines</span></div>
+            
+            <div class="card">
+                <h2>4. Typologie des Sources Humaines</h2>
+                
+                <h3>4.1 Agents en Place</h3>
+                <p><strong>Définition</strong> : Personne ayant accès à des informations sensibles de par sa position, recrutée pour travailler secrètement pour un service étranger.</p>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">👤 Agent d'influence</div>
+                        <p>Modifie les décisions d'une organisation de l'intérieur</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🕵️ Agent de pénétration</div>
+                        <p>Infiltré dans une organisation cible</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">😴 Agent dormant</div>
+                        <p>Activé uniquement en cas de besoin critique</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🎭 Agent double</div>
+                        <p>Travaille pour un service mais en réalité pour un autre</p>
+                    </div>
+                </div>
+
+                <p><strong>Valeur</strong> : Accès direct aux secrets les mieux gardés, vision de l'intérieur.</p>
+
+                <h3>4.2 Transfuges</h3>
+                <p>Personnes qui passent à l'Ouest ou à l'Est de leur propre initiative, souvent avec des informations précieuses.</p>
+                
+                <p><strong>Motivations :</strong></p>
+                <ul>
+                    <li><strong>Idéologiques</strong> - Désillusion politique</li>
+                    <li><strong>Personnelles</strong> - Menace, vengeance</li>
+                    <li><strong>Financières</strong> - Amélioration de vie</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>⚠️ Défis :</strong> Vérification de la bonne foi, risque d'intoxication.
+                </div>
+
+                <h3>4.3 Sources Occasionnelles</h3>
+                <ul>
+                    <li><strong>Voyageurs d'affaires</strong> - Débriefés après des missions dans des pays sensibles</li>
+                    <li><strong>Universitaires et chercheurs</strong> - Contacts lors de conférences internationales</li>
+                    <li><strong>Touristes</strong> - Observations générales mais potentiellement utiles</li>
+                </ul>
+
+                <h3>4.4 Sources Involontaires</h3>
+                <p>Personnes qui fournissent des informations sans savoir qu'elles alimentent le renseignement, souvent via élicitation.</p>
+
+                <h3>4.5 Sources Ouvertes Contactées</h3>
+                <p>Experts publics interrogés de manière ciblée pour clarifier des informations publiques.</p>
+            </div>
+        </section>
+
+        <!-- Section 5: Recrutement -->
+        <section class="section" id="recrutement">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Techniques de Recrutement</span></div>
+            
+            <div class="card">
+                <h2>5. Techniques de Recrutement</h2>
+                
+                <h3>5.1 Le Modèle MICE</h3>
+                <p>Les quatre motivations principales du recrutement :</p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">💰 M - Money (Argent)</div>
+                        <p>La motivation financière reste la plus courante.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Approche :</strong> Identifier les difficultés financières, offrir progressivement, créer une dépendance.</p>
+                        <p style="margin-top: 0.3rem; font-size: 0.85rem; color: var(--text-dim);">Exemple : Aldrich Ames</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🎯 I - Ideology (Idéologie)</div>
+                        <p>Conviction que la cause servie est juste.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Approche :</strong> Identifier les convictions profondes, présenter la collaboration comme cohérente avec ces valeurs.</p>
+                        <p style="margin-top: 0.3rem; font-size: 0.85rem; color: var(--text-dim);">Exemple : Cambridge Five</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">⚠️ C - Compromise (Compromission)</div>
+                        <p>Exploitation de vulnérabilités ou usage de menaces.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Approche :</strong> Documenter activités compromettantes, offrir une "sortie".</p>
+                        <div class="warning-box" style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.85rem;">⚠️ Produit souvent des agents peu fiables</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">⭐ E - Ego / Excitement</div>
+                        <p>Appel au besoin de reconnaissance et d'aventure.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Approche :</strong> Flatter l'expertise, présenter comme défi intellectuel, offrir sentiment d'appartenance à une élite.</p>
+                    </div>
+                </div>
+
+                <h3>5.2 Le Processus de Recrutement en 5 Étapes</h3>
+
+                <h4>Étape 1 : Ciblage (Spotting)</h4>
+                <p>Identification de personnes ayant accès aux informations recherchées.</p>
+                <p><strong>Critères :</strong></p>
+                <ul>
+                    <li>Accès à l'information désirée</li>
+                    <li>Vulnérabilités exploitables</li>
+                    <li>Possibilité de contact discret</li>
+                </ul>
+                <p><strong>Sources d'identification :</strong> LinkedIn, conférences, clubs, recommandations d'autres agents</p>
+
+                <h4>Étape 2 : Évaluation (Assessment)</h4>
+                <p>Analyse approfondie du candidat potentiel.</p>
+                <p><strong>Questions clés :</strong></p>
+                <ul>
+                    <li>Quelle est sa véritable motivation ?</li>
+                    <li>Est-il stable psychologiquement ?</li>
+                    <li>Peut-il garder un secret ?</li>
+                    <li>Y a-t-il des signes d'être un leurre du contre-espionnage ?</li>
+                </ul>
+
+                <h4>Étape 3 : Développement (Development)</h4>
+                <p>Construction progressive d'une relation de confiance.</p>
+                <div class="highlight-box">
+                    <p><strong>Techniques :</strong></p>
+                    <ul>
+                        <li>Contacts répétés dans contextes naturels</li>
+                        <li>Discussions sur sujets d'intérêt commun</li>
+                        <li>Petits services rendus (dette sociale)</li>
+                        <li>Écoute empathique</li>
+                        <li>Partage mesuré d'informations personnelles</li>
+                    </ul>
+                    <p><strong>Durée typique :</strong> 6 mois à 2 ans</p>
+                </div>
+
+                <h4>Étape 4 : Recrutement (Recruitment)</h4>
+                <p>Le moment de "la proposition".</p>
+                
+                <p><strong>Approche douce :</strong></p>
+                <p style="font-style: italic; padding-left: 1rem; border-left: 3px solid var(--highlight);">"J'ai des amis qui seraient très intéressés par votre expertise sur ce sujet. Ils pourraient vous dédommager généreusement pour votre temps."</p>
+
+                <p><strong>Approche directe :</strong></p>
+                <p style="font-style: italic; padding-left: 1rem; border-left: 3px solid var(--highlight);">"Nous savons que vous avez accès à des informations importantes. Nous sommes prêts à vous rémunérer pour partager ces informations avec nous."</p>
+
+                <p><strong>Faux drapeau :</strong> Faire croire à la cible qu'elle travaille pour une organisation autre que la véritable (journalisme, ONG, pays allié).</p>
+
+                <h4>Étape 5 : Gestion (Handling)</h4>
+                <p>Une fois recruté, l'agent nécessite une gestion continue.</p>
+                <ul>
+                    <li>Rencontres régulières mais discrètes</li>
+                    <li>Maintien de la motivation</li>
+                    <li>Formation aux techniques de sécurité</li>
+                    <li>Équipement en moyens de communication sécurisés</li>
+                    <li>Rémunération et compensation</li>
+                    <li>Soutien psychologique</li>
+                </ul>
+
+                <h3>5.3 Profils Psychologiques à Rechercher</h3>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">😤 Le Frustré</div>
+                        <p><strong>Signes :</strong> Plaintes répétées, sentiment d'injustice, compétences non reconnues</p>
+                        <p style="margin-top: 0.5rem;"><strong>Approche :</strong> Offrir la reconnaissance manquante</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">💭 L'Idéaliste Déçu</div>
+                        <p><strong>Signes :</strong> Expressions de désillusion, questionnements éthiques, "lignes rouges" franchies</p>
+                        <p style="margin-top: 0.5rem;"><strong>Approche :</strong> Présenter la coopération comme acte moral</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🎢 L'Aventurier</div>
+                        <p><strong>Signes :</strong> Activités à risque, ennui dans la routine, fascination pour l'espionnage</p>
+                        <p style="margin-top: 0.5rem;"><strong>Approche :</strong> Offrir l'aventure et le frisson</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">💵 Le Mercenaire</div>
+                        <p><strong>Signes :</strong> Discussions fréquentes sur l'argent, style de vie au-dessus des moyens, dettes</p>
+                        <p style="margin-top: 0.5rem;"><strong>Approche :</strong> Négociation financière claire</p>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Section Tags -->
-            <div class="glass-card p-6">
-                <h3 class="font-bold text-sm text-gray-400 uppercase tracking-widest mb-4">Top Technologies</h3>
-                <div class="flex flex-wrap gap-2">
-                    <span class="tag">#Rust</span>
-                    <span class="tag">#NextJS</span>
-                    <span class="tag">#PyTorch</span>
-                    <span class="tag">#WebAssembly</span>
-                    <span class="tag">#KernelDev</span>
-                    <span class="tag">#Solidity</span>
+        <!-- Section 6: Approche et Contact -->
+        <section class="section" id="approche">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Approche et Contact</span></div>
+            
+            <div class="card">
+                <h2>6. Méthodes d'Approche et de Contact</h2>
+                
+                <h3>6.1 Couverture et Légende</h3>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">🎭 Couverture Naturelle</div>
+                        <p>Utilisation de sa véritable profession (diplomate, journaliste, homme d'affaires).</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🕵️ Couverture Profonde</div>
+                        <p>Création d'une fausse identité complète avec background vérifiable.</p>
+                    </div>
+                </div>
+
+                <p><strong>Éléments d'une légende crédible :</strong></p>
+                <ul>
+                    <li>Documents d'identité authentiques ou de haute qualité</li>
+                    <li>Historique professionnel cohérent</li>
+                    <li>Présence numérique (réseaux sociaux, sites web)</li>
+                    <li>Connaissances techniques du domaine de couverture</li>
+                    <li>Cercle social crédible</li>
+                    <li>Raisons légitimes de présence dans la zone d'opération</li>
+                </ul>
+
+                <h3>6.2 Techniques de Rencontre</h3>
+
+                <h4>Rencontre "Accidentelle"</h4>
+                <p>Création d'opportunités de contact qui semblent naturelles.</p>
+                <p><strong>Lieux propices :</strong></p>
+                <ul>
+                    <li>Conférences professionnelles</li>
+                    <li>Clubs sportifs ou culturels</li>
+                    <li>Restaurants et bars fréquentés par la cible</li>
+                    <li>Transports en commun ou aéroports</li>
+                    <li>Événements sociaux</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Exemple de scénario :</strong>
+                    <p>Observer les habitudes de la cible, fréquenter le même café, "reconnaître" la personne comme collègue de secteur, engager une conversation professionnelle.</p>
+                </div>
+
+                <h4>Introduction par Tiers</h4>
+                <p>Utilisation d'un intermédiaire de confiance pour faciliter le contact.</p>
+                <p><strong>Avantages :</strong> Crédibilité immédiate, baisse des défenses naturelles, contexte social naturel</p>
+
+                <h4>Contact Direct</h4>
+                <p>Approche frontale dans un cadre professionnel.</p>
+                <p><strong>Contextes :</strong> Sollicitation d'expertise consultante, interview journalistique, collaboration académique, opportunité d'affaires</p>
+
+                <h3>6.3 Lieux de Rencontre Sécurisés</h3>
+
+                <p><strong>Critères d'un bon lieu :</strong></p>
+                <ul>
+                    <li>Anonymat (lieux fréquentés mais pas trop)</li>
+                    <li>Bruit ambiant (protection contre l'écoute)</li>
+                    <li>Plusieurs issues de sortie</li>
+                    <li>Possibilité de surveillance préalable</li>
+                    <li>Contexte naturel pour la rencontre</li>
+                </ul>
+
+                <p><strong>Exemples :</strong> Cafés avec terrasses bondées, parcs publics lors de jogging, centres commerciaux, musées et expositions, parkings souterrains (pour échanges rapides)</p>
+
+                <h3>6.4 Contre-Surveillance</h3>
+
+                <p><strong>Techniques de détection :</strong></p>
+                <ul>
+                    <li>Parcours irréguliers avec arrêts soudains</li>
+                    <li>Utilisation de surfaces réfléchissantes</li>
+                    <li>Changements de direction abrupts</li>
+                    <li>Entrée dans des lieux avec une seule issue</li>
+                    <li>Utilisation de transports en commun (changements de ligne)</li>
+                </ul>
+
+                <p><strong>Nettoyage de filature :</strong></p>
+                <ul>
+                    <li>Parcours complexe avant la rencontre</li>
+                    <li>Utilisation de taxis avec changements multiples</li>
+                    <li>Passage par grands magasins avec sorties multiples</li>
+                    <li>Vérification finale dans environnement contrôlé</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 7: Interrogatoire -->
+        <section class="section" id="interrogatoire">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Interrogatoire et Entretien</span></div>
+            
+            <div class="card">
+                <h2>7. Techniques d'Interrogatoire et d'Entretien</h2>
+                
+                <h3>7.1 Préparation de l'Entretien</h3>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">📚 Recherche Préalable</div>
+                        <p>Tout ce qui est connu sur le sujet, informations contradictoires à vérifier, questions prioritaires, points de vulnérabilité</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🧠 Préparation Psychologique</div>
+                        <p>Établissement du rapport de force souhaité, choix du ton, anticipation des résistances</p>
+                    </div>
+                </div>
+
+                <h3>7.2 Établissement du Rapport</h3>
+                <div class="warning-box">
+                    <strong>⚠️ Phase cruciale :</strong> Les premières minutes déterminent la qualité de l'ensemble.
+                </div>
+
+                <p><strong>Techniques :</strong></p>
+                <ul>
+                    <li><strong>Synchronisation</strong> - Adopter le rythme et le ton de la source</li>
+                    <li><strong>Écoute active</strong> - Reformulation, validation émotionnelle</li>
+                    <li><strong>Empathie</strong> - "Je comprends votre position..."</li>
+                    <li><strong>Points communs</strong> - Identification d'expériences ou intérêts partagés</li>
+                </ul>
+
+                <h3>7.3 Techniques d'Interrogatoire</h3>
+
+                <h4>🎯 Approche Directe</h4>
+                <p>Questionnement franc et ouvert.</p>
+                <p><strong>Usage :</strong> Avec sources coopératives ou dans contextes professionnels normaux</p>
+                <p style="font-style: italic;">Exemple : "Pouvez-vous me décrire la structure de commandement de votre département ?"</p>
+
+                <h4>🔽 Technique de l'Entonnoir</h4>
+                <p>Du général au spécifique.</p>
+                <div class="highlight-box">
+                    <p><strong>Avantages :</strong></p>
+                    <ul>
+                        <li>Moins menaçant au début</li>
+                        <li>Permet de contextualiser les détails</li>
+                        <li>Évite de révéler trop tôt ce qu'on sait déjà</li>
+                    </ul>
+                    <p><strong>Exemple de progression :</strong></p>
+                    <ol>
+                        <li>"Parlez-moi de votre travail en général"</li>
+                        <li>"Quels sont vos projets actuels ?"</li>
+                        <li>"Sur le projet X spécifiquement, qui est impliqué ?"</li>
+                        <li>"Concernant cette réunion du 15 mars sur le projet X..."</li>
+                    </ol>
+                </div>
+
+                <h4>😊😔 Technique de l'Émotionnel</h4>
+                
+                <p><strong>Ego Up</strong> - Flatterie pour augmenter la coopération</p>
+                <p style="font-style: italic; padding-left: 1rem;">"Vous êtes clairement l'expert sur ce sujet, personne d'autre ne pourrait expliquer cela aussi bien."</p>
+
+                <p><strong>Ego Down</strong> - Mise en doute pour provoquer une réaction de preuve</p>
+                <p style="font-style: italic; padding-left: 1rem;">"Je ne suis pas sûr que vous ayez vraiment accès à ce niveau d'information..."</p>
+
+                <p><strong>Peur</strong> - Pour sources non volontaires (usage très contrôlé)</p>
+                <p style="font-style: italic; padding-left: 1rem;">"Si ces informations tombent entre de mauvaises mains, vous pourriez être impliqué..."</p>
+
+                <p><strong>Espoir</strong> - Offrir une issue positive</p>
+                <p style="font-style: italic; padding-left: 1rem;">"Si vous coopérez pleinement, nous pouvons vous protéger et même récompenser..."</p>
+
+                <h4>📖 Approche Narrative</h4>
+                <p>Laisser la source raconter son histoire librement.</p>
+                <p><strong>Avantages :</strong> Révèle informations non sollicitées, montre priorités mentales, facilite détection de mensonges</p>
+
+                <h4>⚖️ Interrogatoire Contradictoire</h4>
+                <p>Présentation d'éléments contradictoires pour tester la véracité.</p>
+                <p style="font-style: italic;">"Vous dites avoir été au bureau ce jour-là, mais nous avons des informations indiquant que vous étiez ailleurs. Pouvez-vous clarifier ?"</p>
+
+                <h3>7.4 Détection du Mensonge</h3>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">🗣️ Signaux Verbaux</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Réponses trop détaillées ou trop vagues</li>
+                            <li>Changements dans le niveau de détail</li>
+                            <li>Évitement de la question</li>
+                            <li>"Honnêtement..." / "Pour être franc..."</li>
+                            <li>Déclarations négatives vs positives</li>
+                            <li>Temps de réaction anormal</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">👁️ Signaux Non-Verbaux</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Changements dans le contact visuel</li>
+                            <li>Augmentation de l'agitation</li>
+                            <li>Gestes de confort (toucher visage, cheveux)</li>
+                            <li>Barrières physiques (bras croisés)</li>
+                            <li>Micro-expressions (&lt;0,5 seconde)</li>
+                            <li>Incohérences verbal/non-verbal</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Attention :</strong> Aucun signal n'est absolu. Les différences par rapport à la baseline personnelle sont plus significatives.
+                </div>
+
+                <h3>7.5 Techniques de Questionnement Avancées</h3>
+
+                <ul>
+                    <li><strong>Question Ouverte</strong> - "Que pouvez-vous me dire sur...?" (maximise l'information)</li>
+                    <li><strong>Question Fermée</strong> - "Étiez-vous présent à cette réunion ?" (confirmation de faits)</li>
+                    <li><strong>Question de Contrôle</strong> - Questions dont on connaît déjà la réponse (tester la bonne foi)</li>
+                    <li><strong>Question Hypothétique</strong> - "Si vous deviez estimer..." (obtenir estimations sans engagement)</li>
+                    <li><strong>Silence Stratégique</strong> - Ne pas parler après une réponse (malaise pousse à remplir le vide)</li>
+                    <li><strong>Question en Rafale</strong> - Série rapide sans attendre réponses complètes (désorienter, empêcher fabrication)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 8: Protection des Sources -->
+        <section class="section" id="protection">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Protection des Sources</span></div>
+            
+            <div class="card">
+                <h2>8. Gestion et Protection des Sources</h2>
+                
+                <h3>8.1 Sécurité Opérationnelle (OPSEC)</h3>
+                <div class="highlight-box">
+                    <strong>Principes fondamentaux :</strong>
+                    <ul>
+                        <li>Compartimentage strict (les agents ne se connaissent pas)</li>
+                        <li>Communications sécurisées uniquement</li>
+                        <li>Pas de routine détectable</li>
+                        <li>Planification minutieuse de chaque contact</li>
+                        <li>Scénarios de secours systématiques</li>
+                    </ul>
+                </div>
+
+                <h3>8.2 Moyens de Communication Sécurisés</h3>
+
+                <h4>Communications Personnelles</h4>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">🤝 Rencontres Physiques</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Lieux et horaires variables</li>
+                            <li>Procédures de sécurité pré-rencontre</li>
+                            <li>Durée limitée</li>
+                            <li>Signaux de danger établis</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">📮 Dead Drops</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Lieux physiques pour déposer documents/objets</li>
+                            <li>Signaux pour indiquer dépôt/récupération</li>
+                            <li>Aucun contact direct entre parties</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🚦 Signaux</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Marques de craie</li>
+                            <li>Objets placés à emplacements spécifiques</li>
+                            <li>Fenêtres ouvertes/fermées</li>
+                            <li>Codes dans petites annonces</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>Communications Électroniques</h4>
+                <ul>
+                    <li><strong>One-Time Pads (OTP)</strong> - Chiffrement théoriquement inviolable, usage unique de chaque clé</li>
+                    <li><strong>Stéganographie</strong> - Dissimulation de messages dans images, audio, vidéo</li>
+                    <li><strong>Communications burst</strong> - Transmission très rapide de données compressées</li>
+                    <li><strong>Applications cryptées</strong> - Signal, Wickr (avec précautions, devices dédiés)</li>
+                </ul>
+
+                <h3>8.3 Gestion Psychologique</h3>
+
+                <p><strong>Motivation continue :</strong></p>
+                <ul>
+                    <li>Reconnaissance régulière du travail fourni</li>
+                    <li>Maintien de l'alignement avec la motivation initiale</li>
+                    <li>Adaptation de la rémunération</li>
+                    <li>Soutien dans les moments de doute</li>
+                </ul>
+
+                <p><strong>Gestion du stress :</strong></p>
+                <ul>
+                    <li>Reconnaissance des signes de burn-out</li>
+                    <li>Périodes de repos si possible</li>
+                    <li>Soutien face aux crises personnelles</li>
+                    <li>Validation émotionnelle constante</li>
+                </ul>
+
+                <h3>8.4 Exfiltration</h3>
+
+                <div class="warning-box">
+                    <strong>Scénarios nécessitant l'exfiltration :</strong>
+                    <ul>
+                        <li>Compromission imminente</li>
+                        <li>Menace directe sur la vie de l'agent</li>
+                        <li>Fin de mission réussie avec besoin de protection</li>
+                        <li>Instabilité politique majeure</li>
+                    </ul>
+                </div>
+
+                <p><strong>Méthodes :</strong></p>
+                <ul>
+                    <li>Sortie légale (visa, voyage d'affaires)</li>
+                    <li>Passage de frontière clandestin</li>
+                    <li>Extraction militaire (cas extrêmes)</li>
+                    <li>Fausses identités et papiers</li>
+                </ul>
+
+                <h3>8.5 Protection de l'Identité</h3>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">👤 Pour l'agent</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Maintien rigoureux de la couverture</li>
+                            <li>Éviter changements de comportement détectables</li>
+                            <li>Explication crédible des absences</li>
+                            <li>Gestion des finances (pas de richesse soudaine)</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🏢 Pour le service</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Anonymisation des rapports</li>
+                            <li>Codes pour identifier les sources</li>
+                            <li>Destruction des traces de communication</li>
+                            <li>Séparation physique des dossiers sources</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Statut du Système Hardcore -->
-            <div class="glass-card p-6 border-cyan-900/30 bg-cyan-950/5">
-                <div class="flex items-center gap-2 mb-4 text-cyan-400">
-                    <i data-lucide="activity" class="w-4 h-4"></i>
-                    <span class="text-xs font-bold uppercase tracking-tighter">Statut Nexus Engine</span>
+        <!-- Section 9: Élicitation -->
+        <section class="section" id="elicitation">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Élicitation et Collecte Passive</span></div>
+            
+            <div class="card">
+                <h2>9. Élicitation et Collecte Passive</h2>
+                
+                <h3>9.1 Principes de l'Élicitation</h3>
+                <p>L'élicitation consiste à obtenir des informations sans que l'interlocuteur réalise qu'il est interrogé de manière ciblée.</p>
+
+                <div class="highlight-box">
+                    <strong>Fondements psychologiques :</strong>
+                    <ul>
+                        <li>Besoin humain de paraître informé et compétent</li>
+                        <li>Désir de corriger les erreurs d'autrui</li>
+                        <li>Tendance à la réciprocité dans la conversation</li>
+                        <li>Instinct de remplir les silences</li>
+                    </ul>
                 </div>
-                <div class="space-y-3">
-                    <div class="flex justify-between text-xs">
-                        <span class="opacity-50">Disponibilité</span>
-                        <span class="mono">99.998%</span>
+
+                <h3>9.2 Techniques d'Élicitation</h3>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">😕 Fausse Ignorance</div>
+                        <p style="font-style: italic; font-size: 0.9rem;">"Je ne comprends pas vraiment comment fonctionne votre système de sécurité..."</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Effet :</strong> La cible explique pour paraître compétente.</p>
                     </div>
-                    <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                        <div class="w-[99.9%] h-full bg-cyan-400 shadow-[0_0_8px_#00f2ff]"></div>
+                    <div class="info-card">
+                        <div class="info-card-title">❌ Affirmation Erronée</div>
+                        <p style="font-style: italic; font-size: 0.9rem;">"J'ai entendu dire que votre entreprise utilise le protocole X..."</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Effet :</strong> "Non, nous utilisons en fait le protocole Y..."</p>
                     </div>
-                    <div class="flex justify-between text-xs">
-                        <span class="opacity-50">Latence Indexation</span>
-                        <span class="mono">14ms</span>
+                    <div class="info-card">
+                        <div class="info-card-title">⭐ Flatterie</div>
+                        <p style="font-style: italic; font-size: 0.9rem;">"Vous devez être l'un des rares experts capables de comprendre ces systèmes complexes."</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Effet :</strong> Baisse de vigilance, désir de prouver l'expertise.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🎯 Appel à l'Ego</div>
+                        <p style="font-style: italic; font-size: 0.9rem;">"Quelqu'un d'aussi bien placé que vous doit sûrement savoir..."</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Effet :</strong> Stimule le désir de démontrer son importance.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🤝 Confidence Partagée</div>
+                        <p style="font-style: italic; font-size: 0.9rem;">"Entre nous, j'ai travaillé sur quelque chose de similaire..."</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Effet :</strong> Partage mineure → information majeure en retour.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🎣 Hook and Reel</div>
+                        <p style="font-size: 0.9rem;">Lancer un sujet (hook), puis laisser la cible développer (reel) en manifestant un intérêt poli.</p>
                     </div>
                 </div>
+
+                <h3>9.3 Contextes Favorables</h3>
+
+                <p><strong>Événements sociaux :</strong></p>
+                <ul>
+                    <li>Conférences et cocktails</li>
+                    <li>Salons professionnels</li>
+                    <li>Événements de networking</li>
+                    <li>Voyages d'affaires (avions, hôtels)</li>
+                </ul>
+
+                <p><strong>Situations de détente :</strong></p>
+                <ul>
+                    <li>Bars et restaurants</li>
+                    <li>Clubs sportifs</li>
+                    <li>Activités de loisir</li>
+                    <li>Transports longue distance</li>
+                </ul>
+
+                <h3>9.4 Observation et Collecte Visuelle</h3>
+
+                <p><strong>Éléments à observer :</strong></p>
+                <ul>
+                    <li>Architecture et layout des installations</li>
+                    <li>Badges et contrôles d'accès</li>
+                    <li>Matériel visible (ordinateurs, téléphones)</li>
+                    <li>Niveaux de sécurité (caméras, gardes)</li>
+                    <li>Comportements et routines</li>
+                    <li>Documents laissés visibles</li>
+                    <li>Poubelles (source précieuse)</li>
+                </ul>
+
+                <p><strong>Techniques de mémorisation :</strong></p>
+                <ul>
+                    <li>Méthode des loci (palais de mémoire)</li>
+                    <li>Associations mnémotechniques</li>
+                    <li>Répétition mentale immédiate</li>
+                    <li>Notes cryptiques si possible</li>
+                </ul>
             </div>
-        </aside>
+        </section>
 
-    </div>
+        <!-- Section 10: Analyse -->
+        <section class="section" id="analyse">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Analyse de l'Information</span></div>
+            
+            <div class="card">
+                <h2>10. Analyse et Évaluation de l'Information</h2>
+                
+                <h3>10.1 Évaluation de la Fiabilité</h3>
+                
+                <div class="highlight-box">
+                    <strong>Système standard d'évaluation (A-F pour la source, 1-6 pour l'information)</strong>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">Fiabilité de la Source</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li><strong>A</strong> - Complètement fiable (historique prouvé)</li>
+                            <li><strong>B</strong> - Généralement fiable</li>
+                            <li><strong>C</strong> - Relativement fiable</li>
+                            <li><strong>D</strong> - Peu fiable</li>
+                            <li><strong>E</strong> - Pas fiable</li>
+                            <li><strong>F</strong> - Fiabilité impossible à évaluer</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">Crédibilité de l'Information</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li><strong>1</strong> - Confirmée par sources indépendantes</li>
+                            <li><strong>2</strong> - Probablement vraie</li>
+                            <li><strong>3</strong> - Possiblement vraie</li>
+                            <li><strong>4</strong> - Douteuse</li>
+                            <li><strong>5</strong> - Improbable</li>
+                            <li><strong>6</strong> - Vérité impossible à déterminer</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p style="margin-top: 1rem;"><strong>Exemple :</strong> Un rapport classé <span class="badge">B-2</span> provient d'une source généralement fiable et contient des informations probablement vraies.</p>
+
+                <h3>10.2 Indicateurs de Désinformation</h3>
+
+                <div class="warning-box">
+                    <strong>⚠️ Signaux d'alerte :</strong>
+                    <ul>
+                        <li>Information trop parfaite (correspond exactement à ce qui est recherché)</li>
+                        <li>Source aux motivations peu claires</li>
+                        <li>Contradictions internes subtiles</li>
+                        <li>Timing suspect (information apparaît au moment opportun)</li>
+                        <li>Impossibilité de vérification externe</li>
+                        <li>Détails excessifs sur certains points, flous sur d'autres</li>
+                        <li>Absence de détails banals (les vrais témoins incluent des détails non pertinents)</li>
+                    </ul>
+                </div>
+
+                <h3>10.3 Fusion Multi-Sources</h3>
+
+                <p><strong>Principe :</strong> Aucune source unique ne suffit pour des décisions critiques.</p>
+
+                <div class="highlight-box">
+                    <strong>Processus en 5 étapes :</strong>
+                    <ol>
+                        <li><strong>Collecte</strong> - HUMINT + SIGINT + IMINT + OSINT</li>
+                        <li><strong>Comparaison</strong> - Identification des concordances et divergences</li>
+                        <li><strong>Contextualisation</strong> - Placement dans le contexte géopolitique/historique</li>
+                        <li><strong>Hypothèses multiples</strong> - Maintien de plusieurs explications possibles</li>
+                        <li><strong>Conclusion pondérée</strong> - Estimation de probabilités plutôt que certitudes</li>
+                    </ol>
+                </div>
+
+                <h3>10.4 Biais Cognitifs à Éviter</h3>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">🎯 Biais de Confirmation</div>
+                        <p>Tendance à chercher ou interpréter les informations confirmant ses croyances préexistantes.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Contre-mesure :</strong> Désignation d'un "avocat du diable"</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">📅 Biais de Disponibilité</div>
+                        <p>Surpondération des informations récentes ou mémorables.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Contre-mesure :</strong> Revue systématique de l'historique complet</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">👥 Pensée de Groupe</div>
+                        <p>Consensus de groupe supprimant les opinions dissidentes.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Contre-mesure :</strong> Culture encourageant les désaccords</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">✨ Effet de Halo</div>
+                        <p>Une source fiable sur un sujet devient automatiquement fiable sur tous.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Contre-mesure :</strong> Évaluation indépendante de chaque rapport</p>
+                    </div>
+                </div>
+
+                <h3>10.5 Rapport de Renseignement</h3>
+
+                <p><strong>Structure type :</strong></p>
+                <ol>
+                    <li><strong>Résumé exécutif</strong> - Conclusion principale en 2-3 phrases</li>
+                    <li><strong>Évaluation de confiance</strong> - Niveau de certitude (faible/moyen/élevé)</li>
+                    <li><strong>Sources</strong> - Nature et fiabilité (sans révéler l'identité)</li>
+                    <li><strong>Contexte</strong> - Éléments de background nécessaires</li>
+                    <li><strong>Analyse détaillée</strong> - Développement complet</li>
+                    <li><strong>Hypothèses alternatives</strong> - Autres interprétations possibles</li>
+                    <li><strong>Lacunes</strong> - Ce qui reste inconnu</li>
+                    <li><strong>Implications</strong> - Conséquences possibles</li>
+                    <li><strong>Recommandations</strong> - Actions suggérées</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Section 11: Contre-Espionnage -->
+        <section class="section active" id="contre-espionnage">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Contre-Espionnage</span></div>
+            
+            <div class="card">
+                <h2>11. Contre-Espionnage et Sécurité Opérationnelle</h2>
+                
+                <h3>11.1 Menaces du Contre-Espionnage</h3>
+
+                <p><strong>Services adverses cherchent à :</strong></p>
+                <ul>
+                    <li>Identifier vos agents</li>
+                    <li>Retourner vos sources</li>
+                    <li>Infiltrer votre organisation</li>
+                    <li>Neutraliser vos opérations</li>
+                </ul>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">📡 Surveillance Technique</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Écoutes téléphoniques</li>
+                            <li>Surveillance électromagnétique</li>
+                            <li>Caméras de surveillance</li>
+                            <li>Géolocalisation</li>
+                            <li>Analyse des métadonnées numériques</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">👀 Surveillance Physique</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Filatures</li>
+                            <li>Observation de lieux de rencontre</li>
+                            <li>Infiltration de milieux fréquentés</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>11.2 Indicateurs de Compromission</h3>
+
+                <div class="warning-box">
+                    <strong>⚠️ Signaux personnels :</strong>
+                    <ul>
+                        <li>Interrogatoires de sécurité inattendus pour l'agent</li>
+                        <li>Changements inexpliqués dans l'accès de l'agent</li>
+                        <li>Pression nouvelle de l'employeur</li>
+                        <li>Surveillance détectée</li>
+                        <li>Questions ciblées de collègues</li>
+                    </ul>
+                    
+                    <strong>⚠️ Signaux opérationnels :</strong>
+                    <ul>
+                        <li>Informations fournies s'avérant être des leurres</li>
+                        <li>Opérations échouant systématiquement</li>
+                        <li>Fuites médiatiques suspectes</li>
+                        <li>Arrestations coïncidant avec vos opérations</li>
+                    </ul>
+                </div>
+
+                <h3>11.3 Techniques de Contre-Surveillance</h3>
+
+                <h4>Surveillance Detection Route (SDR)</h4>
+                <p>Parcours complexe conçu pour révéler une éventuelle filature.</p>
+
+                <div class="highlight-box">
+                    <strong>Éléments d'un SDR :</strong>
+                    <ul>
+                        <li><strong>Durée :</strong> 2-4 heures minimum</li>
+                        <li>Changements de direction</li>
+                        <li>Utilisation de transports multiples</li>
+                        <li>Passages par "chokepoints" (un seul passage possible)</li>
+                        <li>Arrêts et redémarrages</li>
+                        <li>Utilisation de miroirs, vitrines</li>
+                        <li>Vérification finale dans environnement contrôlé</li>
+                    </ul>
+                </div>
+
+                <h4>Technical Surveillance Countermeasures (TSCM)</h4>
+                <ul>
+                    <li>Balayage électronique des lieux de rencontre</li>
+                    <li>Détection de mouchards</li>
+                    <li>Utilisation de brouilleurs</li>
+                    <li>Espaces SCIF (Sensitive Compartmented Information Facility)</li>
+                </ul>
+
+                <h3>11.4 Compartimentage</h3>
+
+                <p><strong>Principe :</strong> Limiter la diffusion d'informations au strict nécessaire.</p>
+
+                <p><strong>Application :</strong></p>
+                <ul>
+                    <li>Les agents ne connaissent pas l'identité d'autres agents</li>
+                    <li>Les sources ne savent pas pour qui elles travaillent réellement (parfois)</li>
+                    <li>Les officiers traitants connaissent leurs agents mais pas ceux des autres</li>
+                    <li>Les analystes reçoivent des rapports anonymisés</li>
+                    <li>Les décideurs reçoivent des synthèses sans détails opérationnels</li>
+                </ul>
+
+                <p><strong>Avantage :</strong> Une compromission ne détruit pas tout le réseau.</p>
+
+                <h3>11.5 Vetting et Contre-infiltration</h3>
+
+                <p><strong>Vetting des recrues :</strong></p>
+                <ul>
+                    <li>Enquête de background approfondie</li>
+                    <li>Tests psychologiques</li>
+                    <li>Polygraphe (si légal)</li>
+                    <li>Vérification des références</li>
+                    <li>Périodes d'observation</li>
+                    <li>Tests de loyauté</li>
+                </ul>
+
+                <p><strong>Détection d'agents doubles :</strong></p>
+                <ul>
+                    <li>Tests périodiques avec informations contrôlées</li>
+                    <li>Surveillance discrète du style de vie</li>
+                    <li>Analyse des patterns de comportement</li>
+                    <li>Corrélation entre informations fournies et résultats opérationnels</li>
+                    <li>Contre-interrogatoires surprises</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 12: Éthique -->
+        <section class="section" id="ethique">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Aspects Éthiques</span></div>
+            
+            <div class="card">
+                <h2>12. Aspects Éthiques et Légaux</h2>
+                
+                <h3>12.1 Cadre Légal International</h3>
+
+                <p><strong>Conventions et traités :</strong></p>
+                <ul>
+                    <li><strong>Convention de Vienne (1961)</strong> - Protège les diplomates mais interdit l'abus de privilèges</li>
+                    <li><strong>Lois nationales sur l'espionnage</strong> - Variables selon pays</li>
+                    <li><strong>Convention de Genève</strong> - Traitement des espions en temps de guerre</li>
+                </ul>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">✅ Espion Légal</div>
+                        <p>Agent sous couverture diplomatique</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Conséquence :</strong> Expulsion en cas de découverte</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">⚠️ Espion Illégal</div>
+                        <p>Agent sans protection diplomatique</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Conséquence :</strong> Poursuites criminelles</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">❌ Traître</div>
+                        <p>Citoyen travaillant contre son propre pays</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Conséquence :</strong> Peines sévères, parfois peine de mort</p>
+                    </div>
+                </div>
+
+                <h3>12.2 Dilemmes Éthiques</h3>
+
+                <h4>Le mensonge et la manipulation</h4>
+                <p>L'essence même de l'HUMINT repose sur la tromperie. Question fondamentale : <strong>Quand le mensonge est-il justifiable ?</strong></p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">⚖️ Conséquentialiste</div>
+                        <p>Justifiable si les conséquences (protection nationale) l'emportent</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">📜 Déontologique</div>
+                        <p>Certains moyens restent interdits quelle que soit la fin</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🎯 Pragmatique</div>
+                        <p>Distinction entre ennemis (moyens étendus) et alliés/citoyens (restrictions)</p>
+                    </div>
+                </div>
+
+                <h4>Le recrutement par compromission</h4>
+                <p>Exploiter les faiblesses humaines (addiction, infidélité, etc.) est-il acceptable ?</p>
+
+                <p><strong>Réflexions :</strong></p>
+                <ul>
+                    <li>Distinction entre exploitation de faiblesses existantes vs leur création</li>
+                    <li>Proportionnalité : La valeur de l'information justifie-t-elle la méthode ?</li>
+                    <li>Alternatives : D'autres approches sont-elles possibles ?</li>
+                </ul>
+
+                <h4>Protection vs exploitation des sources</h4>
+                <p>Les agents en place risquent leur vie. Quelle est notre responsabilité morale envers eux ?</p>
+
+                <div class="warning-box">
+                    <strong>Tensions :</strong>
+                    <ul>
+                        <li>Maximiser l'exploitation vs préserver leur sécurité</li>
+                        <li>Promesses de protection vs réalités opérationnelles</li>
+                        <li>Exfiltration coûteuse vs abandon</li>
+                    </ul>
+                </div>
+
+                <h3>12.3 Règles d'Engagement Éthiques</h3>
+
+                <div class="warning-box">
+                    <strong>⛔ Interdictions absolues</strong> (dans la plupart des services occidentaux) :
+                    <ul>
+                        <li>Torture ou violence physique</li>
+                        <li>Recrutement de mineurs</li>
+                        <li>Exploitation sexuelle</li>
+                        <li>Mise en danger délibérée de civils innocents</li>
+                        <li>Opérations contre des organisations humanitaires</li>
+                    </ul>
+                </div>
+
+                <p><strong>Zones grises :</strong></p>
+                <ul>
+                    <li>Degré de pression psychologique acceptable</li>
+                    <li>Utilisation de fausses identités impliquant des tiers innocents</li>
+                    <li>Manipulation émotionnelle</li>
+                    <li>Exploitation de vulnérabilités psychologiques</li>
+                </ul>
+
+                <h3>12.4 Supervision et Contrôle</h3>
+
+                <p><strong>Mécanismes démocratiques :</strong></p>
+                <ul>
+                    <li>Commissions parlementaires de renseignement</li>
+                    <li>Inspections générales internes</li>
+                    <li>Audits judiciaires (FISA Court aux USA, etc.)</li>
+                    <li>Procédures d'autorisation pour opérations sensibles</li>
+                </ul>
+
+                <p><strong>Équilibre délicat :</strong></p>
+                <ul>
+                    <li>Efficacité opérationnelle (secret) vs responsabilité démocratique (transparence)</li>
+                    <li>Protection des sources vs droit de savoir du public</li>
+                </ul>
+
+                <h3>12.5 Codes de Conduite Professionnels</h3>
+
+                <div class="highlight-box">
+                    <strong>Valeurs fondamentales :</strong>
+                    <ul>
+                        <li><strong>Loyauté</strong> - Envers son pays et son service</li>
+                        <li><strong>Intégrité</strong> - Honnêteté dans le reporting</li>
+                        <li><strong>Discrétion</strong> - Protection absolue des secrets</li>
+                        <li><strong>Courage</strong> - Physique et moral</li>
+                        <li><strong>Respect</strong> - Même envers les adversaires</li>
+                    </ul>
+                </div>
+
+                <p><strong>Responsabilité personnelle :</strong> Chaque officier est responsable de ses actes. "J'ai reçu des ordres" n'est pas une défense suffisante pour des actes manifestement illégaux ou immoraux.</p>
+            </div>
+        </section>
+
+        <!-- Section 13: Études de Cas -->
+        <section class="section" id="cas">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Études de Cas</span></div>
+            
+            <div class="card">
+                <h2>13. Études de Cas et Scénarios Pratiques</h2>
+                
+                <h3>13.1 Cas Historique : L'affaire Aldrich Ames</h3>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">👤 Contexte</div>
+                        <p>Aldrich Ames, officier de la CIA, est devenu espion pour le KGB/SVR de 1985 à 1994.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">💰 Motivation</div>
+                        <p><strong>Argent</strong> - Dettes et goût du luxe</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;">Rémunération : Plus de 2 millions de dollars</p>
+                    </div>
+                </div>
+
+                <p><strong>Opération :</strong></p>
+                <ul>
+                    <li>Livra l'identité de dizaines d'agents américains en URSS (au moins 10 exécutés)</li>
+                    <li>Durée : 9 ans avant arrestation</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>⚠️ Signes manqués :</strong>
+                    <ul>
+                        <li>Style de vie au-dessus de ses moyens (maison à 500 000$, voiture de luxe)</li>
+                        <li>Accès à des informations alors qu'il n'en avait pas besoin</li>
+                        <li>Comportement erratique (alcoolisme)</li>
+                        <li>Échecs répétés d'opérations après ses accès</li>
+                    </ul>
+                </div>
+
+                <p><strong>Leçons :</strong></p>
+                <ul>
+                    <li>Importance du vetting financier continu</li>
+                    <li>Nécessité du principe du "besoin d'en connaître"</li>
+                    <li>Dangers de la complaisance organisationnelle</li>
+                    <li>Efficacité du contre-espionnage interne</li>
+                </ul>
+
+                <h3>13.2 Cas Historique : Les Cambridge Five</h3>
+
+                <p><strong>Contexte :</strong> Réseau d'espionnage soviétique infiltré dans l'élite britannique (années 1930-1950).</p>
+
+                <p><strong>Membres principaux :</strong></p>
+                <ul>
+                    <li>Kim Philby (MI6)</li>
+                    <li>Donald Maclean (Foreign Office)</li>
+                    <li>Guy Burgess (Foreign Office)</li>
+                    <li>Anthony Blunt (MI5)</li>
+                    <li>John Cairncross (divers postes sensibles)</li>
+                </ul>
+
+                <p><strong>Recrutement :</strong></p>
+                <ul>
+                    <li><strong>Motivation :</strong> Idéologie (conviction communiste)</li>
+                    <li><strong>Contexte :</strong> Cambridge University, années 1930</li>
+                    <li><strong>Recruteurs :</strong> Agents soviétiques infiltrés en milieu universitaire</li>
+                </ul>
+
+                <p><strong>Impact :</strong></p>
+                <ul>
+                    <li>Compromission de centaines d'opérations occidentales</li>
+                    <li>Transmission de secrets atomiques</li>
+                    <li>Influence sur la politique britannique pendant la Guerre Froide</li>
+                    <li>Trahisons non découvertes pendant des décennies</li>
+                </ul>
+
+                <p><strong>Leçons :</strong></p>
+                <ul>
+                    <li>Danger des recrutements idéologiques (très motivés, difficiles à détecter)</li>
+                    <li>Importance de la vigilance même envers l'élite sociale</li>
+                    <li>Nécessité de remettre en question les privilèges de classe dans le vetting</li>
+                </ul>
+
+                <h3>13.3 Scénario Pratique : Recrutement d'un Ingénieur</h3>
+
+                <div class="highlight-box">
+                    <strong>🎯 Situation :</strong>
+                    <p>Vous êtes officier HUMINT d'un service occidental. Votre mission : recruter un ingénieur travaillant sur un programme de missiles balistiques dans un pays hostile.</p>
+                </div>
+
+                <h4>Intelligence Préliminaire</h4>
+                <ul>
+                    <li><strong>Cible :</strong> Dr. Yuri K., 45 ans, ingénieur senior</li>
+                    <li><strong>Famille :</strong> Marié, 2 enfants à l'université (frais élevés)</li>
+                    <li><strong>Habitudes :</strong> Participe régulièrement à conférences internationales</li>
+                    <li><strong>Personnalité :</strong> Discret, professeur associé en parallèle</li>
+                    <li><strong>Vulnérabilités :</strong> Salaire modeste, frustré par manque de reconnaissance</li>
+                </ul>
+
+                <h4>Phase 1 : Spotting et Évaluation</h4>
+                <ol>
+                    <li>Identification lors d'une conférence technique en pays neutre</li>
+                    <li>Recherche approfondie : publications, réseaux sociaux, contacts</li>
+                    <li>Évaluation : Accès confirmé, pas de signes de contre-espionnage</li>
+                </ol>
+
+                <h4>Phase 2 : Développement</h4>
+                <ul>
+                    <li><strong>Approche initiale :</strong> Cocktail de conférence, discussion technique</li>
+                    <li><strong>Couverture :</strong> Consultant pour entreprise privée du secteur</li>
+                    <li><strong>Premier contact :</strong> Échange de cartes, proposition de rester en contact</li>
+                    <li><strong>Suivi :</strong> Emails professionnels sur 6 mois, développement graduel</li>
+                    <li><strong>Deuxième rencontre :</strong> Autre conférence 8 mois plus tard, dîner privé</li>
+                </ul>
+
+                <h4>Phase 3 : Évaluation des Motivations</h4>
+                <p><strong>Observation :</strong></p>
+                <ul>
+                    <li>Mention répétée des coûts universitaires de ses enfants</li>
+                    <li>Expression de frustration sur sous-financement de son laboratoire</li>
+                    <li>Fierté dans son travail mais amertume sur non-reconnaissance</li>
+                </ul>
+                <p><strong>Conclusion :</strong> Profil MICE = <span class="badge">Argent (primaire)</span> + <span class="badge">Ego (secondaire)</span></p>
+
+                <h4>Phase 4 : Recrutement</h4>
+                <p><strong>Proposition</strong> (après 14 mois de développement) :</p>
+                <p style="font-style: italic; padding: 1rem; background: var(--primary); border-radius: 8px;">"Dr. K., votre expertise est exceptionnelle. J'ai des relations avec des organisations qui apprécieraient grandement des consultations sur certains aspects techniques. Cela pourrait être très lucratif et aiderait certainement avec l'éducation de vos enfants. Êtes-vous intéressé à explorer cette possibilité ?"</p>
+
+                <p><strong>Clarification progressive :</strong></p>
+                <ul>
+                    <li>Première mission : Rapport technique général (non sensible) contre 5 000€</li>
+                    <li>Rencontres suivantes : Demandes progressivement plus sensibles</li>
+                    <li>Après 6 mois : Révélation complète de la nature de la collaboration</li>
+                </ul>
+
+                <h4>Phase 5 : Gestion</h4>
+                <p><strong>Protocole établi :</strong></p>
+                <ul>
+                    <li>Rencontres trimestrielles en pays tiers</li>
+                    <li>Communications via boîte email sécurisée avec stéganographie</li>
+                    <li>Rémunération : 10 000€/mois + bonus pour informations critiques</li>
+                    <li>Formation aux techniques de sécurité opérationnelle</li>
+                    <li>Plan d'exfiltration en cas d'urgence</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 14: Technologies -->
+        <section class="section" id="technologies">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Technologies Modernes</span></div>
+            
+            <div class="card">
+                <h2>14. Technologies et Outils Modernes</h2>
+                
+                <h3>14.1 Communications Sécurisées Contemporaines</h3>
+
+                <h4>Dead Drop 2.0 - Numérique</h4>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">🖼️ Stéganographie Numérique</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Messages cachés dans pixels d'images</li>
+                            <li>Données encodées dans métadonnées</li>
+                            <li>Messages dans code source de sites web publics</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">₿ Blockchain et Cryptomonnaies</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Communications encodées dans transactions Bitcoin</li>
+                            <li>Contrats intelligents pour déclenchement automatique</li>
+                            <li>Paiements intraçables aux sources</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">💬 Applications Chiffrées</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Signal Protocol (chiffrement bout-en-bout)</li>
+                            <li>Messages éphémères (autodestruction)</li>
+                            <li>Devices dédiés, achat anonyme</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>14.2 OSINT et Renseignement sur Sources Ouvertes</h3>
+
+                <p><strong>Intelligence des réseaux sociaux :</strong></p>
+                <ul>
+                    <li>Cartographie de réseaux personnels (LinkedIn, Facebook)</li>
+                    <li>Analyse de comportements et patterns de vie</li>
+                    <li>Identification de vulnérabilités (plaintes financières, insatisfactions professionnelles)</li>
+                    <li>Géolocalisation via posts et photos</li>
+                </ul>
+
+                <p><strong>Outils et techniques :</strong></p>
+                <ul>
+                    <li><strong>Maltego</strong> - Visualisation de connexions</li>
+                    <li><strong>SpiderFoot</strong> - Automatisation de collecte OSINT</li>
+                    <li><strong>Google Dorking</strong> - Recherches avancées pour informations sensibles</li>
+                    <li><strong>Shodan</strong> - Recherche de dispositifs connectés vulnérables</li>
+                    <li><strong>Archive.org</strong> - Historique de sites web</li>
+                    <li><strong>Facial Recognition</strong> - Identification via photos publiques</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>⚠️ Précautions :</strong> L'OSINT peut révéler énormément d'informations sur des cibles, mais aussi exposer vos propres agents si leurs légendes ne sont pas étanches numériquement.
+                </div>
+
+                <h3>14.3 Surveillance Technique</h3>
+
+                <p><strong>Dispositifs d'écoute modernes :</strong></p>
+                <ul>
+                    <li>Micros GSM (activation à distance)</li>
+                    <li>Implants dans objets quotidiens (chargeurs, prises électriques)</li>
+                    <li>Micros laser (vibrations sur vitres)</li>
+                    <li>Implants de longue durée (batteries 2-3 ans)</li>
+                </ul>
+
+                <p><strong>Surveillance informatique :</strong></p>
+                <ul>
+                    <li>Keyloggers matériels et logiciels</li>
+                    <li>RAT (Remote Access Trojans)</li>
+                    <li>Exploitation de vulnérabilités zero-day</li>
+                    <li>Man-in-the-middle sur communications</li>
+                </ul>
+
+                <p><strong>Contre-mesures :</strong></p>
+                <ul>
+                    <li>Faraday bags pour téléphones</li>
+                    <li>Générateurs de bruit blanc</li>
+                    <li>Inspection régulière TSCM</li>
+                    <li>Utilisation d'équipements dédiés jetables</li>
+                </ul>
+
+                <h3>14.4 Biométrie et Identité</h3>
+
+                <div class="warning-box">
+                    <strong>Défis de la couverture moderne :</strong>
+                    <ul>
+                        <li>Reconnaissance faciale omniprésente</li>
+                        <li>Empreintes digitales dans bases de données</li>
+                        <li>ADN potentiellement collecté</li>
+                        <li>Patterns de démarche (gait analysis)</li>
+                        <li>Authentification biométrique croissante</li>
+                    </ul>
+                </div>
+
+                <p><strong>Techniques d'évitement :</strong></p>
+                <ul>
+                    <li>Modifications esthétiques légères (lunettes, barbe, maquillage)</li>
+                    <li>Démarche modifiée (cailloux dans chaussures)</li>
+                    <li>Masques hyperréalistes (usage limité)</li>
+                    <li>Évitement des zones à haute surveillance</li>
+                </ul>
+
+                <p><strong>Réalité :</strong> La couverture profonde devient de plus en plus difficile.</p>
+
+                <h3>14.5 Intelligence Artificielle en HUMINT</h3>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">📊 Analyse Comportementale</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Détection de patterns dans communications</li>
+                            <li>Identification de changements suspects</li>
+                            <li>Prédiction de risque de défection</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">💭 Traitement Langage Naturel</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Analyse de sentiment dans rapports</li>
+                            <li>Détection de désinformation</li>
+                            <li>Traduction en temps réel</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🎭 Deepfakes</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Création de fausses vidéos</li>
+                            <li>Imitation de voix</li>
+                            <li>Détection de deepfakes adverses</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🤖 Aide à la Décision</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Évaluation automatique de fiabilité</li>
+                            <li>Corrélation multi-sources</li>
+                            <li>Recommandations basées sur probabilités</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p><strong>Limites :</strong> L'IA ne peut remplacer le jugement humain, l'intuition, et la compréhension contextuelle profonde. Elle est un outil, pas une solution complète.</p>
+            </div>
+        </section>
+
+        <!-- Section 15: Contextes -->
+        <section class="section" id="contextes">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Différents Contextes</span></div>
+            
+            <div class="card">
+                <h2>15. HUMINT dans Différents Contextes</h2>
+                
+                <h3>15.1 Renseignement Militaire Tactique</h3>
+
+                <p><strong>Spécificités :</strong></p>
+                <ul>
+                    <li>Horizons temporels courts (heures à jours)</li>
+                    <li>Focus sur capacités et intentions militaires immédiates</li>
+                    <li>Danger physique élevé</li>
+                    <li>Ressources limitées sur le terrain</li>
+                </ul>
+
+                <p><strong>Sources typiques :</strong></p>
+                <ul>
+                    <li>Prisonniers de guerre (interrogatoires)</li>
+                    <li>Déserteurs</li>
+                    <li>Population locale</li>
+                    <li>Reconnaissance humaine (patrouilles)</li>
+                </ul>
+
+                <p><strong>Exemple :</strong> Obtenir des informations sur positions ennemies, effectifs, moral des troupes, plans d'attaque.</p>
+
+                <h3>15.2 Contre-Terrorisme</h3>
+
+                <div class="warning-box">
+                    <strong>Défis uniques :</strong>
+                    <ul>
+                        <li>Organisations cellulaires cloisonnées</li>
+                        <li>Idéologie forte (recrutement difficile)</li>
+                        <li>Utilisation de violence contre les informateurs</li>
+                        <li>Populations sympathisantes protectrices</li>
+                    </ul>
+                </div>
+
+                <p><strong>Approches :</strong></p>
+
+                <h4>Infiltration</h4>
+                <ul>
+                    <li>Extrêmement difficile et dangereuse</li>
+                    <li>Nécessite des agents avec backgrounds authentiques</li>
+                    <li>Processus très long (années)</li>
+                </ul>
+
+                <h4>Recrutement de Repentis</h4>
+                <ul>
+                    <li>Individus désabusés par la violence</li>
+                    <li>Motivation idéologique inverse</li>
+                    <li>Protection et nouvelle identité essentielles</li>
+                </ul>
+
+                <h4>Sources Communautaires</h4>
+                <ul>
+                    <li>Membres de communautés concernées inquiets</li>
+                    <li>Leaders religieux modérés</li>
+                    <li>Familles de radicalisés</li>
+                </ul>
+
+                <h3>15.3 Contre-Prolifération</h3>
+
+                <p><strong>Objectif :</strong> Empêcher la diffusion d'armes de destruction massive (nucléaire, chimique, biologique).</p>
+
+                <p><strong>Cibles :</strong></p>
+                <ul>
+                    <li>Scientifiques et ingénieurs</li>
+                    <li>Fournisseurs de composants sensibles</li>
+                    <li>Réseaux d'approvisionnement illicites</li>
+                    <li>Décideurs politiques et militaires</li>
+                </ul>
+
+                <p><strong>Méthodes :</strong></p>
+                <ul>
+                    <li>Recrutement de scientifiques ayant accès aux programmes</li>
+                    <li>Surveillance de chaînes d'approvisionnement</li>
+                    <li>Infiltration de réseaux de trafic</li>
+                    <li>Opérations de déni (sabotage discret)</li>
+                </ul>
+
+                <h3>15.4 Renseignement Économique</h3>
+
+                <p><strong>Objectif :</strong> Protection et promotion des intérêts économiques nationaux.</p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">✅ Cibles Légitimes</div>
+                        <ul style="font-size: 0.9rem;">
+                            <li>Pratiques commerciales déloyales</li>
+                            <li>Corruption dans contrats internationaux</li>
+                            <li>Violations de sanctions</li>
+                            <li>Transferts illégaux de technologies</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">⚠️ Zone Grise</div>
+                        <p>La ligne entre renseignement économique légitime et espionnage industriel pour avantage commercial privé.</p>
+                    </div>
+                </div>
+
+                <p><strong>Éthique :</strong> Distinction cruciale entre renseignement pour sécurité nationale vs vol de propriété intellectuelle pour entreprises privées.</p>
+
+                <h3>15.5 Renseignement Politique</h3>
+
+                <p><strong>Objectifs :</strong></p>
+                <ul>
+                    <li>Comprendre intentions de gouvernements étrangers</li>
+                    <li>Prédire changements politiques</li>
+                    <li>Identifier opportunités d'influence</li>
+                    <li>Anticiper crises</li>
+                </ul>
+
+                <p><strong>Sources :</strong></p>
+                <ul>
+                    <li>Diplomates et fonctionnaires</li>
+                    <li>Journalistes et analystes locaux</li>
+                    <li>Universitaires et think tanks</li>
+                    <li>Opposants politiques et dissidents</li>
+                    <li>Milieux d'affaires connectés</li>
+                </ul>
+
+                <p><strong>Produits typiques :</strong></p>
+                <ul>
+                    <li>Évaluations de stabilité politique</li>
+                    <li>Analyses de personnalités (profils de leaders)</li>
+                    <li>Prévisions électorales</li>
+                    <li>Mapping de réseaux d'influence</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 16: Formation -->
+        <section class="section" id="formation">
+            <div class="breadcrumb">Manuel HUMINT &gt; <span>Formation</span></div>
+            
+            <div class="card">
+                <h2>16. Formation et Développement des Officiers HUMINT</h2>
+                
+                <h3>16.1 Sélection Initiale</h3>
+
+                <p><strong>Critères de base :</strong></p>
+                <ul>
+                    <li>Diplôme universitaire (souvent requis)</li>
+                    <li>Maîtrise de langues étrangères</li>
+                    <li>Absence de vulnérabilités sécuritaires</li>
+                    <li>Aptitude psychologique confirmée</li>
+                    <li>Excellente forme physique</li>
+                </ul>
+
+                <p><strong>Tests de sélection :</strong></p>
+                <ul>
+                    <li>Évaluations psychologiques approfondies</li>
+                    <li>Tests d'aptitude analytique</li>
+                    <li>Mise en situation (jeux de rôle)</li>
+                    <li>Enquête de sécurité exhaustive (souvent 12-18 mois)</li>
+                    <li>Polygraphe (selon les services)</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Profils recherchés :</strong>
+                    <ul>
+                        <li>Intelligence émotionnelle élevée</li>
+                        <li>Tolérance à l'ambiguïté</li>
+                        <li>Capacité de déception (sans être sociopathe)</li>
+                        <li>Résilience au stress</li>
+                        <li>Discrétion naturelle</li>
+                    </ul>
+                </div>
+
+                <h3>16.2 Formation de Base</h3>
+
+                <p><strong>Durée typique :</strong> 6-18 mois selon les services</p>
+
+                <p><strong>Modules fondamentaux :</strong></p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">📚 Histoire et Théorie</div>
+                        <p style="font-size: 0.9rem;">Évolution de l'espionnage, grands succès et échecs historiques, doctrines</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🛠️ Techniques Opérationnelles</div>
+                        <p style="font-size: 0.9rem;">Couverture, surveillance, communications clandestines, dead drops, équipements</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🧠 Compétences Interpersonnelles</div>
+                        <p style="font-size: 0.9rem;">Psychologie, interrogatoire, élicitation, détection du mensonge, négociation</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">📝 Analyse et Rédaction</div>
+                        <p style="font-size: 0.9rem;">Évaluation de sources, rédaction de rapports, analyse all-source, présentations</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">🔒 Sécurité Opérationnelle</div>
+                        <p style="font-size: 0.9rem;">Contre-espionnage, protection des sources, gestion de crise, procédures d'urgence</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-title">⚖️ Aspects Légaux et Éthiques</div>
+                        <p style="font-size: 0.9rem;">Cadre juridique, limites d'action, dilemmes éthiques</p>
+                    </div>
+                </div>
+
+                <h3>16.3 Formation Avancée et Spécialisations</h3>
+
+                <p><strong>Après plusieurs années d'expérience opérationnelle</strong> :</p>
+                <ul>
+                    <li><strong>Gestion de réseaux complexes</strong>
+                        <ul>
+                            <li>Manipulation d'agents multiples</li>
+                            <li>Coordination d'opérations élargies</li>
+                            <li>Gestion de sous-agents</li>
+                        </ul>
+                    </li>
+                    <li><strong>Opérations en environnements hostiles</strong>
+                        <ul>
+                            <li>Survie en zone de guerre</li>
+                            <li>Exfiltration sous pression</li>
+                            <li>Résistance à l'interrogatoire (SERE - Survival, Evasion, Resistance, Escape)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Technologies avancées</strong>
+                        <ul>
+                            <li>Hacking et cyber-espionnage</li>
+                            <li>Surveillance technique avancée</li>
+                            <li>Contre-mesures électroniques</li>
+                        </ul>
+                    </li>
+                    <li><strong>Spécialisations régionales</strong>
+                        <ul>
+                            <li>Expertise géopolitique approfondie</li>
+                            <li>Maîtrise culturelle et linguistique</li>
+                            <li>Réseaux de contacts régionaux</li>
+                        </ul>
+                    </li>
+                    <li><strong>Recrutement d'élites</strong>
+                        <ul>
+                            <li>Techniques pour cibles sophistiquées</li>
+                            <li>Environnements diplomatiques</li>
+                            <li>Milieux financiers et technologiques</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>16.4 Développement Continu</h3>
+
+                <p><strong>Simulations et exercices</strong> :</p>
+                <ul>
+                    <li>Mises en situation régulières</li>
+                    <li>Exercices de recrutement avec acteurs</li>
+                    <li>Simulations de crise</li>
+                    <li>Red teaming (contre-espionnage simulé)</li>
+                </ul>
+
+                <p><strong>Retours d'expérience</strong> :</p>
+                <ul>
+                    <li>Débriefings après missions</li>
+                    <li>Analyses de succès et échecs</li>
+                    <li>Partage entre officiers (lessons learned)</li>
+                    <li>Études de cas contemporains</li>
+                </ul>
+
+                <p><strong>Maintien des compétences</strong> :</p>
+                <ul>
+                    <li>Langues (pratique continue)</li>
+                    <li>Techniques de couverture (mises à jour)</li>
+                    <li>Technologies nouvelles</li>
+                    <li>Évolutions géopolitiques</li>
+                </ul>
+
+                <h3>16.5 Bien-Être et Soutien Psychologique</h3>
+
+                <p><strong>Reconnaissance des risques</strong> :</p>
+                <ul>
+                    <li>Stress chronique élevé</li>
+                    <li>Isolement social (impossibilité de partager)</li>
+                    <li>Dissonance morale (actions contraires aux valeurs personnelles)</li>
+                    <li>Danger physique réel</li>
+                    <li>Séparations familiales prolongées</li>
+                </ul>
+
+                <p><strong>Mesures de soutien</strong> :</p>
+                <ul>
+                    <li>Évaluations psychologiques régulières</li>
+                    <li>Accès à psychologues habilités secrets</li>
+                    <li>Périodes de récupération après missions difficiles</li>
+                    <li>Programmes de réintégration familiale</li>
+                    <li>Groupes de soutien entre pairs</li>
+                </ul>
+
+                <p><strong>Gestion des traumatismes</strong> :</p>
+                <ul>
+                    <li>Reconnaissance du PTSD</li>
+                    <li>Traitement spécialisé</li>
+                    <li>Possibilité de transition vers rôles non opérationnels</li>
+                    <li>Réhabilitation et réorientation de carrière si nécessaire</li>
+                </ul>
+
+                </div>
+            </section>
+
+            <!-- Section 17: Futur de l'HUMINT -->
+            <section class="section" id="futur">
+                <div class="breadcrumb">Manuel HUMINT &gt; <span>Futur de l'HUMINT</span></div>
+                
+                <div class="card">
+                <h2 id="17">17. Futur de l'HUMINT</h2>
+
+                <h3>17.1 Défis Émergents</h3>
+
+                <p><strong>Omniprésence de la surveillance</strong> :</p>
+                <ul>
+                    <li>Caméras avec reconnaissance faciale partout</li>
+                    <li>Traces numériques inévitables</li>
+                    <li>Big data permettant l'analyse de patterns</li>
+                    <li><strong>Impact</strong> : Couverture profonde de plus en plus difficile</li>
+                </ul>
+
+                <p><strong>Biométrie avancée</strong> :</p>
+                <ul>
+                    <li>Authentification par empreintes digitales, iris, ADN</li>
+                    <li>Détection de démarche et comportement</li>
+                    <li><strong>Impact</strong> : Identités multiples détectables</li>
+                </ul>
+
+                <p><strong>Intelligence artificielle adverse</strong> :</p>
+                <ul>
+                    <li>Détection automatisée de comportements suspects</li>
+                    <li>Corrélation de données massives</li>
+                    <li>Identification d'anomalies</li>
+                    <li><strong>Impact</strong> : Les techniques traditionnelles deviennent moins efficaces</li>
+                </ul>
+
+                <p><strong>Fermeture des sociétés</strong> :</p>
+                <ul>
+                    <li>États autoritaires avec contrôle total</li>
+                    <li>Technologie de surveillance au service de l'oppression</li>
+                    <li>Réseaux sociaux comme outils de contre-espionnage</li>
+                    <li><strong>Impact</strong> : Accès aux cibles de plus en plus restreint</li>
+                </ul>
+
+                <h3>17.2 Adaptations Nécessaires</h3>
+                <ul>
+                    <li><strong>Micro-operations</strong>
+                        <ul>
+                            <li>Contacts ultra-brefs et rares</li>
+                            <li>Utilisation maximale de technologies pour minimiser contacts physiques</li>
+                            <li>Relations virtuelles quand possible</li>
+                        </ul>
+                    </li>
+                    <li><strong>Hybridation avec SIGINT et Cyber</strong>
+                        <p>L'HUMINT pure devient insuffisante</p>
+                        <ul>
+                            <li>Intégration nécessaire avec interception électronique</li>
+                            <li>Cyberopérations pour faciliter l'HUMINT (accès, couverture)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Approches non-traditionnelles</strong>
+                        <ul>
+                            <li>Utilisation de deepfakes pour communications</li>
+                            <li>Intelligence artificielle pour générer légendes</li>
+                            <li>Réalité virtuelle pour entraînement et rencontres sécurisées</li>
+                        </ul>
+                    </li>
+                    <li><strong>Sources involontaires à distance</strong>
+                        <ul>
+                            <li>Élicitation via réseaux sociaux</li>
+                            <li>Crowdsourcing d'informations</li>
+                            <li>Exploitation de sources ouvertes avancée</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>17.3 Questions Éthiques du Futur</h3>
+                <ul>
+                    <li><strong>Manipulation cognitive avancée</strong> : L'amélioration des neurosciences permet des techniques de persuasion et manipulation de plus en plus puissantes. Où placer les limites ?</li>
+                    <li><strong>Agents augmentés</strong>
+                        <ul>
+                            <li>Implants cognitifs</li>
+                            <li>Modifications génétiques pour performances améliorées</li>
+                            <li>Médicaments améliorant les capacités</li>
+                            <li><strong>Question</strong> : Jusqu'où peut-on aller dans la modification humaine ?</li>
+                        </ul>
+                    </li>
+                    <li><strong>Autonomie des systèmes</strong> : Si l'IA peut recruter et gérer des agents de manière autonome, qui est responsable des décisions et actions ?</li>
+                    <li><strong>Vie privée dans un monde surveillé</strong> : Comment préserver des espaces pour l'activité légitime de renseignement quand toute surveillance est perçue comme violation ?</li>
+                </ul>
+
+                <h3>17.4 Constantes Humaines</h3>
+                <ul>
+                    <li><strong>La nature humaine</strong>
+                        <ul>
+                            <li>Les motivations MICE restent valables</li>
+                            <li>Le besoin de connexion et reconnaissance</li>
+                            <li>Les vulnérabilités psychologiques</li>
+                            <li>Le désir de sens et d'appartenance</li>
+                        </ul>
+                    </li>
+                    <li><strong>L'importance du contact humain</strong> : Même avec toute la technologie du monde, la compréhension profonde des intentions, des nuances culturelles, et des dynamiques interpersonnelles nécessite l'interaction humaine.</li>
+                    <li><strong>Le jugement contextuel</strong> : L'IA peut traiter des données, mais seuls les humains peuvent vraiment comprendre le contexte politique, culturel et émotionnel complexe dans lequel opère le renseignement.</li>
+                    <li><strong>La confiance</strong> : Au cœur de l'HUMINT reste la construction de relations de confiance - quelque chose que la technologie ne peut qu'appuyer, jamais remplacer complètement.</li>
+                </ul>
+
+                <h2>Conclusion</h2>
+                <p>L'HUMINT reste une discipline à la fois ancienne et constamment renouvelée. Si les technologies évoluent et les contextes changent, les fondamentaux demeurent : comprendre l'humain, établir la confiance, obtenir l'information, protéger les sources.</p>
+                <p>La pratique de l'HUMINT exige un équilibre constant entre efficacité opérationnelle et considérations éthiques, entre audace et prudence, entre manipulation et respect. C'est un domaine où l'excellence technique doit s'accompagner d'une profonde réflexion morale.</p>
+                <p>Pour ceux qui œuvrent dans ce domaine, le poids de la responsabilité est immense : les informations collectées influencent des décisions pouvant affecter des millions de vies, tandis que les sources mettent leur vie entre vos mains. Cette dualité exige la plus grande intégrité professionnelle.</p>
+                <p>Le renseignement humain continuera d'évoluer, s'adaptant aux nouvelles réalités géopolitiques et technologiques, mais son essence restera la même : l'art ancien et complexe de comprendre l'autre pour mieux protéger les siens.</p>
+
+                <h2>Annexes</h2>
+                <h3>Annexe A : Glossaire des Termes HUMINT</h3>
+                <p><strong>Agent</strong> : Personne recrutée pour collecter des informations pour un service de renseignement étranger</p>
+                <p><strong>Agent handler / Officier traitant</strong> : Officier responsable de la gestion d'un agent</p>
+                <p><strong>Asset</strong> : Source ou ressource de renseignement (terme général)</p>
+                <p><strong>Blow / Burn</strong> : Compromettre une opération ou l'identité d'un agent</p>
+                <p><strong>Brush pass</strong> : Échange rapide d'objets (documents, argent) lors d'un contact bref et apparemment accidentel</p>
+                <p><strong>Chickenfeed</strong> : Informations vraies mais de faible valeur fournies pour établir la crédibilité</p>
+                <p><strong>Cobbler</strong> : Spécialiste de la création de faux documents</p>
+                <p><strong>Cutout</strong> : Intermédiaire entre l'officier traitant et l'agent pour éviter le contact direct</p>
+                <p><strong>Dangle</strong> : Fausse cible offerte au service adverse pour l'occuper ou identifier ses méthodes</p>
+                <p><strong>Dead drop</strong> : Lieu secret pour déposer et récupérer des objets sans contact direct</p>
+                <p><strong>Defector</strong> : Personne qui change d'allégeance (transfuge)</p>
+                <p><strong>Elicitation</strong> : Obtenir des informations sans que la personne réalise qu'elle est interrogée</p>
+                <p><strong>Exfiltration</strong> : Extraction d'une personne d'une zone hostile</p>
+                <p><strong>False flag</strong> : Opération où l'agent croit travailler pour une organisation autre que la réelle</p>
+                <p><strong>Going black</strong> : Disparaître, couper toute communication</p>
+                <p><strong>Honey trap</strong> : Piège utilisant séduction ou sexe pour compromettre ou recruter</p>
+                <p><strong>Illegal</strong> : Agent opérant sans couverture diplomatique</p>
+                <p><strong>Legend</strong> : Biographie de couverture complète d'un agent</p>
+                <p><strong>Mole</strong> : Agent infiltré profondément dans une organisation cible</p>
+                <p><strong>NOC (Non-Official Cover)</strong> : Agent sans couverture diplomatique, souvent sous couverture commerciale</p>
+                <p><strong>Operative</strong> : Agent actif sur le terrain</p>
+                <p><strong>Rabbit</strong> : Personne sous surveillance (terme britannique)</p>
+                <p><strong>Safe house</strong> : Lieu sécurisé pour rencontres ou hébergement temporaire</p>
+                <p><strong>Singleton</strong> : Agent opérant seul</p>
+                <p><strong>Sleeper</strong> : Agent dormant, activé seulement si nécessaire</p>
+                <p><strong>Tradecraft</strong> : Ensemble des techniques et compétences opérationnelles</p>
+                <p><strong>Walk-in</strong> : Personne s'offrant spontanément comme source</p>
+                <p><strong>Witting</strong> : Personne consciente de sa participation à une opération de renseignement (opposé: unwitting)</p>
+
+                <h3>Annexe B : Codes et Signaux Classiques</h3>
+                <p><strong>Systèmes de communication par signaux visuels</strong> :</p>
+                <p><strong>Fenêtres</strong> :</p>
+                <ul>
+                    <li>Store baissé = Danger, ne pas contacter</li>
+                    <li>Pot de fleurs déplacé = Message dans dead drop</li>
+                    <li>Lumière allumée à heure précise = RDV confirmé</li>
+                </ul>
+                <p><strong>Marques de craie</strong> :</p>
+                <ul>
+                    <li>Ligne verticale = Dead drop chargé</li>
+                    <li>X = Message urgent</li>
+                    <li>Ligne horizontale = Zone compromise</li>
+                </ul>
+                <p><strong>Vêtements</strong> :</p>
+                <ul>
+                    <li>Port de cravate rouge = Contact établi</li>
+                    <li>Lunettes de soleil sur tête = Surveillance détectée</li>
+                    <li>Journal plié d'une certaine manière = Signal convenu</li>
+                </ul>
+                <p><strong>Positionnement corporel</strong> :</p>
+                <ul>
+                    <li>Main dans poche = Sécurité compromise</li>
+                    <li>Gratter l'oreille = Suivre le plan B</li>
+                    <li>Ajuster lunettes = Tout va bien</li>
+                </ul>
+
+                <h3>Annexe C : Études Recommandées</h3>
+                <p><strong>Ouvrages fondamentaux</strong> :</p>
+                <ul>
+                    <li>"The Craft of Intelligence" - Allen Dulles</li>
+                    <li>"My Silent War" - Kim Philby</li>
+                    <li>"Spy Handler" - Victor Cherkashin</li>
+                    <li>"The Art of Intelligence" - Henry Crumpton</li>
+                    <li>"Legacy of Ashes: The History of the CIA" - Tim Weiner</li>
+                </ul>
+                <p><strong>Mémoires d'officiers</strong> :</p>
+                <ul>
+                    <li>"A Spy Among Friends" - Ben Macintyre</li>
+                    <li>"Company Man" - John Rizzo</li>
+                    <li>"The Spy and the Traitor" - Ben Macintyre</li>
+                </ul>
+                <p><strong>Aspects techniques</strong> :</p>
+                <ul>
+                    <li>"The Official CIA Manual of Trickery and Deception"</li>
+                    <li>"Practical Tradecraft" (documents déclassifiés CIA)</li>
+                </ul>
+                <p><strong>Éthique et analyse</strong> :</p>
+                <ul>
+                    <li>"Intelligence Ethics: The Definitive Work" - Jan Goldman</li>
+                    <li>"Psychology of Intelligence Analysis" - Richards Heuer</li>
+                </ul>
+
+                <p><em>FIN DU MANUEL</em></p>
+                <p><small>Ce document est fourni à des fins éducatives uniquement. Les techniques décrites ne doivent être utilisées que dans le cadre légal et éthique approprié par des professionnels autorisés.</small></p>
+
+                </div><!-- end card -->
+            </section><!-- end futur section -->
 
     <script>
-        // --- Données de test ---
-        const REPOSITORIES = [
-            {
-                id: 'core-kernel',
-                name: 'nexus-kernel-v4',
-                description: 'Le cœur battant de l\'écosystème distribué.',
-                language: 'Rust',
-                stars: 1240,
-                files: [
-                    { name: 'README.md', content: '# Nexus Kernel V4\n\nBienvenue dans le cœur du système. Ce dépôt contient l\'implémentation bas niveau de l\'orchestrateur.\n\n## Architecture\n- **Micro-services** haute performance\n- **Zero-copy** data transfer\n- **Security first** design\n\n```rust\nfn main() {\n    println!("Booting Nexus...");\n    nexus::init().unwrap();\n}\n```\n\n### Contribution\nSuivez strictement les protocoles de PR.' },
-                    { name: 'ROADMAP.md', content: '# Roadmap 2025\n\n- [x] Initial bootloader\n- [ ] Quantum-safe crypto layer\n- [ ] Neural bridge interface' }
-                ]
-            },
-            {
-                id: 'neural-arch',
-                name: 'neural-arch-x',
-                description: 'Modèles d\'architecture IA avancés pour le traitement à grande échelle.',
-                language: 'Python',
-                stars: 856,
-                files: [
-                    { name: 'README.md', content: '# Neural-Arch-X\n\nFramework de conception de réseaux de neurones distribués.\n\n> "L\'intelligence n\'est qu\'une forme sophistiquée d\'optimisation."\n\n## Installation\n`pip install nexus-neural-arch`' }
-                ]
-            },
-            {
-                id: 'web-front',
-                name: 'hyper-ui-components',
-                description: 'Une collection de composants web ultra-rapides.',
-                language: 'TypeScript',
-                stars: 432,
-                files: [
-                    { name: 'DOCUMENTATION.md', content: '# Hyper UI\n\nComposants UI conçus pour le Nexus.\nUtilise Tailwind et Lucide par défaut.' }
-                ]
-            }
-        ];
+        // Navigation
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('.section');
+        const scrollTop = document.getElementById('scrollTop');
 
-        const QUESTIONS = [
-            {
-                id: 'q1',
-                title: 'Comment optimiser les transactions Zero-Knowledge sur le Nexus v4 ?',
-                body: "J'essaie de réduire le temps de preuve pour les transactions complexes mais je rencontre une latence de 500ms. Est-ce un problème de CPU ou d'algorithme ?",
-                author: 'DevGod_99',
-                votes: 42,
-                answers: 3,
-                tags: ['ZKP', 'Cryptography', 'Rust']
-            },
-            {
-                id: 'q2',
-                title: 'Erreur Fatale : Kernel Panic sur module Neural-Arch-X',
-                body: "Le module crash dès que la charge de neurones dépasse les 10M. Voici les logs : `segmentation fault: 11`",
-                author: 'JuniorDebugger',
-                votes: -5,
-                answers: 1,
-                tags: ['Python', 'AI', 'Debugging']
-            }
-        ];
-
-        // --- Logique principale ---
-        let currentRepo = REPOSITORIES[0];
-        let currentFile = REPOSITORIES[0].files[0];
-        let activeView = 'repo'; 
-
-        function init() {
-            lucide.createIcons();
-            renderRepoList();
-            renderSidebarQuestions();
-            renderContributionGraph();
-            renderCurrentView();
-            hljs.highlightAll();
+        function openSidebar() {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
         }
 
-        function renderRepoList() {
-            const list = document.getElementById('repo-list');
-            list.innerHTML = REPOSITORIES.map(repo => `
-                <div class="repo-item glass-card p-3 flex flex-col gap-1 cursor-pointer ${currentRepo.id === repo.id ? 'active' : ''}" 
-                     onclick="switchRepo('${repo.id}')">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="folder" class="w-4 h-4 text-cyan-400"></i>
-                        <span class="font-bold text-sm truncate">${repo.name}</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-[10px] opacity-60">
-                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 text-yellow-500"></i> ${repo.stars}</span>
-                        <span class="flex items-center gap-1"><i data-lucide="code" class="w-3 h-3 text-cyan-400"></i> ${repo.language}</span>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
+        function closeSidebarFunc() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
         }
 
-        function renderSidebarQuestions() {
-            const list = document.getElementById('sidebar-questions');
-            list.innerHTML = QUESTIONS.map(q => `
-                <div class="cursor-pointer group hover:bg-white/5 p-2 rounded-lg transition-all border-b border-white/5 pb-4" onclick="switchView('question', '${q.id}')">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="${q.votes > 0 ? 'text-cyan-400' : 'text-red-400'} mono text-xs font-bold">${q.votes > 0 ? '+' : ''}${q.votes} votes</span>
-                    </div>
-                    <p class="text-xs font-semibold group-hover:text-cyan-400 transition-colors line-clamp-2">${q.title}</p>
-                </div>
-            `).join('');
-        }
+        menuToggle.addEventListener('click', openSidebar);
+        closeSidebar.addEventListener('click', closeSidebarFunc);
+        overlay.addEventListener('click', closeSidebarFunc);
 
-        function renderContributionGraph() {
-            const graph = document.getElementById('contribution-graph');
-            const totalCells = 48; 
-            let html = '';
-            for(let i=0; i<totalCells; i++) {
-                const lvl = Math.floor(Math.random() * 5);
-                html += `<div class="grid-cell lvl-${lvl}"></div>`;
-            }
-            graph.innerHTML = html;
-        }
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const sectionId = item.getAttribute('data-section');
+                
+                sections.forEach(s => s.classList.remove('active'));
+                navItems.forEach(n => n.classList.remove('active'));
+                
+                document.getElementById(sectionId)?.classList.add('active');
+                item.classList.add('active');
+                
+                if (window.innerWidth < 1024) {
+                    closeSidebarFunc();
+                }
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
 
-        function switchRepo(id) {
-            currentRepo = REPOSITORIES.find(r => r.id === id);
-            currentFile = currentRepo.files[0];
-            activeView = 'repo';
-            renderRepoList();
-            renderCurrentView();
-        }
-
-        function switchView(view, id) {
-            activeView = view;
-            if(view === 'question') {
-                const q = QUESTIONS.find(q => q.id === id);
-                renderQuestionView(q);
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTop.classList.add('visible');
             } else {
-                renderCurrentView();
+                scrollTop.classList.remove('visible');
             }
-        }
+        });
 
-        function renderCurrentView() {
-            const header = document.getElementById('main-view-header');
-            const content = document.getElementById('view-content');
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
-            if(activeView === 'repo') {
-                header.innerHTML = `
-                    <div class="flex flex-col gap-2">
-                        <div class="flex items-center gap-2 text-gray-400 text-sm">
-                            <span class="hover:text-white cursor-pointer">Admin_Core</span>
-                            <span>/</span>
-                            <span class="font-bold text-white text-lg">${currentRepo.name}</span>
-                            <span class="bg-white/10 px-2 py-0.5 rounded-full text-[10px] border border-white/10 uppercase font-black">Public</span>
-                        </div>
-                        <p class="text-sm opacity-60">${currentRepo.description}</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button class="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-sm hover:bg-white/10 transition-all">
-                            <i data-lucide="star" class="w-4 h-4"></i> Star
-                        </button>
-                        <button class="flex items-center gap-2 bg-cyan-500 text-black font-bold px-4 py-2 rounded-lg text-sm hover:brightness-110 transition-all">
-                            <i data-lucide="code" class="w-4 h-4"></i> Code
-                        </button>
-                    </div>
-                `;
-
-                content.innerHTML = `
-                    <div class="flex border-b border-white/10 mb-6 gap-6 text-sm font-semibold opacity-60">
-                        <div class="pb-2 border-b-2 border-cyan-400 opacity-100 flex items-center gap-2 cursor-pointer">
-                            <i data-lucide="file-text" class="w-4 h-4"></i> README
-                        </div>
-                        <div class="pb-2 flex items-center gap-2 cursor-pointer hover:opacity-100 transition-opacity">
-                            <i data-lucide="git-branch" class="w-4 h-4"></i> Branches
-                        </div>
-                        <div class="pb-2 flex items-center gap-2 cursor-pointer hover:opacity-100 transition-opacity">
-                            <i data-lucide="message-square" class="w-4 h-4"></i> Issues
-                        </div>
-                    </div>
-                    <div id="markdown-content" class="prose prose-invert max-w-none">
-                        ${marked.parse(currentFile.content)}
-                    </div>
-                `;
-            }
-            
-            lucide.createIcons();
-            document.querySelectorAll('pre code').forEach((el) => {
-                hljs.highlightElement(el);
-            });
-        }
-
-        function renderQuestionView(q) {
-            const header = document.getElementById('main-view-header');
-            const content = document.getElementById('view-content');
-
-            header.innerHTML = `
-                <div class="flex flex-col gap-4 w-full">
-                    <div class="flex justify-between items-start">
-                        <h1 class="text-3xl font-black text-white">${q.title}</h1>
-                        <button class="bg-cyan-500 text-black font-bold px-6 py-2 rounded-lg text-sm whitespace-nowrap">Poser une question</button>
-                    </div>
-                    <div class="flex gap-4 text-xs opacity-50">
-                        <span>Posée hier</span>
-                        <span>Vue 1.2k fois</span>
-                        <span>Activité 2h</span>
-                    </div>
-                </div>
-            `;
-
-            // Note: Correction de la syntaxe ici en remplaçant les backticks par des tags <code>
-            content.innerHTML = `
-                <div class="flex gap-6 mt-4">
-                    <div class="flex flex-col items-center gap-2 mt-2">
-                        <i data-lucide="chevron-up" class="w-10 h-10 vote-btn"></i>
-                        <span class="text-2xl font-black mono">${q.votes}</span>
-                        <i data-lucide="chevron-down" class="w-10 h-10 vote-btn"></i>
-                        <i data-lucide="bookmark" class="w-5 h-5 opacity-30 mt-4 cursor-pointer"></i>
-                    </div>
-                    <div class="flex-1 space-y-6">
-                        <div class="text-lg opacity-90 leading-relaxed">
-                            ${q.body}
-                        </div>
-                        <div class="flex gap-2">
-                            ${q.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
-                        </div>
-                        <div class="flex justify-end">
-                            <div class="bg-white/5 border border-white/5 p-3 rounded-xl flex items-center gap-3">
-                                <div class="w-10 h-10 rounded bg-gradient-to-br from-indigo-500 to-purple-500"></div>
-                                <div>
-                                    <div class="text-[10px] opacity-40 uppercase font-bold">Demandé par</div>
-                                    <div class="text-sm font-bold text-cyan-400">${q.author}</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="pt-8 border-t border-white/10">
-                            <h3 class="text-xl font-bold mb-6">${q.answers} Réponses</h3>
-                            <div class="bg-cyan-400/5 border border-cyan-400/20 p-6 rounded-2xl relative">
-                                <div class="absolute -left-3 top-6 bg-green-500 text-black px-2 py-1 rounded text-[10px] font-black uppercase rotate-[-90deg]">Acceptée</div>
-                                <div class="flex gap-6">
-                                    <div class="flex flex-col items-center gap-2">
-                                        <i data-lucide="chevron-up" class="w-8 h-8 vote-btn"></i>
-                                        <span class="text-xl font-black mono">156</span>
-                                        <i data-lucide="chevron-down" class="w-8 h-8 vote-btn"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="mb-4">Il s'agit d'une limitation connue dans la v4. Vous devez forcer le compilateur à utiliser l'extension <code>unsafe-intrinsics</code> pour bypasser le contrôle du scheduler.</p>
-                                        <pre><code class="language-rust">#[nexus_optimize(extreme)]
-pub fn solve_zkp() {
-    // La magie opère ici
-}</code></pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-            document.querySelectorAll('pre code').forEach((el) => {
-                hljs.highlightElement(el);
-            });
-        }
-
-        window.onload = init;
+        // Fonction de recherche retirée : aucune recherche interactive nécessaire
     </script>
-</body>
-</html>
+
+</main></body></html>
