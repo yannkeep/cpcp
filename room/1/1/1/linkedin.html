@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profil LinkedIn – Parfait Larbin Corporate</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Profil LinkedIn satirique du parfait larbin corporate, prêt à dire oui à tout." />
+  <style>
+    :root {
+      --linkedin-blue: #0a66c2;
+      --linkedin-blue-soft: #e8f3ff;
+      --bg: #f3f2ef;
+      --card: #ffffff;
+      --border: #dcdcdc;
+      --text-main: #1f2933;
+      --text-soft: #6b7280;
+      --danger-soft: #fee2e2;
+      --danger: #b91c1c;
+      --success-soft: #dcfce7;
+      --success: #15803d;
+      --badge: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1100px;
+      background: #f3f2ef;
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .topbar {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot-logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: var(--linkedin-blue);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .topbar-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+    }
+
+    .pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-soft);
+    }
+
+    .pill span.icon {
+      font-size: 0.9rem;
+    }
+
+    .btn-toggle {
+      border-radius: 999px;
+      background: var(--linkedin-blue-soft);
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
+    }
+
+    .btn-toggle:hover {
+      background: #dbeafe;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.4fr);
+      gap: 16px;
+      padding: 12px 16px 16px;
+    }
+
+    @media (max-width: 880px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .banner {
+      height: 90px;
+      background:
+        linear-gradient(135deg, #0a66c2, #38bdf8, #e5e7eb);
+    }
+
+    .profile-header {
+      position: relative;
+      padding: 0 16px 12px;
+    }
+
+    .avatar {
+      position: absolute;
+      top: -36px;
+      left: 16px;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 0%, #ffffff, #d1d5db);
+      border: 3px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #4b5563;
+      font-size: 1.1rem;
+    }
+
+    .profile-main {
+      margin-top: 48px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.9rem;
+    }
+
+    .profile-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .profile-title {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+    }
+
+    .profile-sub {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .profile-meta {
+      font-size: 0.78rem;
+      color: #4b5563;
+    }
+
+    .profile-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
+
+    .btn-primary {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--linkedin-blue);
+      background: var(--linkedin-blue);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #374151;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .section {
+      padding: 10px 16px 12px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .section:first-of-type {
+      border-top: none;
+    }
+
+    .section-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .section-sub {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+    }
+
+    .about-text {
+      font-size: 0.86rem;
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    .about-text p {
+      margin: 4px 0;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--badge);
+      color: #111827;
+      border: 1px solid #d1d5db;
+    }
+
+    .xp-item {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.86rem;
+    }
+
+    .xp-bullet {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .xp-main-title {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .xp-company {
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .xp-meta {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    .xp-desc {
+      font-size: 0.8rem;
+      color: #4b5563;
+      margin-top: 2px;
+    }
+
+    .xp-desc ul {
+      margin: 2px 0 0;
+      padding-left: 16px;
+    }
+
+    .xp-desc li {
+      margin-bottom: 1px;
+    }
+
+    .skill-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .skill-pill {
+      font-size: 0.78rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+    }
+
+    .endorse-note {
+      font-size: 0.78rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .side-section {
+      padding: 10px 12px 12px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .side-section:first-of-type {
+      border-top: none;
+    }
+
+    .side-title {
+      font-size: 0.86rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .side-text {
+      font-size: 0.78rem;
+      color: #4b5563;
+    }
+
+    .side-list {
+      list-style: none;
+      padding: 0;
+      margin: 4px 0;
+      font-size: 0.78rem;
+      color: #4b5563;
+    }
+
+    .side-list li {
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #9ca3af;
+    }
+
+    .note-ironic {
+      background: var(--danger-soft);
+      border: 1px solid rgba(248, 113, 113, 0.8);
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 0.78rem;
+      color: var(--danger);
+      margin-top: 6px;
+    }
+
+    .note-soft {
+      background: var(--success-soft);
+      border: 1px solid rgba(74, 222, 128, 0.7);
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 0.78rem;
+      color: var(--success);
+      margin-top: 6px;
+    }
+
+    .hidden-ironic {
+      display: none;
+    }
+
+    body.mode-serieux .bilan-ironic {
+      display: none;
+    }
+
+    body.mode-serieux .hidden-ironic {
+      display: block;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .page {
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .topbar-right {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="dot-logo">in</div>
+      <div class="topbar-title">Profil LinkedIn – Parfait Larbin Corporate</div>
+    </div>
+    <div class="topbar-right">
+      <div class="pill">
+        <span class="icon">⚙️</span>
+        <span>Mode : <strong id="mode-label">Ironique</strong></span>
+      </div>
+      <button class="btn-toggle" id="toggle-mode">
+        <span class="icon">🎭</span>
+        <span>Basculer ironique / sérieux</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Colonne principale -->
+    <section class="card">
+      <div class="banner"></div>
+      <div class="profile-header">
+        <div class="avatar">
+          <!-- Mets tes initiales si tu veux -->
+          PL
+        </div>
+        <div class="profile-main">
+          <div class="profile-info">
+            <!-- TODO : mets ton nom si tu veux t'amuser -->
+            <div class="profile-name">Parfait Larbin (template)</div>
+            <div class="profile-title bilan-ironic">
+              Collaborateur ultra-flexible · Exécutant enthousiaste ·
+              Toujours disponible
+            </div>
+            <div class="profile-title hidden-ironic">
+              Collaborateur polyvalent · Support opérationnel ·
+              Fiable et organisé
+            </div>
+            <div class="profile-sub">
+              Secteur : administratif, services, structures sous-staffées mais très “dynamiques”
+            </div>
+            <div class="profile-meta">
+              Bruxelles, Belgique · Disponible immédiatement ·
+              Ouvert à toutes les “opportunités stimulantes”
+            </div>
+          </div>
+          <div class="profile-actions">
+            <button class="btn-primary">Se connecter</button>
+            <button class="btn-secondary">Plus</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">À propos</div>
+          <div class="about-text bilan-ironic">
+            <p>
+              Collaborateur·rice habitué·e à dire “oui” très vite, à absorber des
+              urgences mal préparées et à gérer des demandes floues avec des délais
+              irréalistes, tout en gardant le sourire en open-space.
+            </p>
+            <p>
+              Capable de se rendre disponible en dehors des horaires, d'adapter ses
+              valeurs aux besoins de la hiérarchie et de présenter tout ça comme
+              de la “passion pour le travail bien fait” sur son profil LinkedIn.
+            </p>
+          </div>
+          <div class="about-text hidden-ironic">
+            <p>
+              Collaborateur·rice polyvalent·e, orienté·e solutions, capable de
+              soutenir une équipe dans la gestion des tâches opérationnelles
+              et la résolution de problèmes concrets du quotidien.
+            </p>
+            <p>
+              Habitué·e aux environnements exigeants, je veille à rester fiable,
+              disponible et attentif·ve aux priorités de l'organisation, tout en
+              préservant autant que possible un équilibre de vie.
+            </p>
+          </div>
+
+          <div class="badge-row">
+            <span class="badge">Répond aux mails trop vite</span>
+            <span class="badge">Support administratif & logistique</span>
+            <span class="badge">Dossiers & suivi</span>
+          </div>
+
+          <div class="note-ironic bilan-ironic">
+            Ce profil est une caricature : ce n'est pas un objectif, c'est un
+            miroir de ce que le système attend parfois. À ne pas reproduire
+            sans protection médicale.
+          </div>
+
+          <div class="note-soft hidden-ironic">
+            Ce modèle peut être adapté en profil réel : en reformulant ce qui
+            relevait de la surcharge en compétences transférables, sans glorifier
+            l'épuisement.
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Expérience</div>
+
+        <div class="xp-item">
+          <div class="xp-bullet">🏢</div>
+          <div>
+            <div class="xp-main-title bilan-ironic">
+              Collaborateur “Swiss Army Knife” (on fait un peu tout)
+            </div>
+            <div class="xp-main-title hidden-ironic">
+              Assistant polyvalent / support d'équipe
+            </div>
+            <div class="xp-company">
+              Entreprise très dynamique (surtout pour les autres)
+            </div>
+            <div class="xp-meta">
+              20XX – 20XX · Bruxelles · Temps plein
+            </div>
+            <div class="xp-desc bilan-ironic">
+              <ul>
+                <li>Gestion de tout ce que personne n'a le temps / l'envie de faire.</li>
+                <li>Absorption de tâches urgentes tombées “par surprise” mais en fait prévisibles.</li>
+                <li>Réactivité exemplaire : sait dire “pas de souci” même quand c'est un gros souci.</li>
+              </ul>
+            </div>
+            <div class="xp-desc hidden-ironic">
+              <ul>
+                <li>Support administratif et logistique aux équipes (planning, organisation, suivi).</li>
+                <li>Gestion de demandes urgentes avec priorisation et communication claire.</li>
+                <li>Contribution à la fluidité du quotidien de travail et à la circulation d'informations.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="xp-item">
+          <div class="xp-bullet">📎</div>
+          <div>
+            <div class="xp-main-title bilan-ironic">
+              Assistant opérationnel multitâche (jamais officiellement cadre, toujours responsable)
+            </div>
+            <div class="xp-main-title hidden-ironic">
+              Assistant opérationnel / coordination de support
+            </div>
+            <div class="xp-company">
+              Organisation sous pression permanente
+            </div>
+            <div class="xp-meta">
+              20XX – 20XX · Belgique · Temps plein
+            </div>
+            <div class="xp-desc bilan-ironic">
+              <ul>
+                <li>Suivi de dossiers “prioritaires” qui changent de priorité toutes les semaines.</li>
+                <li>Participation à des réunions où les décisions sont déjà prises.</li>
+                <li>Production de comptes-rendus et de tableaux de suivi que peu de gens lisent.</li>
+              </ul>
+            </div>
+            <div class="xp-desc hidden-ironic">
+              <ul>
+                <li>Gestion de dossiers administratifs et de suivi de projets.</li>
+                <li>Participation aux réunions d'équipe et rédaction de comptes-rendus.</li>
+                <li>Mise à jour de tableaux de bord et d'outils de suivi pour la direction.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="xp-item bilan-ironic">
+          <div class="xp-bullet">🔥</div>
+          <div>
+            <div class="xp-main-title">
+              Spécialiste des situations impossibles
+            </div>
+            <div class="xp-company">
+              Toutes structures confondues
+            </div>
+            <div class="xp-meta">
+              20XX – aujourd’hui · Contrat moral sans fin
+            </div>
+            <div class="xp-desc">
+              <ul>
+                <li>Capacité à rester poli·e quand on ajoute encore une tâche “vite fait”.</li>
+                <li>Maîtrise du “oui” automatique avant réflexion sur la charge réelle.</li>
+                <li>Sait encaisser le “c'est super ce que tu fais” sans augmentation ni renfort.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section">
+        <div class="section-title">Compétences</div>
+        <div class="section-sub">
+          Principales compétences liées au rôle d'exécutant·e idéal·e (ou de collègue fiable, selon le mode).
+        </div>
+
+        <div>
+          <strong>Organisation & suivi</strong>
+          <div class="skill-pill-row">
+            <span class="skill-pill">Suivi administratif</span>
+            <span class="skill-pill">Gestion de mails</span>
+            <span class="skill-pill">Tableaux & listes</span>
+          </div>
+        </div>
+
+        <div style="margin-top:6px;">
+          <strong>Relation & hiérarchie</strong>
+          <div class="skill-pill-row bilan-ironic">
+            <span class="skill-pill">Dire “oui” très vite</span>
+            <span class="skill-pill">Encaisser les changements de dernière minute</span>
+            <span class="skill-pill">Faire bonne figure en réunion</span>
+          </div>
+          <div class="skill-pill-row hidden-ironic">
+            <span class="skill-pill">Gestion de demandes multiples</span>
+            <span class="skill-pill">Adaptation aux priorités</span>
+            <span class="skill-pill">Communication interne</span>
+          </div>
+        </div>
+
+        <div style="margin-top:6px;">
+          <strong>Résistance & gestion de la pression</strong>
+          <div class="skill-pill-row bilan-ironic">
+            <span class="skill-pill">Résistance passive (mais polie)</span>
+            <span class="skill-pill">Humour comme système de survie</span>
+            <span class="skill-pill">Capacité à fonctionner en sous-effectif chronique</span>
+          </div>
+          <div class="skill-pill-row hidden-ironic">
+            <span class="skill-pill">Gestion du stress</span>
+            <span class="skill-pill">Capacité à prioriser</span>
+            <span class="skill-pill">Autonomie dans les tâches</span>
+          </div>
+        </div>
+
+        <div class="endorse-note">
+          En mode “sérieux”, ces compétences peuvent être reformulées pour un CV réel,
+          sans glorifier la surcharge ni l'auto-sacrifice.
+        </div>
+      </div>
+    </section>
+
+    <!-- Colonne droite -->
+    <aside class="card">
+      <div class="side-section">
+        <div class="side-title">Informations de contact</div>
+        <div class="side-text">
+          <!-- TODO : adapte si tu veux t'en servir pour de vrai -->
+          <ul class="side-list">
+            <li><span class="dot"></span><span>Email : prenom.nom@email.tld</span></li>
+            <li><span class="dot"></span><span>Localisation : Bruxelles, Belgique</span></li>
+            <li><span class="dot"></span><span>Statut : “Ouvert·e aux opportunités” (mais pas à n’importe quoi)</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-title">Résumé express</div>
+        <div class="side-text bilan-ironic">
+          Profil de collaborateur·rice parfait·e pour absorber les conséquences
+          d'une organisation bancale tout en l'habillant de mots comme “agile”,
+          “flexible” et “résilient”.
+        </div>
+        <div class="side-text hidden-ironic">
+          Profil de soutien opérationnel sérieux et fiable, capable d'aider
+          une équipe à tenir ses engagements, à condition que le cadre soit
+          raisonnable et que la charge soit discutée.
+        </div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-title">Ce que les gens disent (officiellement)</div>
+        <ul class="side-list bilan-ironic">
+          <li><span class="dot"></span><span>“Toujours disponible, ne compte pas ses heures”</span></li>
+          <li><span class="dot"></span><span>“Fait tourner la boutique dans l’ombre”</span></li>
+          <li><span class="dot"></span><span>“Ne dit jamais non”</span></li>
+        </ul>
+        <ul class="side-list hidden-ironic">
+          <li><span class="dot"></span><span>“Fiable et rigoureux·se dans le suivi”</span></li>
+          <li><span class="dot"></span><span>“Soutien précieux pour l’équipe”</span></li>
+          <li><span class="dot"></span><span>“Capable de garder le sens des priorités”</span></li>
+        </ul>
+      </div>
+
+      <div class="side-section">
+        <div class="side-title">Ce que ce profil raconte vraiment</div>
+        <div class="side-text bilan-ironic">
+          <p>
+            Que le système adore les gens qui encaissent tout sans broncher,
+            mais qu'il ne les protège pas. Ce profil est un mode d'emploi
+            inversé : à utiliser pour repérer où tu refuses désormais de te
+            comporter en larbin.
+          </p>
+        </div>
+        <div class="side-text hidden-ironic">
+          <p>
+            Que derrière chaque “collaborateur flexible”, il y a une personne
+            qui a appris à tenir beaucoup trop. Ce modèle t’aide à transformer
+            ce vécu en compétences, sans refaire les mêmes erreurs.
+          </p>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script>
+  (function() {
+    var mode = 'ironique'; // ironique ou serieux
+    var btn = document.getElementById('toggle-mode');
+    var label = document.getElementById('mode-label');
+
+    function applyMode() {
+      if (mode === 'serieux') {
+        document.body.classList.add('mode-serieux');
+        label.textContent = 'Sérieux';
+      } else {
+        document.body.classList.remove('mode-serieux');
+        label.textContent = 'Ironique';
+      }
+    }
+
+    btn.addEventListener('click', function () {
+      mode = (mode === 'ironique') ? 'serieux' : 'ironique';
+      applyMode();
+    });
+
+    applyMode();
+  })();
+</script>
+</body>
+</html>
