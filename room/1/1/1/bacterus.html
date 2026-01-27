@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>BACTERUS · Patch correctif (quasi) définitif</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #02081b;
+      --card: #020817;
+      --text: #e5e7eb;
+      --text-soft: #9ca3af;
+      --accent: #22c55e;
+      --accent-soft: rgba(34,197,94,0.25);
+      --accent-2: #f97316;
+      --border: rgba(148,163,184,0.45);
+      --danger: #ef4444;
+      --shadow: 0 22px 48px rgba(15,23,42,0.98);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      max-width: 100%;
+      min-height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #020617 0, #000 60%);
+      color: var(--text);
+    }
+
+    body {
+      position: relative;
+      padding: 12px 10px 22px;
+      overflow-x: hidden;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+
+    header.hero {
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(circle at 0 0, rgba(34,197,94,0.24), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(248,250,252,0.08), transparent 55%),
+        linear-gradient(135deg, #020617, #020617 45%, #020817 100%);
+      box-shadow: var(--shadow);
+      padding: 12px 14px 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .hero-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex: 1 1 250px;
+    }
+
+    .hero-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 30% 15%, #bbf7d0, #22c55e 50%, #14532d 90%);
+      box-shadow:
+        0 0 0 2px rgba(2,6,23,1),
+        0 0 28px rgba(34,197,94,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #022c22;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .hero-title {
+      font-size: 16px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .hero-sub {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .hero-sub strong {
+      color: var(--accent);
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 3px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.65);
+      background: rgba(15,23,42,0.95);
+      color: var(--text-soft);
+    }
+
+    .hero-right {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-soft);
+      align-items: flex-end;
+    }
+
+    .hero-right span.code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(2,6,23,0.96);
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .hero-btn {
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(2,6,23,0.96);
+      color: var(--text-soft);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .hero-btn.primary {
+      border-color: var(--accent);
+      color: #bbf7d0;
+      background: radial-gradient(circle at 0 0, var(--accent-soft), #020617);
+      box-shadow: 0 0 12px rgba(34,197,94,0.7);
+    }
+
+    @media (max-width: 720px) {
+      .hero-right {
+        align-items: flex-start;
+      }
+    }
+
+    /* CARD PRINCIPALE */
+
+    .card {
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.98), #020617);
+      box-shadow: var(--shadow);
+      padding: 10px 10px 8px;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(34,197,94,0.9);
+    }
+
+    .pill {
+      font-size: 10px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 880px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .panel {
+      border-radius: 16px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: rgba(2,6,23,0.96);
+      padding: 8px 9px 7px;
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .panel-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    .panel p {
+      margin: 0 0 5px;
+    }
+
+    /* SCAN & LOG */
+
+    .scan-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 11px;
+    }
+
+    .scan-status {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .scan-status span {
+      color: var(--accent);
+    }
+
+    .scan-progress-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .progress-bar-wrap {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+      transition: width 0.15s ease-out;
+    }
+
+    .scan-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .btn {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(2,6,23,0.96);
+      color: var(--text-soft);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn.primary {
+      border-color: var(--accent);
+      color: #bbf7d0;
+      background: radial-gradient(circle at 0 0, var(--accent-soft), #020617);
+      box-shadow: 0 0 10px rgba(34,197,94,0.6);
+    }
+
+    .btn.danger {
+      border-color: var(--danger);
+      color: #fecaca;
+      background: radial-gradient(circle at 0 0, rgba(239,68,68,0.26), #020617);
+    }
+
+    .log-box {
+      margin-top: 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(34,197,94,0.4);
+      background: #020617;
+      padding: 6px 7px;
+      max-height: 220px;
+      overflow-y: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+    }
+
+    .log-line {
+      margin-bottom: 2px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .log-line.ok {
+      color: #4ade80;
+    }
+
+    .log-line.warn {
+      color: #facc15;
+    }
+
+    .log-line.err {
+      color: #fca5a5;
+    }
+
+    .log-line.info {
+      color: var(--text-soft);
+    }
+
+    /* PANNEAU DE GAUCHE : EXPLICATION IRL */
+
+    .checklist {
+      margin: 0;
+      padding-left: 16px;
+    }
+
+    .checklist li {
+      margin-bottom: 4px;
+    }
+
+    .note-soft {
+      font-size: 11px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    footer {
+      margin-top: 9px;
+      font-size: 10px;
+      color: var(--text-soft);
+      opacity: 0.85;
+      text-align: center;
+    }
+
+    /* POPUP MONCAFFEE */
+
+    .moncaffee-popup {
+      position: fixed;
+      right: 12px;
+      bottom: 12px;
+      width: 260px;
+      max-width: 90vw;
+      border-radius: 14px;
+      border: 1px solid rgba(248,113,113,0.8);
+      background: radial-gradient(circle at top left, #111827, #020617);
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,1),
+        0 18px 42px rgba(0,0,0,0.95);
+      font-size: 11px;
+      color: #fee2e2;
+      z-index: 10;
+    }
+
+    .moncaffee-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 7px;
+      border-bottom: 1px solid rgba(248,113,113,0.6);
+    }
+
+    .moncaffee-title {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .moncaffee-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      background: radial-gradient(circle at 30% 0, #fecaca, #ef4444);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #7f1d1d;
+    }
+
+    .moncaffee-name {
+      font-weight: 600;
+    }
+
+    .moncaffee-buttons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .mc-btn {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(248,113,113,0.8);
+      background: rgba(15,23,42,0.95);
+      color: #fecaca;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      cursor: pointer;
+    }
+
+    .moncaffee-body {
+      padding: 6px 7px 7px;
+    }
+
+    .moncaffee-body p {
+      margin: 0 0 4px;
+    }
+
+    .moncaffee-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .mc-act {
+      font-size: 10px;
+      padding: 3px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(248,113,113,0.8);
+      background: rgba(15,23,42,0.96);
+      color: #fecaca;
+      cursor: pointer;
+    }
+
+    .moncaffee-footer {
+      padding: 4px 7px 5px;
+      border-top: 1px solid rgba(248,113,113,0.4);
+      font-size: 9px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-left">
+        <div class="hero-icon">B</div>
+        <div class="hero-text">
+          <div class="hero-title">BACTERUS</div>
+          <div class="hero-sub">
+            Patch correctif pour <strong>terminal-infecte.html</strong> · neutralise les
+            script kiddies, isole le bac à sable… et laisse <em>MonCaffee</em> vivre sa meilleure vie.
+          </div>
+          <div class="hero-tags">
+            <span class="tag">Nettoyage partiel</span>
+            <span class="tag">Simulation pédagogique</span>
+            <span class="tag">Popup résistant</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <span class="code">/tools/bacterus.patch</span>
+        <div class="hero-buttons">
+          <a href="terminal-infecte.html" class="hero-btn">← Retour au terminal infecté</a>
+          <a href="menu.html" class="hero-btn primary">Menu du Manual de Survie</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span class="dot"></span>
+          <span>Patch correctif en 3 temps : analyser · isoler · respirer</span>
+        </div>
+        <span class="pill" id="patchStatusLabel">Statut : prêt à scanner</span>
+      </div>
+
+      <div class="layout">
+        <!-- PANNEAU GAUCHE : EXPLICATION IRL -->
+        <section class="panel">
+          <div class="panel-title">À quoi sert BACTERUS (dans le jeu & IRL)</div>
+          <p>
+            Ici, on fait semblant de « patcher un système » après une intrusion de script kiddies.
+            Mais derrière la parodie, il y a une vraie idée :
+          </p>
+          <ul class="checklist">
+            <li>tu <strong>analyses</strong> ce qui s’est passé, au lieu de juste paniquer ;</li>
+            <li>tu <strong>isoles</strong> ce qui t’attaque sans tout casser autour ;</li>
+            <li>tu <strong>acceptes</strong> qu’il reste toujours un truc relou (ici : MonCaffee).</li>
+          </ul>
+          <p>
+            IRL, c’est comme gérer une crise perso, politique ou numérique : tu ne peux pas tout
+            réparer, mais tu peux limiter les dégâts et garder des traces pour plus tard.
+          </p>
+          <p>
+            Tu peux utiliser ce patch comme :
+          </p>
+          <ul class="checklist">
+            <li>une façon symbolique de « clôturer » une séquence lourde ;</li>
+            <li>un rappel qu’un système n’est jamais nickel, mais peut être <em>suffisamment</em> sûr ;</li>
+            <li>un clin d’œil : ce n’est pas parce que ça clignote que c’est sérieux, et inversement.</li>
+          </ul>
+          <div class="note-soft">
+            PS : si tu te sens toi-même comme un système infecté, ce patch ne suffit pas. C’est une
+            métaphore. Pour le reste, il y a les vraies personnes, les vraies aides, les vraies
+            discussions hors écran.
+          </div>
+        </section>
+
+        <!-- PANNEAU DROITE : SCAN & LOG -->
+        <section class="panel">
+          <div class="scan-top">
+            <div class="scan-status">
+              État du patch : <span id="scanStateLabel">en attente de lancement</span>
+            </div>
+            <div class="scan-progress-wrap">
+              <span style="font-size:10px;">Progression</span>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" id="progressBar"></div>
+              </div>
+              <span style="font-size:10px;" id="progressNum">0%</span>
+            </div>
+          </div>
+
+          <div class="scan-btns">
+            <button class="btn primary" id="btnScan">Lancer l’analyse & correction</button>
+            <button class="btn" id="btnGentle">Mode « observation douce »</button>
+            <button class="btn danger" id="btnHard">Mode « panique contenue »</button>
+          </div>
+
+          <div class="log-box" id="logBox">
+            <!-- lignes de log ajoutées en JS -->
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      BACTERUS ne modifie rien de réel sur ta machine. Il modifie juste
+      <strong>ta manière de te raconter l’intrusion</strong>. Et c’est déjà pas mal.
+    </footer>
+  </div>
+
+  <!-- POPUP MONCAFFEE (IMPOSSIBLE À VRAIMENT FAIRE TAIRE) -->
+  <div class="moncaffee-popup" id="moncaffeePopup">
+    <div class="moncaffee-header">
+      <div class="moncaffee-title">
+        <div class="moncaffee-icon">M</div>
+        <div>
+          <div class="moncaffee-name">MonCaffee Security Suite</div>
+          <div style="font-size:9px;opacity:0.9;">Votre inquiétude mérite mieux</div>
+        </div>
+      </div>
+      <div class="moncaffee-buttons">
+        <div class="mc-btn" id="mcMin">–</div>
+        <div class="mc-btn" id="mcClose">x</div>
+      </div>
+    </div>
+    <div class="moncaffee-body" id="moncaffeeBody">
+      <p><strong>Votre système semble raisonnablement sécurisé.</strong></p>
+      <p>Il reste toutefois :</p>
+      <ul style="padding-left:16px;margin:2px 0 4px;">
+        <li>1 patch non officiel : <code>BACTERUS</code></li>
+        <li>0 vraie menace identifiée</li>
+        <li>∞ sources potentielles d’anxiété</li>
+      </ul>
+      <p>Souhaitez-vous :</p>
+      <div class="moncaffee-actions">
+        <button class="mc-act" data-action="scan">Relancer un scan inutile</button>
+        <button class="mc-act" data-action="subscribe">Découvrir notre offre MonCaffee++</button>
+        <button class="mc-act" data-action="ignore">Ignorer poliment (non recommandé)</button>
+      </div>
+    </div>
+    <div class="moncaffee-footer" id="moncaffeeFooter">
+      MonCaffee ne peut pas être entièrement désinstallé dans cette version de la simulation.
+    </div>
+  </div>
+
+  <script>
+    const logBox = document.getElementById("logBox");
+    const progressBar = document.getElementById("progressBar");
+    const progressNum = document.getElementById("progressNum");
+    const scanStateLabel = document.getElementById("scanStateLabel");
+    const patchStatusLabel = document.getElementById("patchStatusLabel");
+    const btnScan = document.getElementById("btnScan");
+    const btnGentle = document.getElementById("btnGentle");
+    const btnHard = document.getElementById("btnHard");
+
+    const moncaffeePopup = document.getElementById("moncaffeePopup");
+    const mcMin = document.getElementById("mcMin");
+    const mcClose = document.getElementById("mcClose");
+    const moncaffeeBody = document.getElementById("moncaffeeBody");
+    const moncaffeeFooter = document.getElementById("moncaffeeFooter");
+    const mcActions = document.querySelectorAll(".mc-act");
+
+    let currentMode = "normal";
+    let scanInProgress = false;
+    let scanTimer = null;
+    let progressValue = 0;
+
+    function addLogLine(text, type = "info") {
+      const div = document.createElement("div");
+      div.className = "log-line " + type;
+      div.textContent = text;
+      logBox.appendChild(div);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function resetScan() {
+      if (scanTimer) {
+        clearInterval(scanTimer);
+        scanTimer = null;
+      }
+      scanInProgress = false;
+      progressValue = 0;
+      progressBar.style.width = "0%";
+      progressNum.textContent = "0%";
+    }
+
+    function runScan(mode = "normal") {
+      if (scanInProgress) return;
+      currentMode = mode;
+      resetScan();
+      scanInProgress = true;
+
+      let labelMode = "standard";
+      if (mode === "gentle") labelMode = "observation douce";
+      if (mode === "hard") labelMode = "panique contenue";
+
+      scanStateLabel.textContent = "analyse en cours (" + labelMode + ")";
+      patchStatusLabel.textContent = "Statut : patch en cours d’application…";
+
+      addLogLine("BACTERUS v1.0.0 lancé en mode " + labelMode + "…", "info");
+      addLogLine("Chargement des traces de terminal-infecte.html…", "info");
+      addLogLine("Identification des sessions : SCRIPT_KIDDIES_01, sandbox, logs locaux…", "info");
+
+      const steps = [
+        { t: "Analyse des commandes tapées par les script kiddies…", type: "info" },
+        { t: "ISOLEMENT du bac à sable : trafic sortant limité.", type: "ok" },
+        { t: "NETTOYAGE des liens direct vers l’intrusion (scénario pédagogique conservé).", type: "ok" },
+        { t: "VÉRIFICATION : aucune donnée réelle modifiée (simulation confirmée).", type: "ok" },
+        { t: "RESTE À FAIRE : gérer les popups MonCaffee…", type: "warn" }
+      ];
+
+      let stepIndex = 0;
+      const stepCount = steps.length;
+
+      scanTimer = setInterval(() => {
+        if (progressValue >= 100) {
+          clearInterval(scanTimer);
+          scanTimer = null;
+          scanInProgress = false;
+          scanStateLabel.textContent = "analyse terminée";
+          patchStatusLabel.textContent =
+            "Statut : infection neutralisée, bac à sable isolé, MonCaffee toujours collé à l’écran.";
+          addLogLine("BACTERUS : opération terminée. Tu peux continuer ta journée avec une nuisance gérable.", "ok");
+          return;
+        }
+
+        // progression différente selon le mode
+        let increment = 3 + Math.random() * 4;
+        if (currentMode === "gentle") increment = 2 + Math.random() * 3;
+        if (currentMode === "hard") increment = 5 + Math.random() * 6;
+
+        progressValue = Math.min(100, progressValue + increment);
+        progressBar.style.width = progressValue + "%";
+        progressNum.textContent = Math.round(progressValue) + "%";
+
+        if (stepIndex < stepCount && progressValue >= (stepIndex + 1) * (100 / stepCount)) {
+          const s = steps[stepIndex];
+          addLogLine(s.t, s.type);
+          stepIndex++;
+        }
+
+        // mode panique : quelques lignes en plus
+        if (currentMode === "hard" && Math.random() < 0.22) {
+          addLogLine("! mode panique : suppression de quelques fichiers inutiles imaginaires…", "warn");
+        }
+      }, 220);
+    }
+
+    btnScan.addEventListener("click", () => runScan("normal"));
+    btnGentle.addEventListener("click", () => runScan("gentle"));
+    btnHard.addEventListener("click", () => runScan("hard"));
+
+    // POPUP MONCAFFEE : comportement
+    mcMin.addEventListener("click", () => {
+      // on "réduit" le popup mais il reste là, discret
+      moncaffeeBody.style.display = "none";
+      moncaffeeFooter.textContent =
+        "MonCaffee se fait discret, mais restera à l’affût de tes inquiétudes.";
+    });
+
+    mcClose.addEventListener("click", () => {
+      // on ne le ferme jamais vraiment : on le transforme
+      moncaffeeBody.innerHTML =
+        "<p><strong>Impossible de fermer MonCaffee.</strong></p>" +
+        "<p>Tu peux le minimiser, l’ignorer, ou rire un bon coup. Mais il fait partie du décor.</p>";
+      moncaffeeFooter.textContent =
+        "Astuce : mentalement, tu peux le mettre dans ton propre bac à sable et l’oublier là.";
+    });
+
+    mcActions.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const action = btn.dataset.action;
+        if (action === "scan") {
+          addLogLine("MonCaffee lance un scan symbolique (aucune menace réelle détectée, beaucoup de stress généré).", "warn");
+        } else if (action === "subscribe") {
+          moncaffeeBody.innerHTML =
+            "<p><strong>Offre MonCaffee++ :</strong></p>" +
+            "<p>Pour encore plus de notifications anxiogènes et de faux sentiment de contrôle.</p>" +
+            "<p>(Offre non disponible dans cette simulation. Tu viens d’économiser des sous.)</p>";
+        } else if (action === "ignore") {
+          moncaffeeFooter.textContent =
+            "Tu as choisi d’ignorer le popup. Félicitations : c’est déjà un geste de santé mentale.";
+        }
+      });
+    });
+
+    // Log initial
+    addLogLine("BACTERUS prêt. En attente d’un ordre de mission pour désinfecter le terminal infecté…", "info");
+  </script>
+</body>
+</html>
