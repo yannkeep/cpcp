@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychopolitique & Noopolitique : Analyse Interactive</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Warm Neutral / Stone Harmony -->
+    <!-- 
+         Backgrounds: bg-stone-50, bg-stone-100
+         Text: text-stone-800, text-stone-600
+         Accents: text-orange-700 (Terracotta), bg-stone-300
+         Logic: Create a calm, 'paper-like' reading environment suitable for philosophical reflection.
+    -->
+
+    <!-- Application Structure Plan: 
+         1. Dashboard Layout: A sidebar navigation (desktop) / bottom nav (mobile) to facilitate non-linear exploration.
+         2. Section 1: Introduction - Defines the shift from Biopolitics (Body) to Psychopolitics (Mind). Text-heavy but interactive toggles.
+         3. Section 2: Comparative Analysis - Uses a Radar Chart to visually contrast Disciplinary Society vs. Achievement Society.
+         4. Section 3: The Mechanism (Big Data) - A grid interaction showing how 'Data' feeds 'Control'.
+         5. Section 4: Consequences - A time-series chart showing the rise of burnout correlated with self-optimization.
+         WHY: This structure moves from abstract definition -> theoretical comparison -> concrete mechanism -> human impact.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Radar Chart (Chart.js): To compare 5 dimensions of power (Surveillance, Freedom, Violence, etc.) between Foucault and Han. 
+            Interaction: Toggle datasets.
+         2. Line Chart (Chart.js): To show the 'Paradox of Freedom' - increasing productivity leading to exhaustion. 
+            Interaction: Slider to adjust 'Self-Optimization' levels.
+         3. Interactive Cards (DOM): To explain terminology without cluttering the UI.
+         4. No SVG/Mermaid used. Pure HTML/CSS/Canvas.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Lora', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        stone: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            300: '#d6d3d1',
+                            400: '#a8a29e',
+                            500: '#78716c',
+                            600: '#57534e',
+                            700: '#44403c',
+                            800: '#292524',
+                            900: '#1c1917',
+                        },
+                        terra: {
+                            600: '#ca8a04', // Muted Gold/Earth
+                            700: '#c2410c', // Burnt Orange
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, .serif-font {
+            font-family: 'Lora', serif;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fafaf9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; 
+        }
+
+        /* Chart Container Strict Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-item.active {
+            background-color: #e7e5e4;
+            border-left: 4px solid #c2410c;
+            color: #1c1917;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 h-screen overflow-hidden flex flex-col md:flex-row">
+
+    <!-- Sidebar Navigation -->
+    <nav class="w-full md:w-64 bg-stone-100 border-r border-stone-200 flex-shrink-0 flex flex-col justify-between z-20 shadow-sm">
+        <div>
+            <div class="p-6 border-b border-stone-200">
+                <h1 class="serif-font text-2xl font-bold text-stone-900">Architecture<br>de l'Esprit</h1>
+                <p class="text-xs text-stone-500 mt-2 uppercase tracking-widest">Rapport Interactif</p>
+            </div>
+            
+            <ul class="flex flex-col py-4 space-y-1">
+                <li>
+                    <button onclick="router('intro')" id="nav-intro" class="nav-item w-full text-left px-6 py-3 text-stone-600 hover:bg-stone-200 transition-colors flex items-center gap-3">
+                        <span>1.</span> Introduction
+                    </button>
+                </li>
+                <li>
+                    <button onclick="router('theory')" id="nav-theory" class="nav-item w-full text-left px-6 py-3 text-stone-600 hover:bg-stone-200 transition-colors flex items-center gap-3">
+                        <span>2.</span> Théorie Comparée
+                    </button>
+                </li>
+                <li>
+                    <button onclick="router('mechanism')" id="nav-mechanism" class="nav-item w-full text-left px-6 py-3 text-stone-600 hover:bg-stone-200 transition-colors flex items-center gap-3">
+                        <span>3.</span> Mécanismes
+                    </button>
+                </li>
+                <li>
+                    <button onclick="router('consequences')" id="nav-consequences" class="nav-item w-full text-left px-6 py-3 text-stone-600 hover:bg-stone-200 transition-colors flex items-center gap-3">
+                        <span>4.</span> Conséquences
+                    </button>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="p-6 border-t border-stone-200">
+            <p class="text-xs text-stone-400 italic">Basé sur les travaux de B.C. Han, M. Foucault & B. Stiegler.</p>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto relative p-6 md:p-10 scroll-smooth" id="main-content">
+        <!-- Dynamic content injected here -->
+    </main>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // State Management
+        const state = {
+            currentView: 'intro',
+            charts: {},
+            optimizationLevel: 50 // For the slider interaction
+        };
+
+        // Data Store (Content Snippets)
+        const contentData = {
+            intro: {
+                title: "De la Biopolitique à la Psychopolitique",
+                subtitle: "Le glissement du contrôle des corps vers le contrôle des esprits.",
+                desc: `
+                    <p class="mb-4 leading-relaxed">
+                        Le pouvoir contemporain ne s'exerce plus principalement par la contrainte physique ou l'enfermement (le modèle disciplinaire de Foucault). 
+                        Il a muté vers une forme fluide, séduisante et intelligente : la <strong>Psychopolitique</strong>.
+                    </p>
+                    <p class="mb-4 leading-relaxed">
+                        Selon Byung-Chul Han, nous vivons dans une crise de la liberté. Nous nous croyons libres, mais nous sommes pris dans les filets d'une auto-exploitation volontaire. 
+                        La <strong>Noopolitique</strong> (politique de la mémoire et de l'attention) utilise les technologies numériques pour moduler nos désirs, nos émotions et nos pensées.
+                    </p>
+                `,
+                cards: [
+                    { term: "Biopolitique", def: "Gestion des populations par le corps : hygiène, natalité, discipline physique. (Foucault)" },
+                    { term: "Psychopolitique", def: "Gouvernance des âmes par la séduction, la positivité et l'exploitation des données. (Han)" },
+                    { term: "Noopolitique", def: "Lutte pour le contrôle de l'attention et de la mémoire via les 'psychotechnologies'. (Stiegler)" }
+                ]
+            },
+            theory: {
+                title: "Société Disciplinaire vs Société de la Performance",
+                subtitle: "Comparaison structurelle des modes de domination.",
+                desc: `
+                    <p class="mb-4 leading-relaxed">
+                        Visualisez ci-dessous la rupture radicale entre les deux modèles. Là où la société disciplinaire fonctionnait par la <strong>négation</strong> (interdire, punir), 
+                        la société de la performance fonctionne par la <strong>positivité</strong> (pouvoir, réussir, liker).
+                    </p>
+                `
+            },
+            mechanism: {
+                title: "Le Panoptique Numérique",
+                subtitle: "Comment la surveillance devient participative.",
+                desc: `
+                    <p class="mb-4 leading-relaxed">
+                        Le Big Data ne se contente pas de nous surveiller. Il nous prédit et nous devance. Contrairement au Panoptique de Bentham (où le détenu est vu mais ne voit pas), 
+                        le <strong>Panoptique Numérique</strong> vit de l'exposition volontaire. Plus nous communiquons, plus nous nous soumettons.
+                    </p>
+                `
+            },
+            consequences: {
+                title: "L'Agonie de l'Éros et le Burnout",
+                subtitle: "Les pathologies de la liberté paradoxale.",
+                desc: `
+                    <p class="mb-4 leading-relaxed">
+                        La pression interne à "être soi-même" et à optimiser ses performances conduit à l'infarctus psychique. 
+                        Utilisez le simulateur ci-dessous pour observer la corrélation entre l'impératif d'optimisation et l'épuisement mental.
+                    </p>
+                `
+            }
+        };
+
+        // DOM Elements
+        const mainContent = document.getElementById('main-content');
+        
+        // Router Function
+        function router(viewName) {
+            state.currentView = viewName;
+            
+            // Update Nav UI
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const activeNav = document.getElementById(`nav-${viewName}`);
+            if(activeNav) activeNav.classList.add('active');
+
+            // Clear previous content (and destroy charts to prevent memory leaks)
+            if (state.charts[viewName]) {
+                state.charts[viewName].destroy();
+                delete state.charts[viewName];
+            }
+            // Clear other charts just in case
+            Object.values(state.charts).forEach(chart => chart.destroy());
+            state.charts = {};
+
+            mainContent.innerHTML = ''; // Wipe DOM
+
+            // Render View
+            switch(viewName) {
+                case 'intro': renderIntro(); break;
+                case 'theory': renderTheory(); break;
+                case 'mechanism': renderMechanism(); break;
+                case 'consequences': renderConsequences(); break;
+                default: renderIntro();
+            }
+        }
+
+        // --- View: Introduction ---
+        function renderIntro() {
+            const data = contentData.intro;
+            
+            const html = `
+                <div class="fade-in max-w-4xl mx-auto">
+                    <header class="mb-8 border-b border-stone-200 pb-4">
+                        <h2 class="text-3xl font-bold text-stone-900 serif-font mb-2">${data.title}</h2>
+                        <p class="text-lg text-terra-700 italic">${data.subtitle}</p>
+                    </header>
+                    
+                    <div class="grid md:grid-cols-3 gap-8 mb-10">
+                        <div class="md:col-span-2 text-stone-700 text-lg">
+                            ${data.desc}
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200 flex flex-col justify-center items-center text-center">
+                            <span class="text-4xl mb-3">👁️</span>
+                            <p class="text-sm font-semibold text-stone-500 uppercase tracking-wide">Concept Clé</p>
+                            <p class="text-xl font-bold text-stone-800 mt-1">"La liberté est devenue une contrainte."</p>
+                            <p class="text-xs text-stone-400 mt-2">— Byung-Chul Han</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-terra-700 pl-4">Lexique Fondamental</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        ${data.cards.map(card => `
+                            <div class="group bg-white p-6 rounded border border-stone-200 hover:border-terra-700 hover:shadow-md transition-all duration-300 cursor-default">
+                                <h4 class="font-bold text-stone-900 mb-2 group-hover:text-terra-700 transition-colors">${card.term}</h4>
+                                <p class="text-sm text-stone-600 leading-relaxed">${card.def}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            mainContent.innerHTML = html;
+        }
+
+        // --- View: Theory (Comparative Radar) ---
+        function renderTheory() {
+            const data = contentData.theory;
+            
+            const html = `
+                <div class="fade-in max-w-5xl mx-auto">
+                    <header class="mb-8">
+                        <h2 class="text-3xl font-bold text-stone-900 serif-font mb-2">${data.title}</h2>
+                        <p class="text-stone-600">${data.subtitle}</p>
+                    </header>
+
+                    <div class="grid lg:grid-cols-2 gap-10 items-start">
+                        <div class="order-2 lg:order-1">
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                                <h3 class="text-sm font-bold text-stone-400 uppercase mb-4 text-center tracking-widest">Analyse Dimensionnelle</h3>
+                                <!-- Chart Container -->
+                                <div class="chart-container">
+                                    <canvas id="theoryChart"></canvas>
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <button onclick="toggleDataset(0)" class="px-3 py-1 text-xs rounded bg-stone-200 text-stone-700 hover:bg-stone-300 mr-2">Foucault (On/Off)</button>
+                                    <button onclick="toggleDataset(1)" class="px-3 py-1 text-xs rounded bg-terra-700 text-white hover:bg-orange-800">Han (On/Off)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-1 lg:order-2 text-stone-700">
+                            ${data.desc}
+                            
+                            <div class="space-y-4 mt-6">
+                                <div class="p-4 bg-stone-100 rounded border-l-4 border-stone-400">
+                                    <h4 class="font-bold text-stone-900">Société Disciplinaire (Foucault)</h4>
+                                    <p class="text-sm mt-1">Basée sur la <strong>négativité</strong>. On dit "Non". Lieux clos (école, usine, prison). Le sujet est obéissant.</p>
+                                </div>
+                                <div class="p-4 bg-orange-50 rounded border-l-4 border-terra-700">
+                                    <h4 class="font-bold text-stone-900">Société de la Performance (Han)</h4>
+                                    <p class="text-sm mt-1">Basée sur la <strong>positivité</strong>. On dit "Yes we can". Espaces ouverts (open space, web). Le sujet est un entrepreneur de lui-même.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContent.innerHTML = html;
+
+            // Init Chart
+            const ctx = document.getElementById('theoryChart').getContext('2d');
+            state.charts.theory = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Surveillance Physique', 'Transparence Volontaire', 'Contrainte Externe', 'Auto-Exploitation', 'Isolement', 'Connectivité'],
+                    datasets: [{
+                        label: 'Modèle Disciplinaire (Foucault)',
+                        data: [90, 10, 95, 20, 80, 10],
+                        fill: true,
+                        backgroundColor: 'rgba(120, 113, 108, 0.2)', // Stone 500
+                        borderColor: 'rgba(120, 113, 108, 1)',
+                        pointBackgroundColor: 'rgba(120, 113, 108, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(120, 113, 108, 1)'
+                    }, {
+                        label: 'Modèle Psychopolitique (Han)',
+                        data: [10, 95, 20, 90, 10, 95],
+                        fill: true,
+                        backgroundColor: 'rgba(194, 65, 12, 0.2)', // Terra 700
+                        borderColor: 'rgba(194, 65, 12, 1)',
+                        pointBackgroundColor: 'rgba(194, 65, 12, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(194, 65, 12, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: { borderWidth: 3 }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { display: true },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false } // Cleaner look
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function toggleDataset(index) {
+            const chart = state.charts.theory;
+            const meta = chart.getDatasetMeta(index);
+            meta.hidden = meta.hidden === null ? !chart.data.datasets[index].hidden : null;
+            chart.update();
+        }
+
+        // --- View: Mechanism (Interactive Grid) ---
+        function renderMechanism() {
+            const data = contentData.mechanism;
+            
+            const html = `
+                <div class="fade-in max-w-5xl mx-auto h-full flex flex-col">
+                    <header class="mb-6 flex-shrink-0">
+                        <h2 class="text-3xl font-bold text-stone-900 serif-font mb-2">${data.title}</h2>
+                        <p class="text-stone-600 max-w-3xl">${data.desc}</p>
+                    </header>
+
+                    <div class="flex-1 flex flex-col md:flex-row gap-6">
+                        <!-- Controls/Steps -->
+                        <div class="md:w-1/3 flex flex-col gap-4">
+                            <h3 class="text-sm font-bold text-stone-400 uppercase tracking-widest mb-2">Cycle de Captation</h3>
+                            
+                            <button onclick="highlightStep(1)" class="mech-btn bg-white p-4 rounded border border-stone-200 text-left hover:border-terra-700 transition-all shadow-sm focus:ring-2 focus:ring-terra-600 outline-none">
+                                <div class="font-bold text-stone-800">1. Incitation (Nudging)</div>
+                                <div class="text-xs text-stone-500 mt-1">Gamification, "Like", Gratification immédiate.</div>
+                            </button>
+
+                            <button onclick="highlightStep(2)" class="mech-btn bg-white p-4 rounded border border-stone-200 text-left hover:border-terra-700 transition-all shadow-sm focus:ring-2 focus:ring-terra-600 outline-none">
+                                <div class="font-bold text-stone-800">2. Exposition Volontaire</div>
+                                <div class="text-xs text-stone-500 mt-1">Partage de données, géolocalisation, quantification de soi.</div>
+                            </button>
+
+                            <button onclick="highlightStep(3)" class="mech-btn bg-white p-4 rounded border border-stone-200 text-left hover:border-terra-700 transition-all shadow-sm focus:ring-2 focus:ring-terra-600 outline-none">
+                                <div class="font-bold text-stone-800">3. Prédiction & Contrôle</div>
+                                <div class="text-xs text-stone-500 mt-1">Algorithmes comportementaux, ciblage psychométrique.</div>
+                            </button>
+                        </div>
+
+                        <!-- Visualization Area -->
+                        <div class="md:w-2/3 bg-white rounded-xl border border-stone-200 p-6 relative flex items-center justify-center overflow-hidden">
+                            <div id="mech-display" class="text-center transition-all duration-500">
+                                <span class="text-6xl mb-4 block opacity-20">⚙️</span>
+                                <p class="text-stone-400">Cliquez sur une étape à gauche pour visualiser le mécanisme.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContent.innerHTML = html;
+        }
+
+        function highlightStep(step) {
+            const display = document.getElementById('mech-display');
+            
+            // Content for each step
+            const stepContent = {
+                1: {
+                    emoji: "🎣",
+                    title: "L'Appât Émotionnel",
+                    text: "Le système utilise des déclencheurs de dopamine. Ce n'est pas une obligation, c'est une <em>invitation</em>. Le 'Nudge' (coup de pouce) remplace l'ordre.",
+                    metrics: "Taux de clic, Temps d'écran"
+                },
+                2: {
+                    emoji: "📱",
+                    title: "La Confession Numérique",
+                    text: "Le smartphone devient un confessionnal. Nous livrons nos émotions, nos déplacements et notre santé. La surveillance devient synonyme de liberté.",
+                    metrics: "Data Points, GPS, Biosignaux"
+                },
+                3: {
+                    emoji: "🧠",
+                    title: "Gouvernement des Comportements",
+                    text: "Les données agrégées permettent d'influencer les choix futurs (vote, achat) à un niveau pré-réflexif. C'est la fin du libre arbitre conscient.",
+                    metrics: "Taux de conversion, Prédictibilité"
+                }
+            };
+
+            const content = stepContent[step];
+
+            // Simple animation effect
+            display.style.opacity = 0;
+            setTimeout(() => {
+                display.innerHTML = `
+                    <div class="transform scale-100 transition-transform duration-500">
+                        <span class="text-6xl mb-4 block">${content.emoji}</span>
+                        <h4 class="text-2xl font-bold text-stone-800 mb-2">${content.title}</h4>
+                        <p class="text-stone-600 mb-6 leading-relaxed max-w-md mx-auto">${content.text}</p>
+                        <div class="inline-block bg-stone-100 px-4 py-2 rounded-full text-xs font-mono text-terra-700 border border-stone-200">
+                            Métriques : ${content.metrics}
+                        </div>
+                    </div>
+                `;
+                display.style.opacity = 1;
+            }, 200);
+        }
+
+        // --- View: Consequences (Interactive Chart) ---
+        function renderConsequences() {
+            const data = contentData.consequences;
+            
+            const html = `
+                <div class="fade-in max-w-5xl mx-auto">
+                    <header class="mb-6">
+                        <h2 class="text-3xl font-bold text-stone-900 serif-font mb-2">${data.title}</h2>
+                        <p class="text-stone-600">${data.subtitle}</p>
+                    </header>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 mb-8">
+                        <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
+                            <h3 class="text-sm font-bold text-stone-400 uppercase tracking-widest">Simulation : Le Paradoxe de la Performance</h3>
+                            
+                            <div class="flex items-center gap-4 mt-4 sm:mt-0 bg-stone-50 px-4 py-2 rounded-lg border border-stone-200">
+                                <label for="opt-slider" class="text-sm font-semibold text-stone-700">Niveau d'Auto-Optimisation :</label>
+                                <input type="range" id="opt-slider" min="10" max="100" value="${state.optimizationLevel}" 
+                                    class="w-32 h-2 bg-stone-300 rounded-lg appearance-none cursor-pointer accent-terra-600"
+                                    oninput="updateConsequenceChart(this.value)">
+                                <span id="opt-val" class="text-sm font-bold text-terra-700 w-8 text-right">${state.optimizationLevel}%</span>
+                            </div>
+                        </div>
+
+                        <!-- Chart Container -->
+                        <div class="chart-container">
+                            <canvas id="consequenceChart"></canvas>
+                        </div>
+                        <p class="text-xs text-center text-stone-400 mt-4 italic">Note : Ce modèle illustre la théorie de la "Fatigue de l'Information" (IFS).</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-bold text-stone-800 mb-2">Le Sujet de la Performance</h4>
+                            <p class="text-stone-600 text-sm leading-relaxed mb-4">
+                                Le sujet ne connait plus d'instance externe de domination qui le forcerait au travail. 
+                                Il s'exploite lui-même, et le fait avec le sentiment de liberté. C'est pourquoi la résistance est impossible : on ne se révolte pas contre soi-même.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-stone-800 mb-2">Thérapeutique ?</h4>
+                            <ul class="text-sm text-stone-600 space-y-2">
+                                <li class="flex items-start"><span class="text-terra-600 mr-2">●</span> <strong>L'Idiotisme :</strong> Se retirer du flux d'information, refuser la communication intelligente (Han).</li>
+                                <li class="flex items-start"><span class="text-terra-600 mr-2">●</span> <strong>Le Temps Long :</strong> Réintroduire de la narration contre l'immédiateté des données.</li>
+                                <li class="flex items-start"><span class="text-terra-600 mr-2">●</span> <strong>Le Silence :</strong> Créer des espaces vides de signification.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainContent.innerHTML = html;
+            initConsequenceChart();
+        }
+
+        function initConsequenceChart() {
+            const ctx = document.getElementById('consequenceChart').getContext('2d');
+            
+            // Initial Data Generation based on default slider
+            const generated = generateConsequenceData(state.optimizationLevel);
+
+            state.charts.consequence = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+                    datasets: [
+                        {
+                            label: 'Productivité Apparente',
+                            data: generated.productivity,
+                            borderColor: '#78716c', // Stone 500
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Épuisement Psychique (Burnout)',
+                            data: generated.burnout,
+                            borderColor: '#c2410c', // Terra 700
+                            backgroundColor: 'rgba(194, 65, 12, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Niveau de Performance' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: 'Niveau de Stress' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateConsequenceData(level) {
+            // Logic: High optimization initially boosts productivity but exponentially increases burnout over time, eventually crashing productivity.
+            let productivity = [];
+            let burnout = [];
+            let currentProd = 50;
+            let currentBurn = 20;
+
+            for (let i = 0; i < 12; i++) {
+                // Factor determines how aggressive the optimization is
+                const factor = level / 20; 
+                
+                // Burnout accumulates based on level and time
+                currentBurn += (factor * 1.5) + (i * 0.5);
+                
+                // Productivity rises with level, but is penalized by high burnout
+                if (currentBurn > 70) {
+                    currentProd -= 5; // Crash phase
+                } else {
+                    currentProd += factor; // Growth phase
+                }
+
+                // Caps
+                if (currentProd > 100) currentProd = 100;
+                if (currentProd < 10) currentProd = 10;
+                if (currentBurn > 100) currentBurn = 100;
+
+                productivity.push(currentProd);
+                burnout.push(currentBurn);
+            }
+            return { productivity, burnout };
+        }
+
+        function updateConsequenceChart(val) {
+            state.optimizationLevel = val;
+            document.getElementById('opt-val').innerText = val + '%';
+            
+            const newData = generateConsequenceData(val);
+            const chart = state.charts.consequence;
+            
+            chart.data.datasets[0].data = newData.productivity;
+            chart.data.datasets[1].data = newData.burnout;
+            chart.update();
+        }
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            router('intro');
+        });
+
+    </script>
+</body>
+</html>
