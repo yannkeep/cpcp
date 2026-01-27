@@ -1,1167 +1,1511 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <title>Test-1 — Veille citoyenne & réseau en Éducation permanente (FWB)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>Agence MILOU – Détective privé</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --bg: #050712;
-      --bg-alt: #090d22;
-      --panel: #0b1026;
-      --accent: #8bffb0;
-      --accent-soft: rgba(139, 255, 176, 0.16);
-      --accent-2: #d28bff;
-      --accent-2-soft: rgba(210, 139, 255, 0.18);
-      --danger: #ff4d7a;
-      --ok: #7dffcf;
-      --text-main: #f5f7ff;
-      --text-muted: #a1a9d8;
-      --border-subtle: rgba(120, 140, 220, 0.45);
+      --bg: #020617;
+      --bg-soft: #020617;
+      --card: #020617;
+      --accent: #22c55e;
+      --accent2: #38bdf8;
+      --accent3: #f97316;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: rgba(148, 163, 184, 0.5);
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --radius-xl: 18px;
-      --radius-pill: 999px;
-      --shadow-soft: 0 22px 45px rgba(0, 0, 0, 0.85);
+      --shadow-soft: 0 22px 48px rgba(0, 0, 0, 0.95);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background:
-        radial-gradient(circle at 10% 0%, rgba(139, 255, 176, 0.08), transparent 55%),
-        radial-gradient(circle at 90% 100%, rgba(210, 139, 255, 0.12), transparent 55%),
-        #02030a;
-      color: var(--text-main);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 1.2rem 0.75rem 1.8rem;
-    }
-
-    .shell {
-      width: 100%;
-      max-width: 1120px;
-      background: linear-gradient(135deg, rgba(16, 22, 58, 0.96), rgba(5, 8, 27, 0.98));
-      border-radius: 28px;
-      border: 1px solid rgba(145, 170, 255, 0.35);
-      box-shadow: var(--shadow-soft);
-      padding: 1.1rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    @media (min-width: 768px) {
-      .shell {
-        padding: 1.5rem 1.75rem 1.85rem;
-      }
-    }
-
-    .scanline {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.22;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.05),
-        rgba(255, 255, 255, 0.05) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-      mix-blend-mode: soft-light;
-    }
-
-    header {
-      position: relative;
-      margin-bottom: 1rem;
-      padding-bottom: 0.8rem;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      border-radius: var(--radius-pill);
-      padding: 0.18rem 0.6rem 0.18rem 0.24rem;
-      border: 1px solid rgba(139, 255, 176, 0.85);
-      background: radial-gradient(circle at 0% 0%, rgba(139, 255, 176, 0.24), transparent 55%);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-
-    .badge-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 10px rgba(139, 255, 176, 1);
-    }
-
-    .mode-chip {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.7rem;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(210, 139, 255, 0.85);
-      padding: 0.2rem 0.7rem;
-      background: radial-gradient(circle at 100% 0%, rgba(210, 139, 255, 0.22), transparent 55%);
-      color: var(--accent-2);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .mode-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(210, 139, 255, 0.9);
-      box-shadow: 0 0 8px rgba(210, 139, 255, 1);
-    }
-
-    h1 {
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      line-height: 1.15;
-      margin-bottom: 0.3rem;
-    }
-
-    h1 span {
-      color: var(--accent);
-    }
-
-    .subtitle {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      max-width: 680px;
-    }
-
-    .level-row {
-      margin-top: 0.55rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      align-items: center;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .difficulty-global {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      border-radius: var(--radius-pill);
-      padding: 0.2rem 0.7rem;
-      border: 1px solid rgba(139, 255, 176, 0.8);
-      background: rgba(8, 20, 20, 0.9);
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.75rem;
-    }
-
-    .difficulty-scale {
-      display: inline-flex;
-      gap: 0.25rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .dot-easy, .dot-mid, .dot-hard {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-    }
-    .dot-easy { background: #42ffb0; }
-    .dot-mid { background: #ffcc66; }
-    .dot-hard { background: #ff4d7a; }
-
-    .warn-banner {
-      margin-top: 0.8rem;
-      border-radius: 14px;
-      padding: 0.6rem 0.75rem;
-      border: 1px solid rgba(255, 77, 122, 0.8);
+      font-family: var(--font-main);
       background:
-        linear-gradient(120deg, rgba(255, 77, 122, 0.12), transparent 60%),
-        radial-gradient(circle at 0% 0%, rgba(255, 210, 152, 0.22), transparent 60%);
-      display: flex;
-      gap: 0.6rem;
-      align-items: flex-start;
-      font-size: 0.8rem;
-    }
-
-    .warn-icon {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.75rem;
-      padding-top: 0.05rem;
-      color: var(--danger);
-    }
-
-    .warn-text strong {
-      color: #ffd1e0;
-    }
-
-    .layout {
-      position: relative;
-      margin-top: 1rem;
-      display: grid;
-      gap: 1rem;
-    }
-
-    @media (min-width: 960px) {
-      .layout {
-        grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr);
-      }
-    }
-
-    .panel {
-      border-radius: var(--radius-xl);
-      background:
-        radial-gradient(circle at 0 0, rgba(139, 255, 176, 0.06), transparent 55%),
-        radial-gradient(circle at 100% 100%, rgba(210, 139, 255, 0.08), transparent 55%),
-        rgba(7, 11, 32, 0.96);
-      border: 1px solid var(--border-subtle);
-      padding: 0.9rem 0.9rem 1rem;
-    }
-
-    @media (min-width: 768px) {
-      .panel {
-        padding: 1rem 1.1rem 1.1rem;
-      }
-    }
-
-    .panel h2 {
-      font-size: 1rem;
-      margin-bottom: 0.45rem;
-    }
-
-    .panel h3 {
-      font-size: 0.9rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .panel p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .panel p strong {
-      color: #ffffff;
-      font-weight: 600;
-    }
-
-    /* PDF embeds */
-    .pdf-grid {
-      display: grid;
-      gap: 0.75rem;
-      margin-top: 0.6rem;
-    }
-
-    .pdf-card {
-      border-radius: 16px;
-      border: 1px solid rgba(145, 170, 255, 0.6);
-      background: rgba(4, 6, 20, 0.96);
-      overflow: hidden;
+        radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.35), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.3), transparent 55%),
+        #020617;
+      color: var(--text);
       display: flex;
       flex-direction: column;
     }
 
-    .pdf-header {
-      padding: 0.45rem 0.7rem;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(
+        rgba(15, 23, 42, 0.22) 1px,
+        transparent 1px
+      );
+      background-size: 100% 2px;
+      mix-blend-mode: soft-light;
+      opacity: 0.7;
+      z-index: 1;
+    }
+
+    a { color: inherit; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background:
+        radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.26), transparent 60%),
+        rgba(3, 7, 18, 0.96);
+      border-bottom: 1px solid rgba(30, 64, 175, 0.8);
+      padding: 8px 14px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 0.4rem;
-      background: linear-gradient(90deg, rgba(139, 255, 176, 0.14), transparent);
-      font-size: 0.8rem;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95);
     }
 
-    .pdf-title {
-      font-weight: 600;
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .pdf-badge {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.7rem;
-      border-radius: var(--radius-pill);
-      padding: 0.16rem 0.55rem;
-      border: 1px solid rgba(148, 172, 255, 0.75);
-    }
-
-    .pdf-body {
+    .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background:
+        conic-gradient(from 180deg, #22c55e, #0ea5e9, #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #22c55e;
       position: relative;
-      padding: 0;
+      box-shadow:
+        0 0 0 2px #020617,
+        0 0 28px rgba(34, 197, 94, 0.9);
     }
 
-    .pdf-embed {
-      width: 100%;
-      height: 260px;
-      border: none;
-      display: block;
+    .logo::before {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: inherit;
+      background: radial-gradient(circle at 30% 20%, #020617, #020617);
     }
 
-    @media (min-width: 768px) {
-      .pdf-embed {
-        height: 320px;
+    .logo span {
+      position: relative;
+      letter-spacing: 0.08em;
+    }
+
+    .org-name {
+      font-size: 0.98rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .org-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    .header-right {
+      text-align: right;
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+
+    .tagline {
+      font-family: var(--font-mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .header-right .hint {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    /* Layout global */
+    .layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 230px) minmax(0, 1.9fr) minmax(0, 1.2fr);
+      gap: 10px;
+      padding: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 230px minmax(0, 1fr);
+        grid-template-rows: auto auto;
       }
     }
 
-    .pdf-fallback {
-      padding: 0.4rem 0.7rem 0.6rem;
-      font-size: 0.78rem;
-      color: var(--text-muted);
+    @media (max-width: 760px) {
+      .layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
     }
 
-    .pdf-fallback a {
-      color: var(--accent);
-    }
-
-    /* Media (YouTube + Spotify) + Galerie */
-    .media-grid {
-      display: grid;
-      gap: 0.75rem;
-      margin-top: 0.6rem;
-    }
-
-    .media-card {
-      border-radius: 16px;
-      padding: 0.55rem 0.7rem 0.7rem;
-      border: 1px solid rgba(148, 172, 255, 0.7);
-      background: rgba(5, 8, 28, 0.96);
-    }
-
-    .media-label {
+    /* Sidebar */
+    .sidebar {
+      background: rgba(3, 7, 18, 0.98);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 10px 9px 11px;
       font-size: 0.8rem;
-      margin-bottom: 0.35rem;
-      color: var(--text-muted);
-    }
-
-    .media-embed {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #000;
-    }
-
-    .media-embed iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .spotify-embed {
-      width: 100%;
-      min-height: 152px;
-      border-radius: 12px;
-      border: 0;
-    }
-
-    /* Image gallery */
-    .gallery {
-      margin-top: 0.7rem;
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.45rem;
-      margin-top: 0.4rem;
-    }
-
-    .gallery-item {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(140, 165, 255, 0.7);
-      background: rgba(3, 5, 20, 0.96);
-    }
-
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .gallery-caption {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 0.2rem 0.35rem;
-      font-size: 0.7rem;
-      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.85));
-    }
-
-    .gallery-caption span {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.7rem;
-      color: var(--accent);
-    }
-
-    /* Quiz / Test */
-    .quiz-section {
-      margin-top: 1.1rem;
-    }
-
-    .quiz-intro {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 0.6rem;
-    }
-
-    .question {
-      border-radius: 16px;
-      border: 1px solid rgba(145, 170, 255, 0.7);
-      background: rgba(6, 9, 28, 0.96);
-      padding: 0.7rem 0.75rem 0.75rem;
-      margin-bottom: 0.6rem;
-    }
-
-    .question-header {
       display: flex;
-      justify-content: space-between;
-      gap: 0.4rem;
-      margin-bottom: 0.35rem;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .question-title {
-      font-size: 0.86rem;
-      font-weight: 600;
+    .nav-title {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-family: var(--font-mono);
     }
 
-    .difficulty-tag {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.7rem;
-      padding: 0.18rem 0.5rem;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(139, 255, 176, 0.75);
-      background: rgba(4, 12, 20, 0.95);
-      white-space: nowrap;
-    }
-
-    .difficulty-tag[data-level="2"] {
-      border-color: #ffcc66;
-      color: #ffdd99;
-      background: rgba(30, 22, 4, 0.95);
-    }
-
-    .difficulty-tag[data-level="3"] {
-      border-color: #ff4d7a;
-      color: #ffb7c9;
-      background: rgba(35, 5, 16, 0.95);
-    }
-
-    .question-body {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-bottom: 0.35rem;
-    }
-
-    .options {
+    .nav-list {
       list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 0.25rem;
-    }
-
-    .options li {
       display: flex;
-      align-items: flex-start;
-      gap: 0.35rem;
-      font-size: 0.82rem;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 6px;
     }
 
-    .options input[type="radio"] {
-      margin-top: 0.1rem;
-      accent-color: #42ffb0;
-    }
-
-    .options label {
+    .nav-btn {
+      width: 100%;
+      text-align: left;
+      border-radius: 999px;
+      border: 1px solid rgba(51, 65, 85, 0.95);
+      background: rgba(15, 23, 42, 0.98);
+      color: var(--muted);
+      padding: 5px 9px;
       cursor: pointer;
-    }
-
-    .explanation {
-      margin-top: 0.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
       font-size: 0.8rem;
-      color: var(--text-muted);
-      border-top: 1px dashed rgba(140, 165, 255, 0.7);
-      padding-top: 0.3rem;
-      display: none;
+      transition: background 0.16s, color 0.16s, border-color 0.16s,
+                  transform 0.16s, box-shadow 0.16s;
     }
 
-    .explanation strong {
-      color: var(--ok);
+    .nav-btn span.key {
+      font-size: 0.7rem;
+      padding: 1px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(75, 85, 99, 0.9);
+      font-family: var(--font-mono);
     }
 
-    .question.correct {
-      border-color: rgba(125, 255, 207, 0.9);
-      box-shadow: 0 0 14px rgba(125, 255, 207, 0.35);
+    .nav-btn:hover {
+      background: rgba(15, 23, 42, 1);
+      color: var(--text);
+      border-color: rgba(56, 189, 248, 0.9);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.95);
     }
 
-    .question.incorrect {
-      border-color: rgba(255, 77, 122, 0.9);
-      box-shadow: 0 0 14px rgba(255, 77, 122, 0.3);
+    .nav-btn.active {
+      background:
+        radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.24), transparent 60%);
+      border-color: rgba(34, 197, 94, 0.9);
+      color: var(--text);
     }
 
-    .quiz-actions {
-      margin-top: 0.65rem;
+    .sidebar-footer {
+      margin-top: 6px;
+      padding-top: 5px;
+      border-top: 1px solid rgba(51, 65, 85, 0.9);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* Main panel */
+    .main-panel {
+      background:
+        radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.2), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.18), transparent 55%),
+        var(--bg-soft);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 12px 12px 14px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .main-panel::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      pointer-events: none;
+      background-image: repeating-linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.25),
+        rgba(15, 23, 42, 0.25) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      opacity: 0.5;
+      mix-blend-mode: soft-light;
+    }
+
+    .main-inner {
+      position: relative;
+      z-index: 2;
+    }
+
+    .panel-title {
+      font-size: 1rem;
+      margin-bottom: 3px;
+    }
+
+    .panel-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
+      gap: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: rgba(3, 7, 18, 0.98);
+      border-radius: 14px;
+      border: 1px solid rgba(51, 65, 85, 0.98);
+      padding: 8px 9px 9px;
+      font-size: 0.8rem;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.9);
+    }
+
+    .card h3 {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .card p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .pill-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.45rem;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid rgba(75, 85, 99, 0.95);
+      padding: 2px 7px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    .pill.alert {
+      border-color: rgba(239, 68, 68, 0.9);
+      color: #fecaca;
+    }
+
+    .news-list {
+      list-style: none;
+      margin-top: 4px;
+    }
+
+    .news-item {
+      margin-bottom: 5px;
+    }
+
+    .news-item strong {
+      display: block;
+      font-size: 0.82rem;
+    }
+
+    .news-meta {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .quick-link {
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.98);
+      padding: 6px 7px;
+      font-size: 0.75rem;
+      background: #020617;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      text-align: left;
+      transition: border-color 0.16s, box-shadow 0.16s, transform 0.16s;
+    }
+
+    .quick-link span.label {
+      font-weight: 500;
+    }
+
+    .quick-link span.meta {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .quick-link:hover {
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.95);
+      transform: translateY(-1px);
+    }
+
+    /* Section Dossiers / PDF */
+    .doc-list {
+      list-style: none;
+      margin-top: 4px;
+      font-size: 0.78rem;
+    }
+
+    .doc-item {
+      margin-bottom: 5px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed rgba(55, 65, 81, 0.9);
+    }
+
+    .doc-item:last-child {
+      border-bottom: none;
+    }
+
+    .doc-title-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
       align-items: center;
     }
 
-    .btn {
+    .doc-buttons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .btn-xs {
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.9);
+      background: rgba(15, 23, 42, 0.98);
+      color: #e0f2fe;
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      transition: background 0.16s, box-shadow 0.16s, transform 0.16s;
+    }
+
+    .btn-xs:hover {
+      background: rgba(15, 23, 42, 1);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.95);
+      transform: translateY(-1px);
+    }
+
+    .doc-meta {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      margin-top: 2px;
+    }
+
+    /* Right panel : console & outils */
+    .side-panel {
+      background: rgba(3, 7, 18, 0.98);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 10px 9px 11px;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .side-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(
+        120deg,
+        rgba(56, 189, 248, 0.22),
+        transparent 45%,
+        rgba(34, 197, 94, 0.14),
+        transparent 70%
+      );
+      mix-blend-mode: soft-light;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .side-inner {
+      position: relative;
+      z-index: 2;
+    }
+
+    .side-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .side-header h2 {
+      font-size: 0.9rem;
+    }
+
+    .badge-soft {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 2px 7px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    .console {
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.98);
+      background: #020617;
+      padding: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .console-output {
+      background: #020617;
+      border-radius: 6px;
+      border: 1px solid rgba(31, 41, 55, 0.98);
+      padding: 4px 5px;
+      height: 140px;
+      overflow-y: auto;
+      color: #e5e7eb;
+    }
+
+    .console-line {
+      margin-bottom: 2px;
+    }
+
+    .console-prefix {
+      color: #22c55e;
+      margin-right: 4px;
+    }
+
+    .console-input-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .console-input-row span {
+      color: #22c55e;
+    }
+
+    .console-input-row input {
+      flex: 1;
+      border-radius: 4px;
+      border: 1px solid rgba(55, 65, 81, 0.98);
+      background: #020617;
+      color: #e5e7eb;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 3px 5px;
+      outline: none;
+    }
+
+    .console-input-row input::placeholder {
+      color: #64748b;
+    }
+
+    .notes-area {
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.98);
+      background: #020617;
+      padding: 6px;
+      margin-top: 4px;
+    }
+
+    .notes-area label {
+      font-size: 0.76rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .notes-area textarea {
+      width: 100%;
+      min-height: 80px;
+      border-radius: 8px;
+      border: 1px solid rgba(31, 41, 55, 0.98);
+      background: #020617;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      padding: 5px 7px;
+      resize: vertical;
+      outline: none;
+    }
+
+    .btn-small {
+      margin-top: 5px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.9);
+      background: rgba(15, 23, 42, 0.98);
+      color: #e0f2fe;
+      font-size: 0.74rem;
+      padding: 4px 8px;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.35rem;
-      padding: 0.45rem 0.85rem;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(139, 255, 176, 0.85);
-      background: radial-gradient(circle at 0% 0%, rgba(139, 255, 176, 0.3), rgba(2, 5, 15, 0.95));
-      color: #041308;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: "Space Grotesk", system-ui, sans-serif;
-      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      gap: 4px;
+      font-family: var(--font-mono);
+      transition: background 0.16s, box-shadow 0.16s, transform 0.16s;
     }
 
-    .btn:hover {
+    .btn-small:hover {
+      background: rgba(15, 23, 42, 1);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.95);
       transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.8);
     }
 
-    .btn-secondary {
-      border-color: rgba(148, 172, 255, 0.85);
-      background: radial-gradient(circle at 100% 0%, rgba(210, 139, 255, 0.3), rgba(5, 6, 26, 0.95));
-      color: var(--text-main);
+    .embed-card {
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.98);
+      background: #020617;
+      padding: 6px;
+      margin-top: 6px;
+      font-size: 0.78rem;
     }
 
-    .scoreboard {
-      font-size: 0.8rem;
-      color: var(--text-muted);
+    .embed-card h3 {
+      font-size: 0.82rem;
+      margin-bottom: 4px;
     }
 
-    .scoreboard strong {
-      color: var(--accent);
+    .hint {
+      font-size: 0.72rem;
+      color: var(--muted);
     }
 
-    .score-comment {
-      display: block;
-      font-size: 0.8rem;
-      margin-top: 0.15rem;
+    iframe {
+      border: none;
+      border-radius: 8px;
+    }
+
+    .penguin-box {
+      border-radius: 10px;
+      border: 1px dashed rgba(148, 163, 184, 0.7);
+      padding: 4px;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .penguin-box img {
+      max-width: 100%;
+      border-radius: 8px;
     }
 
     footer {
-      margin-top: 1rem;
-      font-size: 0.7rem;
-      color: var(--text-muted);
+      padding: 6px 12px 8px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(30, 64, 175, 0.7);
+      background: rgba(3, 7, 18, 0.98);
       display: flex;
       justify-content: space-between;
+      gap: 8px;
       flex-wrap: wrap;
-      gap: 0.25rem;
+      position: relative;
+      z-index: 2;
     }
 
-    footer code {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.7rem;
-      background: rgba(6, 9, 28, 0.96);
-      border-radius: 999px;
-      padding: 0.16rem 0.5rem;
-      border: 1px solid rgba(110, 132, 220, 0.75);
+    @media (max-width: 760px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      footer {
+        flex-direction: column;
+      }
     }
+
+    /* Sections main */
+    .section-root { display: none; }
+    .section-root.active { display: block; }
+
+    /* Annuaire / intranet */
+    .directory-list {
+      list-style: none;
+      margin-top: 6px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 6px;
+    }
+
+    .directory-card {
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.98);
+      background: #020617;
+      padding: 6px 7px;
+      font-size: 0.78rem;
+    }
+
+    .directory-card strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .directory-role {
+      font-size: 0.75rem;
+      color: #a5b4fc;
+    }
+
+    .directory-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .directory-filter {
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.74rem;
+    }
+
+    .directory-filter input,
+    .directory-filter select {
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.98);
+      background: #020617;
+      color: var(--text);
+      padding: 3px 7px;
+      font-size: 0.75rem;
+      outline: none;
+    }
+
+    .task-list {
+      list-style: none;
+      font-size: 0.78rem;
+      margin-top: 4px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .task-item input {
+      width: 14px;
+      height: 14px;
+    }
+
+    .tasks {
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.98);
+      background: #020617;
+      padding: 6px;
+      margin-top: 6px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal-overlay.visible {
+      display: flex;
+    }
+
+    .modal {
+      width: min(960px, 96vw);
+      height: min(560px, 92vh);
+      background: #020617;
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(55, 65, 81, 0.98);
+      font-size: 0.85rem;
+    }
+
+    .modal-header h3 {
+      font-size: 0.9rem;
+    }
+
+    .modal-header button {
+      border-radius: 999px;
+      border: 1px solid rgba(248, 113, 113, 0.9);
+      background: rgba(127, 29, 29, 0.95);
+      color: #fee2e2;
+      font-size: 0.76rem;
+      padding: 3px 8px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+    }
+
+    .modal-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr);
+      gap: 6px;
+      padding: 6px;
+    }
+
+    @media (max-width: 860px) {
+      .modal-body {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(0, 1.3fr) minmax(0, 1fr);
+      }
+    }
+
+    .modal-pdf {
+      background: #020617;
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.98);
+      overflow: hidden;
+    }
+
+    .modal-side {
+      background: #020617;
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.98);
+      padding: 6px;
+      font-size: 0.78rem;
+    }
+
+    .modal-side h4 {
+      font-size: 0.82rem;
+      margin-bottom: 3px;
+    }
+
+    .modal-side p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .modal-side iframe {
+      width: 100%;
+      height: 120px;
+    }
+
   </style>
 </head>
 <body>
-  <div class="shell">
-    <div class="scanline"></div>
+<header>
+  <div class="header-left">
+    <div class="logo"><span>MI</span></div>
+    <div>
+      <div class="org-name">AGENCE MILOU</div>
+      <div class="org-sub">Détective privé · renseignement discret &amp; légal</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="tagline">“Follow the facts, not the noise.”</div>
+    <div class="hint">Vitrine + intranet + console d’opérations dans un seul fichier HTML.</div>
+  </div>
+</header>
 
-    <header>
-      <div class="top-row">
-        <div class="badge">
-          <span class="badge-dot"></span>
-          <span>Test-1</span>
-          <span>Veille citoyenne FWB</span>
-        </div>
-        <div class="mode-chip">
-          <span class="mode-dot"></span>
-          <span>Mobile first</span>
-        </div>
-      </div>
+<div class="layout">
+  <!-- Sidebar navigation -->
+  <aside class="sidebar">
+    <div>
+      <div class="nav-title">Surface</div>
+      <ul class="nav-list">
+        <li><button class="nav-btn active" data-section="public">Vitrine agence <span class="key">1</span></button></li>
+        <li><button class="nav-btn" data-section="console">Console d’opérations <span class="key">2</span></button></li>
+        <li><button class="nav-btn" data-section="intranet">Intranet &amp; équipe <span class="key">3</span></button></li>
+        <li><button class="nav-btn" data-section="dossiers">Dossiers &amp; annexes PDF <span class="key">4</span></button></li>
+        <li><button class="nav-btn" data-section="pause">Outils / Pause pingouins <span class="key">5</span></button></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer">
+      💡 Tout est statique : tu peux renommer l’agence, les contacts, les docs PDF et les liens
+      YouTube/Spotify directement dans ce fichier.
+    </div>
+  </aside>
 
-      <h1>Test-1 — <span>Veille citoyenne & réseau en Éducation permanente</span></h1>
-      <p class="subtitle">
-        Ici, on vérifie si tu as saisi les bases de la <strong>veille citoyenne</strong> en Fédération Wallonie-Bruxelles
-        et comment construire un <strong>réseau collectif</strong> dans le cadre de l’Éducation permanente.
-        C’est ton “kit démocratique” avant d’aller plus loin dans les tests.
-      </p>
-
-      <div class="level-row">
-        <div class="difficulty-global">
-          Niveau global&nbsp;: Intermédiaire (★★☆)
-        </div>
-        <div class="difficulty-scale">
-          <span class="dot-easy"></span><span>Facile</span>
-          <span class="dot-mid"></span><span>Intermédiaire</span>
-          <span class="dot-hard"></span><span>Avancé</span>
-        </div>
-      </div>
-
-      <div class="warn-banner">
-        <div class="warn-icon">[!]</div>
-        <div class="warn-text">
-          <strong>Ce test ne remplace pas un cours complet.</strong> Il sert à repérer ce que tu as compris
-          des enjeux stratégiques, des obstacles et des outils de la veille citoyenne.
-          Tu peux t’en servir pour savoir où creuser avant de te projeter dans un rôle de veilleur·se citoyen·ne.
-        </div>
-      </div>
-    </header>
-
-    <div class="layout">
-      <!-- COLONNE GAUCHE : RESSOURCES PRINCIPALES -->
-      <section class="panel">
-        <h2>Ressources à consulter avant / pendant le test</h2>
-        <p>
-          Le test-1 s’appuie sur deux dossiers&nbsp;:
-          un texte sur les <strong>enjeux, obstacles et formats de veille citoyenne</strong>,
-          et un <strong>guide pratique pour monter un réseau collectif</strong> en Éducation permanente (FWB).
+  <!-- Main panel -->
+  <main class="main-panel">
+    <div class="main-inner">
+      <!-- Section vitrine -->
+      <section id="section-public" class="section-root active">
+        <h1 class="panel-title">Vitrine publique – Agence MILOU</h1>
+        <p class="panel-sub">
+          Cette surface décrit ton offre officielle de détective privé, tout en restant directement
+          connectée à tes outils internes (console, intranet, dossiers).
         </p>
 
-        <!-- PDFs -->
-        <div class="pdf-grid">
-          <article class="pdf-card">
-            <div class="pdf-header">
-              <div class="pdf-title">Veille citoyenne en FWB&nbsp;: enjeux & perspectives</div>
-              <div class="pdf-badge">Niveau&nbsp;: ★★☆</div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Qui tu es (version publique)</h3>
+            <p>
+              L’Agence MILOU accompagne particuliers, avocats et structures dans
+              la <strong>recherche d’information fiable</strong> : vérifications, recoupements,
+              reconstitutions de chronologie, documentation de situations complexes.
+            </p>
+            <div class="pill-row">
+              <span class="pill">filatures numériques</span>
+              <span class="pill">analyse de traces</span>
+              <span class="pill">veille &amp; OSINT</span>
+              <span class="pill">pré-contentieux</span>
             </div>
-            <div class="pdf-body">
-              <object class="pdf-embed"
-                      data="pdfs/veille-citoyenne-enjeux.pdf"
-                      type="application/pdf">
-                <div class="pdf-fallback">
-                  Impossible d’afficher le PDF ici.
-                  <a href="pdfs/veille-citoyenne-enjeux.pdf" target="_blank" rel="noopener">
-                    Ouvrir le document dans un nouvel onglet
-                  </a>.
-                </div>
-              </object>
-            </div>
+            <p>
+              Tout ce qui n’est pas public ou légal ne t’intéresse pas. Tu travailles avec une
+              <strong>éthique claire</strong> : pas d’arnaques, pas de harcèlement, pas d’abus d’outils.
+            </p>
           </article>
 
-          <article class="pdf-card">
-            <div class="pdf-header">
-              <div class="pdf-title">Guide pour développer un réseau de veille citoyenne (EP FWB)</div>
-              <div class="pdf-badge">Niveau&nbsp;: ★★☆ → ★★★</div>
-            </div>
-            <div class="pdf-body">
-              <object class="pdf-embed"
-                      data="pdfs/guide-reseau-veille.pdf"
-                      type="application/pdf">
-                <div class="pdf-fallback">
-                  Impossible d’afficher le PDF ici.
-                  <a href="pdfs/guide-reseau-veille.pdf" target="_blank" rel="noopener">
-                    Ouvrir le document dans un nouvel onglet
-                  </a>.
+          <article class="card">
+            <h3>Ce que tu proposes</h3>
+            <ul class="news-list">
+              <li class="news-item">
+                <strong>Vérification de situations</strong>
+                <div class="news-meta">Prévention de litiges, recoupement d’éléments, dossiers structurés.</div>
+              </li>
+              <li class="news-item">
+                <strong>Analyse de preuves numériques</strong>
+                <div class="news-meta">Messages, captures, logs, réseaux sociaux, OSINT.</div>
+              </li>
+              <li class="news-item">
+                <strong>Sur-mesure</strong>
+                <div class="news-meta">
+                  Quand ce n’est pas dans la liste, on discute. L’objectif : rester légal, clair, documenté.
                 </div>
-              </object>
+              </li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="grid-2" style="margin-top:8px;">
+          <article class="card">
+            <h3>Contact &amp; modalités</h3>
+            <p>
+              Tu peux adapter ce bloc pour coller à ta réalité (adresse mail, téléphone, ville, etc.).
+            </p>
+            <ul class="news-list">
+              <li class="news-item">
+                <strong>Email</strong>
+                <div class="news-meta">contact@agence-milou.fr</div>
+              </li>
+              <li class="news-item">
+                <strong>Téléphone</strong>
+                <div class="news-meta">+33 (0)6 00 00 00 00</div>
+              </li>
+              <li class="news-item">
+                <strong>Zone de travail</strong>
+                <div class="news-meta">France (et en ligne), selon le cadre légal.</div>
+              </li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Ce que le client ne voit pas… mais toi oui</h3>
+            <p>
+              Grâce au même fichier HTML, tu as :
+            </p>
+            <ul>
+              <li>une <strong>console d’opérations</strong> (commande <code>help</code> pour voir les options),</li>
+              <li>un <strong>intranet</strong> (contacts, procédures, tâches),</li>
+              <li>une <strong>section dossiers/PDF</strong> avec modales,</li>
+              <li>un espace <strong>pause / pingouins / musique</strong>.</li>
+            </ul>
+            <p class="hint">
+              Tu peux utiliser cette structure telle quelle pour commencer,
+              et la resserrer ensuite autour de ton vrai métier.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section console (en texte, la vraie console est à droite) -->
+      <section id="section-console" class="section-root">
+        <h1 class="panel-title">Console d’opérations – vue générale</h1>
+        <p class="panel-sub">
+          La vraie console se trouve dans la colonne de droite. Ici, tu peux noter
+          ce que signifient les commandes, et comment tu organises ton travail.
+        </p>
+        <article class="card">
+          <h3>Commandes de la console (fictives, mais utiles pour toi)</h3>
+          <ul>
+            <li><code>help</code> – affiche la liste des commandes disponibles.</li>
+            <li><code>clients</code> – rappelle la façon dont tu gères tes clients.</li>
+            <li><code>cases</code> – rappelle ta méthode pour traiter un dossier.</li>
+            <li><code>docs</code> – renvoie vers la liste des annexes/PDF.</li>
+            <li><code>pingouin</code> – affiche la section pingouin (pause visuelle).</li>
+            <li><code>spotify</code> – affiche l’embed Spotify.</li>
+            <li><code>youtube</code> – affiche l’embed YouTube.</li>
+            <li><code>clear</code> – efface la console.</li>
+          </ul>
+          <p class="hint">
+            Tu peux adapter les réponses dans le script JS (en bas du fichier)
+            pour correspondre à ta façon de travailler.
+          </p>
+        </article>
+      </section>
+
+      <!-- Section intranet -->
+      <section id="section-intranet" class="section-root">
+        <h1 class="panel-title">Intranet – équipe &amp; procédures</h1>
+        <p class="panel-sub">
+          Cette section te sert d’espace interne pour organiser tes contacts, ton équipe
+          (même si tu es solo) et quelques tâches / routines.
+        </p>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>Annuaire interne</h3>
+            <div class="directory-filter">
+              <input type="text" id="directorySearch" placeholder="Nom, rôle, domaine…">
+              <select id="directoryDept">
+                <option value="all">Tous</option>
+                <option value="Enquêtes">Enquêtes</option>
+                <option value="Juridique">Juridique</option>
+                <option value="Tech">Tech</option>
+                <option value="Partenaires">Partenaires</option>
+              </select>
+            </div>
+            <ul class="directory-list" id="directoryList"><li class="directory-card"><strong>Toi</strong><div class="directory-role">Détective privé / analyste principal – Enquêtes</div><div class="directory-meta">contact@agence-milou.fr</div></li><li class="directory-card"><strong>Contact avocat</strong><div class="directory-role">Référent juridique (civil / pénal) – Juridique</div><div class="directory-meta">avocat@exemple.fr</div></li><li class="directory-card"><strong>Tech confiance</strong><div class="directory-role">Admin systèmes / sécurité – Tech</div><div class="directory-meta">tech@exemple.fr</div></li><li class="directory-card"><strong>Graphiste</strong><div class="directory-role">Maquettage de dossiers – Partenaires</div><div class="directory-meta">graphiste@exemple.fr</div></li></ul>
+          </article>
+
+          <article class="card">
+            <h3>Routines &amp; tâches du jour</h3>
+            <div class="tasks">
+              <h4 style="font-size:0.85rem;margin-bottom:3px;">Checklist</h4>
+              <ul class="task-list" id="taskList"><li class="task-item"><input type="checkbox"><span>Vérifier les mails entrants / demandes de clients</span></li><li class="task-item"><input type="checkbox"><span>Mettre à jour le journal de bord des dossiers actifs</span></li><li class="task-item"><input type="checkbox"><span>Faire 15 min de veille OSINT / jurisprudence</span></li><li class="task-item"><input type="checkbox"><span>Faire une pause pingouins + musique</span></li></ul>
+              <p class="hint">
+                Tu peux modifier la constante <code>tasks</code> dans le script
+                pour adapter cette checklist à ta réalité (veille, RDV, rédactions).
+              </p>
             </div>
           </article>
         </div>
       </section>
 
-      <!-- COLONNE DROITE : MÉDIA + GALERIE D’IMAGES -->
-      <aside class="panel">
-        <h2>Ambiance, exemples visuels & supports audio</h2>
-        <p>
-          Tu peux utiliser cette colonne comme “mur d’inspiration” :
-          images de veille citoyenne en action, vidéo explicative et playlist pour rester concentré·e.
+      <!-- Section dossiers / PDF -->
+      <section id="section-dossiers" class="section-root">
+        <h1 class="panel-title">Dossiers &amp; annexes PDF</h1>
+        <p class="panel-sub">
+          Ici tu peux référencer tes dossiers, annexes, modèles. Les PDF sont ouverts
+          dans une <strong>modale</strong> avec à droite des embeds YouTube / Spotify / pingouins
+          pour garder le cerveau oxygéné pendant la lecture.
         </p>
-
-        <!-- Galerie d’images -->
-        <section class="gallery">
-          <h3>Galerie — Veille citoyenne en pratique</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">
-            Remplace les images par tes propres visuels&nbsp;: ateliers, balades urbaines, cartes, réunions, etc.
+        <article class="card">
+          <h3>Dossiers référencés</h3>
+          <ul class="doc-list" id="docList"><li class="doc-item"><div class="doc-title-row"><span>Dossier Dystopie – contexte &amp; risques (PDF)</span><div class="doc-buttons"><button type="button" class="btn-xs">Modale</button><button type="button" class="btn-xs">Nouvel onglet</button></div></div><div class="doc-meta">dystopie.pdf</div><div>Annexe sur les risques systémiques (surveillance, climat, autoritarisme). Sert de toile de fond à certains dossiers.</div></li><li class="doc-item"><div class="doc-title-row"><span>Plaidoyer JP – réflexion de référence (PDF)</span><div class="doc-buttons"><button type="button" class="btn-xs">Modale</button><button type="button" class="btn-xs">Nouvel onglet</button></div></div><div class="doc-meta">plaidoyer-jp.pdf</div><div>Texte de fond. Peut servir à cadrer une démarche, un rapport, une prise de position.</div></li><li class="doc-item"><div class="doc-title-row"><span>Pression – note analytique (PDF)</span><div class="doc-buttons"><button type="button" class="btn-xs">Modale</button><button type="button" class="btn-xs">Nouvel onglet</button></div></div><div class="doc-meta">pression (1).pdf</div><div>Analyse des pressions (sociales, institutionnelles, économiques) autour de certaines affaires.</div></li></ul>
+          <p class="hint">
+            Pour ajouter / enlever un dossier, modifie la constante <code>documents</code> dans le script,
+            et adapte le nom de fichier PDF.
           </p>
-          <div class="gallery-grid">
-            <figure class="gallery-item">
-              <img src="images/veille-balade-urbaine.jpg" alt="Balade urbaine participative" />
-              <figcaption class="gallery-caption">
-                <span>Balade&nbsp;urbaine</span> — observer le quartier et collecter des données ensemble
-              </figcaption>
-            </figure>
-            <figure class="gallery-item">
-              <img src="images/veille-cartographie.jpg" alt="Cartographie participative sur un mur ou écran" />
-              <figcaption class="gallery-caption">
-                <span>Cartographie</span> — construire une carte commune des besoins et ressources
-              </figcaption>
-            </figure>
-            <figure class="gallery-item">
-              <img src="images/veille-magazine-snooze.jpg" alt="Magazine citoyen imprimé" />
-              <figcaption class="gallery-caption">
-                <span>Magazine local</span> — media participatif type “Snooze” pour partager la veille
-              </figcaption>
-            </figure>
-            <figure class="gallery-item">
-              <img src="images/veille-reunion-quartier.jpg" alt="Réunion de quartier" />
-              <figcaption class="gallery-caption">
-                <span>Réunion</span> — restituer les résultats de veille au public concerné
-              </figcaption>
-            </figure>
-          </div>
-        </section>
+        </article>
+      </section>
 
-        <!-- Médias (YouTube + Spotify) -->
-        <div class="media-grid">
-          <!-- YouTube -->
-          <article class="media-card">
-            <div class="media-label">
-              🎬 Extrait YouTube&nbsp;: participation citoyenne & contrôle démocratique
-            </div>
-            <div class="media-embed">
-              <iframe
-                src="https://www.youtube.com/embed/sWjfuYv9okw?si=Un2tlG2MKbuOtyAp"
-                title="Vidéo sur la participation citoyenne"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen>
-              </iframe>
+      <!-- Section pause / pingouins -->
+      <section id="section-pause" class="section-root">
+        <h1 class="panel-title">Outils &amp; zone de pause contrôlée</h1>
+        <p class="panel-sub">
+          Même un détective a besoin de pauses. Cette section regroupe tes embeds :
+          pingouins, YouTube, Spotify. Tu peux les déclencher aussi via la console (commande
+          <code>pingouin</code>, <code>youtube</code>, <code>spotify</code>).
+        </p>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Pingouins (anti-burnout)</h3>
+            <p>
+              Un peu d’écologie mentale. Tu peux remplacer ce GIF / image par n’importe quel visuel local
+              (par exemple <code>pingouin.png</code>) ou un autre lien.
+            </p>
+            <div class="penguin-box" id="penguinBox">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Pingouin qui marche">
+              <p class="hint">
+                Astuce : ne pas ouvrir ça pendant un rendez-vous client, sauf si tu veux briser la glace.
+              </p>
             </div>
           </article>
-
-          <!-- Spotify -->
-          <article class="media-card">
-            <div class="media-label">
-              🎧 Playlist Spotify&nbsp;: “Civic Focus” — musiques calmes pour lire & analyser
+          <article class="card">
+            <h3>Flux audio / vidéo</h3>
+            <p>
+              Tu peux changer les liens YouTube / Spotify ci-dessous par ceux que tu utilises pour te
+              concentrer (ou te détendre).
+            </p>
+            <div style="margin-bottom:6px;">
+              <div style="font-size:0.78rem;margin-bottom:2px;">YouTube – ambiance enquête / lofi :</div>
+              <iframe id="ytFrame" width="100%" height="150" src="https://www.youtube.com/embed/aium57_Ib5c?si=JZhceK3Fmb3TV9lr" title="YouTube lofi" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
             </div>
-            <iframe
-              class="spotify-embed"
-              src="https://open.spotify.com/embed/playlist/7dCEN3pOke0Nv1Iz62VBnJ?utm_source=generator"
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy">
-            </iframe>
+            <div>
+              <div style="font-size:0.78rem;margin-bottom:2px;">Spotify – playlist de travail :</div>
+              <iframe id="spotifyFrame" style="border-radius:8px" src="https://open.spotify.com/embed/playlist/6gOcC0JrhINybsxyZxZ9SL?utm_source=generator" width="100%" height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+            </div>
           </article>
         </div>
-      </aside>
+      </section>
     </div>
+  </main>
 
-    <!-- SECTION TEST / QUIZ -->
-    <section class="panel quiz-section" aria-label="Test-1 Veille citoyenne & réseau">
-      <h2>Test-1&nbsp;: Veille citoyenne & réseau en Éducation permanente</h2>
-      <p class="quiz-intro">
-        Pour chaque question, choisis la réponse qui te semble la plus juste.
-        Le niveau de difficulté est indiqué à droite&nbsp;:
-        <strong>★☆☆ = facile</strong>, <strong>★★☆ = intermédiaire</strong>, <strong>★★★ = avancé</strong>.
+  <!-- Right column : console + notes + embeds -->
+  <aside class="side-panel">
+    <div class="side-inner">
+      <div class="side-header">
+        <h2>Console d’opérations</h2>
+        <span class="badge-soft">LOCAL NODE ONLY</span>
+      </div>
+      <p class="hint">
+        Console fictive, mais utile pour structurer tes routines. Rien n’est envoyé nulle part :
+        tout se passe dans ce fichier et ton navigateur.
       </p>
 
-      <!-- Q1 -->
-      <article class="question" data-question-id="q1">
-        <div class="question-header">
-          <div class="question-title">1. Définition de base</div>
-          <span class="difficulty-tag" data-level="1">Niveau&nbsp;: ★☆☆ (Facile)</span>
-        </div>
-        <div class="question-body">
-          La veille citoyenne, telle que décrite dans les dossiers, désigne avant tout&nbsp;:
-        </div>
-        <ul class="options">
-          <li>
-            <input type="radio" name="q1" id="q1a" value="a">
-            <label for="q1a">Une campagne électorale permanente menée par les partis politiques</label>
-          </li>
-          <li>
-            <input type="radio" name="q1" id="q1b" value="b" data-correct="true">
-            <label for="q1b">
-              Le regard des citoyens sur l’action publique pour vérifier le respect des engagements et proposer des améliorations
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q1" id="q1c" value="c">
-            <label for="q1c">Un simple relais des communiqués officiels des autorités</label>
-          </li>
-        </ul>
-        <div class="explanation">
-          <strong>Correction&nbsp;:</strong>
-          La veille citoyenne consiste à suivre, analyser et questionner l’action publique
-          pour renforcer la transparence, la redevabilité et le pouvoir d’agir des citoyens.
-        </div>
-      </article>
+      <div class="console">
+        <div class="console-output" id="consoleOutput"><div class="console-line"><span class="console-prefix">#</span><span> Console initialisée. Tape 'help' pour commencer.</span></div></div>
+        <form class="console-input-row" id="consoleForm">
+          <span>&gt;</span>
+          <input id="consoleInput" type="text" autocomplete="off" placeholder="Tape une commande (help, clients, cases, docs, pingouin…)">
+        </form>
+      </div>
 
-      <!-- Q2 -->
-      <article class="question" data-question-id="q2">
-        <div class="question-header">
-          <div class="question-title">2. Lien avec l’Éducation permanente</div>
-          <span class="difficulty-tag" data-level="2">Niveau&nbsp;: ★★☆ (Intermédiaire)</span>
-        </div>
-        <div class="question-body">
-          Pourquoi la veille citoyenne est-elle considérée comme un outil légitime d’Éducation permanente en FWB&nbsp;?
-        </div>
-        <ul class="options">
-          <li>
-            <input type="radio" name="q2" id="q2a" value="a">
-            <label for="q2a">
-              Parce qu’elle permet de vendre des abonnements premium à des rapports d’experts
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q2" id="q2b" value="b" data-correct="true">
-            <label for="q2b">
-              Parce qu’elle développe l’analyse critique de la société, la participation active des adultes
-              et l’émancipation collective, comme prévu par le décret EP
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q2" id="q2c" value="c">
-            <label for="q2c">
-              Parce qu’elle se limite à organiser des loisirs créatifs sans dimension politique
-            </label>
-          </li>
-        </ul>
-        <div class="explanation">
-          <strong>Correction&nbsp;:</strong>
-          Le décret Éducation permanente insiste sur l’analyse critique, la participation citoyenne
-          et l’émancipation&nbsp;: une veille citoyenne bien conçue coche précisément ces cases.
-        </div>
-      </article>
+      <div class="notes-area">
+        <label for="notesText">Bloc-notes privé (non synchronisé)</label>
+        <textarea id="notesText" placeholder="Synthèse d’un dossier, idées, choses à vérifier…"></textarea>
+        <button class="btn-small" id="btnClearNotes">🧹 Effacer les notes</button>
+      </div>
 
-      <!-- Q3 -->
-      <article class="question" data-question-id="q3">
-        <div class="question-header">
-          <div class="question-title">3. Information comme bien commun</div>
-          <span class="difficulty-tag" data-level="2">Niveau&nbsp;: ★★☆ (Intermédiaire)</span>
-        </div>
-        <div class="question-body">
-          Quand les dossiers parlent de l’information comme “bien commun”, qu’est-ce que cela implique pour un réseau de veille&nbsp;?
-        </div>
-        <ul class="options">
-          <li>
-            <input type="radio" name="q3" id="q3a" value="a">
-            <label for="q3a">
-              Garder les analyses en interne pour préserver l’avantage du collectif
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q3" id="q3b" value="b" data-correct="true">
-            <label for="q3b">
-              Partager les données, méthodes et productions sous licences libres pour qu’elles soient réutilisables par d’autres
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q3" id="q3c" value="c">
-            <label for="q3c">
-              Ne publier que des résumés très vagues sans mentionner les sources
-            </label>
-          </li>
-        </ul>
-        <div class="explanation">
-          <strong>Correction&nbsp;:</strong>
-          Traiter l’information comme un commun suppose ouverture, documentation et licences libres,
-          afin que d’autres collectifs puissent s’en emparer et prolonger le travail.
-        </div>
-      </article>
+      <div class="embed-card">
+        <h3>Raccourcis console &amp; embeds</h3>
+        <p class="hint">
+          Quelques commandes utiles :
+          <br><code>help</code> · <code>clients</code> · <code>cases</code> · <code>docs</code> · <code>pingouin</code> · <code>spotify</code> · <code>youtube</code> · <code>clear</code>
+        </p>
+      </div>
+    </div>
+  </aside>
+</div>
 
-      <!-- Q4 -->
-      <article class="question" data-question-id="q4">
-        <div class="question-header">
-          <div class="question-title">4. Inclusion & fracture numérique</div>
-          <span class="difficulty-tag" data-level="2">Niveau&nbsp;: ★★☆ (Intermédiaire)</span>
-        </div>
-        <div class="question-body">
-          Laquelle de ces propositions décrit une bonne pratique pour rendre la veille citoyenne vraiment inclusive&nbsp;?
-        </div>
-        <ul class="options">
-          <li>
-            <input type="radio" name="q4" id="q4a" value="a">
-            <label for="q4a">
-              Tout miser sur une plateforme web complexe et ignorer les publics non connectés
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q4" id="q4b" value="b" data-correct="true">
-            <label for="q4b">
-              Combiner supports numériques et non numériques (brochures papier, réunions locales, radio, ateliers)
-              avec un langage clair
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q4" id="q4c" value="c">
-            <label for="q4c">
-              Utiliser volontairement du jargon administratif pour filtrer les “vrais motivés”
-            </label>
-          </li>
-        </ul>
-        <div class="explanation">
-          <strong>Correction&nbsp;:</strong>
-          Les textes insistent sur le multicanal et le langage clair pour dépasser la fracture numérique
-          et les barrières symboliques, notamment en milieu populaire.
-        </div>
-      </article>
+<footer>
+  <span>
+    AGENCE MILOU – Détective privé. Site vitrine + intranet + console d’opérations dans un seul HTML statique.
+  </span>
+  <span>
+    Pour adapter : ouvre ce fichier, remplace les textes, contacts, noms de PDF, et les liens YouTube/Spotify.
+  </span>
+</footer>
 
-      <!-- Q5 -->
-      <article class="question" data-question-id="q5">
-        <div class="question-header">
-          <div class="question-title">5. Formats d’action innovants</div>
-          <span class="difficulty-tag" data-level="2">Niveau&nbsp;: ★★☆ (Intermédiaire)</span>
+<!-- Modal PDF -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Dossier</h3>
+      <button type="button" id="modalCloseBtn">Fermer (Esc)</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-pdf">
+        <embed id="modalPdfEmbed" src="" type="application/pdf" width="100%" height="100%">
+      </div>
+      <div class="modal-side">
+        <h4>Ambiance &amp; notes</h4>
+        <p id="modalDesc">Commentaires sur le dossier, ambiance audio/vidéo pour le traiter, etc.</p>
+        <div style="margin-bottom:6px;">
+          <div style="font-size:0.76rem;margin-bottom:2px;">YouTube :</div>
+          <iframe width="100%" height="110" src="./veilleux_files/jfKfPfyJRdk(1).html" title="YouTube lofi" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
         </div>
-        <div class="question-body">
-          Parmi les formats suivants, lequel correspond à l’esprit des exemples donnés (Snooze, Metz, cartographies)&nbsp;?
-        </div>
-        <ul class="options">
-          <li>
-            <input type="radio" name="q5" id="q5a" value="a">
-            <label for="q5a">
-              Une newsletter strictement descendante rédigée uniquement par le bourgmestre
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q5" id="q5b" value="b" data-correct="true">
-            <label for="q5b">
-              Un média ou dispositif participatif où des citoyens produisent et discutent des contenus
-              (magazine, balades, carto collaborative, consultations hybrides)
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q5" id="q5c" value="c">
-            <label for="q5c">
-              Un audit d’experts payants sans participation du public
-            </label>
-          </li>
-        </ul>
-        <div class="explanation">
-          <strong>Correction&nbsp;:</strong>
-          L’idée centrale est de co-produire l’analyse avec les habitants via des formats participatifs,
-          pas simplement de leur “livrer” une vérité toute faite.
-        </div>
-      </article>
-
-      <!-- Q6 -->
-      <article class="question" data-question-id="q6">
-        <div class="question-header">
-          <div class="question-title">6. Gouvernance ouverte</div>
-          <span class="difficulty-tag" data-level="3">Niveau&nbsp;: ★★★ (Avancé)</span>
-        </div>
-        <div class="question-body">
-          Quel élément fait partie d’une gouvernance saine pour un réseau de veille citoyenne&nbsp;?
-        </div>
-        <ul class="options">
-          <li>
-            <input type="radio" name="q6" id="q6a" value="a">
-            <label for="q6a">
-              Laisser une seule personne décider du contenu, sans transparence ni compte rendu
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q6" id="q6b" value="b" data-correct="true">
-            <label for="q6b">
-              Adopter une charte éthique, une validation collégiale des analyses
-              et des comptes rendus publics des décisions
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q6" id="q6c" value="c">
-            <label for="q6c">
-              Éviter toute documentation pour rester “flexible”
-            </label>
-          </li>
-        </ul>
-        <div class="explanation">
-          <strong>Correction&nbsp;:</strong>
-          Les deux textes insistent sur la charte, la transparence, la collégialité et la documentation
-          comme garde-fous contre récupération et dérives.
-        </div>
-      </article>
-
-      <!-- Q7 -->
-      <article class="question" data-question-id="q7">
-        <div class="question-header">
-          <div class="question-title">7. Obstacles à anticiper</div>
-          <span class="difficulty-tag" data-level="2">Niveau&nbsp;: ★★☆ (Intermédiaire)</span>
-        </div>
-        <div class="question-body">
-          Lequel de ces obstacles est clairement identifié comme un frein à une veille citoyenne transformative&nbsp;?
-        </div>
-        <ul class="options">
-          <li>
-            <input type="radio" name="q7" id="q7a" value="a">
-            <label for="q7a">
-              La trop grande simplicité des structures administratives
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q7" id="q7b" value="b" data-correct="true">
-            <label for="q7b">
-              La complexité institutionnelle, le manque de ressources, la défiance envers l’action collective
-              et la désinformation
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q7" id="q7c" value="c">
-            <label for="q7c">
-              Le fait que les citoyens disposent de trop de temps libre pour s’engager
-            </label>
-          </li>
-        </ul>
-        <div class="explanation">
-          <strong>Correction&nbsp;:</strong>
-          Les dossiers parlent de “brol” administratif, de fractures numériques et sociales,
-          de ressources limitées et de défiance politique comme obstacles majeurs à surmonter.
-        </div>
-      </article>
-
-      <!-- Q8 -->
-      <article class="question" data-question-id="q8">
-        <div class="question-header">
-          <div class="question-title">8. Étapes pour un réseau collectif</div>
-          <span class="difficulty-tag" data-level="3">Niveau&nbsp;: ★★★ (Avancé)</span>
-        </div>
-        <div class="question-body">
-          Laquelle de ces séquences se rapproche le plus du plan d’action proposé pour créer un réseau de veille&nbsp;?
-        </div>
-        <ul class="options">
-          <li>
-            <input type="radio" name="q8" id="q8a" value="a">
-            <label for="q8a">
-              Lancer directement une grosse campagne médiatique puis voir qui suit
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q8" id="q8b" value="b" data-correct="true">
-            <label for="q8b">
-              Cartographier les acteurs, constituer un collectif pilote, écrire une charte,
-              former les membres, développer des outils collaboratifs, lancer des actions pilotes,
-              évaluer, puis pérenniser
-            </label>
-          </li>
-          <li>
-            <input type="radio" name="q8" id="q8c" value="c">
-            <label for="q8c">
-              Attendre qu’un ministère crée le réseau et suivre sans rien proposer
-            </label>
-          </li>
-        </ul>
-        <div class="explanation">
-          <strong>Correction&nbsp;:</strong>
-          Le guide détaille une montée en puissance progressive&nbsp;:
-          diagnostic, mise en réseau, charte, formation, outils, pilotes, évaluation, puis ancrage structurel.
-        </div>
-      </article>
-
-      <div class="quiz-actions">
-        <button class="btn" type="button" id="checkBtn">Corriger le test</button>
-        <button class="btn btn-secondary" type="button" id="resetBtn">Réinitialiser</button>
-        <div class="scoreboard" id="scoreboard">
-          Score&nbsp;: <strong>0 / 8</strong>
-          <span class="score-comment"></span>
+        <div>
+          <div style="font-size:0.76rem;margin-bottom:2px;">Spotify :</div>
+          <iframe style="border-radius:8px" src="./veilleux_files/37i9dQZF1DX4sWSpwq3LiO(1).html" width="100%" height="110" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
         </div>
       </div>
-    </section>
-
-    <footer>
-      <span>Test-1 — Veille citoyenne & réseau EP FWB · Prototype pédagogique (non officiel)</span>
-      <code>// résultats stockés localement dans ton navigateur</code>
-    </footer>
+    </div>
   </div>
+</div>
 
-  <script>
-    (function() {
-      const checkBtn = document.getElementById('checkBtn');
-      const resetBtn = document.getElementById('resetBtn');
-      const scoreboard = document.getElementById('scoreboard');
-      const scoreCommentEl = scoreboard.querySelector('.score-comment');
+<script>
+  // ===================== Données fictives =====================
+  const staff = [
+    { nom: "Toi", role: "Détective privé / analyste principal", dept: "Enquêtes", contact: "contact@agence-milou.fr" },
+    { nom: "Contact avocat", role: "Référent juridique (civil / pénal)", dept: "Juridique", contact: "avocat@exemple.fr" },
+    { nom: "Tech confiance", role: "Admin systèmes / sécurité", dept: "Tech", contact: "tech@exemple.fr" },
+    { nom: "Graphiste", role: "Maquettage de dossiers", dept: "Partenaires", contact: "graphiste@exemple.fr" }
+  ];
 
-      function evaluateQuiz() {
-        const questions = document.querySelectorAll('.question');
-        let total = questions.length;
-        let score = 0;
+  const documents = [
+    {
+      id: "dystopie",
+      titre: "Dossier Dystopie – contexte & risques",
+      fichier: "pdfs/dystopie.pdf",
+      type: "PDF",
+      description: "Annexe sur les risques systémiques (surveillance, climat, autoritarisme). Sert de toile de fond à certains dossiers."
+    },
+    {
+      id: "plaidoyer",
+      titre: "Plaidoyer JP – réflexion de référence",
+      fichier: "pdfs/manuel-plaidoyer-jp.pdf",
+      type: "PDF",
+      description: "Texte de fond. Peut servir à cadrer une démarche, un rapport, une prise de position."
+    },
+    {
+      id: "pression",
+      titre: "Pression – note analytique",
+      fichier: "pdfs/pression.pdf",
+      type: "PDF",
+      description: "Analyse des pressions (sociales, institutionnelles, économiques) autour de certaines affaires."
+    }
+  ];
 
-        questions.forEach(q => {
-          q.classList.remove('correct', 'incorrect');
-          const expl = q.querySelector('.explanation');
-          if (expl) expl.style.display = 'block';
+  const tasks = [
+    { label: "Vérifier les mails entrants / demandes de clients", done: false },
+    { label: "Mettre à jour le journal de bord des dossiers actifs", done: false },
+    { label: "Faire 15 min de veille OSINT / jurisprudence", done: false },
+    { label: "Faire une pause pingouins + musique", done: false }
+  ];
 
-          const inputs = q.querySelectorAll('input[type="radio"]');
-          let answered = false;
-          let isCorrect = false;
+  const NOTES_KEY = "agence_milou_notes_v1";
 
-          inputs.forEach(input => {
-            if (input.checked) {
-              answered = true;
-              if (input.dataset.correct === 'true') {
-                isCorrect = true;
-              }
-            }
-          });
+  // ===================== Navigation =====================
+  const navBtns = document.querySelectorAll(".nav-btn");
+  const sections = document.querySelectorAll(".section-root");
 
-          if (isCorrect) {
-            score++;
-            q.classList.add('correct');
-          } else if (answered) {
-            q.classList.add('incorrect');
-          }
-        });
+  function showSection(sectionKey) {
+    sections.forEach(sec => {
+      sec.classList.toggle("active", sec.id === "section-" + sectionKey);
+    });
+    navBtns.forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.section === sectionKey);
+    });
+  }
 
-        scoreboard.querySelector('strong').textContent = score + ' / ' + total;
-        const ratio = score / total;
-        let comment = '';
+  navBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.section;
+      showSection(key);
+    });
+  });
 
-        if (ratio === 1) {
-          comment = 'Parfait : tu as le profil veilleur·se citoyen·ne hardcore. On peut passer aux tests suivants.';
-        } else if (ratio >= 0.75) {
-          comment = 'Très solide. Relis juste les points où tu as hésité avant de te lancer dans un vrai réseau.';
-        } else if (ratio >= 0.5) {
-          comment = 'Base correcte, mais un retour calme sur les deux PDF t’aidera à consolider.';
-        } else {
-          comment = 'Pas grave : lis les dossiers à ton rythme, discutes-en avec d’autres, et refais le test tranquille.';
-        }
+  // ===================== Annuaire =====================
+  function renderDirectory(filterText = "", dept = "all") {
+    const list = document.getElementById("directoryList");
+    list.innerHTML = "";
+    const q = (filterText || "").toLowerCase();
 
-        scoreCommentEl.textContent = ' — ' + comment;
-      }
+    staff.forEach(person => {
+      if (dept !== "all" && person.dept !== dept) return;
+      const full = (person.nom + " " + person.role + " " + person.dept).toLowerCase();
+      if (q && !full.includes(q)) return;
 
-      function resetQuiz() {
-        const questions = document.querySelectorAll('.question');
-        questions.forEach(q => {
-          q.classList.remove('correct', 'incorrect');
-          const inputs = q.querySelectorAll('input[type="radio"]');
-          inputs.forEach(i => { i.checked = false; });
-          const expl = q.querySelector('.explanation');
-          if (expl) expl.style.display = 'none';
-        });
-        scoreboard.querySelector('strong').textContent = '0 / ' + document.querySelectorAll('.question').length;
-        scoreCommentEl.textContent = '';
-      }
+      const li = document.createElement("li");
+      li.className = "directory-card";
+      const name = document.createElement("strong");
+      name.textContent = person.nom;
+      const role = document.createElement("div");
+      role.className = "directory-role";
+      role.textContent = person.role + " – " + person.dept;
+      const meta = document.createElement("div");
+      meta.className = "directory-meta";
+      meta.textContent = person.contact;
+      li.appendChild(name);
+      li.appendChild(role);
+      li.appendChild(meta);
+      list.appendChild(li);
+    });
 
-      checkBtn.addEventListener('click', evaluateQuiz);
-      resetBtn.addEventListener('click', resetQuiz);
+    if (!list.children.length) {
+      const li = document.createElement("li");
+      li.className = "directory-card";
+      li.textContent = "Aucun contact ne correspond à ce filtre. Modifie la liste 'staff' dans le script.";
+      list.appendChild(li);
+    }
+  }
 
-      // cacher les explications au chargement
-      document.querySelectorAll('.explanation').forEach(expl => {
-        expl.style.display = 'none';
+  // ===================== Tâches =====================
+  function renderTasks() {
+    const list = document.getElementById("taskList");
+    list.innerHTML = "";
+    tasks.forEach((task, idx) => {
+      const li = document.createElement("li");
+      li.className = "task-item";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = task.done;
+      checkbox.addEventListener("change", () => {
+        tasks[idx].done = checkbox.checked;
       });
-    })();
-  </script>
+      const span = document.createElement("span");
+      span.textContent = task.label;
+      li.appendChild(checkbox);
+      li.appendChild(span);
+      list.appendChild(li);
+    });
+  }
+
+  // ===================== Dossiers / PDF =====================
+  function renderDocuments() {
+    const list = document.getElementById("docList");
+    list.innerHTML = "";
+    documents.forEach(doc => {
+      const li = document.createElement("li");
+      li.className = "doc-item";
+
+      const titleRow = document.createElement("div");
+      titleRow.className = "doc-title-row";
+
+      const title = document.createElement("span");
+      title.textContent = doc.titre + " (" + doc.type + ")";
+
+      const btns = document.createElement("div");
+      btns.className = "doc-buttons";
+
+      const btnModal = document.createElement("button");
+      btnModal.type = "button";
+      btnModal.className = "btn-xs";
+      btnModal.textContent = "Modale";
+      btnModal.addEventListener("click", () => openModal(doc.id));
+
+      const btnNewTab = document.createElement("button");
+      btnNewTab.type = "button";
+      btnNewTab.className = "btn-xs";
+      btnNewTab.textContent = "Nouvel onglet";
+      btnNewTab.addEventListener("click", () => {
+        window.open(doc.fichier, "_blank");
+      });
+
+      btns.appendChild(btnModal);
+      btns.appendChild(btnNewTab);
+
+      titleRow.appendChild(title);
+      titleRow.appendChild(btns);
+
+      const meta = document.createElement("div");
+      meta.className = "doc-meta";
+      meta.textContent = doc.fichier;
+
+      const desc = document.createElement("div");
+      desc.textContent = doc.description;
+
+      li.appendChild(titleRow);
+      li.appendChild(meta);
+      li.appendChild(desc);
+
+      list.appendChild(li);
+    });
+  }
+
+  // ===================== Modal PDF =====================
+  const modalOverlay = document.getElementById("modalOverlay");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalPdfEmbed = document.getElementById("modalPdfEmbed");
+  const modalDesc = document.getElementById("modalDesc");
+  const modalCloseBtn = document.getElementById("modalCloseBtn");
+
+  function openModal(docId) {
+    const doc = documents.find(d => d.id === docId);
+    if (!doc) return;
+    modalTitle.textContent = doc.titre;
+    modalPdfEmbed.src = doc.fichier;
+    modalDesc.textContent = doc.description;
+    modalOverlay.classList.add("visible");
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove("visible");
+    modalPdfEmbed.src = "";
+  }
+
+  modalCloseBtn.addEventListener("click", closeModal);
+  modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) closeModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modalOverlay.classList.contains("visible")) {
+      closeModal();
+    }
+  });
+
+  // ===================== Notes (localStorage) =====================
+  function loadNotes() {
+    try {
+      const val = localStorage.getItem(NOTES_KEY);
+      if (val !== null) {
+        document.getElementById("notesText").value = val;
+      }
+    } catch (e) {
+      // localStorage peut être désactivé, ce n'est pas grave
+    }
+  }
+
+  function saveNotesDebounced() {
+    if (saveNotesDebounced._t) clearTimeout(saveNotesDebounced._t);
+    saveNotesDebounced._t = setTimeout(() => {
+      try {
+        const val = document.getElementById("notesText").value || "";
+        localStorage.setItem(NOTES_KEY, val);
+      } catch (e) {}
+    }, 400);
+  }
+
+  document.getElementById("notesText").addEventListener("input", saveNotesDebounced);
+  document.getElementById("btnClearNotes").addEventListener("click", () => {
+    document.getElementById("notesText").value = "";
+    saveNotesDebounced();
+  });
+
+  // ===================== Console =====================
+  const consoleOutput = document.getElementById("consoleOutput");
+  const consoleForm = document.getElementById("consoleForm");
+  const consoleInput = document.getElementById("consoleInput");
+  const penguinBox = document.getElementById("penguinBox");
+
+  function logConsole(line, type = "out") {
+    const div = document.createElement("div");
+    div.className = "console-line";
+    const prefix = document.createElement("span");
+    prefix.className = "console-prefix";
+    prefix.textContent = type === "in" ? ">" : "#";
+    const text = document.createElement("span");
+    text.textContent = " " + line;
+    div.appendChild(prefix);
+    div.appendChild(text);
+    consoleOutput.appendChild(div);
+    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+  }
+
+  function handleCommand(cmdRaw) {
+    const cmd = (cmdRaw || "").trim();
+    if (!cmd) return;
+    const lower = cmd.toLowerCase();
+
+    if (lower === "help") {
+      logConsole("Commandes : help, clients, cases, docs, pingouin, spotify, youtube, clear", "out");
+      return;
+    }
+    if (lower === "clear") {
+      consoleOutput.innerHTML = "";
+      return;
+    }
+    if (lower === "clients") {
+      logConsole("Rappel : ne jamais promettre de résultat, seulement des moyens et une méthode. Toujours cadrer le cadre légal.", "out");
+      return;
+    }
+    if (lower === "cases") {
+      logConsole("Méthode dossier : écoute → cadrage → plan de collecte → validation → rapport structuré.", "out");
+      return;
+    }
+    if (lower === "docs") {
+      showSection("dossiers");
+      logConsole("Ouverture de la section 'Dossiers & annexes PDF'.", "out");
+      return;
+    }
+    if (lower === "pingouin") {
+      showSection("pause");
+      penguinBox.scrollIntoView({ behavior: "smooth", block: "center" });
+      logConsole("Pause pingouin déclenchée.", "out");
+      return;
+    }
+    if (lower === "spotify") {
+      showSection("pause");
+      document.getElementById("spotifyFrame").scrollIntoView({ behavior: "smooth", block: "center" });
+      logConsole("Section Spotify affichée.", "out");
+      return;
+    }
+    if (lower === "youtube") {
+      showSection("pause");
+      document.getElementById("ytFrame").scrollIntoView({ behavior: "smooth", block: "center" });
+      logConsole("Section YouTube affichée.", "out");
+      return;
+    }
+
+    logConsole("Commande inconnue. Tape 'help' pour la liste des commandes.", "out");
+  }
+
+  consoleForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const value = consoleInput.value;
+    consoleInput.value = "";
+    logConsole(value, "in");
+    handleCommand(value);
+  });
+
+  // ===================== Filtres annuaire =====================
+  const directorySearch = document.getElementById("directorySearch");
+  const directoryDept = document.getElementById("directoryDept");
+
+  directorySearch.addEventListener("input", () => {
+    renderDirectory(directorySearch.value, directoryDept.value);
+  });
+  directoryDept.addEventListener("change", () => {
+    renderDirectory(directorySearch.value, directoryDept.value);
+  });
+
+  // ===================== Init =====================
+  document.addEventListener("DOMContentLoaded", () => {
+    renderDirectory();
+    renderTasks();
+    renderDocuments();
+    loadNotes();
+    logConsole("Console initialisée. Tape 'help' pour commencer.", "out");
+  });
+</script>
+
 </body>
 </html>
