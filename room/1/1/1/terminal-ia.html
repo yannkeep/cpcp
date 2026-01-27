@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>IA² Terminal + Game Terminal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-alt: #020617;
+      --accent: #22c55e;
+      --accent-soft: rgba(34,197,94,0.18);
+      --accent-2: #38bdf8;
+      --danger: #f97316;
+      --text: #e5e7eb;
+      --muted: #64748b;
+      --border: rgba(148,163,184,0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Mono", "Menlo", "Consolas", monospace;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 45%, #000 100%);
+      color: var(--text);
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 900px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+    }
+
+    /* HEADER */
+
+    .top-bar {
+      padding: .5rem .85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+      border-bottom: 1px solid rgba(15,23,42,0.9);
+      background: linear-gradient(to bottom, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+      box-shadow: 0 8px 20px rgba(15,23,42,0.9);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+
+    .brand-dot {
+      width: .8rem;
+      height: .8rem;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #bbf7d0 0, #22c55e 55%, #14532d 100%);
+      box-shadow: 0 0 18px rgba(34,197,94,0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-dot::after {
+      content: "²";
+      position: absolute;
+      right: -4px;
+      bottom: -4px;
+      font-size: .6rem;
+      color: #22c55e;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: .8rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      font-size: .62rem;
+      color: var(--muted);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .top-status {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .7rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chip {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: .15rem .5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      background: rgba(15,23,42,0.96);
+      cursor: default;
+    }
+
+    .chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34,197,94,0.8);
+    }
+
+    .chip-btn {
+      cursor: pointer;
+      transition: border-color .15s ease, color .15s ease, background .15s ease;
+    }
+
+    .chip-btn:hover {
+      border-color: var(--accent-2);
+      color: var(--accent-2);
+    }
+
+    /* IA TERMINAL */
+
+    .terminal {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin: .75rem .75rem .5rem;
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top, #020817 0, #020617 40%, #000 100%);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .terminal-inner {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .terminal-header {
+      padding: .45rem .7rem;
+      border-bottom: 1px solid rgba(15,23,42,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .7rem;
+      color: var(--muted);
+      background: radial-gradient(circle at top left, rgba(34,197,94,0.2), rgba(15,23,42,0.98));
+    }
+
+    .term-dots {
+      display: flex;
+      gap: .25rem;
+    }
+
+    .term-dot {
+      width: .45rem;
+      height: .45rem;
+      border-radius: 999px;
+      background: #4b5563;
+    }
+    .term-dot:nth-child(1){background:#ef4444;}
+    .term-dot:nth-child(2){background:#eab308;}
+    .term-dot:nth-child(3){background:#22c55e;}
+
+    .term-title {
+      font-size: .7rem;
+      color: var(--muted);
+    }
+
+    .term-mode {
+      font-size: .7rem;
+      color: var(--accent-2);
+    }
+
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      padding: .7rem .7rem 4.3rem;
+      font-size: .8rem;
+      line-height: 1.5;
+      scrollbar-width: thin;
+    }
+
+    .line {
+      display: flex;
+      align-items: flex-start;
+      gap: .4rem;
+      margin-bottom: .25rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .line-label {
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .line-label.user { color: var(--accent); }
+    .line-label.ai1 { color: var(--accent-2); }
+    .line-label.ai2 { color: var(--danger); }
+
+    .line-content {
+      flex: 1;
+      color: var(--text);
+    }
+
+    .line-tag {
+      display: inline-block;
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+      margin-bottom: .1rem;
+    }
+
+    .line-block {
+      margin-bottom: .45rem;
+    }
+
+    .hint {
+      font-size: .7rem;
+      color: var(--muted);
+      margin-bottom: .45rem;
+    }
+
+    .hint code {
+      font-family: inherit;
+      font-size: .7rem;
+      background: rgba(15,23,42,0.95);
+      padding: .1rem .3rem;
+      border-radius: .4rem;
+      border: 1px solid rgba(51,65,85,0.9);
+    }
+
+    /* INPUT BAR IA */
+
+    .input-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-top: 1px solid rgba(15,23,42,0.95);
+      background: radial-gradient(circle at top, rgba(15,23,42,0.97), rgba(15,23,42,0.98));
+      padding: .45rem .55rem .5rem;
+    }
+
+    .input-line {
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      margin-bottom: .25rem;
+    }
+
+    .prompt {
+      font-size: .8rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .input-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      background: rgba(15,23,42,1);
+      border-radius: .6rem;
+      border: 1px solid rgba(51,65,85,0.9);
+      padding: .25rem .45rem;
+    }
+
+    #input-ia {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+      font-size: .8rem;
+    }
+
+    #input-ia::placeholder {
+      color: #475569;
+    }
+
+    .btn-send {
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #022c22;
+      font-size: .7rem;
+      padding: .25rem .6rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .btn-send:active {
+      transform: translateY(1px);
+    }
+
+    .input-suggestions {
+      display: flex;
+      gap: .35rem;
+      flex-wrap: wrap;
+      margin-bottom: .35rem;
+    }
+
+    .suggestion {
+      border-radius: 999px;
+      border: 1px solid rgba(51,65,85,0.9);
+      padding: .18rem .5rem;
+      font-size: .7rem;
+      color: var(--muted);
+      background: rgba(15,23,42,1);
+      cursor: pointer;
+    }
+
+    .suggestion span {
+      color: var(--accent);
+    }
+
+    /* CLAVIER FUTURISTE NÉON */
+
+    .neon-keyboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(52px, 1fr));
+      gap: .25rem;
+      margin-top: .15rem;
+    }
+
+    .neon-key {
+      position: relative;
+      border: none;
+      border-radius: .6rem;
+      padding: .38rem 0;
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #f9fafb;
+      background: linear-gradient(135deg, #22c55e, #0ea5e9, #a855f7);
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(56,189,248,.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: neonHue 6s linear infinite;
+    }
+
+    .neon-key span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .neon-key::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(
+        from 0deg,
+        #22c55e,
+        #0ea5e9,
+        #a855f7,
+        #f97316,
+        #facc15,
+        #22c55e
+      );
+      opacity: .65;
+      animation: neonSpin 4s linear infinite;
+    }
+
+    .neon-key:nth-child(2) { animation-delay: .4s; }
+    .neon-key:nth-child(3) { animation-delay: .8s; }
+    .neon-key:nth-child(4) { animation-delay: 1.2s; }
+    .neon-key:nth-child(5) { animation-delay: 1.6s; }
+    .neon-key:nth-child(6) { animation-delay: 2.0s; }
+    .neon-key:nth-child(7) { animation-delay: 2.4s; }
+    .neon-key:nth-child(8) { animation-delay: 2.8s; }
+    .neon-key:nth-child(9) { animation-delay: 3.2s; }
+    .neon-key:nth-child(10) { animation-delay: 3.6s; }
+    .neon-key:nth-child(11) { animation-delay: 4.0s; }
+    .neon-key:nth-child(12) { animation-delay: 4.4s; }
+
+    .neon-key::after {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: inherit;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.9), rgba(15,23,42,0.98));
+      z-index: 0;
+    }
+
+    .neon-key span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .neon-key:active {
+      transform: translateY(1px) scale(.98);
+      box-shadow: 0 0 5px rgba(56,189,248,.5);
+    }
+
+    @keyframes neonSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes neonHue {
+      from { filter: hue-rotate(0deg); }
+      to   { filter: hue-rotate(360deg); }
+    }
+
+    /* GAME TERMINAL (CLASSIQUE) */
+
+    .game-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 1rem;
+    }
+
+    .game-overlay.visible {
+      display: flex;
+    }
+
+    .game-window {
+      width: 100%;
+      max-width: 800px;
+      max-height: 90vh;
+      background: #000000;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #22c55e;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+    }
+
+    .game-header {
+      padding: .4rem .6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #020617;
+      color: #22c55e;
+      font-size: .72rem;
+      border-bottom: 1px solid #22c55e;
+    }
+
+    .game-header-left {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .game-title {
+      text-transform: uppercase;
+      letter-spacing: .16em;
+    }
+
+    .game-close-btn {
+      border: 1px solid #22c55e;
+      background: transparent;
+      color: #22c55e;
+      border-radius: 999px;
+      padding: .15rem .5rem;
+      font-size: .7rem;
+      cursor: pointer;
+    }
+
+    .game-screen {
+      flex: 1;
+      padding: .6rem .7rem 3.2rem;
+      overflow-y: auto;
+      font-family: "SF Mono", "Menlo", "Consolas", monospace;
+      font-size: .8rem;
+      line-height: 1.5;
+      background: #020617;
+      color: #22c55e;
+    }
+
+    .game-line {
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: .25rem;
+    }
+
+    .game-line-user::before {
+      content: "> ";
+    }
+
+    .game-line-system::before {
+      content: "";
+    }
+
+    .game-input-bar {
+      position: relative;
+      border-top: 1px solid #22c55e;
+      background: #020817;
+      padding: .35rem .55rem .45rem;
+    }
+
+    .game-input-inner {
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+    }
+
+    .game-prompt {
+      color: #22c55e;
+      font-size: .8rem;
+    }
+
+    #game-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: #000000;
+      color: #22c55e;
+      font-family: "SF Mono","Menlo","Consolas",monospace;
+      font-size: .8rem;
+      padding: .25rem .35rem;
+    }
+
+    #game-input::placeholder {
+      color: #475569;
+    }
+
+    .game-help-hint {
+      margin-top: .2rem;
+      font-size: .7rem;
+      color: #38bdf8;
+    }
+
+    @media (max-width: 640px) {
+      .top-bar {
+        padding-inline: .7rem;
+      }
+      .terminal {
+        margin: .7rem .5rem .4rem;
+      }
+      .game-overlay {
+        padding: .4rem;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .top-bar {
+        padding-inline: 1.2rem;
+      }
+      .terminal {
+        margin: 1.1rem 1.3rem .8rem;
+      }
+      .screen {
+        padding-inline: 1rem;
+      }
+      .input-bar {
+        padding-inline: .9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <div class="brand-text">
+          <span class="brand-title">IA² TERMINAL</span>
+          <span class="brand-sub">double couche de sur-analyse</span>
+        </div>
+      </div>
+      <div class="top-status">
+        <div class="chip">
+          <div class="chip-dot"></div>
+          <span>dual-engine online</span>
+        </div>
+        <div class="chip" id="playerIdChip" style="display:none;">
+          <span>ID&nbsp;</span><span id="playerIdDisplay"></span>
+        </div>
+        <button class="chip chip-btn" id="openGameTerminal">
+          <span>ouvrir game terminal</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- TERMINAL IA² -->
+    <main class="terminal">
+      <div class="terminal-inner">
+        <div class="terminal-header">
+          <div class="term-dots">
+            <div class="term-dot"></div>
+            <div class="term-dot"></div>
+            <div class="term-dot"></div>
+          </div>
+          <div class="term-title">/dev/ia2 – session mobile-first</div>
+          <div class="term-mode">mode : analyse + méta-analyse</div>
+        </div>
+        <div class="screen" id="screen-ia" aria-live="polite">
+          <div class="line-block">
+            <div class="line">
+              <span class="line-label">sys</span>
+              <div class="line-content">Bienvenue dans <strong>IA² Terminal</strong> – une fausse console dopée à l’IA, dopée à l’IA.</div>
+            </div>
+            <div class="line">
+              <span class="line-label">sys</span>
+              <div class="line-content">Tape une commande, une question ou une phrase de ta vie réelle. IA¹ répond, puis IA² commente.</div>
+            </div>
+          </div>
+          <div class="hint">
+            Exemples : <code>diagnostic motivation</code>, <code>explique la dystopie douce</code>, <code>plan d'action pour mon projet</code>
+          </div>
+        </div>
+
+        <div class="input-bar">
+          <div class="input-line">
+            <span class="prompt">λ</span>
+            <div class="input-wrap">
+              <input id="input-ia" type="text" autocomplete="off"
+                     placeholder="Écris ici et appuie sur Entrée…" />
+              <button class="btn-send" id="sendIaBtn">RUN</button>
+            </div>
+          </div>
+          <div class="input-suggestions">
+            <button class="suggestion" data-fill="diagnostic de ma situation actuelle">
+              ▶ diagnostic <span>IA¹</span>/<span>IA²</span>
+            </button>
+            <button class="suggestion" data-fill="explique la situation comme à un enfant de 10 ans">
+              ▶ mode <span>simple</span>
+            </button>
+            <button class="suggestion" data-fill="génère trois pistes d'action concrètes">
+              ▶ 3 <span>actions</span>
+            </button>
+          </div>
+
+          <!-- CLAVIER FUTURISTE NÉON
+               Pour mettre un lien sur une touche :
+               - modifie l'attribut data-url="ma-page.html"
+               - par exemple data-url="google.html"
+          -->
+          <div class="neon-keyboard">
+            <button class="neon-key" data-url=""><span>K1</span></button>
+            <button class="neon-key" data-url=""><span>K2</span></button>
+            <button class="neon-key" data-url=""><span>K3</span></button>
+            <button class="neon-key" data-url=""><span>K4</span></button>
+            <button class="neon-key" data-url=""><span>K5</span></button>
+            <button class="neon-key" data-url=""><span>K6</span></button>
+            <button class="neon-key" data-url=""><span>K7</span></button>
+            <button class="neon-key" data-url=""><span>K8</span></button>
+            <button class="neon-key" data-url=""><span>K9</span></button>
+            <button class="neon-key" data-url=""><span>K10</span></button>
+            <button class="neon-key" data-url=""><span>K11</span></button>
+            <button class="neon-key" data-url=""><span>K12</span></button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- GAME TERMINAL CLASSIQUE -->
+  <div class="game-overlay" id="gameOverlay">
+    <div class="game-window">
+      <div class="game-header">
+        <div class="game-header-left">
+          <span class="game-title">game terminal</span>
+          <span>– MOORPG IRL · Projet S</span>
+        </div>
+        <button class="game-close-btn" id="closeGameTerminal">FERMER</button>
+      </div>
+      <div class="game-screen" id="gameScreen"></div>
+      <div class="game-input-bar">
+        <div class="game-input-inner">
+          <span class="game-prompt">S&gt;</span>
+          <input id="game-input" type="text" autocomplete="off" placeholder="help, missions, ls, scan, note add..., stats, -url -index…" />
+        </div>
+        <div class="game-help-hint">
+          Tape <strong>help</strong> pour voir toutes les commandes du jeu. (Il existe aussi des easter eggs…)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       PROJET S – GAME STATE (localStorage)
+       ========================================================= */
+
+    const STORAGE_KEY = "ProjetS_GameState_v1";
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          return {
+            playerId: null,
+            openCount: 0,
+            commandsCount: 0,
+            missionsViewed: {},
+            achievements: {
+              konami: false,
+              usedUrl: false,
+              easterEgg: false,
+              notesUsed: false
+            },
+            notes: [],
+            iaLog: []
+          };
+        }
+        const parsed = JSON.parse(raw);
+        return {
+          playerId: parsed.playerId || null,
+          openCount: parsed.openCount || 0,
+          commandsCount: parsed.commandsCount || 0,
+          missionsViewed: parsed.missionsViewed || {},
+          achievements: Object.assign(
+            {
+              konami: false,
+              usedUrl: false,
+              easterEgg: false,
+              notesUsed: false
+            },
+            parsed.achievements || {}
+          ),
+          notes: Array.isArray(parsed.notes) ? parsed.notes : [],
+          iaLog: Array.isArray(parsed.iaLog) ? parsed.iaLog : []
+        };
+      } catch {
+        return {
+          playerId: null,
+          openCount: 0,
+          commandsCount: 0,
+          missionsViewed: {},
+          achievements: {
+            konami: false,
+            usedUrl: false,
+            easterEgg: false,
+            notesUsed: false
+          },
+          notes: [],
+          iaLog: []
+        };
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
+      } catch {
+        // ignore
+      }
+    }
+
+    let gameState = loadState();
+
+    function randomInstanceId() {
+      const num = Math.floor(Math.random() * 9000) + 1000;
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const l1 = letters[Math.floor(Math.random() * letters.length)];
+      const l2 = letters[Math.floor(Math.random() * letters.length)];
+      return "S-" + num + "-" + l1 + l2;
+    }
+
+    function ensurePlayerId() {
+      if (!gameState.playerId) {
+        gameState.playerId = randomInstanceId();
+        saveState();
+      }
+      return gameState.playerId;
+    }
+
+    function updatePlayerIdChip() {
+      const id = gameState.playerId;
+      const chip = document.getElementById("playerIdChip");
+      const span = document.getElementById("playerIdDisplay");
+      if (id && chip && span) {
+        span.textContent = id;
+        chip.style.display = "inline-flex";
+      }
+    }
+
+    function recordMissionViewed(id) {
+      if (!id) return;
+      gameState.missionsViewed[id] = true;
+      saveState();
+    }
+
+    function recordGameCommand() {
+      gameState.commandsCount += 1;
+      saveState();
+    }
+
+    function recordIaPrompt(text) {
+      const clean = text.trim();
+      if (!clean) return;
+      if (!Array.isArray(gameState.iaLog)) gameState.iaLog = [];
+      gameState.iaLog.push({ text: clean, ts: Date.now() });
+      if (gameState.iaLog.length > 20) {
+        gameState.iaLog = gameState.iaLog.slice(-20);
+      }
+      saveState();
+    }
+
+    /* ===== LISTE DES PAGES "CONNUES" PAR -url -help ===== */
+    const availableUrls = [
+      "index.html",
+      "terminal-ia.html",
+      "example.html",
+      "game.html",
+      "about.html",
+      "contact.html"
+    ];
+
+    /* ===== IA TERMINAL LOGIC ===== */
+
+    const screenIa = document.getElementById("screen-ia");
+    const inputIa = document.getElementById("input-ia");
+    const sendIaBtn = document.getElementById("sendIaBtn");
+
+    function appendBlockIa(html) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "line-block";
+      wrapper.innerHTML = html;
+      screenIa.appendChild(wrapper);
+      screenIa.scrollTop = screenIa.scrollHeight;
+    }
+
+    function sanitize(str) {
+      return str.replace(/[&<>]/g, c => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c] || c
+      ));
+    }
+
+    function makeAi1Response(text) {
+      const clean = text.trim();
+      if (!clean) return "Analyse : aucun signal exploitable, la commande est vide.";
+      const lengthLabel =
+        clean.length < 20 ? "très courte" :
+        clean.length < 60 ? "brève" :
+        "assez dense";
+
+      const keywords = clean
+        .split(/\s+/)
+        .filter(w => w.length > 4)
+        .slice(0, 3)
+        .join(", ");
+
+      return [
+        `Analyse de surface (${lengthLabel}) :`,
+        `• Intention perçue : ${clean.endsWith("?") ? "question" : "énoncé / demande implicite"}.`,
+        keywords
+          ? `• Mots-clés captés : ${keywords}.`
+          : `• Peu de mots-clés nets : IA¹ se concentre surtout sur le ton.`,
+        `• Hypothèse : tu cherches une forme de clarté ou de structure autour de ce que tu viens d’écrire.`
+      ].join("\n");
+    }
+
+    function makeAi2Response(text) {
+      const clean = text.trim();
+      const truncated = clean.length > 80 ? clean.slice(0, 77) + "…" : clean;
+
+      return [
+        "META-IA (surveillance d’IA¹) :",
+        `• Résumé ultra court de ta commande : « ${truncated || "∅"} »`,
+        "• Ce que IA¹ vient de faire :",
+        "  - elle a projeté des intentions probables à partir de quelques indices textuels,",
+        "  - elle a généré des mots-clés et brodé un contexte autour.",
+        "• Ce qu’il faut garder en tête :",
+        "  - IA¹ n’a pas accès à ta situation réelle ni à ton historique,",
+        "  - une partie de la réponse est forcément approximative.",
+        "• Bon usage : s’en servir comme miroir de réflexion, pas comme vérité ni ordre."
+      ].join("\n");
+    }
+
+    function handleIaCommand(raw) {
+      const trimmed = raw.trim();
+      if (!trimmed) return;
+
+      recordIaPrompt(trimmed);
+
+      const low = trimmed.toLowerCase();
+      if (low === "konami") {
+        appendBlockIa(`
+          <div class="line">
+            <span class="line-label user">you</span>
+            <div class="line-content">${sanitize(trimmed)}</div>
+          </div>
+          <div class="line">
+            <span class="line-label ai1">ia¹</span>
+            <div class="line-content"><span class="line-tag">réponse primaire</span><br>Code détecté. Mais ici, la séquence se joue au clavier, pas dans la ligne de commande.</div>
+          </div>
+        `);
+        return;
+      }
+
+      const userEscaped = sanitize(trimmed);
+      const ai1 = makeAi1Response(trimmed);
+      const ai2 = makeAi2Response(trimmed);
+
+      const blockHtml = `
+        <div class="line">
+          <span class="line-label user">you</span>
+          <div class="line-content">${userEscaped}</div>
+        </div>
+        <div class="line">
+          <span class="line-label ai1">ia¹</span>
+          <div class="line-content"><span class="line-tag">réponse primaire</span><br>${sanitize(ai1)}</div>
+        </div>
+        <div class="line">
+          <span class="line-label ai2">ia²</span>
+          <div class="line-content"><span class="line-tag">méta-analyse</span><br>${sanitize(ai2)}</div>
+        </div>
+      `;
+
+      appendBlockIa(blockHtml);
+    }
+
+    function submitIa() {
+      const value = inputIa.value;
+      if (!value.trim()) return;
+      handleIaCommand(value);
+      inputIa.value = "";
+      inputIa.focus();
+    }
+
+    sendIaBtn.addEventListener("click", submitIa);
+
+    inputIa.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        submitIa();
+      }
+    });
+
+    document.querySelectorAll(".suggestion").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const fill = btn.getAttribute("data-fill") || "";
+        inputIa.value = fill;
+        inputIa.focus();
+      });
+    });
+
+    // Gestion du clavier néon : chaque touche peut ouvrir un lien
+    document.querySelectorAll(".neon-key").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const url = btn.getAttribute("data-url") || "";
+        const label = btn.textContent.trim();
+        if (url) {
+          try {
+            window.open(url, "_blank");
+          } catch (e) {
+            alert("Impossible d’ouvrir " + url + " automatiquement.");
+          }
+        } else {
+          alert("Cette touche (« " + label + " ») n’a pas encore de lien.\nAjoute data-url=\"ma-page.html\" dans le HTML.");
+        }
+      });
+    });
+
+    /* ===== GAME TERMINAL LOGIC ===== */
+
+    const gameOverlay = document.getElementById("gameOverlay");
+    const openGameTerminalBtn = document.getElementById("openGameTerminal");
+    const closeGameTerminalBtn = document.getElementById("closeGameTerminal");
+    const gameScreen = document.getElementById("gameScreen");
+    const gameInput = document.getElementById("game-input");
+    const playerIdChip = document.getElementById("playerIdChip");
+    const playerIdDisplay = document.getElementById("playerIdDisplay");
+
+    const gameMissions = {
+      "S-00": "S-00 – TU ES DÉJÀ DEDANS\n- Objectif : prendre conscience que ton environnement quotidien est déjà un terrain de jeu.\n- Action : note 3 choses étranges, absurdes ou révélatrices autour de toi aujourd’hui.\n- Trace : texte court, photo, note vocale.",
+      "S-01": "S-01 – ABSURDEX LOCAL\n- Objectif : repérer une absurdité organisationnelle (règle, procédure, panneau…).\n- Action : documente-la (photo/texte) et décris pourquoi elle te semble absurde.\n- Trace : publication avec #ProjetS #S01.",
+      "S-02": "S-02 – CAMÉRA, JE TE VOIS\n- Objectif : cartographier la surveillance ordinaire.\n- Action : fais la liste ou un mini-plan des caméras et capteurs autour d’un lieu.\n- Trace : schéma, liste commentée.",
+      "S-03": "S-03 – INSTANCE RENCONTRÉE\n- Objectif : écouter le rapport d’une autre personne à la dystopie douce.\n- Action : pose une question simple du type « qu’est-ce qui te semble absurde en ce moment ? » (avec son accord).\n- Trace : retranscription anonymisée.",
+      "S-04": "S-04 – TRACE STATIQUE\n- Objectif : laisser une trace discrète mais durable.\n- Action : affiche, colle, dépose un message symbolique dans l’espace public (sans dégradation, sans danger).\n- Trace : photo + contexte.",
+      "S-05": "S-05 – LE MURMURE À S\n- Objectif : formuler ce que tu voudrais dire au système (S).\n- Action : écris une lettre ou un message à S (système, société, organisation…).\n- Trace : texte (public ou privé), 10 à 20 lignes."
+    };
+
+    const scanSnippets = [
+      "Les néons clignotent légèrement au-dessus de toi. Quelque part, un badge bippe sur un portique. +1 à la sensation de simulation.",
+      "Tu remarques un écran de plus qui affiche une information que personne ne lit. Il continue pourtant de défiler, infatigable.",
+      "Une caméra orientable suit vaguement les mouvements. Est-ce qu’elle enregistre, ou est-ce qu’elle performe elle aussi un rôle ?",
+      "Tu passes en revue les notifications non lues. Pour le système, elles sont des preuves d’activité. Pour toi, juste du bruit.",
+      "Quelqu’un scanne un QR code sans lire ce qu’il ouvre. Le geste compte plus que le contenu."
+    ];
+
+    function gamePrint(line, type = "system") {
+      const div = document.createElement("div");
+      div.className = "game-line " + (type === "user" ? "game-line-user" : "game-line-system");
+      div.textContent = line;
+      gameScreen.appendChild(div);
+      gameScreen.scrollTop = gameScreen.scrollHeight;
+    }
+
+    function gamePrintBlock(text) {
+      text.split("\n").forEach(l => gamePrint(l));
+    }
+
+    function gameClear() {
+      gameScreen.innerHTML = "";
+    }
+
+    function gameHelp() {
+      const helpText = [
+        "Commandes disponibles :",
+        "",
+        "  help           : affiche cette aide",
+        "  about          : principe du jeu",
+        "  id             : affiche ou crée ton ID d’instance",
+        "  ls             : liste les zones / commandes clés",
+        "  scan           : description aléatoire de l’environnement (flavor text)",
+        "  missions       : liste les missions de base (S-00 à S-05)",
+        "  mission S-xx   : détails d’une mission (ex : mission S-02)",
+        "  journal        : modèle de journal de bord",
+        "  note add ...   : ajoute une note personnelle (journal, idée, etc.)",
+        "  note list      : liste tes notes locales",
+        "  stats          : statistiques de ta session",
+        "  achievements   : succès débloqués",
+        "  sync           : remonte les dernières commandes IA",
+        "  -url -[nom]    : ouvre [nom].html (ex : -url -index, -url -google)",
+        "  -url -help     : liste des fichiers HTML « connus »",
+        "  fork           : instructions pour forker / modifier le jeu",
+        "  clear          : efface l’écran",
+        "  exit / close   : fermer le game terminal",
+        "",
+        "Bonus : easter eggs et Konami Code clavier."
+      ].join("\n");
+      gamePrintBlock(helpText);
+    }
+
+    function gameAbout() {
+      const txt = [
+        "ABOUT – PROJET S / MOORPG IRL",
+        "",
+        "- Tu joues ton propre rôle dans ta vie réelle (instance).",
+        "- Les missions S-xx te poussent à observer, documenter et détourner légèrement ton quotidien.",
+        "- Le game terminal sert de manuel embarqué : aide, missions, journal, notes, stats.",
+        "",
+        "Commandes spéciales :",
+        "  -url -index    -> ouvre index.html",
+        "  -url -google   -> ouvre google.html si présent",
+        "  -url -help     -> liste les fichiers HTML référencés.",
+        "",
+        "Tu es encouragé·e à forker ce fichier, modifier les missions, ajouter tes saisons et ton univers."
+      ].join("\n");
+      gamePrintBlock(txt);
+    }
+
+    function gameMissionsList() {
+      const txt = [
+        "MISSIONS DE BASE (SAISON 1) :",
+        "",
+        "  S-00 : Tu es déjà dedans",
+        "  S-01 : Absurdex local",
+        "  S-02 : Caméra, je te vois",
+        "  S-03 : Instance rencontrée",
+        "  S-04 : Trace statique",
+        "  S-05 : Le murmure à S",
+        "",
+        "Tape : mission S-00 (ou autre) pour les détails."
+      ].join("\n");
+      gamePrintBlock(txt);
+    }
+
+    function gameJournal() {
+      const txt = [
+        "MODÈLE SIMPLE DE JOURNAL DE BORD :",
+        "",
+        "Page de garde :",
+        "  - Pseudo / ID d’instance",
+        "  - Dates de début et (un jour) de fin de saison",
+        "",
+        "Pour chaque mission :",
+        "  - Mission : S-xx + titre",
+        "  - Date & lieu",
+        "  - Type de trace (photo, texte, audio, etc.)",
+        "  - Lien / emplacement de la trace (si public)",
+        "  - Ce que j’ai observé / ressenti (5–10 lignes)",
+        "",
+        "Fin de saison :",
+        "  - Ce que j’ai appris sur mon environnement",
+        "  - Ce que j’ai appris sur moi",
+        "  - Idée(s) de nouvelle mission à proposer"
+      ].join("\n");
+      gamePrintBlock(txt);
+    }
+
+    function handleUrlCommand(argRaw) {
+      if (!argRaw) {
+        gamePrint("Usage : -url -[nom] ouvre [nom].html (ex : -url -index).");
+        gamePrint("Tape : -url -help pour la liste des fichiers référencés.");
+        return;
+      }
+
+      if (argRaw.toLowerCase() === "-help") {
+        gamePrint("Fichiers HTML référencés (liste indicative) :");
+        availableUrls.forEach(u => gamePrint("  • " + u));
+        gamePrint("Tu peux aussi tenter d’ouvrir d’autres fichiers : -url -google → google.html, etc.");
+        return;
+      }
+
+      let base = argRaw;
+      if (base.startsWith("-")) base = base.slice(1);
+      if (!base) {
+        gamePrint("Nom vide. Exemple : -url -index pour ouvrir index.html.");
+        return;
+      }
+
+      const file = base + ".html";
+      const known = availableUrls.includes(file);
+
+      if (known) {
+        gamePrint(`Ouverture de ${file} (référencé)…`);
+      } else {
+        gamePrint(`Ouverture de ${file} (non listé, mais on tente quand même)…`);
+      }
+
+      gameState.achievements.usedUrl = true;
+      saveState();
+
+      try {
+        window.open(file, "_blank");
+      } catch (e) {
+        gamePrint("Impossible d’ouvrir la page automatiquement. Ouvre-la manuellement si besoin.");
+      }
+    }
+
+    function gameShowId() {
+      const id = ensurePlayerId();
+      gamePrint(`ID d’instance : ${id}`);
+      updatePlayerIdChip();
+    }
+
+    function gameStats() {
+      const missionsCount = Object.keys(gameState.missionsViewed || {}).length;
+      const txt = [
+        "STATS INSTANCE :",
+        "",
+        `  ID          : ${gameState.playerId || "(non défini – tape 'id')"}`,
+        `  Ouvertures  : ${gameState.openCount}`,
+        `  Commandes   : ${gameState.commandsCount}`,
+        `  Missions vues : ${missionsCount}`,
+        `  Notes        : ${(gameState.notes || []).length}`,
+        ""
+      ].join("\n");
+      gamePrintBlock(txt);
+    }
+
+    function gameAchievements() {
+      const a = gameState.achievements || {};
+      const check = (x) => x ? "[ok]" : "[  ]";
+      const txt = [
+        "SUCCÈS DÉBLOQUÉS :",
+        "",
+        `  ${check(a.konami)} Konami code détecté`,
+        `  ${check(a.usedUrl)} Utilisation de -url`,
+        `  ${check(a.easterEgg)} Au moins un easter egg (xyzzy/sudo/42/s/konami)`,
+        `  ${check(a.notesUsed)} A déjà utilisé le système de notes`,
+        "",
+        "Tu peux inventer d'autres succès dans ta propre version du fichier."
+      ].join("\n");
+      gamePrintBlock(txt);
+    }
+
+    function gameLs() {
+      const txt = [
+        "ZONES / COMMANDES CLÉS :",
+        "",
+        "  [core]    help, about, id, stats, achievements",
+        "  [world]   missions, mission S-xx, journal, scan",
+        "  [notes]   note add ..., note list",
+        "  [meta]    sync (log IA), fork, -url -[nom], -url -help",
+        "",
+        "Idée : duplique ce fichier, ajoute tes propres zones / commandes, et annonce-les ici."
+      ].join("\n");
+      gamePrintBlock(txt);
+    }
+
+    function gameScan() {
+      const idx = Math.floor(Math.random() * scanSnippets.length);
+      gamePrint("SCAN ENVIRONNEMENT :");
+      gamePrint(scanSnippets[idx]);
+    }
+
+    function gameNoteCommand(parts) {
+      const sub = (parts[1] || "").toLowerCase();
+      const rest = parts.slice(2).join(" ");
+      if (!sub) {
+        gamePrint("Usage : note add [texte]  ou  note list");
+        return;
+      }
+      if (sub === "add") {
+        if (!rest.trim()) {
+          gamePrint("Ajoute le texte de la note après 'note add'.");
+          return;
+        }
+        const note = {
+          text: rest.trim(),
+          ts: Date.now()
+        };
+        if (!Array.isArray(gameState.notes)) gameState.notes = [];
+        gameState.notes.push(note);
+        gameState.achievements.notesUsed = true;
+        saveState();
+        gamePrint("Note ajoutée.");
+      } else if (sub === "list") {
+        const notes = gameState.notes || [];
+        if (!notes.length) {
+          gamePrint("Aucune note pour l’instant. Utilise 'note add ...' pour en créer une.");
+          return;
+        }
+        gamePrint("NOTES :");
+        notes.forEach((n, i) => {
+          const date = new Date(n.ts).toLocaleString();
+          gamePrint(`${i + 1}. [${date}] ${n.text}`);
+        });
+      } else {
+        gamePrint("Sous-commande inconnue. Utilise : note add ...  ou  note list");
+      }
+    }
+
+    function gameSyncIaLog() {
+      const log = gameState.iaLog || [];
+      if (!log.length) {
+        gamePrint("Aucune commande IA enregistrée pour le moment.");
+        return;
+      }
+      gamePrint("Dernières commandes tapées dans le terminal IA :");
+      const last = log.slice(-5);
+      last.forEach((entry, idx) => {
+        const date = new Date(entry.ts).toLocaleTimeString();
+        gamePrint(`${idx + 1}. [${date}] ${entry.text}`);
+      });
+      gamePrint("Idée : utilise ces traces comme base de journaling ou de mission personnelle.");
+    }
+
+    function gameForkInfo() {
+      const txt = [
+        "FORK / HACK :",
+        "",
+        "1. Copie ce fichier terminal-ia.html dans un nouveau dossier ou dépôt.",
+        "2. Renomme-le, modifie les missions, ajoute des commandes, change le texte.",
+        "3. Partage ton fork dans un cercle de confiance (ou en public si tu veux).",
+        "",
+        "Tu peux par exemple :",
+        "- créer une 'Saison 2' avec d’autres S-xx",
+        "- ajouter des commandes propres à un lieu (ville, campus, orga)",
+        "- brancher les commandes sur d’autres pages HTML (cartes, journaux, galeries)",
+        "",
+        "Règle officieuse : chaque fork documente au moins 1 nouvelle absurdité ou 1 nouvelle manière de jouer avec le réel."
+      ].join("\n");
+      gamePrintBlock(txt);
+    }
+
+    function gameHandleCommand(raw) {
+      const cmdRaw = raw.trim();
+      if (!cmdRaw) return;
+
+      gamePrint(cmdRaw, "user");
+      recordGameCommand();
+
+      const lowFull = cmdRaw.toLowerCase();
+      if (["xyzzy", "sudo", "42", "s", "konami"].includes(lowFull)) {
+        gameState.achievements.easterEgg = true;
+        saveState();
+      }
+      if (lowFull === "xyzzy") {
+        gamePrint("Tu as trouvé un vieux mot de passe textuel. Ici, la grotte, c’est le réel.");
+        return;
+      }
+      if (lowFull === "sudo") {
+        gamePrint("sudo : privilèges refusés. Même dans ce jeu, tu restes humain.");
+        return;
+      }
+      if (lowFull === "42") {
+        gamePrint("42. Il te reste à formuler la bonne question.");
+        return;
+      }
+      if (lowFull === "s") {
+        gamePrint("S murmure : « je t’observe déjà, inutile de m’appeler par mon initiale. »");
+        return;
+      }
+      if (lowFull === "konami") {
+        gamePrint("« up up down down left right left right b a » – mais le vrai trigger se fait au clavier, pas ici.");
+        return;
+      }
+
+      const parts = cmdRaw.split(/\s+/);
+      const cmd = (parts[0] || "").toLowerCase();
+      const arg = parts[1] || "";
+      const argUpper = arg.toUpperCase();
+
+      if (cmd === "help") {
+        gameHelp();
+      } else if (cmd === "about") {
+        gameAbout();
+      } else if (cmd === "missions") {
+        gameMissionsList();
+      } else if (cmd === "mission" && argUpper) {
+        const mission = gameMissions[argUpper];
+        if (mission) {
+          recordMissionViewed(argUpper);
+          gamePrintBlock(mission);
+        } else {
+          gamePrint(`Mission inconnue : ${arg}. Utilise S-00 à S-05.`);
+        }
+      } else if (cmd === "journal") {
+        gameJournal();
+      } else if (cmd === "clear") {
+        gameClear();
+      } else if (cmd === "-url") {
+        handleUrlCommand(arg);
+      } else if (cmd === "exit" || cmd === "close" || cmd === "quit") {
+        hideGameTerminal();
+      } else if (cmd === "id") {
+        gameShowId();
+      } else if (cmd === "stats") {
+        gameStats();
+      } else if (cmd === "achievements") {
+        gameAchievements();
+      } else if (cmd === "ls") {
+        gameLs();
+      } else if (cmd === "scan") {
+        gameScan();
+      } else if (cmd === "note") {
+        gameNoteCommand(parts);
+      } else if (cmd === "sync") {
+        gameSyncIaLog();
+      } else if (cmd === "fork") {
+        gameForkInfo();
+      } else {
+        gamePrint("Commande inconnue. Tape 'help' pour la liste des commandes.");
+      }
+    }
+
+    function showGameTerminal() {
+      gameOverlay.classList.add("visible");
+      gameState.openCount += 1;
+      ensurePlayerId();
+      updatePlayerIdChip();
+      saveState();
+
+      if (!gameScreen.hasChildNodes()) {
+        gamePrint("Game terminal chargé – MOORPG IRL : Projet S");
+        gamePrint("Tape 'help' pour voir les commandes disponibles.");
+        gamePrint("");
+      }
+      setTimeout(() => gameInput.focus(), 50);
+    }
+
+    function hideGameTerminal() {
+      gameOverlay.classList.remove("visible");
+      inputIa && inputIa.focus();
+    }
+
+    openGameTerminalBtn.addEventListener("click", () => {
+      showGameTerminal();
+    });
+
+    closeGameTerminalBtn.addEventListener("click", () => {
+      hideGameTerminal();
+    });
+
+    gameOverlay.addEventListener("click", (e) => {
+      if (e.target === gameOverlay) {
+        hideGameTerminal();
+      }
+    });
+
+    gameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const value = gameInput.value;
+        if (!value.trim()) return;
+        gameHandleCommand(value);
+        gameInput.value = "";
+      }
+    });
+
+    /* ===== KONAMI CODE GLOBAL ===== */
+
+    const konamiSequence = [
+      "ArrowUp","ArrowUp","ArrowDown","ArrowDown",
+      "ArrowLeft","ArrowRight","ArrowLeft","ArrowRight",
+      "b","a"
+    ];
+    let konamiPos = 0;
+
+    function triggerKonami() {
+      gameState.achievements.konami = true;
+      saveState();
+      appendBlockIa(`
+        <div class="line">
+          <span class="line-label ai2">ia²</span>
+          <div class="line-content">
+            <span class="line-tag">easter egg détecté</span><br>
+            Konami code validé. Considère que tu viens de confirmer officiellement que tu sais que tout ça est un jeu.
+          </div>
+        </div>
+      `);
+      showGameTerminal();
+      gamePrint(">>> KONAMI CODE DÉTECTÉ <<<");
+      gamePrint("Mode « glitch » : tu peux te permettre une mission improvisée hors catalogue officiel.");
+      gamePrint("Exemple : S-KONAMI – repérer un endroit où tu te sens déjà dans un jeu vidéo, et y laisser une trace.");
+      gamePrint("");
+    }
+
+    document.addEventListener("keydown", (e) => {
+      const key = e.key;
+      const expected = konamiSequence[konamiPos];
+
+      if (key === expected || key.toLowerCase() === expected) {
+        konamiPos++;
+        if (konamiPos === konamiSequence.length) {
+          konamiPos = 0;
+          triggerKonami();
+        }
+      } else {
+        konamiPos = key === "ArrowUp" ? 1 : 0;
+      }
+    });
+
+    // Init au chargement
+    window.addEventListener("load", () => {
+      if (gameState.playerId) updatePlayerIdChip();
+      setTimeout(() => inputIa && inputIa.focus(), 200);
+    });
+  </script>
+</body>
+</html>
