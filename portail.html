@@ -1,0 +1,2509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Portail GOO Hardcore · Univers 12,50</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+:root {
+  --border: #020617;
+  --text: #e5e7eb;
+  --text-soft: #9ca3af;
+}
+
+/* RESET & BASE */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #020617;
+}
+
+/* BACKGROUND PSYCHÉ + GOO */
+
+.bg-psy {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(244,114,182,0.9) 0, transparent 35%),
+    radial-gradient(circle at 90% 15%, rgba(45,212,191,0.9) 0, transparent 40%),
+    radial-gradient(circle at 15% 85%, rgba(250,204,21,0.9) 0, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(96,165,250,0.9) 0, transparent 38%),
+    radial-gradient(circle at 50% 50%, rgba(30,64,175,1) 0, rgba(15,23,42,1) 60%);
+  filter: saturate(1.7) contrast(1.2);
+  animation: bgMove 18s ease-in-out infinite alternate;
+}
+
+.bg-psy::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background:
+    conic-gradient(from 0deg,
+      rgba(56,189,248,0.32),
+      rgba(250,204,21,0.35),
+      rgba(34,197,94,0.36),
+      rgba(244,114,182,0.4),
+      rgba(56,189,248,0.32));
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  animation: spinSlow 35s linear infinite;
+}
+
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(circle at top, rgba(15,23,42,0.35), rgba(15,23,42,0.96)),
+    radial-gradient(circle at bottom, rgba(15,23,42,0.85), rgba(0,0,0,0.9));
+}
+
+/* bruit animé léger par-dessus */
+
+.bg-noise {
+  position: fixed;
+  inset: -50%;
+  z-index: 1;
+  background-image: radial-gradient(circle, rgba(15,23,42,0.35) 1px, transparent 0);
+  background-size: 6px 6px;
+  opacity: 0.25;
+  mix-blend-mode: soft-light;
+  animation: noiseDrift 12s linear infinite alternate;
+}
+
+/* CANVAS PARTICULES COSMIQUES */
+
+.cosmic-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: auto; /* important pour sélectionner les galaxies */
+}
+
+/* PARTICULES / ÉTINCELLES (au-dessus du champ cosmique) */
+
+.spark-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.spark {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #f97316 0, #facc15 40%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.4);
+  transition: transform 0.12s ease-out, opacity 0.12s ease-out;
+  mix-blend-mode: screen;
+}
+
+/* WRAPPER CENTRAL (au-dessus de tout ça) */
+
+.wrapper {
+  position: relative;
+  z-index: 4;
+  width: min(520px, 100%);
+  padding: 20px 16px 32px;
+}
+
+/* PUPITRE COSMIQUE (boutons) */
+
+.cosmic-controls {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15,23,42,0.94);
+  border: 1px solid rgba(148,163,184,0.45);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.cosmic-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #e5e7eb;
+  background: radial-gradient(circle at 0 0, rgba(248,250,252,0.1), rgba(15,23,42,0.9));
+  cursor: pointer;
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+.cosmic-btn:hover {
+  opacity: 1;
+}
+
+.cosmic-btn.mode.active {
+  opacity: 1;
+  color: #020617;
+  background: linear-gradient(90deg,#22c55e,#a855f7,#0ea5e9);
+}
+
+.cosmic-btn.toggle.active {
+  opacity: 1;
+  color: #f97316;
+  border: 1px solid rgba(248,171,80,0.9);
+}
+
+/* petite variation visuelle pour les événements */
+.cosmic-btn.event {
+  font-size: 10px;
+  border: 1px dashed rgba(148,163,184,0.6);
+}
+
+/* Animations de fond */
+
+@keyframes bgMove {
+  0% { transform: scale(1.05) translate(0,0); }
+  50% { transform: scale(1.12) translate(-18px, 12px); }
+  100% { transform: scale(1.07) translate(14px, -10px); }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes noiseDrift {
+  0%   { transform: translate(0,0); }
+  50%  { transform: translate(30px,-20px); }
+  100% { transform: translate(-20px,20px); }
+}
+
+/* FILTRE GOO */
+
+svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* LOGO + BLOBS GOOEY */
+
+.goo-container {
+  position: relative;
+  filter: url(#goo);
+}
+
+.logo-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+}
+
+/* noyau lisible + halo */
+
+.logo-core {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 0, rgba(248,250,252,0.9) 0, rgba(226,232,240,0.9) 22%, rgba(15,23,42,0.98) 65%, rgba(15,23,42,1) 100%);
+  box-shadow:
+    0 0 0 2px rgba(15,23,42,1),
+    0 0 30px rgba(15,23,42,1),
+    0 0 110px rgba(0,0,0,1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: breathe 4.3s ease-in-out infinite;
+}
+
+.logo-core::before {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 10% 0, rgba(244,114,182,0.65), transparent 60%),
+    radial-gradient(circle at 80% 90%, rgba(34,197,94,0.65), transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(56,189,248,0.65), transparent 60%);
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  animation: haloPulse 7s ease-in-out infinite alternate;
+}
+
+@keyframes breathe {
+  0%   { transform: scale(0.98); }
+  50%  { transform: scale(1.04); }
+  100% { transform: scale(0.98); }
+}
+
+@keyframes haloPulse {
+  0%   { opacity: 0.5; filter: blur(8px); }
+  50%  { opacity: 0.95; filter: blur(16px); }
+  100% { opacity: 0.5; filter: blur(8px); }
+}
+
+/* BLOBS GLUANTS DRAGGABLE */
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(248,250,252,0.9), rgba(59,130,246,0.9), rgba(15,23,42,1));
+  opacity: 0.9;
+  mix-blend-mode: screen;
+  cursor: grab;
+  transition: box-shadow 0.12s ease-out, transform 0.12s ease-out;
+}
+.blob:active {
+  cursor: grabbing;
+  box-shadow: 0 0 18px rgba(248,250,252,0.7);
+}
+
+/* bulles de base */
+
+.blob.seed-1 {
+  width: 120px;
+  height: 120px;
+  top: -15%;
+  left: 10%;
+  background: radial-gradient(circle at 30% 30%, rgba(248,250,252,0.9), rgba(34,197,94,0.9), rgba(15,23,42,1));
+  animation: blobMove1 11s ease-in-out infinite alternate;
+}
+.blob.seed-2 {
+  width: 160px;
+  height: 160px;
+  top: 70%;
+  right: -10%;
+  background: radial-gradient(circle at 30% 30%, rgba(248,250,252,0.9), rgba(244,114,182,0.9), rgba(15,23,42,1));
+  animation: blobMove2 14s ease-in-out infinite alternate;
+}
+.blob.seed-3 {
+  width: 110px;
+  height: 110px;
+  bottom: -10%;
+  left: 60%;
+  background: radial-gradient(circle at 30% 30%, rgba(248,250,252,0.9), rgba(56,189,248,0.9), rgba(15,23,42,1));
+  animation: blobMove3 16s ease-in-out infinite alternate;
+}
+
+@keyframes blobMove1 {
+  0% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(18px,12px) scale(1.15); }
+  100% { transform: translate(-6px,18px) scale(0.98); }
+}
+@keyframes blobMove2 {
+  0% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(-12px,-18px) scale(1.08); }
+  100% { transform: translate(-20px,10px) scale(1.02); }
+}
+@keyframes blobMove3 {
+  0% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(-16px,-10px) scale(1.12); }
+  100% { transform: translate(10px,-16px) scale(1.0); }
+}
+
+/* bulles dynamiques */
+
+.blob.dynamic {
+  animation: blobFloat 10s ease-in-out infinite alternate;
+}
+
+@keyframes blobFloat {
+  0% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(6px,-10px) scale(1.07); }
+  100% { transform: translate(-4px,8px) scale(0.96); }
+}
+
+/* POP */
+
+@keyframes blobPop {
+  0%   { transform: scale(1); opacity: 1; filter: blur(0); }
+  60%  { transform: scale(1.35); opacity: 1; filter: blur(2px); }
+  100% { transform: scale(0.3); opacity: 0; filter: blur(7px); }
+}
+.blob.popping {
+  animation: blobPop 0.26s ease-out forwards;
+}
+
+/* anneau interne et texte logo */
+
+.logo-inner {
+  position: absolute;
+  inset: 16%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 0, rgba(248,250,252,0.95), rgba(15,23,42,0.99));
+  box-shadow:
+    0 0 12px rgba(15,23,42,0.95) inset,
+    0 0 18px rgba(15,23,42,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text-main {
+  text-align: center;
+  padding: 8px 12px 10px;
+  border-radius: 24px;
+  background: radial-gradient(circle at 50% 0, rgba(248,250,252,0.96), rgba(15,23,42,0.96));
+  box-shadow:
+    0 0 8px rgba(15,23,42,0.9),
+    0 0 22px rgba(15,23,42,1) inset;
+}
+
+.logo-sub {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(148,163,184,0.98);
+}
+
+.logo-title {
+  font-size: clamp(26px, 7.6vw, 34px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #020617;
+  margin: 4px 0;
+}
+
+.logo-tagline {
+  font-size: 11px;
+  color: rgba(148,163,184,0.96);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.logo-badge {
+  margin-top: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(15,23,42,1);
+  background: linear-gradient(90deg, rgba(15,23,42,0.98), rgba(15,23,42,0.9));
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #e5e7eb;
+}
+
+.logo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #ef4444;
+  box-shadow: 0 0 12px rgba(248,113,113,0.9);
+}
+
+/* HOTSPOTS INVISIBLES (PORTAIL) */
+
+.hotspot {
+  position: absolute;
+  z-index: 6;
+  cursor: pointer;
+}
+
+.hotspot-top {
+  width: 48%;
+  height: 25%;
+  left: 26%;
+  top: -3%;
+}
+.hotspot-right {
+  width: 28%;
+  height: 48%;
+  right: -4%;
+  top: 26%;
+}
+.hotspot-left {
+  width: 28%;
+  height: 48%;
+  left: -4%;
+  top: 26%;
+}
+
+.hotspot-center {
+  position: absolute;
+  inset: 24%;
+  z-index: 7;
+}
+
+/* HINTS */
+
+.hints {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-soft);
+  text-shadow: 0 1px 2px rgba(15,23,42,0.9);
+}
+
+.hints strong {
+  font-weight: 600;
+}
+
+.hint-extra {
+  display: none;
+  margin-top: 6px;
+  font-size: 10px;
+  color: #e5e7eb;
+}
+
+/* OVERLAY ACCÈS ACCORDÉ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(34,197,94,0.22), rgba(3,7,18,0.98));
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.overlay-inner {
+  max-width: 360px;
+  width: 90%;
+  border-radius: 18px;
+  border: 1px solid rgba(15,23,42,1);
+  background: radial-gradient(circle at 10% 0, rgba(22,163,74,0.18), rgba(15,23,42,0.98));
+  box-shadow:
+    0 22px 80px rgba(0,0,0,0.9),
+    0 0 0 1px rgba(148,163,184,0.4);
+  padding: 18px 16px 20px;
+  text-align: center;
+}
+
+.overlay-inner h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  color: #bbf7d0;
+}
+
+.overlay-inner p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.overlay-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(34,197,94,0.7);
+  color: #bbf7d0;
+  background: rgba(22,163,74,0.18);
+  font-size: 11px;
+}
+
+.btn {
+  margin-top: 12px;
+  border-radius: 999px;
+  border: none;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(90deg,#22c55e,#a855f7,#0ea5e9);
+  color: #020617;
+  box-shadow: 0 10px 30px rgba(15,23,42,0.9);
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+}
+
+/* ============================ */
+/*   CASINO “LE 642” INTÉGRÉ    */
+/* ============================ */
+
+.slot-section {
+  margin-top: 18px;
+  display: none; /* affiché après déverrouillage */
+}
+
+.slot-card {
+  width: 100%;
+  border-radius: 18px;
+  padding: 14px 13px 16px;
+  background:
+    radial-gradient(circle at 10% 0, rgba(30,64,175,0.85), rgba(15,23,42,0.98));
+  box-shadow:
+    0 18px 60px rgba(0,0,0,0.9),
+    0 0 0 1px rgba(148,163,184,0.45);
+  border: 1px solid rgba(30,64,175,0.9);
+  position: relative;
+  overflow: hidden;
+}
+
+/* contour néon */
+.slot-card::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background:
+    conic-gradient(from 0deg,
+      rgba(244,114,182,0.0),
+      rgba(244,114,182,0.65),
+      rgba(52,211,153,0.75),
+      rgba(56,189,248,0.75),
+      rgba(244,114,182,0.65),
+      rgba(244,114,182,0.0));
+  opacity: 0.75;
+  filter: blur(22px);
+  mix-blend-mode: screen;
+  z-index: -1;
+  animation: neonLoop 16s linear infinite;
+}
+
+@keyframes neonLoop {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.slot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.slot-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.slot-game-name {
+  font-size: 20px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fef9c3;
+  text-shadow:
+    0 0 6px rgba(250,204,21,0.9),
+    0 0 16px rgba(248,250,252,0.6);
+}
+
+.slot-subtitle {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(191,219,254,0.9);
+}
+
+.slot-pill {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(248,250,252,0.5);
+  color: #fef2f2;
+  background: linear-gradient(90deg, rgba(248,113,113,0.85), rgba(239,68,68,0.85));
+  box-shadow:
+    0 0 8px rgba(248,113,113,0.9),
+    0 0 24px rgba(239,68,68,0.7);
+}
+
+.slot-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-size: 11px;
+  color: var(--text-soft);
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(15,23,42,0.9);
+  border: 1px solid rgba(148,163,184,0.5);
+}
+
+.status-label {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 10px;
+}
+
+.status-value {
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+/* machine à sous */
+
+.slot-machine {
+  border-radius: 14px;
+  padding: 10px 8px 12px;
+  background:
+    radial-gradient(circle at 50% 0, rgba(248,250,252,0.12), rgba(15,23,42,0.98));
+  border: 1px solid rgba(15,23,42,0.9);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.9),
+    0 0 0 1px rgba(30,64,175,0.9);
+  position: relative;
+}
+
+.reels-wrapper {
+  position: relative;
+  border-radius: 12px;
+  padding: 6px;
+  background: radial-gradient(circle at 50% 0, #020617, #020617);
+  border: 1px solid rgba(148,163,184,0.6);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.reels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.reel {
+  position: relative;
+  height: 84px;
+  border-radius: 10px;
+  background: radial-gradient(circle at 50% 0, #020617, #020617);
+  overflow: hidden;
+  border: 1px solid rgba(30,64,175,0.9);
+  box-shadow:
+    0 0 22px rgba(15,23,42,0.9),
+    inset 0 0 10px rgba(15,23,42,0.95);
+}
+
+.reel-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.reel-number {
+  font-size: 42px;
+  font-weight: 700;
+  text-shadow:
+    0 0 6px rgba(248,250,252,0.9),
+    0 0 18px rgba(129,230,217,0.9);
+}
+
+.reel:nth-child(1) .reel-number { color: #38bdf8; }
+.reel:nth-child(2) .reel-number { color: #a855f7; }
+.reel:nth-child(3) .reel-number { color: #22c55e; }
+
+.reel.spinning .reel-number {
+  animation: spinNumber 0.5s linear infinite;
+}
+
+@keyframes spinNumber {
+  0%   { transform: translateY(0); opacity: 0.8; }
+  50%  { transform: translateY(-10px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 0.8; }
+}
+
+/* bas de la machine */
+
+.slot-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.bet-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-soft);
+}
+
+.bet-value {
+  font-weight: 600;
+  color: #e5e7eb;
+  min-width: 50px;
+}
+
+.spin-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 0;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  color: #020617;
+  background: radial-gradient(circle at 0 0, #f97316, #facc15);
+  box-shadow:
+    0 10px 25px rgba(248,113,113,0.9),
+    0 0 0 1px rgba(15,23,42,1);
+}
+
+.spin-btn:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 4px 12px rgba(248,113,113,0.8),
+    0 0 0 1px rgba(15,23,42,1);
+}
+
+.banner {
+  margin-top: 10px;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 11px;
+  text-align: center;
+  background: rgba(15,23,42,0.9);
+  border: 1px solid rgba(148,163,184,0.6);
+  color: var(--text-soft);
+}
+
+.banner span.strong {
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+/* toast */
+
+.toast {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 76px;
+  margin-inline: auto;
+  width: min(340px, 100%);
+  border-radius: 999px;
+  padding: 6px 11px;
+  font-size: 11px;
+  background: radial-gradient(circle at 0 0, rgba(34,197,94,0.9), rgba(15,23,42,0.98));
+  border: 1px solid rgba(22,163,74,0.85);
+  color: #bbf7d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow:
+    0 16px 40px rgba(0,0,0,0.9),
+    0 0 0 1px rgba(15,23,42,0.9);
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+  z-index: 10;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* overlay LOSE ULTIME */
+
+.overlay-lose {
+  position: fixed;
+  inset: 0;
+  z-index: 21;
+  background: radial-gradient(circle at top, rgba(248,113,113,0.4), rgba(15,23,42,0.98));
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-inner-lose {
+  max-width: 360px;
+  width: 90%;
+  border-radius: 20px;
+  padding: 16px 14px 18px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 10% 0, rgba(15,23,42,0.98), rgba(15,23,42,1));
+  box-shadow:
+    0 22px 80px rgba(0,0,0,1),
+    0 0 0 1px rgba(148,163,184,0.75);
+  border: 1px solid rgba(248,113,113,0.9);
+  overflow: hidden;
+  position: relative;
+}
+
+/* fond glitché */
+
+.overlay-inner-lose::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(248,113,113,0.15),
+      rgba(248,113,113,0.15) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  animation: glitchLines 1s steps(2,end) infinite;
+}
+
+@keyframes glitchLines {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+.lose-title {
+  font-size: 20px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fee2e2;
+  text-shadow:
+    0 0 4px rgba(248,250,252,0.9),
+    0 0 16px rgba(248,113,113,0.9);
+  margin-bottom: 6px;
+}
+
+.lose-sub {
+  font-size: 12px;
+  color: #fecaca;
+  margin-bottom: 8px;
+}
+
+.lose-num {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: #fef3c7;
+  text-shadow:
+    0 0 6px rgba(250,204,21,1),
+    0 0 30px rgba(248,113,113,1);
+  margin-bottom: 10px;
+}
+
+.lose-tip {
+  font-size: 11px;
+  color: var(--text-soft);
+}
+
+.btn-reset {
+  margin-top: 10px;
+  border-radius: 999px;
+  border: none;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(90deg,#22c55e,#a855f7,#0ea5e9);
+  color: #020617;
+  box-shadow: 0 10px 30px rgba(15,23,42,0.9);
+}
+
+/* MOBILE OPTI */
+
+@media (max-width: 480px) {
+  .slot-game-name {
+    font-size: 18px;
+  }
+  .reel {
+    height: 72px;
+  }
+  .reel-number {
+    font-size: 34px;
+  }
+  .spin-btn {
+    font-size: 13px;
+    padding-inline: 8px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- filtre goo -->
+<svg xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="goo">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
+      <feColorMatrix in="blur" mode="matrix"
+        values="
+          1 0 0 0 0
+          0 1 0 0 0
+          0 0 1 0 0
+          0 0 0 20 -10"
+        result="goo" />
+      <feBlend in="SourceGraphic" in2="goo" />
+    </filter>
+  </defs>
+</svg>
+
+<div class="bg-psy"></div>
+<div class="bg-overlay"></div>
+<div class="bg-noise"></div>
+
+<canvas id="cosmicCanvas" class="cosmic-canvas"></canvas>
+
+<div class="spark-layer" id="sparkLayer"></div>
+
+<div class="wrapper">
+  <div class="goo-container">
+    <div class="logo-wrap" id="logoWrap">
+
+      <div class="blob seed-1"></div>
+      <div class="blob seed-2"></div>
+      <div class="blob seed-3"></div>
+
+      <div class="logo-core" id="logoCore">
+        <div class="hotspot hotspot-top" data-step="top"></div>
+        <div class="hotspot hotspot-right" data-step="right"></div>
+        <div class="hotspot hotspot-left" data-step="left"></div>
+        <div class="hotspot-center" id="hotspotCenter"></div>
+
+        <div class="logo-inner">
+          <div class="logo-text-main">
+            <div class="logo-sub">UNIVERS</div>
+            <div class="logo-title">12·50</div>
+            <div class="logo-tagline">PORTAIL GOO HARDCORE</div>
+            <div class="logo-badge">
+              <span class="logo-dot"></span>
+              <span>Accès verrouillé</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="hints">
+    <div id="hint-main">
+      Le reste du monde dégouline.  
+      <strong>Seul le cercle garde une logique.</strong>
+    </div>
+    <div class="hint-extra" id="hint-extra">
+      <em>Portail :</em> séquence (haut → droite → gauche),  
+      ou <strong>appui long au centre</strong>.<br>
+      <em>Bulles :</em> drag & drop, clic = éclatement, une grosse bulle se <strong>divise</strong>,  
+      double-clic sur le cercle = <strong>nouvelle bulle</strong>.<br>
+      <em>Ciel :</em> choisis un mode, déclenche des événements, inverse le sens.  
+      Les <strong>galaxies</strong> apparaissent aléatoirement (ou via le bouton) : clique dessus pour les cibler.
+    </div>
+  </div>
+
+  <!-- SECTION CASINO : LE 642 -->
+  <div class="slot-section" id="slotSection">
+    <div class="slot-card">
+      <div class="slot-header">
+        <div class="slot-title-block">
+          <div class="slot-game-name">LE 642</div>
+          <div class="slot-subtitle">NE TOMBE SURTOUT PAS DESSUS</div>
+        </div>
+        <div class="slot-pill">LA LOOZE ULTIME</div>
+      </div>
+
+      <div class="slot-status">
+        <div class="status-chip">
+          <span class="status-label">Solde</span>
+          <span class="status-value" id="balance">1250</span>
+          <span class="status-label">jetons</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-label">Dernier spin</span>
+          <span class="status-value" id="lastResult">—</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-label">Danger</span>
+          <span class="status-value">6 · 4 · 2</span>
+        </div>
+      </div>
+
+      <div class="slot-machine">
+        <div class="reels-wrapper">
+          <div class="reels">
+            <div class="reel" data-index="0">
+              <div class="reel-inner">
+                <div class="reel-number" id="reel0">0</div>
+              </div>
+            </div>
+            <div class="reel" data-index="1">
+              <div class="reel-inner">
+                <div class="reel-number" id="reel1">0</div>
+              </div>
+            </div>
+            <div class="reel" data-index="2">
+              <div class="reel-inner">
+                <div class="reel-number" id="reel2">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot-controls">
+          <div class="bet-group">
+            <span class="status-label">Mise</span>
+            <span class="bet-value" id="betValue">10</span>
+            <span class="status-label">jetons</span>
+          </div>
+          <button class="spin-btn" id="spinBtn">
+            <span class="spin-label">SPIN</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="banner" id="banner">
+        <span class="strong">Règle d’or :</span> tant que tu n’affiches pas <span class="strong">642</span>, l’univers te tolère.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pupitre cosmique -->
+<div class="cosmic-controls">
+  <!-- modes -->
+  <button class="cosmic-btn mode active" data-mode="normal">Normal</button>
+  <button class="cosmic-btn mode" data-mode="nebula">Nébuleuse</button>
+  <button class="cosmic-btn mode" data-mode="meteor">Météores</button>
+  <button class="cosmic-btn mode" data-mode="pulsar">Pulsar</button>
+  <button class="cosmic-btn mode" data-mode="blackhole">Trou noir</button>
+  <!-- événements -->
+  <button class="cosmic-btn event" data-event="supernova">Supernova</button>
+  <button class="cosmic-btn event" data-event="bigbang">Big Bang</button>
+  <button class="cosmic-btn event" data-event="bigcrunch">Big Crunch</button>
+  <!-- galaxies -->
+  <button class="cosmic-btn event" id="galaxyBtn">Galaxie</button>
+  <!-- toggle -->
+  <button class="cosmic-btn toggle" data-toggle="invert">Inversion</button>
+</div>
+
+<!-- Overlay accès accordé -->
+<div class="overlay" id="overlay">
+  <div class="overlay-inner">
+    <div class="overlay-badge" id="overlayBadge">
+      ✔ Accès accordé · Portail gluant fissuré
+    </div>
+    <h2>Bienvenue dans l’univers 12,50</h2>
+    <p>
+      Tu as traversé la couche de glu psychédélique.  
+      Tu peux maintenant lancer <strong>Le 642</strong>.
+    </p>
+    <button class="btn" id="btnEnter" type="button">
+      Accéder à la machine à sous
+    </button>
+  </div>
+</div>
+
+<!-- Overlay LOOZE ULTIME -->
+<div class="overlay-lose" id="overlayLose">
+  <div class="overlay-inner-lose">
+    <div class="lose-title">LA LOOZE ULTIME</div>
+    <div class="lose-sub">Tu as tiré le seul combo vraiment interdit.</div>
+    <div class="lose-num">6&nbsp;4&nbsp;2</div>
+    <div class="lose-tip">
+      Le cosmos s’effondre autour de toi.<br/>
+      Big Crunch, solde atomisé, on recommence ?
+    </div>
+    <button class="btn-reset" id="btnReset">Nouvelle partie (1250 jetons)</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+/* ---------------- PORTAIL ---------------- */
+
+const sequenceTarget = ["top","right","left"];
+let currentSequence = [];
+let unlocked = false;
+
+const hotspots = document.querySelectorAll(".hotspot");
+const hotspotCenter = document.getElementById("hotspotCenter");
+const overlay = document.getElementById("overlay");
+const badge = document.getElementById("overlayBadge");
+const btnEnter = document.getElementById("btnEnter");
+const hintExtra = document.getElementById("hint-extra");
+const slotSection = document.getElementById("slotSection");
+
+hotspots.forEach(h => {
+  h.addEventListener("click", () => {
+    if (unlocked) return;
+    const step = h.getAttribute("data-step");
+    if (!step) return;
+    currentSequence.push(step);
+    if (currentSequence.length > sequenceTarget.length) {
+      currentSequence.shift();
+    }
+    if (sequenceTarget.every((v,i) => currentSequence[i] === v)) {
+      openPortal("sequence");
+    }
+  });
+});
+
+let pressTimer = null;
+
+function startPress() {
+  if (unlocked) return;
+  cancelPress();
+  pressTimer = setTimeout(() => {
+    openPortal("longpress");
+  }, 1200);
+}
+function cancelPress() {
+  if (pressTimer) {
+    clearTimeout(pressTimer);
+    pressTimer = null;
+  }
+}
+hotspotCenter.addEventListener("pointerdown", startPress);
+hotspotCenter.addEventListener("pointerup", cancelPress);
+hotspotCenter.addEventListener("pointerleave", cancelPress);
+
+function openPortal(mode) {
+  unlocked = true;
+  overlay.style.display = "flex";
+  if (badge) {
+    badge.textContent = mode === "sequence"
+      ? "✔ Accès accordé · Séquence gluante correcte"
+      : "✔ Accès accordé · Appui long dans la glu détecté";
+  }
+}
+btnEnter.addEventListener("click", () => {
+  overlay.style.display = "none";
+  slotSection.style.display = "block";
+});
+setTimeout(() => {
+  if (!unlocked) {
+    hintExtra.style.display = "block";
+  }
+}, 12000);
+
+/* ---------------- BULLES GOO ---------------- */
+
+const logoWrap = document.getElementById("logoWrap");
+const logoCore = document.getElementById("logoCore");
+
+const MIN_BLOB_SIZE = 55;
+const CHILD_RATIO_MIN = 0.42;
+const CHILD_RATIO_MAX = 0.6;
+
+function makeBlobInteractive(blob) {
+  let dragging = false;
+  let moved = false;
+  let pointerId = null;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let startLeft = 0;
+  let startTop = 0;
+
+  const onPointerDown = (e) => {
+    e.preventDefault();
+    dragging = true;
+    moved = false;
+    pointerId = e.pointerId;
+    blob.setPointerCapture(pointerId);
+    blob.classList.remove("seed-1","seed-2","seed-3");
+
+    const rect = blob.getBoundingClientRect();
+    const wrapRect = logoWrap.getBoundingClientRect();
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    startLeft = rect.left - wrapRect.left;
+    startTop = rect.top - wrapRect.top;
+  };
+
+  const onPointerMove = (e) => {
+    if (!dragging || e.pointerId !== pointerId) return;
+    e.preventDefault();
+    const dx = e.clientX - dragStartX;
+    const dy = e.clientY - dragStartY;
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) moved = true;
+
+    const wrapRect = logoWrap.getBoundingClientRect();
+    const bw = blob.offsetWidth;
+    const bh = blob.offsetHeight;
+
+    let newLeft = startLeft + dx;
+    let newTop = startTop + dy;
+
+    newLeft = Math.max(-bw * 0.5, Math.min(newLeft, wrapRect.width - bw * 0.5));
+    newTop = Math.max(-bh * 0.5, Math.min(newTop, wrapRect.height - bh * 0.5));
+
+    blob.style.left = newLeft + "px";
+    blob.style.top = newTop + "px";
+    blob.style.right = "auto";
+    blob.style.bottom = "auto";
+  };
+
+  const onPointerUp = (e) => {
+    if (e.pointerId !== pointerId) return;
+    dragging = false;
+    try { blob.releasePointerCapture(pointerId); } catch {}
+    pointerId = null;
+  };
+
+  blob.addEventListener("pointerdown", onPointerDown);
+  blob.addEventListener("pointermove", onPointerMove);
+  blob.addEventListener("pointerup", onPointerUp);
+  blob.addEventListener("pointercancel", onPointerUp);
+
+  blob.addEventListener("click", (e) => {
+    if (moved) return;
+    e.stopPropagation();
+    splitBlob(blob);
+  });
+}
+
+function splitBlob(blob) {
+  const size = blob.offsetWidth;
+  const rect = blob.getBoundingClientRect();
+  const wrapRect = logoWrap.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2 - wrapRect.left;
+  const centerY = rect.top + rect.height / 2 - wrapRect.top;
+
+  blob.classList.add("popping");
+
+  setTimeout(() => {
+    blob.remove();
+    if (size < MIN_BLOB_SIZE) return;
+
+    const childCount = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < childCount; i++) {
+      const ratio = CHILD_RATIO_MIN + Math.random() * (CHILD_RATIO_MAX - CHILD_RATIO_MIN);
+      const newSize = size * ratio;
+
+      const child = document.createElement("div");
+      child.className = "blob dynamic";
+      child.style.width = newSize + "px";
+      child.style.height = newSize + "px";
+
+      const palette = Math.floor(Math.random() * 3);
+      if (palette === 0) {
+        child.style.background =
+          "radial-gradient(circle at 30% 30%, rgba(248,250,252,0.9), rgba(34,197,94,0.9), rgba(15,23,42,1))";
+      } else if (palette === 1) {
+        child.style.background =
+          "radial-gradient(circle at 30% 30%, rgba(248,250,252,0.9), rgba(244,114,182,0.9), rgba(15,23,42,1))";
+      } else {
+        child.style.background =
+          "radial-gradient(circle at 30% 30%, rgba(248,250,252,0.9), rgba(56,189,248,0.9), rgba(15,23,42,1))";
+      }
+
+      const angle = (Math.PI * 2 * i / childCount) + (Math.random() * 0.8 - 0.4);
+      const dist = size * 0.25 + Math.random() * size * 0.15;
+
+      const childX = centerX + Math.cos(angle) * dist - newSize / 2;
+      const childY = centerY + Math.sin(angle) * dist - newSize / 2;
+
+      child.style.left = childX + "px";
+      child.style.top = childY + "px";
+
+      logoWrap.appendChild(child);
+      makeBlobInteractive(child);
+    }
+  }, 260);
+}
+
+document.querySelectorAll(".blob").forEach(makeBlobInteractive);
+
+logoCore.addEventListener("dblclick", (e) => {
+  const rect = logoWrap.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const blob = document.createElement("div");
+  blob.className = "blob dynamic";
+
+  const size = 70 + Math.random() * 80;
+  blob.style.width = size + "px";
+  blob.style.height = size + "px";
+
+  const palette = Math.floor(Math.random() * 3);
+  if (palette === 0) {
+    blob.style.background =
+      "radial-gradient(circle at 30% 30%, rgba(248,250,252,0.9), rgba(34,197,94,0.9), rgba(15,23,42,1))";
+  } else if (palette === 1) {
+    blob.style.background =
+      "radial-gradient(circle at 30% 30%, rgba(248,250,252,0.9), rgba(244,114,182,0.9), rgba(15,23,42,1))";
+  } else {
+    blob.style.background =
+      "radial-gradient(circle at 30% 30%, rgba(248,250,252,0.9), rgba(56,189,248,0.9), rgba(15,23,42,1))";
+  }
+
+  blob.style.left = (x - size / 2) + "px";
+  blob.style.top = (y - size / 2) + "px";
+
+  logoWrap.appendChild(blob);
+  makeBlobInteractive(blob);
+});
+
+/* -------------- PARTICULES + MODES -------------- */
+
+const cosmicCanvas = document.getElementById("cosmicCanvas");
+const ctx = cosmicCanvas.getContext("2d");
+let cw, ch, dpr;
+let particles = [];
+let mouseX = null;
+let mouseY = null;
+
+let cosmicMode = "normal";    // normal | nebula | meteor | pulsar | blackhole
+let invertFlow = false;      // inversion du sens
+let pulsarPhase = 0;
+let meteors = [];
+
+// événements globaux/galaxies
+let supernovaActive = false;
+let supernovaTimer = 0;
+const SUPER_MAX = 60;
+
+let bigBangFlash = 0;
+
+let bigCrunchActive = false;
+let bigCrunchTimer = 0;
+const CRUNCH_MAX = 200;
+
+let supernovaGalaxy = null;
+let bigBangGalaxy = null;
+let bigCrunchGalaxy = null;
+
+// galaxies
+let galaxies = [];
+const MAX_GALAXIES = 6;
+
+/* RESIZE */
+
+function resizeCanvas() {
+  dpr = window.devicePixelRatio || 1;
+  cw = window.innerWidth;
+  ch = window.innerHeight;
+  cosmicCanvas.width = cw * dpr;
+  cosmicCanvas.height = ch * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+/* PARTICULES DE FOND */
+
+function initParticles() {
+  particles = [];
+  const count = isTouch ? 80 : 260;
+  const centerX = cw / 2;
+  const centerY = ch / 2;
+
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const radius = Math.random() * Math.min(cw, ch) * 0.55;
+    const x = centerX + Math.cos(angle) * radius;
+    const y = centerY + Math.sin(angle) * radius;
+
+    const speed = 0.2 + Math.random() * 0.6;
+    const vx = -Math.sin(angle) * speed;
+    const vy = Math.cos(angle) * speed;
+
+    const size = 1 + Math.random() * 2.1;
+    const hueBase = 180 + Math.random() * 120;
+    const alpha = 0.4 + Math.random() * 0.4;
+
+    particles.push({
+      x, y,
+      vx, vy,
+      size,
+      hueBase,
+      alpha,
+      noiseOffset: Math.random() * 1000
+    });
+  }
+}
+initParticles();
+
+/* METEORS */
+
+function spawnMeteorShower() {
+  meteors = [];
+  const count = isTouch ? 8 : 20;
+  for (let i = 0; i < count; i++) {
+    const y = Math.random() * ch;
+    const x = Math.random() * cw * -0.3 - 50;
+    const speed = 8 + Math.random() * 8;
+    meteors.push({
+      x, y,
+      vx: speed,
+      vy: 1 + Math.random() * 1.5,
+      life: 0,
+      maxLife: 60 + Math.random() * 40
+    });
+  }
+}
+
+/* SUPERNOvA / BIG BANG / BIG CRUNCH */
+
+function currentSelectedGalaxy() {
+  return galaxies.find(g => g.selected) || null;
+}
+
+function triggerSupernova() {
+  supernovaActive = true;
+  supernovaTimer = 0;
+  supernovaGalaxy = currentSelectedGalaxy();
+}
+
+function triggerBigBang() {
+  bigBangGalaxy = currentSelectedGalaxy();
+  if (bigBangGalaxy) {
+    // explosion locale de la galaxie
+    bigBangGalaxy.particles.forEach(gp => {
+      gp.dist = 10 + Math.random() * bigBangGalaxy.radius;
+      gp.size = 1 + Math.random() * 4.5;
+      gp.alpha = 0.4 + Math.random() * 0.6;
+    });
+  } else {
+    // explosion globale des particules de fond
+    const centerX = cw / 2;
+    const centerY = ch / 2;
+    particles.forEach(p => {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2.8 + Math.random() * 2.5;
+      p.x = centerX;
+      p.y = centerY;
+      p.vx = Math.cos(angle) * speed;
+      p.vy = Math.sin(angle) * speed;
+      p.size = 1.2 + Math.random() * 2.8;
+      p.alpha = 0.6 + Math.random() * 0.4;
+    });
+  }
+  bigBangFlash = 1;
+}
+
+function triggerBigCrunch() {
+  bigCrunchGalaxy = currentSelectedGalaxy();
+  bigCrunchActive = true;
+  bigCrunchTimer = 0;
+}
+
+/* GALAXIES */
+
+function createGalaxy(strength) {
+  const margin = 80;
+  const cx = margin + Math.random() * Math.max(10, cw - margin * 2);
+  const cy = margin + Math.random() * Math.max(10, ch - margin * 2);
+
+  const baseR = 40;
+  const maxExtraR = Math.min(cw, ch) * 0.25;
+  const radius = baseR + strength * maxExtraR;
+
+  const baseCount = 80;
+  const maxExtraCount = 220;
+  const count = Math.floor(baseCount + strength * maxExtraCount);
+
+  const rotBase = 0.001;
+  const rotMaxExtra = 0.003;
+  let rotSpeed = rotBase + strength * rotMaxExtra;
+  if (invertFlow) rotSpeed *= -1;
+
+  const hueBase = 160 + Math.random() * 160;
+  const maxLife = 2000 + strength * 2000;
+
+  // vitesse de déplacement de la galaxie dans le cosmos
+  const driftSpeed = 0.05 + Math.random() * 0.25;
+  const driftAngle = Math.random() * Math.PI * 2;
+  const vx = Math.cos(driftAngle) * driftSpeed;
+  const vy = Math.sin(driftAngle) * driftSpeed;
+
+  const gParticles = [];
+  for (let i = 0; i < count; i++) {
+    const dist = Math.pow(Math.random(), 0.7) * radius;
+    const angle = Math.random() * Math.PI * 2;
+    const size = 0.8 + Math.random() * 3.5;
+    const alpha = 0.25 + Math.random() * 0.55;
+    const hueOffset = (Math.random() * 60) - 30;
+    gParticles.push({ angle, dist, size, alpha, hueOffset });
+  }
+
+  const galaxy = {
+    cx, cy,
+    vx, vy,
+    radius,
+    rot: 0,
+    rotSpeed,
+    hueBase,
+    particles: gParticles,
+    life: 0,
+    maxLife,
+    selected: false,
+    dead: false
+  };
+
+  galaxies.push(galaxy);
+  if (galaxies.length > MAX_GALAXIES) {
+    galaxies.shift();
+  }
+}
+
+/* CONTROLES COSMIQUES */
+
+const modeButtons = document.querySelectorAll(".cosmic-btn.mode");
+const eventButtons = document.querySelectorAll(".cosmic-btn.event");
+const toggleButton = document.querySelector(".cosmic-btn.toggle");
+const galaxyBtn = document.getElementById("galaxyBtn");
+
+modeButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const mode = btn.getAttribute("data-mode");
+    cosmicMode = mode;
+    modeButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    if (mode === "meteor") {
+      spawnMeteorShower();
+    }
+  });
+});
+
+eventButtons.forEach(btn => {
+  const ev = btn.getAttribute("data-event");
+  if (!ev) return; // le bouton Galaxie est géré à part
+
+  btn.addEventListener("click", () => {
+    if (ev === "supernova") triggerSupernova();
+    if (ev === "bigbang")   triggerBigBang();
+    if (ev === "bigcrunch") triggerBigCrunch();
+  });
+});
+
+toggleButton.addEventListener("click", () => {
+  invertFlow = !invertFlow;
+  toggleButton.classList.toggle("active", invertFlow);
+});
+
+/* Galaxie : bouton = création immédiate (aléatoire) */
+
+galaxyBtn.addEventListener("click", () => {
+  const strength = Math.random(); // taille/puissance aléatoire
+  createGalaxy(strength);
+});
+
+/* Sélection d’une galaxie par clic sur le canvas */
+
+cosmicCanvas.addEventListener("pointerdown", (e) => {
+  const rect = cosmicCanvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  let best = null;
+  let bestDist = Infinity;
+
+  for (const g of galaxies) {
+    const dx = x - g.cx;
+    const dy = y - g.cy;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    if (d < g.radius * 0.9 && d < bestDist) {
+      bestDist = d;
+      best = g;
+    }
+  }
+
+  if (best) {
+    galaxies.forEach(g => g.selected = false);
+    best.selected = true;
+  } else {
+    galaxies.forEach(g => g.selected = false);
+  }
+});
+
+/* UPDATE PARTICULES FOND + ÉVÈNEMENTS */
+
+function updateParticles() {
+  const centerX = cw / 2;
+  const centerY = ch / 2;
+
+  ctx.globalCompositeOperation = "source-over";
+  ctx.fillStyle = "rgba(2, 6, 23, 0.22)";
+  ctx.fillRect(0, 0, cw, ch);
+
+  ctx.globalCompositeOperation = "lighter";
+
+  const time = performance.now() * 0.00025;
+  pulsarPhase += (cosmicMode === "pulsar" ? 0.12 : 0.03);
+
+  for (const p of particles) {
+    let dx = p.x - centerX;
+    let dy = p.y - centerY;
+    const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+
+    let swirlForce = 0.0006;
+    let gravForce = -0.00015;
+    let maxSpeed = 2.2;
+
+    if (cosmicMode === "nebula") {
+      swirlForce = 0.0004;
+      gravForce = -0.00005;
+      maxSpeed = 1.4;
+    } else if (cosmicMode === "blackhole" && !bigCrunchGalaxy || (bigCrunchActive && !bigCrunchGalaxy)) {
+      swirlForce = 0.0011;
+      gravForce = -0.00045;
+      maxSpeed = 3.5;
+    } else if (cosmicMode === "pulsar") {
+      swirlForce = 0.0007;
+      gravForce = -0.00020;
+      maxSpeed = 2.4;
+    } else if (cosmicMode === "meteor") {
+      swirlForce = 0.0004;
+      gravForce = -0.00008;
+      maxSpeed = 2.6;
+    }
+
+    if (invertFlow) {
+      swirlForce *= -1;
+    }
+
+    const axT = -dy * swirlForce;
+    const ayT = dx * swirlForce;
+
+    let ax = axT + dx * gravForce;
+    let ay = ayT + dy * gravForce;
+
+    // répulsion souris
+    if (mouseX !== null && mouseY !== null) {
+      const mdx = p.x - mouseX;
+      const mdy = p.y - mouseY;
+      const mdist2 = mdx*mdx + mdy*mdy;
+      const radiusRep = (cosmicMode === "blackhole" || (bigCrunchActive && !bigCrunchGalaxy)) ? 100 : 140;
+      if (mdist2 < radiusRep*radiusRep) {
+        const mdist = Math.sqrt(mdist2) || 1;
+        const force = 0.05 * (1 - mdist / radiusRep);
+        ax += (mdx / mdist) * force;
+        ay += (mdy / mdist) * force;
+      }
+    }
+
+    // bruit
+    p.noiseOffset += 0.01;
+    const noiseScaleLocal = (cosmicMode === "nebula" ? 0.01 : 0.004);
+    ax += Math.cos(p.noiseOffset + time * 2) * noiseScaleLocal;
+    ay += Math.sin(p.noiseOffset * 0.9 - time * 1.5) * noiseScaleLocal;
+
+    // pulsar global
+    if (cosmicMode === "pulsar") {
+      const pulsarKick = Math.sin(pulsarPhase) * 0.0025;
+      ax += (dx / dist) * pulsarKick;
+      ay += (dy / dist) * pulsarKick;
+    }
+
+    // supernova globale (si aucune galaxie ciblée)
+    if (supernovaActive && !supernovaGalaxy) {
+      const phase = supernovaTimer / SUPER_MAX;
+      const shock = 0.006 * (1 - phase);
+      ax += (dx / dist) * shock;
+      ay += (dy / dist) * shock;
+    }
+
+    // big crunch global (si aucune galaxie ciblée)
+    if (bigCrunchActive && !bigCrunchGalaxy) {
+      const phase = bigCrunchTimer / CRUNCH_MAX;
+      const extraG = -0.0006 * (0.2 + phase);
+      ax += dx * extraG;
+      ay += dy * extraG;
+    }
+
+    p.vx += ax;
+    p.vy += ay;
+
+    p.vx *= 0.985;
+    p.vy *= 0.985;
+
+    const v2 = p.vx*p.vx + p.vy*p.vy;
+    if (v2 > maxSpeed*maxSpeed) {
+      const v = Math.sqrt(v2);
+      p.vx = p.vx / v * maxSpeed;
+      p.vy = p.vy / v * maxSpeed;
+    }
+
+    p.x += p.vx;
+    p.y += p.vy;
+
+    // wrap
+    if (p.x < -50) p.x = cw + 50;
+    if (p.x > cw + 50) p.x = -50;
+    if (p.y < -50) p.y = ch + 50;
+    if (p.y > ch + 50) p.y = -50;
+
+    let hue = p.hueBase + Math.sin(p.noiseOffset + time * 2) * 25;
+    let alpha = p.alpha;
+
+    if (cosmicMode === "nebula") {
+      hue = 260 + Math.sin(p.noiseOffset) * 40;
+      alpha = 0.45 + Math.random() * 0.35;
+    } else if (cosmicMode === "pulsar") {
+      const pulse = 0.4 + 0.4 * (Math.sin(pulsarPhase) * 0.5 + 0.5);
+      alpha *= pulse;
+    } else if (cosmicMode === "blackhole" || (bigCrunchActive && !bigCrunchGalaxy)) {
+      hue = 215 + Math.sin(p.noiseOffset * 0.7) * 10;
+      alpha *= 0.9;
+    }
+
+    if (invertFlow) {
+      hue = 360 - hue;
+    }
+
+    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4);
+    grad.addColorStop(0, `hsla(${hue}, 90%, 80%, ${alpha})`);
+    grad.addColorStop(1, `hsla(${hue}, 90%, 50%, 0)`);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  if (cosmicMode === "meteor") {
+    updateMeteors();
+  }
+  if (cosmicMode === "pulsar") {
+    drawPulsarFlash(centerX, centerY);
+  }
+
+  // galaxies
+  drawGalaxies();
+
+  // supernova : flash global
+  if (supernovaActive) {
+    supernovaTimer++;
+    const phase = supernovaTimer / SUPER_MAX;
+    const alpha = 0.4 * Math.exp(-3 * phase);
+    if (alpha > 0) {
+      ctx.globalCompositeOperation = "screen";
+      ctx.fillStyle = `rgba(248,250,252,${alpha})`;
+      ctx.fillRect(0, 0, cw, ch);
+    }
+    if (supernovaTimer > SUPER_MAX) {
+      supernovaActive = false;
+      supernovaGalaxy = null;
+    }
+  }
+
+  // big bang flash
+  if (bigBangFlash > 0) {
+    const alpha = 0.6 * bigBangFlash;
+    ctx.globalCompositeOperation = "screen";
+    ctx.fillStyle = `rgba(248,250,252,${alpha})`;
+    ctx.fillRect(0, 0, cw, ch);
+    bigBangFlash *= 0.85;
+    if (bigBangFlash < 0.02) bigBangFlash = 0;
+  }
+
+  // big crunch progression pour le fond (si aucune galaxie ciblée)
+  if (bigCrunchActive && !bigCrunchGalaxy) {
+    bigCrunchTimer++;
+    const phase = bigCrunchTimer / CRUNCH_MAX;
+    const r = Math.min(cw, ch) * (0.25 + 0.3 * (1 - phase));
+    const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, r);
+    grad.addColorStop(0, "rgba(3,7,18,0.85)");
+    grad.addColorStop(1, "rgba(3,7,18,0)");
+    ctx.globalCompositeOperation = "multiply";
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, cw, ch);
+
+    if (bigCrunchTimer > CRUNCH_MAX) {
+      bigCrunchActive = false;
+      bigCrunchTimer = 0;
+      initParticles();
+      bigBangFlash = 0.8;
+    }
+  }
+
+  // spawn aléatoire de galaxies
+  if (Math.random() < 0.003 && galaxies.length < MAX_GALAXIES) {
+    createGalaxy(Math.random());
+  }
+}
+
+/* DESSIN DES GALAXIES */
+
+function drawGalaxies() {
+  if (!galaxies.length) return;
+
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+
+  const centerX = cw / 2;
+  const centerY = ch / 2;
+
+  const alive = [];
+
+  for (const g of galaxies) {
+    if (g.dead) continue;
+
+    g.life++;
+    g.rot += g.rotSpeed;
+
+    // mouvement de la galaxie
+    g.cx += g.vx;
+    g.cy += g.vy;
+
+    // rebond doux sur les bords
+    const margin = g.radius * 0.8;
+    if (g.cx < margin || g.cx > cw - margin) g.vx *= -1;
+    if (g.cy < margin || g.cy > ch - margin) g.vy *= -1;
+
+    let lifeFactor = 1 - (g.life / g.maxLife);
+    lifeFactor = Math.max(0, lifeFactor);
+    let brightnessFactor = Math.max(0.1, lifeFactor);
+
+    // supernova ciblée : boost de luminosité
+    if (supernovaActive && supernovaGalaxy === g) {
+      brightnessFactor = Math.max(brightnessFactor, 0.8);
+    }
+
+    // big crunch ciblé : effondrement progressif
+    if (bigCrunchActive && bigCrunchGalaxy === g) {
+      const phase = bigCrunchTimer / CRUNCH_MAX;
+      const shrink = 1 - phase;
+      brightnessFactor *= Math.pow(1 - phase, 2);
+
+      if (phase >= 1) {
+        g.dead = true;
+        bigCrunchActive = false;
+        bigCrunchTimer = 0;
+        bigCrunchGalaxy = null;
+        continue;
+      }
+
+      g.currentRadiusFactor = shrink;
+    } else {
+      g.currentRadiusFactor = 1;
+    }
+
+    // halo de sélection
+    if (g.selected) {
+      ctx.beginPath();
+      ctx.arc(g.cx, g.cy, g.radius * 1.05, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(248,250,252,0.6)";
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    }
+
+    for (const gp of g.particles) {
+      const ang = gp.angle + g.rot;
+      const effectiveDist = gp.dist * (g.currentRadiusFactor || 1);
+      const x = g.cx + Math.cos(ang) * effectiveDist;
+      const y = g.cy + Math.sin(ang) * effectiveDist;
+
+      let hue = g.hueBase + gp.hueOffset;
+      if (invertFlow) hue = 360 - hue;
+
+      const alpha = gp.alpha * brightnessFactor;
+
+      const grad = ctx.createRadialGradient(x, y, 0, x, y, gp.size * 3.5);
+      grad.addColorStop(0, `hsla(${hue}, 90%, 78%, ${alpha})`);
+      grad.addColorStop(1, `hsla(${hue}, 90%, 45%, 0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(x, y, gp.size * 3.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    alive.push(g);
+  }
+
+  galaxies = alive;
+  ctx.restore();
+}
+
+/* METEORS DRAW */
+
+function updateMeteors() {
+  if (meteors.length === 0) return;
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  for (const m of meteors) {
+    m.x += m.vx;
+    m.y += m.vy;
+    m.life++;
+    const progress = m.life / m.maxLife;
+    const alpha = Math.max(0, 1 - progress);
+    const length = 40 + progress * 80;
+    ctx.strokeStyle = `hsla(${200 + progress*60}, 90%, 80%, ${alpha})`;
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(m.x, m.y);
+    ctx.lineTo(m.x - m.vx * 2 - length, m.y - m.vy * 0.5);
+    ctx.stroke();
+  }
+  ctx.restore();
+  meteors = meteors.filter(m => m.life < m.maxLife && m.x < cw + 200);
+}
+
+/* PULSAR FLASH */
+
+function drawPulsarFlash(cx, cy) {
+  const pulse = (Math.sin(pulsarPhase) * 0.5 + 0.5);
+  const radius = 40 + pulse * 60;
+  const alpha = 0.08 + pulse * 0.18;
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+  grad.addColorStop(0, `rgba(248,250,252,${alpha})`);
+  grad.addColorStop(1, "rgba(248,250,252,0)");
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+/* LOOP */
+
+function loop() {
+  updateParticles();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ÉTINCELLES */
+
+const sparkLayer = document.getElementById("sparkLayer");
+
+if (!isTouch) {
+  const sparks = [];
+  const maxSparks = 10;
+  for (let i = 0; i < maxSparks; i++) {
+    const s = document.createElement("div");
+    s.className = "spark";
+    sparkLayer.appendChild(s);
+    sparks.push({ el: s, life: 0 });
+  }
+  let lastMove = 0;
+  window.addEventListener("pointermove", e => {
+    const now = performance.now();
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (now - lastMove < 20) return;
+    lastMove = now;
+    const x = e.clientX;
+    const y = e.clientY;
+    const spark = sparks.reduce((a,b) => (a.life <= b.life ? a : b));
+    spark.life = 1;
+    spark.el.style.left = (x - 5) + "px";
+    spark.el.style.top = (y - 5) + "px";
+    spark.el.style.opacity = "1";
+    spark.el.style.transform = "scale(1)";
+    setTimeout(() => {
+      spark.el.style.opacity = "0";
+      spark.el.style.transform = "scale(0.4)";
+      spark.life = 0;
+    }, 220);
+  });
+} else {
+  window.addEventListener("pointermove", () => {
+    mouseX = null;
+    mouseY = null;
+  });
+}
+
+/* ========================= */
+/*        SLOT LE 642        */
+/* ========================= */
+
+const balanceEl = document.getElementById("balance");
+const lastResultEl = document.getElementById("lastResult");
+const bannerEl = document.getElementById("banner");
+const spinBtn = document.getElementById("spinBtn");
+const toast = document.getElementById("toast");
+const overlayLose = document.getElementById("overlayLose");
+const btnReset = document.getElementById("btnReset");
+const betValueEl = document.getElementById("betValue");
+
+let balance = 1250;
+let bet = 10;
+let spinning = false;
+
+const reelsEls = [
+  document.getElementById("reel0"),
+  document.getElementById("reel1"),
+  document.getElementById("reel2"),
+];
+
+function updateBalance(delta) {
+  balance += delta;
+  if (balance < 0) balance = 0;
+  balanceEl.textContent = balance;
+}
+
+function setBanner(text, type = "info") {
+  let color = "var(--text-soft)";
+  if (type === "danger") color = "#fecaca";
+  if (type === "win") color = "#bbf7d0";
+  bannerEl.style.color = color;
+  bannerEl.innerHTML = text;
+}
+
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2400);
+}
+
+/* bip synthé (facultatif) */
+
+function beep(freq = 880, duration = 120) {
+  if (!window.AudioContext && !window.webkitAudioContext) return;
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const ctxAudio = new AudioCtx();
+    const osc = ctxAudio.createOscillator();
+    const gain = ctxAudio.createGain();
+    osc.type = "triangle";
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(ctxAudio.destination);
+    gain.gain.setValueAtTime(0.001, ctxAudio.currentTime);
+    gain.gain.linearRampToValueAtTime(0.06, ctxAudio.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctxAudio.currentTime + duration/1000);
+    osc.start();
+    osc.stop(ctxAudio.currentTime + duration/1000 + 0.02);
+  } catch(e) {}
+}
+
+/* logiques de spin */
+
+function spin() {
+  if (spinning) return;
+  if (balance < bet) {
+    setBanner("Plus assez de jetons. Le cosmos te conseille une pause hydratation.", "danger");
+    showToast("Recharge mentale recommandée avant de rejouer.");
+    return;
+  }
+
+  spinning = true;
+  updateBalance(-bet);
+  setBanner("Les constellations remixent tes chiffres. Évite juste 6-4-2.", "info");
+  beep(600, 80);
+
+  const finalDigits = [];
+  const spinTimes = [600, 900, 1200];
+
+  reelsEls.forEach((reel, index) => {
+    const reelBox = reel.closest(".reel");
+    reelBox.classList.add("spinning");
+    let ticks = 0;
+    const interval = setInterval(() => {
+      reel.textContent = Math.floor(Math.random() * 10);
+      ticks++;
+      if (ticks % 3 === 0) beep(300 + index*60, 40);
+    }, 60);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      const digit = Math.floor(Math.random() * 10);
+      reel.textContent = digit;
+      finalDigits[index] = digit;
+      reelBox.classList.remove("spinning");
+
+      if (index === reelsEls.length - 1) {
+        setTimeout(() => {
+          resolveResult(finalDigits);
+        }, 80);
+      }
+    }, spinTimes[index]);
+  });
+}
+
+const surpriseMessages = [
+  "Surprise : combo safe, tu peux oser une Supernova pour fêter ça.",
+  "Tip : un Big Bang bien placé peut relancer tout ton univers intérieur.",
+  "Easter egg : 125 = clin d’œil discret à 12,50.",
+  "Astuce : mieux vaut perdre des jetons que des neurones.",
+  "Le cosmos prend des notes sur ton style de jeu, mais sans te juger (trop)."
+];
+
+function triggerRandomSurprise(digits) {
+  const [a,b,c] = digits;
+  const rnd = Math.random();
+
+  if (a === 1 && b === 2 && c === 5) {
+    showToast("Combo 125 : badge mental \"12,50 inside\" débloqué.");
+    triggerBigBang(); // petit feu d'artifice cosmique
+    return;
+  }
+
+  if (rnd < 0.25) {
+    const msg = surpriseMessages[Math.floor(Math.random() * surpriseMessages.length)];
+    showToast(msg);
+  }
+}
+
+function resolveResult(d) {
+  const [a, b, c] = d;
+  lastResultEl.textContent = `${a}${b}${c}`;
+
+  // 642 = lose ultime → Big Crunch cosmique
+  if (a === 6 && b === 4 && c === 2) {
+    overlayLose.style.display = "flex";
+    triggerBigCrunch();
+    spinning = false;
+    beep(180, 300);
+    beep(120, 300);
+    beep(80, 400);
+    return;
+  }
+
+  let message = "";
+  let type = "info";
+  let delta = 0;
+
+  // triple → jackpot + Supernova
+  if (a === b && b === c) {
+    delta = 250;
+    type = "win";
+    message = `JACKPOT stellaire : ${a}${b}${c}. +${delta} jetons, Supernova recommandée.`;
+    triggerSupernova();
+    beep(880, 160);
+    beep(1200, 200);
+  } else {
+    const digitsSet = new Set(d);
+    const has6 = digitsSet.has(6);
+    const has4 = digitsSet.has(4);
+    const has2 = digitsSet.has(2);
+
+    if (has6 && has4 && has2) {
+      // tous présents mais pas 642
+      delta = -20;
+      type = "danger";
+      message = `Combo toxique (tous les chiffres maudits, mais pas alignés) : ${a}${b}${c}. -20 jetons de sueur froide.`;
+      beep(260, 140);
+    } else if ((a + b + c) % 3 === 0) {
+      // petit bonus cosmique + vague de particules (Big Bang)
+      delta = 15;
+      type = "win";
+      message = `Alignement cosmique (somme divisible par 3) : +${delta} jetons. Big Bang bonus assuré.`;
+      triggerBigBang();
+      beep(720, 120);
+    } else if (a === 6 || b === 4 || c === 2) {
+      delta = 0;
+      type = "info";
+      message = `Un des chiffres maudits est sorti (${a}${b}${c}). Le vide quantique t’observe, mais te laisse passer.`;
+    } else {
+      // résultat neutre / mini bonus
+      const rnd = Math.random();
+      if (rnd < 0.25) {
+        delta = 10;
+        type = "win";
+        message = `Mini win galactique : +${delta} jetons. De quoi alimenter un prochain spin.`;
+        beep(660, 100);
+      } else {
+        delta = 0;
+        type = "info";
+        message = `Rien de spécial sur ${a}${b}${c}. Les galaxies tournent, le casino sourit.`;
+      }
+    }
+  }
+
+  if (delta !== 0) updateBalance(delta);
+  setBanner(message, type);
+  triggerRandomSurprise(d);
+  spinning = false;
+}
+
+/* EVENTS SLOT */
+
+spinBtn.addEventListener("click", spin);
+
+btnReset.addEventListener("click", () => {
+  balance = 1250;
+  balanceEl.textContent = balance;
+  overlayLose.style.display = "none";
+  setBanner("Nouveau crédit : 1250 jetons. Rappelle-toi : tout sauf 642.", "info");
+});
+
+/* ============================================================
+   PACK D'ANIMATIONS & SURPRISES GOO / COSMIQUES
+   Basé sur le moteur existant du portail 12,50
+   ============================================================ */
+
+// quelques refs DOM utiles
+const bgPsyEl    = document.querySelector(".bg-psy");
+const logoCoreEl = document.getElementById("logoCore");
+const hintMainEl = document.getElementById("hint-main");
+const hintExtraEl = document.getElementById("hint-extra");
+
+// petite aide pour mettre à jour le visuel des boutons de mode
+function setCosmicModeVisual(modeName) {
+  cosmicMode = modeName;
+  modeButtons.forEach(b => {
+    const isActive = b.getAttribute("data-mode") === modeName;
+    b.classList.toggle("active", isActive);
+  });
+}
+
+/* ---- Dictionnaire d'animations ----
+   Tu peux les appeler avec triggerGooAnimation("nom")
+   Exemple : triggerGooAnimation("rainbowStorm");
+*/
+
+const gooAnimations = {
+  // Orage visuel qui change rapidement de mode + inversion
+  rainbowStorm() {
+    let steps = 0;
+    const modes = ["normal","nebula","meteor","pulsar","blackhole"];
+    const stormId = setInterval(() => {
+      const m = modes[steps % modes.length];
+      setCosmicModeVisual(m);
+      invertFlow = !invertFlow;
+      toggleButton.classList.toggle("active", invertFlow);
+      steps++;
+      if (steps > 14) {
+        clearInterval(stormId);
+        // on finit en mode nébuleuse cosy
+        invertFlow = false;
+        toggleButton.classList.remove("active");
+        setCosmicModeVisual("nebula");
+      }
+    }, 280);
+  },
+
+  // Supernova + pluie de galaxies
+  supernovaBurst() {
+    triggerSupernova();
+    const burstCount = 3 + Math.floor(Math.random()*3);
+    for (let i=0; i<burstCount; i++) {
+      const strength = 0.4 + Math.random()*0.6;
+      setTimeout(() => createGalaxy(strength), i * 250);
+    }
+  },
+
+  // Tempête de galaxies (sans supernova)
+  galaxyStorm() {
+    const n = 4 + Math.floor(Math.random()*5);
+    for (let i=0; i<n; i++) {
+      const strength = Math.random();
+      setTimeout(() => createGalaxy(strength), i * 220);
+    }
+  },
+
+  // Explosion de toutes les bulles GOO en petites bulles
+  blobExplosion() {
+    const blobs = Array.from(document.querySelectorAll(".blob"));
+    blobs.forEach((b, idx) => {
+      setTimeout(() => {
+        if (document.body.contains(b)) splitBlob(b);
+      }, idx * 80);
+    });
+  },
+
+  // Pluie de nouvelles bulles nées du centre
+  blobRain() {
+    const rect = logoWrap.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    for (let i=0; i<8; i++) {
+      setTimeout(() => {
+        const evtLike = {
+          clientX: rect.left + centerX + (Math.random()*80-40),
+          clientY: rect.top + centerY + (Math.random()*80-40)
+        };
+        // on réutilise la logique de dblclick sur logoCore
+        const e = new MouseEvent("dblclick", {clientX: evtLike.clientX, clientY: evtLike.clientY});
+        logoCore.dispatchEvent(e);
+      }, i * 90);
+    }
+  },
+
+  // Glitch du portail (secousses + hue-rotate)
+  portalGlitch() {
+    const target = logoCoreEl;
+    const baseTransform = target.style.transform || "";
+    const baseFilter = target.style.filter || "";
+    const start = performance.now();
+    const duration = 900;
+
+    function frame(now) {
+      const t = now - start;
+      const p = t / duration;
+      if (p >= 1) {
+        target.style.transform = baseTransform;
+        target.style.filter = baseFilter;
+        return;
+      }
+      const dx = (Math.random() - 0.5) * 10;
+      const dy = (Math.random() - 0.5) * 10;
+      const rot = (Math.random() - 0.5) * 6;
+      const hue = (Math.random()*80 - 40).toFixed(1);
+      target.style.transform = `translate(${dx}px,${dy}px) rotate(${rot}deg)`;
+      target.style.filter = `hue-rotate(${hue}deg) contrast(1.4)`;
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  },
+
+  // Flash de Big Bang + réinitialisation douce du cosmos
+  softReset() {
+    bigBangFlash = 1;
+    galaxies = [];
+    initParticles();
+    invertFlow = false;
+    toggleButton.classList.remove("active");
+    setCosmicModeVisual("normal");
+  },
+
+  // Big Crunch ciblé sur une galaxie aléatoire
+  randomCrunch() {
+    if (!galaxies.length) {
+      // si pas de galaxie, on en crée une grosse d'abord
+      createGalaxy(1);
+      setTimeout(() => {
+        galaxies.forEach(g => g.selected = false);
+        const g = galaxies[0];
+        if (g) {
+          g.selected = true;
+          triggerBigCrunch();
+        }
+      }, 500);
+      return;
+    }
+    galaxies.forEach(g => g.selected = false);
+    const g = galaxies[Math.floor(Math.random()*galaxies.length)];
+    g.selected = true;
+    triggerBigCrunch();
+  },
+
+  // Petit message caché + passage en mode pulsar
+  secretHint() {
+    if (hintExtraEl) hintExtraEl.style.display = "block";
+    if (hintMainEl) hintMainEl.textContent = "Tu trifouilles bien comme il faut… continue.";
+    setCosmicModeVisual("pulsar");
+  },
+
+  // Combo “demo” qui enchaîne plusieurs effets
+  demoShow() {
+    this.blobExplosion();
+    setTimeout(() => this.galaxyStorm(), 600);
+    setTimeout(() => this.supernovaBurst(), 1400);
+    setTimeout(() => this.portalGlitch(), 2200);
+  }
+};
+
+// fonction utilitaire publique
+function triggerGooAnimation(name) {
+  const fn = gooAnimations[name];
+  if (fn) fn();
+}
+
+/* ============================================================
+   MODE CHAOS (déclenche aléatoirement des animations)
+   ============================================================ */
+
+let chaosMode = false;
+let chaosTimerId = null;
+
+function chaosLoop() {
+  if (!chaosMode) return;
+  const names = Object.keys(gooAnimations);
+  const pick = names[Math.floor(Math.random()*names.length)];
+  triggerGooAnimation(pick);
+
+  const delay = 7000 + Math.random()*9000;
+  chaosTimerId = setTimeout(chaosLoop, delay);
+}
+
+function toggleChaosMode() {
+  chaosMode = !chaosMode;
+  if (chaosMode) {
+    chaosLoop();
+    if (hintMainEl) {
+      hintMainEl.textContent = "Mode CHAOS : le portail décide tout seul.";
+    }
+  } else {
+    clearTimeout(chaosTimerId);
+    if (hintMainEl) {
+      hintMainEl.textContent = "Le reste du monde dégouline. Seul le cercle garde une logique.";
+    }
+  }
+}
+
+/* ============================================================
+   RACCOURCIS CLAVIER & CHEAT CODES
+   ============================================================ */
+
+// Konami code = gros show
+const konami = [
+  "ArrowUp","ArrowUp","ArrowDown","ArrowDown",
+  "ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"
+];
+let keyBuffer = [];
+
+window.addEventListener("keydown", (e) => {
+  // buffer pour Konami
+  keyBuffer.push(e.key);
+  if (keyBuffer.length > konami.length) keyBuffer.shift();
+  if (konami.every((k,i) => keyBuffer[i] === k)) {
+    triggerGooAnimation("demoShow");
+  }
+
+  // raccourcis simples
+  switch (e.key) {
+    case "1":
+      triggerGooAnimation("rainbowStorm");
+      break;
+    case "2":
+      triggerGooAnimation("supernovaBurst");
+      break;
+    case "3":
+      triggerGooAnimation("galaxyStorm");
+      break;
+    case "4":
+      triggerGooAnimation("randomCrunch");
+      break;
+    case "5":
+      triggerGooAnimation("blobRain");
+      break;
+    case "g":
+      triggerGooAnimation("portalGlitch");
+      break;
+    case "r":
+      triggerGooAnimation("softReset");
+      break;
+    case "c":
+      toggleChaosMode(); // on/off
+      break;
+    case "h":
+      triggerGooAnimation("secretHint");
+      break;
+  }
+});
+
+
+</script>
+
+</body>
+</html>
