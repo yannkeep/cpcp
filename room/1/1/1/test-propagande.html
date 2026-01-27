@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE NEXUS // GitHub x StackOverflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;800&family=Inter:wght@300;400;600;800&display=swap');
+
+        :root {
+            --bg-deep: #050505;
+            --accent: #00f2ff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: #e5e7eb;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+        }
+
+        .repo-item.active {
+            border-left: 4px solid var(--accent);
+            background: rgba(0, 242, 255, 0.05);
+        }
+
+        /* Barre de défilement personnalisée */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        /* Graphique de contribution */
+        .grid-cell { width: 12px; height: 12px; border-radius: 2px; }
+        .lvl-0 { background: #161b22; }
+        .lvl-1 { background: #0e4429; }
+        .lvl-2 { background: #006d32; }
+        .lvl-3 { background: #26a641; }
+        .lvl-4 { background: #39d353; }
+
+        #markdown-content h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        #markdown-content h2 { font-size: 1.8rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
+        #markdown-content p { margin-bottom: 1rem; line-height: 1.6; opacity: 0.9; }
+        #markdown-content code { background: rgba(255,255,255,0.1); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'JetBrains Mono'; font-size: 0.9em; }
+        #markdown-content pre { background: #0d1117; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border: 1px solid var(--border); overflow-x: auto; }
+        
+        .vote-btn { cursor: pointer; transition: color 0.2s; }
+        .vote-btn:hover { color: var(--accent); }
+
+        .tag {
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation Supérieure -->
+    <nav class="sticky top-0 z-50 glass-card m-4 p-4 flex items-center justify-between border-none rounded-2xl bg-black/60">
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 text-xl font-black tracking-tighter text-white">
+                <i data-lucide="terminal" class="text-cyan-400"></i>
+                THE_NEXUS<span class="text-cyan-400">.io</span>
+            </div>
+            <div class="relative group">
+                <input type="text" placeholder="Rechercher des dépôts ou questions..." class="bg-white/5 border border-white/10 rounded-lg px-10 py-2 w-96 focus:outline-none focus:border-cyan-400 transition-all text-sm">
+                <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 opacity-40"></i>
+                <div class="absolute right-3 top-2.5 flex gap-1">
+                    <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-[10px] mono">CMD</kbd>
+                    <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-[10px] mono">K</kbd>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <button class="flex items-center gap-2 hover:text-cyan-400 transition-colors">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+            </button>
+            <button class="flex items-center gap-2 hover:text-cyan-400 transition-colors">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+            </button>
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 border border-white/20"></div>
+        </div>
+    </nav>
+
+    <div class="grid grid-cols-12 gap-6 p-4 h-[calc(100vh-120px)]">
+        
+        <!-- Barre latérale : Dépôts -->
+        <aside class="col-span-3 flex flex-col gap-4 overflow-y-auto pr-2">
+            <div class="flex items-center justify-between px-2">
+                <h3 class="font-bold text-sm text-gray-400 uppercase tracking-widest">Dépôts</h3>
+                <i data-lucide="layers" class="w-4 h-4 opacity-50"></i>
+            </div>
+            
+            <div id="repo-list" class="space-y-2">
+                <!-- Chargement dynamique -->
+            </div>
+
+            <div class="mt-8 px-2">
+                <h3 class="font-bold text-sm text-gray-400 uppercase tracking-widest mb-4">Questions Tendances</h3>
+                <div id="sidebar-questions" class="space-y-4">
+                    <!-- Chargement dynamique -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Zone de contenu principale -->
+        <main class="col-span-6 glass-card overflow-y-auto p-8 relative">
+            <div id="main-view-header" class="mb-8 flex justify-between items-start">
+                <!-- En-tête dynamique -->
+            </div>
+            
+            <div id="view-content" class="animate-in fade-in duration-500">
+                <!-- Markdown ou Question View -->
+            </div>
+        </main>
+
+        <!-- Panneau de droite : Stats & Savoir -->
+        <aside class="col-span-3 space-y-6">
+            <!-- Statistiques Utilisateur -->
+            <div class="glass-card p-6">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-16 h-16 rounded-2xl bg-gray-800 flex items-center justify-center border border-white/10">
+                        <i data-lucide="user" class="w-8 h-8 text-cyan-400"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold">Admin_Core</h2>
+                        <p class="text-sm opacity-50">Grand Maître StackOverflow</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div class="bg-white/5 rounded-xl p-3 border border-white/5">
+                        <div class="text-xs opacity-50 uppercase font-bold">Réputation</div>
+                        <div class="text-xl font-black text-cyan-400">12,842</div>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-3 border border-white/5">
+                        <div class="text-xs opacity-50 uppercase font-bold">Dépôts</div>
+                        <div class="text-xl font-black">42</div>
+                    </div>
+                </div>
+
+                <!-- Contributions -->
+                <div class="mt-6">
+                    <div class="flex justify-between text-xs mb-2 opacity-50 font-bold">
+                        <span>CONTRIBUTIONS (2025)</span>
+                        <span class="text-green-500">Intense</span>
+                    </div>
+                    <div id="contribution-graph" class="grid grid-cols-12 gap-1">
+                        <!-- Généré par JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Tags -->
+            <div class="glass-card p-6">
+                <h3 class="font-bold text-sm text-gray-400 uppercase tracking-widest mb-4">Top Technologies</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="tag">#Rust</span>
+                    <span class="tag">#NextJS</span>
+                    <span class="tag">#PyTorch</span>
+                    <span class="tag">#WebAssembly</span>
+                    <span class="tag">#KernelDev</span>
+                    <span class="tag">#Solidity</span>
+                </div>
+            </div>
+
+            <!-- Statut du Système Hardcore -->
+            <div class="glass-card p-6 border-cyan-900/30 bg-cyan-950/5">
+                <div class="flex items-center gap-2 mb-4 text-cyan-400">
+                    <i data-lucide="activity" class="w-4 h-4"></i>
+                    <span class="text-xs font-bold uppercase tracking-tighter">Statut Nexus Engine</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between text-xs">
+                        <span class="opacity-50">Disponibilité</span>
+                        <span class="mono">99.998%</span>
+                    </div>
+                    <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div class="w-[99.9%] h-full bg-cyan-400 shadow-[0_0_8px_#00f2ff]"></div>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="opacity-50">Latence Indexation</span>
+                        <span class="mono">14ms</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        // --- Données de test ---
+        const REPOSITORIES = [
+            {
+                id: 'core-kernel',
+                name: 'nexus-kernel-v4',
+                description: 'Le cœur battant de l\'écosystème distribué.',
+                language: 'Rust',
+                stars: 1240,
+                files: [
+                    { name: 'README.md', content: '# Nexus Kernel V4\n\nBienvenue dans le cœur du système. Ce dépôt contient l\'implémentation bas niveau de l\'orchestrateur.\n\n## Architecture\n- **Micro-services** haute performance\n- **Zero-copy** data transfer\n- **Security first** design\n\n```rust\nfn main() {\n    println!("Booting Nexus...");\n    nexus::init().unwrap();\n}\n```\n\n### Contribution\nSuivez strictement les protocoles de PR.' },
+                    { name: 'ROADMAP.md', content: '# Roadmap 2025\n\n- [x] Initial bootloader\n- [ ] Quantum-safe crypto layer\n- [ ] Neural bridge interface' }
+                ]
+            },
+            {
+                id: 'neural-arch',
+                name: 'neural-arch-x',
+                description: 'Modèles d\'architecture IA avancés pour le traitement à grande échelle.',
+                language: 'Python',
+                stars: 856,
+                files: [
+                    { name: 'README.md', content: '# Neural-Arch-X\n\nFramework de conception de réseaux de neurones distribués.\n\n> "L\'intelligence n\'est qu\'une forme sophistiquée d\'optimisation."\n\n## Installation\n`pip install nexus-neural-arch`' }
+                ]
+            },
+            {
+                id: 'web-front',
+                name: 'hyper-ui-components',
+                description: 'Une collection de composants web ultra-rapides.',
+                language: 'TypeScript',
+                stars: 432,
+                files: [
+                    { name: 'DOCUMENTATION.md', content: '# Hyper UI\n\nComposants UI conçus pour le Nexus.\nUtilise Tailwind et Lucide par défaut.' }
+                ]
+            }
+        ];
+
+        const QUESTIONS = [
+            {
+                id: 'q1',
+                title: 'Comment optimiser les transactions Zero-Knowledge sur le Nexus v4 ?',
+                body: "J'essaie de réduire le temps de preuve pour les transactions complexes mais je rencontre une latence de 500ms. Est-ce un problème de CPU ou d'algorithme ?",
+                author: 'DevGod_99',
+                votes: 42,
+                answers: 3,
+                tags: ['ZKP', 'Cryptography', 'Rust']
+            },
+            {
+                id: 'q2',
+                title: 'Erreur Fatale : Kernel Panic sur module Neural-Arch-X',
+                body: "Le module crash dès que la charge de neurones dépasse les 10M. Voici les logs : `segmentation fault: 11`",
+                author: 'JuniorDebugger',
+                votes: -5,
+                answers: 1,
+                tags: ['Python', 'AI', 'Debugging']
+            }
+        ];
+
+        // --- Logique principale ---
+        let currentRepo = REPOSITORIES[0];
+        let currentFile = REPOSITORIES[0].files[0];
+        let activeView = 'repo'; 
+
+        function init() {
+            lucide.createIcons();
+            renderRepoList();
+            renderSidebarQuestions();
+            renderContributionGraph();
+            renderCurrentView();
+            hljs.highlightAll();
+        }
+
+        function renderRepoList() {
+            const list = document.getElementById('repo-list');
+            list.innerHTML = REPOSITORIES.map(repo => `
+                <div class="repo-item glass-card p-3 flex flex-col gap-1 cursor-pointer ${currentRepo.id === repo.id ? 'active' : ''}" 
+                     onclick="switchRepo('${repo.id}')">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="folder" class="w-4 h-4 text-cyan-400"></i>
+                        <span class="font-bold text-sm truncate">${repo.name}</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-[10px] opacity-60">
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 text-yellow-500"></i> ${repo.stars}</span>
+                        <span class="flex items-center gap-1"><i data-lucide="code" class="w-3 h-3 text-cyan-400"></i> ${repo.language}</span>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderSidebarQuestions() {
+            const list = document.getElementById('sidebar-questions');
+            list.innerHTML = QUESTIONS.map(q => `
+                <div class="cursor-pointer group hover:bg-white/5 p-2 rounded-lg transition-all border-b border-white/5 pb-4" onclick="switchView('question', '${q.id}')">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="${q.votes > 0 ? 'text-cyan-400' : 'text-red-400'} mono text-xs font-bold">${q.votes > 0 ? '+' : ''}${q.votes} votes</span>
+                    </div>
+                    <p class="text-xs font-semibold group-hover:text-cyan-400 transition-colors line-clamp-2">${q.title}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderContributionGraph() {
+            const graph = document.getElementById('contribution-graph');
+            const totalCells = 48; 
+            let html = '';
+            for(let i=0; i<totalCells; i++) {
+                const lvl = Math.floor(Math.random() * 5);
+                html += `<div class="grid-cell lvl-${lvl}"></div>`;
+            }
+            graph.innerHTML = html;
+        }
+
+        function switchRepo(id) {
+            currentRepo = REPOSITORIES.find(r => r.id === id);
+            currentFile = currentRepo.files[0];
+            activeView = 'repo';
+            renderRepoList();
+            renderCurrentView();
+        }
+
+        function switchView(view, id) {
+            activeView = view;
+            if(view === 'question') {
+                const q = QUESTIONS.find(q => q.id === id);
+                renderQuestionView(q);
+            } else {
+                renderCurrentView();
+            }
+        }
+
+        function renderCurrentView() {
+            const header = document.getElementById('main-view-header');
+            const content = document.getElementById('view-content');
+
+            if(activeView === 'repo') {
+                header.innerHTML = `
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center gap-2 text-gray-400 text-sm">
+                            <span class="hover:text-white cursor-pointer">Admin_Core</span>
+                            <span>/</span>
+                            <span class="font-bold text-white text-lg">${currentRepo.name}</span>
+                            <span class="bg-white/10 px-2 py-0.5 rounded-full text-[10px] border border-white/10 uppercase font-black">Public</span>
+                        </div>
+                        <p class="text-sm opacity-60">${currentRepo.description}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-sm hover:bg-white/10 transition-all">
+                            <i data-lucide="star" class="w-4 h-4"></i> Star
+                        </button>
+                        <button class="flex items-center gap-2 bg-cyan-500 text-black font-bold px-4 py-2 rounded-lg text-sm hover:brightness-110 transition-all">
+                            <i data-lucide="code" class="w-4 h-4"></i> Code
+                        </button>
+                    </div>
+                `;
+
+                content.innerHTML = `
+                    <div class="flex border-b border-white/10 mb-6 gap-6 text-sm font-semibold opacity-60">
+                        <div class="pb-2 border-b-2 border-cyan-400 opacity-100 flex items-center gap-2 cursor-pointer">
+                            <i data-lucide="file-text" class="w-4 h-4"></i> README
+                        </div>
+                        <div class="pb-2 flex items-center gap-2 cursor-pointer hover:opacity-100 transition-opacity">
+                            <i data-lucide="git-branch" class="w-4 h-4"></i> Branches
+                        </div>
+                        <div class="pb-2 flex items-center gap-2 cursor-pointer hover:opacity-100 transition-opacity">
+                            <i data-lucide="message-square" class="w-4 h-4"></i> Issues
+                        </div>
+                    </div>
+                    <div id="markdown-content" class="prose prose-invert max-w-none">
+                        ${marked.parse(currentFile.content)}
+                    </div>
+                `;
+            }
+            
+            lucide.createIcons();
+            document.querySelectorAll('pre code').forEach((el) => {
+                hljs.highlightElement(el);
+            });
+        }
+
+        function renderQuestionView(q) {
+            const header = document.getElementById('main-view-header');
+            const content = document.getElementById('view-content');
+
+            header.innerHTML = `
+                <div class="flex flex-col gap-4 w-full">
+                    <div class="flex justify-between items-start">
+                        <h1 class="text-3xl font-black text-white">${q.title}</h1>
+                        <button class="bg-cyan-500 text-black font-bold px-6 py-2 rounded-lg text-sm whitespace-nowrap">Poser une question</button>
+                    </div>
+                    <div class="flex gap-4 text-xs opacity-50">
+                        <span>Posée hier</span>
+                        <span>Vue 1.2k fois</span>
+                        <span>Activité 2h</span>
+                    </div>
+                </div>
+            `;
+
+            // Note: Correction de la syntaxe ici en remplaçant les backticks par des tags <code>
+            content.innerHTML = `
+                <div class="flex gap-6 mt-4">
+                    <div class="flex flex-col items-center gap-2 mt-2">
+                        <i data-lucide="chevron-up" class="w-10 h-10 vote-btn"></i>
+                        <span class="text-2xl font-black mono">${q.votes}</span>
+                        <i data-lucide="chevron-down" class="w-10 h-10 vote-btn"></i>
+                        <i data-lucide="bookmark" class="w-5 h-5 opacity-30 mt-4 cursor-pointer"></i>
+                    </div>
+                    <div class="flex-1 space-y-6">
+                        <div class="text-lg opacity-90 leading-relaxed">
+                            ${q.body}
+                        </div>
+                        <div class="flex gap-2">
+                            ${q.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                        </div>
+                        <div class="flex justify-end">
+                            <div class="bg-white/5 border border-white/5 p-3 rounded-xl flex items-center gap-3">
+                                <div class="w-10 h-10 rounded bg-gradient-to-br from-indigo-500 to-purple-500"></div>
+                                <div>
+                                    <div class="text-[10px] opacity-40 uppercase font-bold">Demandé par</div>
+                                    <div class="text-sm font-bold text-cyan-400">${q.author}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-8 border-t border-white/10">
+                            <h3 class="text-xl font-bold mb-6">${q.answers} Réponses</h3>
+                            <div class="bg-cyan-400/5 border border-cyan-400/20 p-6 rounded-2xl relative">
+                                <div class="absolute -left-3 top-6 bg-green-500 text-black px-2 py-1 rounded text-[10px] font-black uppercase rotate-[-90deg]">Acceptée</div>
+                                <div class="flex gap-6">
+                                    <div class="flex flex-col items-center gap-2">
+                                        <i data-lucide="chevron-up" class="w-8 h-8 vote-btn"></i>
+                                        <span class="text-xl font-black mono">156</span>
+                                        <i data-lucide="chevron-down" class="w-8 h-8 vote-btn"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="mb-4">Il s'agit d'une limitation connue dans la v4. Vous devez forcer le compilateur à utiliser l'extension <code>unsafe-intrinsics</code> pour bypasser le contrôle du scheduler.</p>
+                                        <pre><code class="language-rust">#[nexus_optimize(extreme)]
+pub fn solve_zkp() {
+    // La magie opère ici
+}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+            document.querySelectorAll('pre code').forEach((el) => {
+                hljs.highlightElement(el);
+            });
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
