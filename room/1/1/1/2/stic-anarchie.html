@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr" prefix="og: http://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO -->
+    <title>RTL-TVI Éthique Journalistique : Deborsu Entre Audimat et Responsabilité | Analyse Médias</title>
+    <meta name="description" content="39,1% de part de marché. À quel prix ? Analyse des méthodes de RTL-TVI et Christophe Deborsu. Quand le divertissement écrase le journalisme d'investigation.">
+    <meta name="keywords" content="RTL-TVI, éthique journalistique, Deborsu, Je vous dérange, audimat, responsabilité médiatique, déontologie, CSA">
+    <link rel="canonical" href="https://ouaisfieu.be/deborsu-tous-fraudeurs/rtl-tvi-ethique-journalistique/">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://ouaisfieu.be/deborsu-tous-fraudeurs/rtl-tvi-ethique-journalistique/">
+    <meta property="og:title" content="RTL-TVI : Quand l'Audimat Écrase l'Éthique">
+    <meta property="og:description" content="410.000 spectateurs, 400+ plaintes. Les méthodes de Deborsu et la responsabilité de RTL Belgium.">
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "RTL-TVI et Christophe Deborsu : Audimat vs Éthique Journalistique",
+        "description": "Analyse des pratiques journalistiques du documentaire 'Tous Fraudeurs' et de la responsabilité de RTL Belgium",
+        "datePublished": "2025-11-18",
+        "dateModified": "2026-01-27",
+        "author": {"@type": "Organization", "name": "Observatoire Citoyen Belge"},
+        "about": [
+            {"@type": "Organization", "name": "RTL Belgium", "alternateName": "RTL-TVI"},
+            {"@type": "Person", "name": "Christophe Deborsu", "jobTitle": "Journaliste"},
+            {"@type": "Thing", "name": "Déontologie journalistique"}
+        ]
+    }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --ink: #0a0a0a;
+            --paper: #f5f2eb;
+            --accent: #c41e3a;
+            --highlight: #ffd700;
+            --muted: #6b6b6b;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 18px;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--ink);
+            color: var(--paper);
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+        }
+        
+        .hero-mini {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 3rem 2rem;
+        }
+        
+        .hero-mini-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        
+        .lead {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            border-left: 3px solid var(--accent);
+            padding-left: 1rem;
+        }
+        
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--ink);
+        }
+        
+        h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin: 2rem 0 1rem;
+        }
+        
+        p { margin-bottom: 1.5rem; }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        @media (max-width: 600px) {
+            .comparison-grid { grid-template-columns: 1fr; }
+        }
+        
+        .comparison-col h4 {
+            font-family: 'Space Mono', monospace;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .comparison-col.bad h4 {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .comparison-col.good h4 {
+            background: #2d5a27;
+            color: white;
+        }
+        
+        .comparison-col ul {
+            list-style: none;
+        }
+        
+        .comparison-col li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .quote-block {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+        }
+        
+        .quote-block cite {
+            display: block;
+            margin-top: 1rem;
+            font-style: normal;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        
+        .response-box {
+            background: #ffeaea;
+            border: 2px solid var(--accent);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .response-box h4 {
+            font-family: 'Space Mono', monospace;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .related-pages {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--ink);
+        }
+        
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .related-link {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 1rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+        }
+        
+        .related-link:hover {
+            background: var(--ink);
+            color: var(--paper);
+        }
+        
+        .related-link-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        
+        .footer {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="hub-deborsu-tous-fraudeurs.html" class="back-link">← Retour au Hub Central</a>
+    
+    <header class="hero-mini">
+        <div class="hero-mini-inner">
+            <div class="tag">Médias • Éthique • Déontologie</div>
+            <h1>RTL-TVI : Quand l'Audimat Écrase l'Éthique Journalistique</h1>
+            <p class="lead">410.000 spectateurs, 39,1% de part de marché. Des chiffres records. Mais à quel prix pour le journalisme et pour les personnes exposées ?</p>
+        </div>
+    </header>
+    
+    <main class="content">
+        <article>
+            <h2>Le Format "Je Vous Dérange"</h2>
+            
+            <p>L'émission de Christophe Deborsu se positionne comme du "journalisme de terrain" : micro à la main, caméra embarquée, rencontres "authentiques". Un format qui a fait ses preuves en termes d'audience.</p>
+            
+            <p>Mais ce format pose des questions déontologiques fondamentales : l'immédiateté et le spectaculaire prennent-ils le pas sur le recul et l'analyse ? La quête du "bon client" télévisuel ne biaise-t-elle pas la représentation de la réalité ?</p>
+            
+            <h2>Journalisme vs Infotainment</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-col bad">
+                    <h4>❌ Méthodes Deborsu</h4>
+                    <ul>
+                        <li>Titre racoleur à question fermée</li>
+                        <li>Sélection de "cas extrêmes"</li>
+                        <li>Montage à thèse préconçue</li>
+                        <li>Propos tronqués et décontextualisés</li>
+                        <li>Narration orientée</li>
+                        <li>Pas de contradictoire structuré</li>
+                    </ul>
+                </div>
+                <div class="comparison-col good">
+                    <h4>✓ Journalisme d'Investigation</h4>
+                    <ul>
+                        <li>Titre informatif et neutre</li>
+                        <li>Échantillon représentatif</li>
+                        <li>Données avant conclusions</li>
+                        <li>Interviews complètes validées</li>
+                        <li>Contextualisation systémique</li>
+                        <li>Voix contradictoires équilibrées</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>La Défense de Deborsu</h2>
+            
+            <div class="quote-block">
+                "Un reporter rapporte mais ne juge pas. Respect et merci pour tous ceux qui ont participé à cette émission."
+                <cite>— Christophe Deborsu, Facebook, 8 novembre 2025</cite>
+            </div>
+            
+            <p>Cette défense minimaliste pose problème à plusieurs niveaux :</p>
+            
+            <p><strong>"Un reporter rapporte"</strong> — Mais le montage, la sélection, la narration ne sont pas des actes neutres. Choisir ce qu'on montre et ce qu'on cache EST un jugement.</p>
+            
+            <p><strong>"Respect"</strong> — Plusieurs intervenants ont dénoncé publiquement la manipulation de leurs propos. Le respect suppose le consentement éclairé sur l'usage final.</p>
+            
+            <h2>La Responsabilité de RTL Belgium</h2>
+            
+            <p>Au-delà du journaliste, c'est la chaîne qui porte la responsabilité éditoriale. RTL Belgium a :</p>
+            
+            <p>• <strong>Validé</strong> un titre racoleur ("Tous fraudeurs ?") qui présuppose la réponse</p>
+            <p>• <strong>Programmé</strong> l'émission à une heure de grande audience</p>
+            <p>• <strong>Refusé</strong> de commenter la polémique</p>
+            <p>• <strong>Permis</strong> la diffusion sans vérification des témoignages</p>
+            
+            <div class="response-box">
+                <h4>📺 Réponse officielle de RTL Belgium</h4>
+                <p><em>"Contacté par nos soins, RTL Belgium ne souhaite pas réagir à la polémique."</em></p>
+                <p>Ce silence est révélateur. Une chaîne responsable aurait défendu son travail ou reconnu ses erreurs.</p>
+            </div>
+            
+            <h2>Le Précédent Dangereux</h2>
+            
+            <p>Si le CSA ne sanctionne pas sévèrement ce type de pratique, le message envoyé aux médias sera clair : <strong>la stigmatisation paie</strong>.</p>
+            
+            <p>39,1% de part de marché contre 400 plaintes. Dans l'économie médiatique actuelle, c'est un ratio "rentable". Seules des sanctions significatives peuvent rééquilibrer l'équation.</p>
+            
+            <section class="related-pages">
+                <h2>Pages Connexes du Dossier</h2>
+                <div class="related-grid">
+                    <a href="hub-deborsu-tous-fraudeurs.html" class="related-link">
+                        <div class="related-link-title">← Hub Central : Vue d'ensemble</div>
+                    </a>
+                    <a href="plaintes-csa-deborsu.html" class="related-link">
+                        <div class="related-link-title">→ 400+ Plaintes au CSA</div>
+                    </a>
+                    <a href="temoignages-tronques-verviers.html" class="related-link">
+                        <div class="related-link-title">→ Témoignages Tronqués</div>
+                    </a>
+                    <a href="gaelle-denys-cpas-manipulation.html" class="related-link">
+                        <div class="related-link-title">→ Gaëlle Denys Dénonce</div>
+                    </a>
+                </div>
+            </section>
+        </article>
+    </main>
+    
+    <footer class="footer">
+        <p>© 2026 Observatoire Citoyen Belge — ouaisfieu</p>
+    </footer>
+</body>
+</html>
